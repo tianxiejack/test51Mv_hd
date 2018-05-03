@@ -157,26 +157,24 @@ int  CProcess021::WindowstoPiexly(int y,int channel)
 
 int  CProcess021::PiexltoWindowsx(int x,int channel)
 {
-	int ret=0;
+	 int ret=0;
 	 int aimw= trkWinWH[extInCtrl.SensorStat][extInCtrl.AvtTrkAimSize][0];
 	 int aimh= trkWinWH[extInCtrl.SensorStat][extInCtrl.AvtTrkAimSize][1];
 	 ret= cvRound(x*1.0/vcapWH[channel][0]*vdisWH[0][0]);
 	 if(ret<0)
-	 	{
-			ret=0;
-	 	}
+ 	 {
+		ret=0;
+ 	 }
 	 else if(ret>=vdisWH[0][0])
-	 	{
-			ret=vdisWH[0][0];
-	 	}
-
+ 	 {
+		ret=vdisWH[0][0];
+ 	 }
 	 if(extInCtrl.ImgMmtshow[extInCtrl.SensorStat])
-	 	{
-			ret =ret*2/3;//-vdisWH[0][0]/6;
+ 	 {
+		ret =ret*2/3;
+ 	 }
 
-	 	}
-
-	  return ret;
+	 return ret;
 }
 
 int  CProcess021::PiexltoWindowsy(int y,int channel)
@@ -186,20 +184,19 @@ int  CProcess021::PiexltoWindowsy(int y,int channel)
 	 int aimh= trkWinWH[extInCtrl.SensorStat][extInCtrl.AvtTrkAimSize][1];
 	 ret= cvRound(y*1.0/vcapWH[channel][1]*vdisWH[0][1]);
 
-	  if(ret<0)
-	 	{
-			ret=0;
-	 	}
+	 if(ret<0)
+ 	 {
+		ret=0;
+ 	 }
 	 else if(ret>=vdisWH[0][1])
-	 	{
-			ret=vdisWH[0][1];
-	 	}
+ 	 {
+		ret=vdisWH[0][1];
+ 	 }
 
 	  if(extInCtrl.ImgMmtshow[extInCtrl.SensorStat])
-	 	{
-			ret =ret*2/3;//-vdisWH[0][1]/6;
-
-	 	}
+ 	  {
+		ret =ret*2/3;//-vdisWH[0][1]/6;
+ 	  }
 	
 	return  ret;
 }
@@ -245,30 +242,25 @@ int  CProcess021::PiexltoWindowsxzoom(int x,int channel)
 	 int aimh= trkWinWH[extInCtrl.SensorStat][extInCtrl.AvtTrkAimSize][1];
 	 ret= cvRound(x*1.0/vcapWH[channel][0]*vdisWH[0][0]);
 	 if(ret<0)
-	 	{
-			ret=0;
-	 	}
+ 	{
+		ret=0;
+ 	}
 	 else if(ret>=vdisWH[0][0])
-	 	{
-			ret=vdisWH[0][0];
-	 	}
+ 	{
+		ret=vdisWH[0][0];
+ 	}
 
-	 if(extInCtrl.ImgMmtshow[extInCtrl.SensorStat])
-	 	{
-			ret =ret*2/3;//-vdisWH[0][0]/6;
+	if(extInCtrl.ImgMmtshow[extInCtrl.SensorStat])
+ 	{
+		ret =ret*2/3;//-vdisWH[0][0]/6;
+ 	}
 
-	 	}
-//zoom 18.4.6
-	 if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
-	 	{
-	 		ret=ret-320;
-			ret=2*ret;
-	 		;
-			//ret=ret*2;
-	 	}
-
-
-	  return ret;
+	if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
+ 	{
+ 		ret=ret-320;
+		ret=2*ret;
+ 	}
+	return ret;
 }
 
 int  CProcess021::PiexltoWindowsyzoom(int y,int channel)
@@ -1694,14 +1686,14 @@ osdindex++;
 	}
 osdindex++;	//cross aim
 	{
-		startx=crossBak.x;//PiexltoWindowsx(crossBak.x,extInCtrl.SensorStat);
-	 	starty=crossBak.y;//PiexltoWindowsy(crossBak.y,extInCtrl.SensorStat);
+		startx=crossBak.x;
+	 	starty=crossBak.y;
 	 	if(Osdflag[osdindex]==1)
 		{
 			DrawCross(startx,starty,frcolor,false);
 			Osdflag[osdindex]=0;
  		}
-	
+
 		startx=PiexltoWindowsx(extInCtrl.unitAxisX[extInCtrl.SensorStat],extInCtrl.SensorStat);
 	 	starty=PiexltoWindowsy(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 		if(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)
@@ -3212,38 +3204,22 @@ void CProcess021::MSGAPI_inputpositon(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	if(pIStuts->SensorStat==0)
-		{
-	if((pIStuts->AvtPosXTv>=50)&&(pIStuts->AvtPosXTv<=vcapWH[pIStuts->SensorStat][0]-50))
+	{
+		if((pIStuts->AvtPosXTv>=50)&&(pIStuts->AvtPosXTv<=vcapWH[pIStuts->SensorStat][0]-50))
 		{
 			pIStuts->unitAimX = pIStuts->AvtPosXTv;
 			pIStuts->unitAxisX[pIStuts->SensorStat ]=pIStuts->AvtPosXTv;
 			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];
 		}
-	if((pIStuts->AvtPosYTv>=50)&&(pIStuts->AvtPosYTv<=vcapWH[pIStuts->SensorStat][1]-50))
+		if((pIStuts->AvtPosYTv>=50)&&(pIStuts->AvtPosYTv<=vcapWH[pIStuts->SensorStat][1]-50))
 		{
 			pIStuts->unitAimY = pIStuts->AvtPosYTv;
 			pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYTv;
 			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];
 		}
-		}
+	}
 	else if(pIStuts->SensorStat==1)
-		{
-#ifdef VIDEO1280X1024
-		if((pIStuts->AvtPosXFir>=50)&&(pIStuts->AvtPosXFir<=1230))
-		{
-			pIStuts->unitAimX = pIStuts->AvtPosXFir;
-			pIStuts->unitAxisX[pIStuts->SensorStat ]=pIStuts->AvtPosXFir;
-			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];
-		}
-		if((pIStuts->AvtPosYFir>=50)&&(pIStuts->AvtPosYFir<=974))
-		{
-			pIStuts->unitAimY = pIStuts->AvtPosYFir;
-			pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYFir;
-			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];
-		}
-
-
-#else
+	{
 		if((pIStuts->AvtPosXFir>=25)&&(pIStuts->AvtPosXFir<=vcapWH[pIStuts->SensorStat][0]-25))
 		{
 			pIStuts->unitAimX = pIStuts->AvtPosXFir;
@@ -3256,15 +3232,8 @@ void CProcess021::MSGAPI_inputpositon(long lParam )
 			pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYFir;
 			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];
 		}
-#endif
+	}
 
-		}
-
-	
-	
-	
-	
-	
 	OSA_printf("%s   THE=unitAimX=%d unitAxisY=%d\n",__func__,pIStuts->unitAxisX[pIStuts->SensorStat ],pIStuts->unitAxisY[pIStuts->SensorStat ]);
 }
 
@@ -3282,18 +3251,11 @@ void CProcess021::MSGAPI_inputfovselect(long lParam )
 
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 
-	/*
-	sThis->m_intervalFrame=1;
-	sThis->m_rcAcq.x=pIStuts->unitAxisX[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
-	sThis->m_rcAcq.y=pIStuts->unitAxisY[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
-	sThis->m_rcAcq.width=trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
-	sThis->m_rcAcq.height=trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
-	OSA_printf("XY(%f,%f)  WH(%f,%f)\n",sThis->m_rcAcq.x,sThis->m_rcAcq.y,sThis->m_rcAcq.width,sThis->m_rcAcq.height);
-	*/
-
-	if(pIStuts->changeSensorFlag == 0){
+	if(pIStuts->changeSensorFlag == 0)
+	{
 		//OSA_printf("FovStat = %d SensorStat=%d\n",pIStuts->FovStat,pIStuts->SensorStat);
-		if(pIStuts->SensorStat == 0){
+		if(pIStuts->SensorStat == 0)
+		{
 			if(pIStuts->FovStat == 1)
 				sThis->Track_fovreacq( 2400,pIStuts->SensorStat,0);
 			else if(pIStuts->FovStat == 3)
@@ -3315,8 +3277,7 @@ void CProcess021::MSGAPI_inputfovselect(long lParam )
 		}
 
 		//OSA_printf("fovselectXY(%f,%f),WH(%f,%f)\n",sThis->trackinfo_obj->reAcqRect.x,sThis->trackinfo_obj->reAcqRect.y,sThis->trackinfo_obj->reAcqRect.width,sThis->trackinfo_obj->reAcqRect.height);
-		if(pIStuts->AvtTrkStat){
-			
+		if(pIStuts->AvtTrkStat){	
 			sThis->Track_reacq(sThis->trackinfo_obj->reAcqRect,2);
 		}
 	}
