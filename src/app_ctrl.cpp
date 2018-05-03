@@ -11,7 +11,6 @@
 #include"app_ctrl.h"
 #include"osa.h"
 #include "msgDriv.h"
-#include "UartMessage.h"
 #include"dx.h"
 CMD_EXT *msgextInCtrl;
 #define Coll_Save 0 //   1:quit coll is to save  cross  or  0:using save funtion to cross axis

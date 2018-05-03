@@ -19,7 +19,6 @@
 #include"osd_graph.h"
 
 #include "MeanShiftKalman.h"
-#include "MSTracker.h"
 #include "MMTD.h"
 //#include "BigVideo.hpp"
 

@@ -39,8 +39,6 @@
 #include <osa_debug.h>
 #include <dx.h>
 #include <dx_priv.h>
-#include <data_port.h>
-#include "ipc_port.h"
 #include "app_user.h"
 
 #define DX_TSK_PRI          2

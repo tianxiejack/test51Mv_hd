@@ -41,7 +41,6 @@
 #include "app_user.h"
 #include "app_global.h"
 #include"osd_graph.h"
-#include "app_hardctrl.h"
 
 
 static Int32 APP_loadDefCfg( int item);

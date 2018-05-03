@@ -39,7 +39,6 @@
 
 #include "script.h"
 #include "sys_config.h"
-#include "port_tsk.h"
 
 #ifndef DATA_FILE_0
 #define DATA_FILE_0 NULL

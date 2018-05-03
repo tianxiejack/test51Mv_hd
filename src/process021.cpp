@@ -11,7 +11,6 @@
 
 
 #include "dx_main.h"
-#include "UartMessage.h"
 #include "msgDriv.h"
 #include"app_ctrl.h"
 #include"dx.h"
