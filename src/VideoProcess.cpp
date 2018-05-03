@@ -130,39 +130,18 @@ void CVideoProcess::main_proc_func()
 
 		frame_gray = Mat(frame.rows, frame.cols, CV_8UC1);
 
-//		OSA_printf("%s:chId = %d , w=%d, h=%d \n",__func__, chId, frame.cols, frame.rows);
-
-
-
 		if(channel == 2)
 		{
-		//	tstart = getTickCount();
-			//frame_gray = Mat(frame.rows, frame.cols, CV_8UC1, m_grayMem[0]);
-			//cutColor(frame, frame_gray, CV_YUV2GRAY_YUYV);
 			extractYUYV2Gray2(frame, frame_gray);
-			//extractYUYV2Gray(frame, frame_gray);
-
-		//	OSA_printf("chId = %d, YUV2GRAY: time = %f sec \n", chId, ( (getTickCount() - tstart)/getTickFrequency()) );
-		}else{
+		}
+		else
+		{
 			memcpy(frame_gray.data, frame.data, frame.cols * frame.rows*channel*sizeof(unsigned char));
 		}
-
-#if 0
-
-		//UtcBlobDetectSR
-		rectangle( m_display.m_imgOsd[1],
-			Point( preAcpSR.x, preAcpSR.y ),
-			Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-			cvScalar(0,0,0,0), 1, 8 );
-
-		//line(m_display.m_imgOsd[1], erspt1, erspt2, cvScalar(0,0,0,0), 1, 8, 0 );
-		//line(m_display.m_imgOsd[1], erspt3, erspt4, cvScalar(0,0,0,0), 1, 8, 0 );
-
-		
-#endif
 #if 1
 		if(wFileFlag == true && m_pwFile != NULL){
-			if(bTrack){
+			if(bTrack)
+			{
 				timeFlag--;
 				if(timeFlag == 0)
 					timeFlag = 0;
@@ -173,13 +152,10 @@ void CVideoProcess::main_proc_func()
 #endif		
 		if(bTrack)
 		{
-			
 			iTrackStat = ReAcqTarget();
-			//int64 movetrktime = 0;
 			if(Movedetect&&(iTrackStat==0))
-				{
-					//movetrktime = getTickCount();
-					#if 1
+			{
+				#if 1
 					IMG_MAT image;
 					image.data_u8 = frame_gray.data;
 					image.width = frame_gray.cols;
@@ -191,179 +167,83 @@ void CVideoProcess::main_proc_func()
 					Movedetect = UtcAcqTarget(m_track,image,acqRect,&TRKMoveAcpSR);
 					if(Movedetect)
 						MoveAcpSR=TRKMoveAcpSR;
-					#endif
-					moveStat=0;
-					Movedetect=FALSE;
+				#endif
+				moveStat=0;
+				Movedetect=FALSE;
 
-					if(moveDetectRect)
-						rectangle( m_display.m_imgOsd[1],
-							Point( preAcpSR.x, preAcpSR.y ),
-							Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-							cvScalar(0,0,0,0), 1, 8 );
-					
-					unsigned int currentx=MoveAcpSR.x+MoveAcpSR.width/2;
-					unsigned int currenty=MoveAcpSR.y+MoveAcpSR.height/2;
-							
-						
-					if((m_rcTrack.x+m_rcTrack.width>MoveAcpSR.x&&
-						m_rcTrack.x<MoveAcpSR.x+MoveAcpSR.width)||
-						(m_rcTrack.y+m_rcTrack.height>MoveAcpSR.y&&
-						m_rcTrack.y<MoveAcpSR.y+MoveAcpSR.height))
-						{
-
+				if(moveDetectRect)
+					rectangle( m_display.m_imgOsd[1],
+						Point( preAcpSR.x, preAcpSR.y ),
+						Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
+						cvScalar(0,0,0,0), 1, 8 );
 				
-					MoveAcpSR.width=MoveAcpSR.width*1.4;
-					MoveAcpSR.height=MoveAcpSR.height*1.4;
+				unsigned int currentx=MoveAcpSR.x+MoveAcpSR.width/2;
+				unsigned int currenty=MoveAcpSR.y+MoveAcpSR.height/2;
+						
 					
-					
-					//if(preAcpSR.x-preAcpSR.width)
-					if(MoveAcpSR.width<m_rcTrack.width/2)
+				if((m_rcTrack.x+m_rcTrack.width>MoveAcpSR.x&&
+					m_rcTrack.x<MoveAcpSR.x+MoveAcpSR.width)||
+					(m_rcTrack.y+m_rcTrack.height>MoveAcpSR.y&&
+					m_rcTrack.y<MoveAcpSR.y+MoveAcpSR.height))
+					{
+
+						MoveAcpSR.width=MoveAcpSR.width*1.4;
+						MoveAcpSR.height=MoveAcpSR.height*1.4;
+						
+						if(MoveAcpSR.width<m_rcTrack.width/2)
 						{
 							MoveAcpSR.width=m_rcTrack.width/2;
 						}
-					else if(MoveAcpSR.width>m_rcTrack.width)
+						else if(MoveAcpSR.width>m_rcTrack.width)
 						{
 							MoveAcpSR.width=m_rcTrack.width;
 						}
-					if(MoveAcpSR.width<16)
+						if(MoveAcpSR.width<16)
 						{
 							MoveAcpSR.width=16;
 						}
-					
-					if(MoveAcpSR.height<m_rcTrack.height/2)
+						if(MoveAcpSR.height<m_rcTrack.height/2)
 						{
 							MoveAcpSR.height=m_rcTrack.height/2;
 						}
-					else if(MoveAcpSR.height>m_rcTrack.height)
+						else if(MoveAcpSR.height>m_rcTrack.height)
 						{
 							MoveAcpSR.height=m_rcTrack.height;
 						}
-					if(MoveAcpSR.height<16)
+						if(MoveAcpSR.height<16)
 						{
 							MoveAcpSR.height=16;
 						}
-					if(MoveAcpSR.width*1.0/MoveAcpSR.height>1.333)
+						if(MoveAcpSR.width*1.0/MoveAcpSR.height>1.333)
 						{
 							MoveAcpSR.height=MoveAcpSR.width/1.333;
-
 						}
-					else if(MoveAcpSR.height*1.0/MoveAcpSR.width>1.333)
+						else if(MoveAcpSR.height*1.0/MoveAcpSR.width>1.333)
 						{
 							MoveAcpSR.width=MoveAcpSR.height/1.333;
-
 						}
-					
-					
-					m_rcTrack.x=currentx-MoveAcpSR.width/2;
-					m_rcTrack.y=currenty-MoveAcpSR.height/2;
-					m_rcTrack.width=MoveAcpSR.width;
-					m_rcTrack.height=MoveAcpSR.height;
+						
+						m_rcTrack.x=currentx-MoveAcpSR.width/2;
+						m_rcTrack.y=currenty-MoveAcpSR.height/2;
+						m_rcTrack.width=MoveAcpSR.width;
+						m_rcTrack.height=MoveAcpSR.height;
 					}
 					else
-						moveStat=1;
-					
-					
-					
+						moveStat=1;		
 
-				}
-//			tstart = getTickCount();
+			}
 			int64 trktime = 0;
 			if(algOsdRect == true)
 				trktime = getTickCount();//OSA_getCurTimeInMsec();
-			//printf("********x=%d y=%d w=%d h=%d\n",m_rcTrack.x,m_rcTrack.y,m_rcTrack.width,m_rcTrack.height);
-		
-			//
 			if(m_iTrackStat==2)
-				{
+			{
 				//m_searchmod=1;
-				#if 0
-					switch( m_searchmod)
-						{
-						case 0:
-							UtcSetSerchMode(m_track,SEARCH_MODE_ALL);
-							break;
-						case 1:
-							UtcSetSerchMode(m_track,SEARCH_MODE_LEFT);
-							break;
-						case 2:
-							UtcSetSerchMode(m_track,SEARCH_MODE_RIGHT);
-							break;
-						default:
-							UtcSetSerchMode(m_track,SEARCH_MODE_ALL);
-							break;
-						}
-				#endif
-
-				}
-			else
-				{
-					m_searchmod=0;
-
-				}
-			//Grayconvfilter(frame_gray, frame_gray, m_rcTrack);
-			if(0)
-			{//(algOsdRect == true){
-				if(iTrackStat == 0){
-					salientMap = cv::Mat(ScalerLarge, ScalerLarge, CV_8UC1);
-					sobelMap = cv::Mat(ScalerLarge, ScalerLarge, CV_8UC1);
-
-					//\u5de6\u4e0b\u89d2\u663e\u793a\u5c40\u90e8\u56fe\u50cf
-					cv::Mat ROIMat,salientMat, sobelMat;
-					cv::Rect ROIRect;
-					cv::Point pt;
-					#if 0
-					ROIRect.width = (int)m_rcTrack.width;//frame_gray.cols/3;
-					ROIRect.height = (int)m_rcTrack.height;//frame_gray.rows/3;
-					ROIRect.x = (int)m_rcTrack.x;//frame_gray.cols/2 - ROIRect.width/2;
-					ROIRect.y = (int)m_rcTrack.y;//frame_gray.rows/2 - ROIRect.height/2;
-					frame_gray(ROIRect).copyTo(ROIMat);
-					cv::cvtColor(ROIMat, ROIMat, CV_GRAY2BGRA);
-					pt.x = 0; pt.y = m_display.m_imgOsd[1].rows - ROIMat.rows;
-					copyMat2Mat(ROIMat, m_display.m_imgOsd[1], pt);
-
-
-					#else
-					IMG_MAT image;
-					image.data_u8 = frame_gray.data;
-					image.width = frame_gray.cols;
-					image.height = frame_gray.rows;
-					image.channels = 1;
-					image.step[0] = image.width;
-					image.dtype = 0;
-					UTC_ACQ_param acq;
-					acq.axisX = image.width/2;
-					acq.axisY = image.height/2;
-					acq.rcWin.x = (int)(m_rcTrack.x);
-					acq.rcWin.y = (int)(m_rcTrack.y);
-					acq.rcWin.width = (int)(m_rcTrack.width);
-					acq.rcWin.height = (int)(m_rcTrack.height);
-
-					
-					
-					UtcTrkPreAcq2(m_track, image, acq, &AcqRect, NULL, salientMap.data, sobelMap.data, NULL, NULL);
-
-					cv::cvtColor(salientMap, salientMat, CV_GRAY2BGRA);
-					pt.x = 0; pt.y = m_display.m_imgOsd[1].rows - salientMat.rows;
-					copyMat2Mat(salientMat, m_display.m_imgOsd[1], pt);
-					
-					
-					cv::cvtColor(sobelMap, sobelMat, CV_GRAY2BGRA);
-					pt.x = salientMat.cols; pt.y = m_display.m_imgOsd[1].rows - sobelMat.rows;
-					copyMat2Mat(sobelMat, m_display.m_imgOsd[1], pt);
-
-					#endif
-				}
 			}
-			
-			
+			else
+			{
+				m_searchmod=0;
+			}
 			m_iTrackStat = process_track(iTrackStat, frame_gray, m_dc, m_rcTrack);
-
-		//	drawcvrect(m_dc,m_rcTrack.x,m_rcTrack.y,m_rcTrack.width,m_rcTrack.height,2)
-
-				
-			#if  0//test move trk time
-		
-			#endif
 
 			UtcGetSceneMV(m_track, &speedx, &speedy);
 			UtcGetOptValue(m_track, &optValue);
@@ -455,19 +335,6 @@ void CVideoProcess::main_proc_func()
 
 			//m_MMTDObj.MMTDProcess(frame_gray, m_tgtBox, m_display.m_imgOsd[1], 0);
 			m_MMTDObj.MMTDProcessRect(frame_gray, m_tgtBox, roi, m_display.m_imgOsd[1], 0);
-			#if  0//test mtd process time
-			int time = ( (getTickCount() - tstart)/getTickFrequency())*1000;
-			static int totaltime = 0;
-			static int count11 = 1;
-			totaltime += time;
-			if((count11++)%100 == 0)
-			{
-				OSA_printf("ALL-MTD: time = %f msec \n", totaltime/100.0 );
-				//OSA_printf("ALL-MTD: time = %d msec \n", time);
-				count11 = 1;
-				totaltime=0;
-			}
-			#endif
 			for(int i=0;i<MAX_TARGET_NUMBER;i++)
 			{
 				m_mtd[chId]->tg[i].cur_x=m_tgtBox[i].Box.x+m_tgtBox[i].Box.width/2;
@@ -479,181 +346,90 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bBlobDetect)
 		{
-//			tstart = getTickCount();
-			Mat dysrc = frame_gray(Rect(frame_gray.cols/2-75, frame_gray.rows/2-75, 150, 150));
-			
-#if 1   //UtcBlobDetectSR
-			
+			Mat dysrc = frame_gray(Rect(frame_gray.cols/2-75, frame_gray.rows/2-75, 150, 150));					
 			BlobDetect(dysrc, adaptiveThred, m_blobRect);
-
-#else
+			//OSA_printf("ALL-BlobDetect: time = %f sec \n", ( (getTickCount() - tstart)/getTickFrequency()) );
+		}
+		else if (bMoveDetect)
+		{
 			IMG_MAT image;
-
 			image.data_u8 = frame_gray.data;
 			image.width = frame_gray.cols;
 			image.height = frame_gray.rows;
 			image.channels = 1;
 			image.step[0] = image.width;
 			image.dtype = 0;
+			image.size = frame_gray.cols*frame_gray.rows;
 
-			acqRect.axisX = 640;
-			acqRect.axisY = 512;
-			acqRect.rcWin.x = 640 - 44;
-			acqRect.rcWin.y = 512 -44;
-			acqRect.rcWin.width = 88;
-			acqRect.rcWin.height = 88;
+			if(moveDetectRect)
+				rectangle( m_display.m_imgOsd[1],
+					Point( preAcpSR.x, preAcpSR.y ),
+					Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
+					cvScalar(0,0,0,0), 1, 8 );
 
-			UtcBlobDetectSR(m_track,image,acqRect,&preAcpSR);
+			acqRect.axisX = m_ImageAxisx;
+			acqRect.axisY = m_ImageAxisy;
 
-			printf("+++++++++xy(%d,%d),wh(%d,%d)\n",preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);
-
-			if(preAcpSR.width<25)
-				preAcpSR.width = 25;
-			else if(preAcpSR.width>60)
-				preAcpSR.width = 60;
-				
-			if(preAcpSR.height<25)
-				preAcpSR.height = 25;
-			else if(preAcpSR.height>60)
-				preAcpSR.height = 60;
+			if(m_SensorStat == 0){
+				acqRect.rcWin.x = m_ImageAxisx - 50;
+				acqRect.rcWin.y = m_ImageAxisy -50;
+				acqRect.rcWin.width = 100;
+				acqRect.rcWin.height = 100;
+			}
+			else if(m_SensorStat == 1){
+				acqRect.rcWin.x = m_ImageAxisx - 25;
+				acqRect.rcWin.y = m_ImageAxisy -25;
+				acqRect.rcWin.width = 50;
+				acqRect.rcWin.height = 50;
+			}
 			
-			preAcpSR.x = preAcpSR.x*m_display.m_imgOsd[1].cols/frame.cols;
-			preAcpSR.y = preAcpSR.y*m_display.m_imgOsd[1].rows/frame.rows;
-			preAcpSR.width = preAcpSR.width*m_display.m_imgOsd[1].cols/frame.cols;
-			preAcpSR.height = preAcpSR.height*m_display.m_imgOsd[1].rows/frame.rows;
-
-/*
-			pt1.x = preAcpSR.x;
-			pt1.y = preAcpSR.y-preAcpSR.height/2;
-
-			pt2.x = preAcpSR.x+preAcpSR.width;
-			pt2.y = preAcpSR.y-preAcpSR.height/2;
-			line(m_display.m_imgOsd[1], pt1, pt2, cvScalar(0,255,0,255), 1, 8, 0 );
-			erspt1 = pt1;
-			erspt2 = pt2;
-
-			pt1.x = preAcpSR.x+preAcpSR.width/2;
-			pt1.y = preAcpSR.y;
-
-			pt2.x = preAcpSR.x+preAcpSR.width/2;
-			pt2.y = preAcpSR.y-preAcpSR.height;
-			line(m_display.m_imgOsd[1], pt1, pt2, cvScalar(0,255,0,255), 1, 8, 0 );
-			erspt3 = pt1;
-			erspt4 = pt2;*/
-
-			rectangle( m_display.m_imgOsd[1],
-				Point( preAcpSR.x, preAcpSR.y ),
-				Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-				cvScalar(0,255,0,255), 1, 8 );
-#endif
-//			OSA_printf("ALL-BlobDetect: time = %f sec \n", ( (getTickCount() - tstart)/getTickFrequency()) );
-		}
-		else if (bMoveDetect)
+			if((acqRect.rcWin.width!=50)&&(acqRect.rcWin.width!=100))
 			{
-				#if 1
-
-				IMG_MAT image;
-				image.data_u8 = frame_gray.data;
-				image.width = frame_gray.cols;
-				image.height = frame_gray.rows;
-				image.channels = 1;
-				image.step[0] = image.width;
-				image.dtype = 0;
-				image.size = frame_gray.cols*frame_gray.rows;
+				acqRect.rcWin.width=50;
+				acqRect.rcWin.height=50;
+			}
+			if(acqRect.rcWin.x<0)
+			{
+				acqRect.rcWin.x=0;
+				acqRect.axisX=image.width/2;
+				acqRect.axisY=image.height/2;
+			}
+			else if(acqRect.rcWin.x+acqRect.rcWin.width>image.width)
+			{
+				acqRect.rcWin.x=image.width/2-25;
+				acqRect.axisX=image.width/2;
+				acqRect.axisY=image.height/2;
+			}
+			if(acqRect.rcWin.y<0)
+			{
+				acqRect.rcWin.y=0;
+				acqRect.axisX=image.width/2;
+				acqRect.axisY=image.height/2;
+			}
+			else if(acqRect.rcWin.y+acqRect.rcWin.height>image.height)
+			{
+				acqRect.rcWin.y=image.height/2-25;
+				acqRect.axisX=image.width/2;
+				acqRect.axisY=image.height/2;
+			}
+					
+			Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
+			if(Movedetect)
+			{
+				//printf("+++++++++xy(%d,%d),wh(%d,%d)\n",preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);		
+				preAcpSR.x = MoveAcpSR.x*m_display.m_imgOsd[1].cols/frame.cols;
+				preAcpSR.y = MoveAcpSR.y*m_display.m_imgOsd[1].rows/frame.rows;
+				preAcpSR.width = MoveAcpSR.width*m_display.m_imgOsd[1].cols/frame.cols;
+				preAcpSR.height = MoveAcpSR.height*m_display.m_imgOsd[1].rows/frame.rows;
 
 				if(moveDetectRect)
 					rectangle( m_display.m_imgOsd[1],
 						Point( preAcpSR.x, preAcpSR.y ),
 						Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-						cvScalar(0,0,0,0), 1, 8 );
-
-				acqRect.axisX = m_ImageAxisx;
-				acqRect.axisY = m_ImageAxisy;
-
-				if(m_SensorStat == 0){
-					acqRect.rcWin.x = m_ImageAxisx - 50;
-					acqRect.rcWin.y = m_ImageAxisy -50;
-					acqRect.rcWin.width = 100;
-					acqRect.rcWin.height = 100;
-				}
-				else if(m_SensorStat == 1){
-					acqRect.rcWin.x = m_ImageAxisx - 25;
-					acqRect.rcWin.y = m_ImageAxisy -25;
-					acqRect.rcWin.width = 50;
-					acqRect.rcWin.height = 50;
-
-				}
-				/*
-				int64 acqtrktime = 0;
-				acqtrktime = getTickCount();
-				UtcAcqTarget(m_track,image,acqRect,&preAcpSR);
-				float time = ( (getTickCount() - acqtrktime)/getTickFrequency())*1000;;//OSA_getCurTimeInMsec() - trktime;
-				static float totaltime = 0;
-				static int count11 = 1;
-				totaltime += time;
-				if((count11++)%100 == 0)
-				{
-					OSA_printf("ALL-ACQTRK: time = %f ms \n", totaltime/100 );
-					count11 = 1;
-					totaltime = 0.0;
-				}
-				*/
-				//UtcTrkPreAcqSR(m_track,image,acqRect,&preAcpSR);
-				
-				if((acqRect.rcWin.width!=50)&&(acqRect.rcWin.width!=100))
-					{
-						acqRect.rcWin.width=50;
-						acqRect.rcWin.height=50;
-					}
-				if(acqRect.rcWin.x<0)
-					{
-						acqRect.rcWin.x=0;
-						acqRect.axisX=image.width/2;
-						acqRect.axisY=image.height/2;
-					}
-				else if(acqRect.rcWin.x+acqRect.rcWin.width>image.width)
-					{
-						acqRect.rcWin.x=image.width/2-25;
-						acqRect.axisX=image.width/2;
-						acqRect.axisY=image.height/2;
-					}
-				if(acqRect.rcWin.y<0)
-					{
-						acqRect.rcWin.y=0;
-						acqRect.axisX=image.width/2;
-						acqRect.axisY=image.height/2;
-					}
-				else if(acqRect.rcWin.y+acqRect.rcWin.height>image.height)
-					{
-						acqRect.rcWin.y=image.height/2-25;
-						acqRect.axisX=image.width/2;
-						acqRect.axisY=image.height/2;
-					}
-				
-				
-				
-				
-				Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
-				if(Movedetect)
-				{
-					//printf("+++++++++xy(%d,%d),wh(%d,%d)\n",preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);
-					
-					preAcpSR.x = MoveAcpSR.x*m_display.m_imgOsd[1].cols/frame.cols;
-					preAcpSR.y = MoveAcpSR.y*m_display.m_imgOsd[1].rows/frame.rows;
-					preAcpSR.width = MoveAcpSR.width*m_display.m_imgOsd[1].cols/frame.cols;
-					preAcpSR.height = MoveAcpSR.height*m_display.m_imgOsd[1].rows/frame.rows;
-
-					if(moveDetectRect)
-						rectangle( m_display.m_imgOsd[1],
-							Point( preAcpSR.x, preAcpSR.y ),
-							Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-							cvScalar(255,0,0,255), 1, 8 );
-
-				}
-#endif
-				
-
+						cvScalar(255,0,0,255), 1, 8 );
 			}
+
+		}
 
 		if(chId != m_curChId)
 			continue;
