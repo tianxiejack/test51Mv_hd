@@ -10,7 +10,6 @@ using namespace cv;
 
 int main(int argc, char **argv)
 {
-
 	CProcess021 proc;
 	App_dxmain();
 	proc.creat();

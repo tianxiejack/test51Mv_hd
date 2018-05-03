@@ -1,3 +1,5 @@
+
+#if 0
 #ifndef  CLAHE_HEAD
 #define  CLAHE_HEAD
 
@@ -43,5 +45,7 @@ static void Interpolate2 (kz_pixel_t*, int, unsigned long*, unsigned long*,
  
 const unsigned int uiMAX_REG_X = 16;	  /* max. # contextual regions in x-direction */ 
 const unsigned int uiMAX_REG_Y = 16;	  /* max. # contextual regions in y-direction */ 
+
+#endif
 
 #endif
