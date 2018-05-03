@@ -18,7 +18,6 @@
 #include "app_status.h"
 #include"osd_graph.h"
 
-#include "MeanShiftKalman.h"
 #include "MMTD.h"
 //#include "BigVideo.hpp"
 
