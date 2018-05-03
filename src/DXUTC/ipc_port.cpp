@@ -1,12 +1,4 @@
-/* ===========================================================================
-**
- *  \file ipc_port.c
- *
- *  \brief
- *
- *
- * ===========================================================================
- */
+#if 0
 
 #include <stdio.h>
 #include <string.h>
@@ -302,4 +294,4 @@ Int32 ipc_port_getByConfigId(void *Hdl, Int32 configId, Int32 value)
 
     return status;
 }
-
+#endif

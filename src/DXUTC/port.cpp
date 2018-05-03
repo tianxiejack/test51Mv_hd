@@ -28,7 +28,7 @@ Int32 port_create(IN Int32 portType, OUT port_handle** ppHdl)
 	}
 	if(portType == PORT_IPC)
 	{
-		return ipc_port_create(ppHdl);
+		//return ipc_port_create(ppHdl);
 	}
 
 	return  OSA_EFAIL;
@@ -53,7 +53,7 @@ Int32 port_destory(IN port_handle* pHdl)
 	}
 	
 	if(pHdl != NULL && pHdl->portType == PORT_IPC){
-		return ipc_port_destroy(pHdl);
+		;//return ipc_port_destroy(pHdl);
 	}
     
 	return  OSA_EFAIL;

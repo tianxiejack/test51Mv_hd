@@ -780,7 +780,7 @@ Int32 Dx_postMsg( Int32 msgId, Void *pPrm, Int32 prmSize )
         {
             pCfg->value = gDXD_info.sysConfig[configId];
 
-            ipc_port_getByConfigId(gDxObj.ipcPort,configId,pCfg->value);
+            //ipc_port_getByConfigId(gDxObj.ipcPort,configId,pCfg->value);
 
             status = OSA_SOK;
         }
@@ -800,7 +800,7 @@ Int32 Dx_postMsg( Int32 msgId, Void *pPrm, Int32 prmSize )
             status = OSA_SOK;
             gDXD_info.sysConfig[configId] = pCfg->value;
 
-            status = ipc_port_setByConfigId(gDxObj.ipcPort,configId,pCfg->value);
+            //status = ipc_port_setByConfigId(gDxObj.ipcPort,configId,pCfg->value);
         }
         else
         {
