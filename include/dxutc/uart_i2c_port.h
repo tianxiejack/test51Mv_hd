@@ -1,15 +1,4 @@
-/*=======================================================
-* Copyright (C), 2011-2012, ChamRun Tech. Co., Ltd.
-* FileName:		uart_i2c_port.h
-* Author:			xavier
-* Date:			2014-03-17
-* Description:		this file define MAX3109 register addr
-* Version:		version 1.00
-* Function List:
-* History:
-*     <author>  <time>   <version >   <desc>
-*     xavier    14/03/17     1.0     build this moudle
-   =======================================================*/
+#if 0
 
 #ifndef _UART_I2C_PORT_H_
 #define _UART_I2C_PORT_H_
@@ -170,3 +159,5 @@ Int32 uart_i2c_port_destroy( port_handle *pHdl );
 
 #endif
 /************************************** The End Of File **************************************/
+
+#endif

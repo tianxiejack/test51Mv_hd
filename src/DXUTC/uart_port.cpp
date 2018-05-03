@@ -1,3 +1,4 @@
+#if 0
 /*******************************************************************************
  *                                                                           
  * Copyright (c) 2012 ChamRun Tech Incorporated - http://www.casevision.com/ 
@@ -302,4 +303,4 @@ static Int32 uart_port_set(uart_port_handle *port)
 
 
 
-
+#endif

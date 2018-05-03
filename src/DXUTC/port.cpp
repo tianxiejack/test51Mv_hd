@@ -10,7 +10,7 @@ Int32 port_create(IN Int32 portType, OUT port_handle** ppHdl)
 {
 	if(portType == PORT_UART)
 	{
-		return uart_port_create(ppHdl);
+		//return uart_port_create(ppHdl);
 	}
 
 	if(portType == PORT_NET_UDP)
@@ -37,7 +37,7 @@ Int32 port_create(IN Int32 portType, OUT port_handle** ppHdl)
 Int32 port_destory(IN port_handle* pHdl)
 {
 	if(pHdl != NULL && pHdl->portType == PORT_UART){
-		return uart_port_destroy(pHdl);
+		//return uart_port_destroy(pHdl);
 	}
 
 	if(pHdl != NULL && pHdl->portType == PORT_NET_UDP){
