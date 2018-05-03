@@ -1,6 +1,7 @@
 #include <npp.h>
 #include <cuda_runtime.h>
 #include "Exceptions.h"
+#if 0
 
 #include <math.h>
 
@@ -398,3 +399,5 @@ void YUYV2Jpeg(  const char *szOutputFile, Npp8u	*nppSrcImage[], Npp32s nppImage
 			cudaFree(apdDCT[i]);
 		}
 }
+
+#endif
