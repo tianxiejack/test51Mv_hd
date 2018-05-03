@@ -11,23 +11,6 @@
 #define SYSCFG_SAVE_FILE1   			"/mnt/ubi/config_1.txt"
 #define SYSCFG_SAVE_FILE2   			"/mnt/ubi/config_2.txt"
 
-#define STITCH_INPUT_WIDTH  		(720)
-#define STITCH_INPUT_HEIGHT 		(576)
-
-#define INCLUDE_MAIN_PORT
-#ifdef INCLUDE_MAIN_PORT
-//#undef MAIN_PORT1_ENABLE
-#define MAIN_PORT1_ENABLE
-#define MAIN_PORT1_DEV     			 "/dev/ttyTHS2"
-#undef MAIN_PORT2_ENABLE
-#define MAIN_PORT2_DEV      			 "/dev/ttyO1"
-#define MAIN_PORT_UDP
-#define MAIN_PORT_UDP_IPORT 		5550
-//#define DATA_PORT
-#define DATA_PORT_IPORT     			5552
-//#define IPC_PORT            　8237
-#endif
-
 #define CFGID_BUILD( blkId, feildId )   ( ( (( blkId) << 4 ) & 0xFF0 ) | ( feildId ) )
 #define CFGID_blkId( cfgId )            ( ( (cfgId) >> 4 ) & 0xFF )
 #define CFGID_feildId( cfgId )          ( cfgId & 0xF )
