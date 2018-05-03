@@ -1,3 +1,5 @@
+
+#if 0
 #ifndef _UARTMESSAGE_H_
 #define _UARTMESSAGE_H_
 
@@ -33,5 +35,8 @@ int Uart_lookupSync(unsigned char *RS422,int *len);
 #ifdef __cplusplus
 }
 #endif
+
+#endif
+
 
 #endif

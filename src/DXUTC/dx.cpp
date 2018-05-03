@@ -55,15 +55,7 @@ typedef struct Dx_Obj
     Int32           *sysConfig;
     UpdateConfigFxn *fxnsCfg;
 
-#ifdef INCLUDE_MAIN_PORT
 
-    port_handle *mainPort[3];
-    OSA_TskHndl *mainPortTsk[3];
-#endif
-
-    port_handle *dataPort;
-
-    port_handle *ipcPort;
     OSA_TskHndl *ipcPortTsk;
 
     UInt32  tmReg[DX_TIMER_MAX];
@@ -357,80 +349,6 @@ static Int32 Dx_syscfgLoadConfigAs( Int32 blkId, Int32 feildId )
 Int32 Dx_openMport( void )
 {
     Int32 status = OSA_SOK;
-#ifdef INCLUDE_MAIN_PORT
-
-    {
-        ipc_open_params     mIpcOpenParams;
-        uart_open_params	mUartOpenParams;
-        udp_open_params		mUdpOpenParams;
-        mUartOpenParams.baudrate   = 115200;
-        mUartOpenParams.databits   = 8;
-        mUartOpenParams.parity	   = 'E';
-        mUartOpenParams.stopbits   = 1;
-
-        mUdpOpenParams.interfaceIp = 0;
-        mIpcOpenParams.msgKey      = 0x82345;
-
-#ifdef MAIN_PORT1_ENABLE
-
-        status = port_create( PORT_UART, &gDxObj.mainPort[0] );
-        OSA_assert( status == OSA_SOK );
-        OSA_assert( gDxObj.mainPort[0] != NULL );
-        strcpy( mUartOpenParams.device, MAIN_PORT1_DEV );
-        status = gDxObj.mainPort[0]->open( gDxObj.mainPort[0], &mUartOpenParams );
-        OSA_assert( status == OSA_SOK );
-        gDxObj.mainPortTsk[0] = port_tsk_create( gDxObj.mainPort[0], &gDxObj.tsk, DX_MSGID_PORT_DATA, (void*)0 );
-        OSA_assert( gDxObj.mainPortTsk[0] != NULL );
-#endif
-
-#ifdef MAIN_PORT2_ENABLE
-
-        status = port_create( PORT_UART, &gDxObj.mainPort[1] );
-        OSA_assert( status == OSA_SOK );
-        strcpy( mUartOpenParams.device, MAIN_PORT2_DEV );
-        status = gDxObj.mainPort[1]->open( gDxObj.mainPort[1], &mUartOpenParams );
-        OSA_assert( status == OSA_SOK );
-        gDxObj.mainPortTsk[1] = port_tsk_create( gDxObj.mainPort[1], &gDxObj.tsk, DX_MSGID_PORT_DATA, (void*)1 );
-        OSA_assert( gDxObj.mainPortTsk[1] != NULL );
-#endif
-
-#ifdef MAIN_PORT_UDP
-
-        status = port_create( PORT_NET_UDP, &gDxObj.mainPort[2] );
-        OSA_assert( status == OSA_SOK );
-        mUdpOpenParams.port	   = MAIN_PORT_UDP_IPORT;
-        status				   = gDxObj.mainPort[2]->open( gDxObj.mainPort[2], &mUdpOpenParams );
-        OSA_assert( status == OSA_SOK );
-        gDxObj.mainPortTsk[2] = port_tsk_create( gDxObj.mainPort[2], &gDxObj.tsk, DX_MSGID_PORT_DATA, (void*)2 );
-        OSA_assert( gDxObj.mainPortTsk[2] != NULL );
-#endif
-
-#ifdef DATA_PORT
-
-        status = port_create( PORT_NET_UDP, &gDxObj.dataPort );
-        OSA_assert( status == OSA_SOK );
-        mUdpOpenParams.port	   = DATA_PORT_IPORT;
-        status				   = gDxObj.dataPort->open( gDxObj.dataPort, &mUdpOpenParams );
-        OSA_assert( status == OSA_SOK );
-#endif
-
-#ifdef IPC_PORT
-
-        status = port_create( PORT_IPC, &gDxObj.ipcPort);
-        OSA_assert( status == OSA_SOK );
-
-        status              = gDxObj.ipcPort->open( gDxObj.ipcPort, &mIpcOpenParams );
-        OSA_assert( status != OSA_EFAIL );
-
-        gDxObj.ipcPortTsk = port_tsk_create( gDxObj.ipcPort, &gDxObj.tsk, DX_MSGID_PORT_DATA, (void*)2 );
-        gDxObj.mainPort[2] = gDxObj.ipcPort;
-        gDxObj.mainPortTsk[2] = gDxObj.ipcPortTsk ;
-
-        OSA_assert( gDxObj.ipcPort != NULL );
-#endif
-
-    }
-#endif
     return status;
 }
 
@@ -446,54 +364,6 @@ Int32 Dx_openMport( void )
 Int32 Dx_closeMport( void )
 {
     Int32 status = OSA_SOK;
-
-#ifdef INCLUDE_MAIN_PORT
-
-    {
-#ifdef MAIN_PORT1_ENABLE
-
-        port_tsk_destroy( gDxObj.mainPortTsk[0] );
-        gDxObj.mainPortTsk[0] = NULL;
-        gDxObj.mainPort[0]->close( gDxObj.mainPort[0] );
-        port_destory( gDxObj.mainPort[0] );
-        gDxObj.mainPort[0] = NULL;
-
-#endif
-
-#ifdef MAIN_PORT2_ENABLE
-
-        port_tsk_destroy( gDxObj.mainPortTsk[1] );
-        gDxObj.mainPortTsk[1] = NULL;
-        gDxObj.mainPort[1]->close( gDxObj.mainPort[1] );
-        port_destory( gDxObj.mainPort[1] );
-        gDxObj.mainPort[1] = NULL;
-#endif
-
-#ifdef MAIN_PORT_UDP
-
-        port_tsk_destroy( gDxObj.mainPortTsk[2] );
-        gDxObj.mainPortTsk[2] = NULL;
-        gDxObj.mainPort[2]->close( gDxObj.mainPort[2] );
-        port_destory( gDxObj.mainPort[2] );
-        gDxObj.mainPort[2] = NULL;
-#endif
-
-#ifdef DATA_PORT
-
-        gDxObj.dataPort->close( gDxObj.dataPort );
-        port_destory( gDxObj.dataPort );
-        gDxObj.dataPort = NULL;
-#endif
-#ifdef IPC_PORT
-
-        gDxObj.dataPort->close( gDxObj.ipcPort );
-        port_tsk_destroy( gDxObj.ipcPortTsk);
-        port_destory( gDxObj.ipcPort );
-        gDxObj.ipcPort = NULL;
-#endif
-
-    }
-#endif
     return status;
 }
 
@@ -853,17 +723,6 @@ static int Dx_portDataRecvSend( int iPort )
         OSA_printf( "%s %d: enter!!!\r\n", __func__, OSA_getCurTimeInMsec( ) );
     }
 
-    if ( gDxObj.mainPort[iPort] == NULL || gDxObj.mainPortTsk[iPort] == NULL )
-    {
-        return OSA_EFAIL;
-    }
-
-    status = port_tsk_recv( gDxObj.mainPortTsk[iPort], data, 64, OSA_TIMEOUT_NONE );
-    if( status <= 0 )
-    {
-        return OSA_EFAIL;
-    }
-
     if( MP_flag( data ) == 0x55 )
     {
         if( MP_checkOk( data ) )
@@ -904,7 +763,7 @@ static int Dx_portDataRecvSend( int iPort )
                 MP_feildId( data ) = feildId;
                 MP_value( data )   = value;
                 MP_check( data );
-                status = port_tsk_send( gDxObj.mainPortTsk[iPort], data, 8, OSA_TIMEOUT_FOREVER );
+                //status = port_tsk_send( gDxObj.mainPortTsk[iPort], data, 8, OSA_TIMEOUT_FOREVER );
             }
             else
             {
@@ -949,7 +808,7 @@ static int Dx_portDataRecvSend( int iPort )
                 MP_feildId( data ) = feildId;
                 MP_value( data )   = value;
                 MP_check( data );
-                status = port_tsk_send( gDxObj.mainPortTsk[iPort], data, 8, OSA_TIMEOUT_FOREVER );
+                //status = port_tsk_send( gDxObj.mainPortTsk[iPort], data, 8, OSA_TIMEOUT_FOREVER );
 
             }
             else
@@ -1227,14 +1086,6 @@ static Int32 Dx_updateCfgDownloadFile( Int32 blkId, Int32 feildId )
     transBlkId	   = blkId;
     transFieldId   = feildId;
 
-    status = data_port_send_file( gDxObj.dataPort, gFileTab[itemId], cDataPortTimeout, data_transfer_callback );
-
-    if( status != OSA_SOK )
-    {
-        FIELD_ITEM_SYS( CFGID_BUILD(transBlkId, transFieldId) )	   = status;
-        transBlkId								   = 0;
-        transFieldId							   = 0;
-    }
 
     return status;
 }
@@ -1272,7 +1123,7 @@ static Int32 Dx_updateCfgUploadFile( Int32 blkId, Int32 feildId )
     transBlkId	= blkId;
     transFieldId   	= feildId;
 
-    status = data_port_recv_file( gDxObj.dataPort, gFileTab[itemId], cDataPortTimeout, data_transfer_callback );
+    //status = data_port_recv_file( gDxObj.dataPort, gFileTab[itemId], cDataPortTimeout, data_transfer_callback );
 //status = data_port_recv_file( gDxObj.dataPort, "/mnt/config/config_0.txt", cDataPortTimeout, data_transfer_callback );
     if( status != OSA_SOK )
     {
@@ -1322,14 +1173,6 @@ static Int32 Dx_updateCfgDownloadData( Int32 blkId, Int32 feildId )
     transBlkId	   = blkId;
     transFieldId   = feildId;
 
-    status = data_port_send_data( gDxObj.dataPort,(Uint8 *) address, length, cDataPortTimeout, data_transfer_callback );
-
-    if( status != OSA_SOK )
-    {
-        FIELD_ITEM_SYS( CFGID_BUILD(transBlkId, transFieldId) )	   = status;
-        transBlkId								   = 0;
-        transFieldId							   = 0;
-    }
 
     return status;
 }
@@ -1371,15 +1214,6 @@ static Int32 Dx_updateCfgUploadData( Int32 blkId, Int32 feildId )
 
     transBlkId	   = blkId;
     transFieldId   = feildId;
-
-    status = data_port_recv_data( gDxObj.dataPort, (Uint8 *) address, length, cDataPortTimeout, data_transfer_callback,TRUE);
-
-    if( status != OSA_SOK )
-    {
-        FIELD_ITEM_SYS( CFGID_BUILD(transBlkId, transFieldId) )	   = status;
-        transBlkId								   = 0;
-        transFieldId							   = 0;
-    }
 
     return status;
 }

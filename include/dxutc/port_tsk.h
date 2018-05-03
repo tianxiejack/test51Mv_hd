@@ -1,4 +1,4 @@
-
+#if 0
 #ifndef _PORT_TASK_H_
 #define _PORT_TASK_H_
 
@@ -20,4 +20,5 @@ int port_tsk_send(OSA_TskHndl * tsk, Uint8 *data, Int32  nbytes, Uint32 timeout)
 int port_tsk_recv(OSA_TskHndl * tsk, Uint8 *data, Int32  nMaxBytes, Uint32 timeout);
 
 
+#endif
 #endif

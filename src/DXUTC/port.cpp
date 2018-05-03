@@ -1,4 +1,4 @@
-
+#if 0
 #include <port.h>
 #include <ipc_port.h>
 #include <uart_port.h>
@@ -87,3 +87,5 @@ void port_status_print(IN port_handle* pHdl)
 	
 	OSA_printf("\n");
 }
+
+#endif

@@ -467,7 +467,7 @@ bool CProcess021::OnPreProcess(int chId, Mat &frame)
 	if(m_bCast){
 		Uint32 curTm = OSA_getCurTimeInMsec();
 		Uint32 elapse = curTm - m_castTm;
-		MSGAPI_AckSnd( AckTrkErr);
+		//MSGAPI_AckSnd( AckTrkErr);
 		if(elapse < 2000){
 			return false;
 		}
@@ -674,7 +674,7 @@ void CProcess021::DrawBlob(BlobRect blobRct,  bool bShow /*= true*/)
 			if((extInCtrl.TempTvCollX==0)||(extInCtrl.TempTvCollY==0))
 				;
 			else					
-				MSGAPI_AckSnd( AckTvCollErr);
+				;//MSGAPI_AckSnd( AckTvCollErr);
 		}
 	}
 }
@@ -923,7 +923,7 @@ void CProcess021::drawmmt(TARGET tg[],bool bShow)
 			
 
 			if(Mmtsendtime==0)
-				MSGAPI_AckSnd( AckMtdInfo);
+				;//MSGAPI_AckSnd( AckMtdInfo);
 			Mmtsendtime++;
 			if(Mmtsendtime==1)
 				{
@@ -1246,7 +1246,7 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 			
 
 			if(Mmtsendtime==0)
-				MSGAPI_AckSnd( AckMtdInfo);
+				;//MSGAPI_AckSnd( AckMtdInfo);
 			Mmtsendtime++;
 			if(Mmtsendtime==1)
 				{
@@ -1819,7 +1819,7 @@ osdindex++;
 			if(extInCtrl.unitTrkStat!=extInCtrl.unitTrkStatpri)
 			{
 				extInCtrl.unitTrkStatpri=extInCtrl.unitTrkStat;
-				MSGAPI_AckSnd( AckTrkType);
+				//MSGAPI_AckSnd( AckTrkType);
 			}
 
 		 }

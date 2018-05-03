@@ -1,4 +1,4 @@
-
+#if 0
 #include <data_port.h>
 #include <osa_rng.h>
 #include "app_global.h"
@@ -431,3 +431,4 @@ int data_port_recv_file(port_handle *port, char *file, Uint32 timeout, fxnDataPo
 	return retVal;
 }
 
+#endif

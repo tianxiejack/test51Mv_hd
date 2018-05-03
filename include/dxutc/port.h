@@ -1,4 +1,4 @@
-
+#if 0
 #ifndef _UTILS_PORT_H_
 #define _UTILS_PORT_H_
 
@@ -144,5 +144,7 @@ Int32 port_destory(IN port_handle* pHdl);
 void port_status_print(IN port_handle* pHdl);
 
 
+
+#endif
 
 #endif

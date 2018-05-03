@@ -1,3 +1,5 @@
+
+#if 0
 #include "UartMessage.h"
 #include"app_status.h"
 #include"osa.h"
@@ -2218,4 +2220,4 @@ int uartMessage(void)
 }
 
 
-
+#endif

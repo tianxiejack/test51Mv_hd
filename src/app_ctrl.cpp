@@ -95,7 +95,7 @@ void app_ctrl_freezeReset(CMD_EXT * pInCmd)
 	if((pristatus&0x03)!=(pIStuts->unitFaultStat&0x03))
 		{
 			pristatus=pIStuts->unitFaultStat;
-			MSGAPI_AckSnd( AckPeroidChek);
+			//MSGAPI_AckSnd( AckPeroidChek);
 		}
 	//printf("*************************\n");
 
@@ -120,13 +120,13 @@ void app_ctrl_setSensor(CMD_EXT * pInCmd)
         pIStuts->SensorStat = pInCmd->SensorStat;
         //pIStuts->AvtMoveX = pIStuts->AvtMoveY = 0; //switch sensor axisxy clean
         //for  reply
-        MSGAPI_AckSnd(AckSensor);
+        //MSGAPI_AckSnd(AckSensor);
 	 app_ctrl_Sensorchange(pInCmd);
 	 OSA_printf("the sensorstat=%d  x=%d y=%d\n",pIStuts->SensorStat,pIStuts->unitAxisX[pIStuts->SensorStat ],pIStuts->unitAxisY[pIStuts->SensorStat ]);
         MSGDRIV_send(MSGID_EXT_INPUT_SENSOR, 0);
     }
     else
-            MSGAPI_AckSnd(AckSensor);
+           ;// MSGAPI_AckSnd(AckSensor);
 
    return ;
 }
@@ -173,7 +173,7 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 	
     }
 
-    MSGAPI_AckSnd(AckTrkState);
+    //MSGAPI_AckSnd(AckTrkState);
    
    return ;
 }
@@ -227,13 +227,13 @@ void app_ctrl_setMMT(CMD_EXT * pInCmd)
         if(pInCmd->AvtTrkStat == eTrk_mode_acq)
         	{
             MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
-		MSGAPI_AckSnd(AckMtdStat); 
+		//MSGAPI_AckSnd(AckMtdStat);
         	}
         else
-           MSGAPI_AckSnd(AckMtdStat); 
+           ;//MSGAPI_AckSnd(AckMtdStat);
     }
    else
-        MSGAPI_AckSnd(  AckMtdStat);
+        ;//MSGAPI_AckSnd(  AckMtdStat);
 
    if(pIStuts->MMTTempStat==3||pIStuts->MMTTempStat==4)
    	{
@@ -278,14 +278,14 @@ void app_ctrl_setTrkBomen(CMD_EXT * pInCmd)
 
     if(pInCmd->TrkBomenCtrl != 0x01 && pInCmd->TrkBomenCtrl != 0x02)
     {
-            MSGAPI_AckSnd(AckWaveDoor);
+            //MSGAPI_AckSnd(AckWaveDoor);
             return ;
     }
     if(pInCmd->TrkBomenCtrl != pIStuts->TrkBomenCtrl)
         pIStuts->TrkBomenCtrl = pInCmd->TrkBomenCtrl;
 
     /***for **reply*****/
-    MSGAPI_AckSnd(AckWaveDoor);
+    //MSGAPI_AckSnd(AckWaveDoor);
    
    return ;
 }
@@ -316,7 +316,7 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
 		iChangeMask++;
 
     /***for **reply*****/		
-    MSGAPI_AckSnd( AckWaveDoorPos);
+    //MSGAPI_AckSnd( AckWaveDoorPos);
     
     if((pIStuts->CmdType == 0x07) &&(iChangeMask))
     {
@@ -358,9 +358,9 @@ void app_ctrl_setZoom(CMD_EXT * pInCmd)
 
     /***for **reply*****/
     if(pIStuts->CmdType == CmdZoom)
-    	MSGAPI_AckSnd(AckZoom);
+    	;//MSGAPI_AckSnd(AckZoom);
     else if(pIStuts->CmdType == CmdSmallest)
-	MSGAPI_AckSnd(AckSmallest);	
+	;//MSGAPI_AckSnd(AckSmallest);
 		
    return ;
 }
@@ -414,7 +414,7 @@ void app_ctrl_setFRColl(CMD_EXT * pInCmd)
 
 
     /***for **reply*****/
-    MSGAPI_AckSnd( AckFrColl);
+    //MSGAPI_AckSnd( AckFrColl);
    MSGDRIV_send(MSGID_EXT_INPUT_ENFREZZ, 0);
 	#if 0
 
@@ -524,7 +524,7 @@ void app_ctrl_setTvColl(CMD_EXT * pInCmd)
 		#endif
     }
    // else
-          MSGAPI_AckSnd( AckTvColl);         
+          //MSGAPI_AckSnd( AckTvColl);
    return ;
 }
 
@@ -548,10 +548,10 @@ void app_ctrl_setAimSize(CMD_EXT * pInCmd)
        // MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
        MSGDRIV_send(MSGID_EXT_INPUT_AIMSIZE, 0);
        
-	  MSGAPI_AckSnd( AckWaveDoorScal);
+	  //MSGAPI_AckSnd( AckWaveDoorScal);
     }
     else
-        MSGAPI_AckSnd( AckWaveDoorScal);
+        ;//MSGAPI_AckSnd( AckWaveDoorScal);
    
    return ;
 }
@@ -569,7 +569,7 @@ void app_ctrl_setTargetPal(CMD_EXT * pInCmd)
     if(pInCmd->TargetPal != 0x01 &&
                  pInCmd->TargetPal != 0x02)
     {
-        MSGAPI_AckSnd( AckTarPal);  
+        //MSGAPI_AckSnd( AckTarPal);
         return ;
     }
     
@@ -577,7 +577,7 @@ void app_ctrl_setTargetPal(CMD_EXT * pInCmd)
    	    pIStuts->TargetPal = pInCmd->TargetPal;
    
    /***for **reply*****/
-   MSGAPI_AckSnd( AckTarPal);
+   //MSGAPI_AckSnd( AckTarPal);
    
    return ;
 }
@@ -643,7 +643,7 @@ void app_ctrl_setFovCtrl(CMD_EXT * pInCmd)
         }
     }*/
     /***for **reply*****/
-    MSGAPI_AckSnd( AckFov);
+    //MSGAPI_AckSnd( AckFov);
    return ;
 }
 
@@ -673,7 +673,7 @@ void app_ctrl_setSerTrk(CMD_EXT * pInCmd )
 		pIStuts->CmdType = pInCmd->CmdType;
 
 	if(pIStuts->CmdType == CmdSerTrk)
-	    MSGAPI_AckSnd( AckSerTrk);	
+	    ;//MSGAPI_AckSnd( AckSerTrk);
 
 	return ;	
 }
@@ -740,7 +740,7 @@ void app_ctrl_setSaveCfg(CMD_EXT * pInCmd)
     }
 
     /***for **reply*****/
-    MSGAPI_AckSnd( ACK);
+    //MSGAPI_AckSnd( ACK);
 
   return ;
 }
@@ -796,25 +796,23 @@ void app_ctrl_setDispGrade(CMD_EXT * pInCmd)
     {
         pIStuts->DispGrp[0] = pInCmd->DispGrp[0];
         pIStuts->DispGrp[1] = pInCmd->DispGrp[1];
-	CFGID_CONFIG_SET(CFGID_OC25_TV_OSD_LEVEL,   pIStuts->DispGrp[0] );
+        CFGID_CONFIG_SET(CFGID_OC25_TV_OSD_LEVEL,   pIStuts->DispGrp[0] );
         CFGID_CONFIG_SET(CFGID_OC25_FR_OSD_LEVEL,   pIStuts->DispGrp[1]);
     
       //  MSGDRIV_send(MSGID_EXT_INPUT_DISPGRADE, 0);
     }
 	
        /***for **reply*****/
-   	MSGAPI_AckSnd( ACK);
+   	//MSGAPI_AckSnd( ACK);
    return ;
 }
 
 
 void app_ctrl_setDispColor(CMD_EXT * pInCmd )
 {
-      if(msgextInCtrl==NULL)
-		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
-
-
+  if(msgextInCtrl==NULL)
+	return ;
+	CMD_EXT *pIStuts = msgextInCtrl;
 
 	if(pInCmd->CmdType != pIStuts->CmdType)
 		pIStuts->CmdType = pInCmd->CmdType;
@@ -828,15 +826,13 @@ if(pInCmd->DispColor[0] !=0x07)
 	    pIStuts->DispColor[1] = pInCmd->DispColor[1]; 
 	    CFGID_CONFIG_SET(CFGID_RTS_TV_SEN_COLOR,   pIStuts->DispColor[0]);
 
-
-          CFGID_CONFIG_SET(CFGID_RTS_FR_SEN_COLOR,   pIStuts->DispColor[1]);
-	 
+        CFGID_CONFIG_SET(CFGID_RTS_FR_SEN_COLOR,   pIStuts->DispColor[1]);
 	  //  if(pIStuts->DispColor[0] < 7)
 	    //MSGDRIV_send(MSGID_EXT_INPUT_DISPCOLOR, 0);
 	}
 }
      /***for **reply*****/
-     MSGAPI_AckSnd( ACK);
+     //MSGAPI_AckSnd( ACK);
    return ;
 }
 
@@ -870,7 +866,7 @@ void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
     }
  
         /***for **reply*****/	
-        MSGAPI_AckSnd( ACK);
+        //MSGAPI_AckSnd( ACK);
    
    return ;
 }
@@ -1040,13 +1036,11 @@ void app_ctrl_setEnhance(CMD_EXT * pInCmd)
 				pIStuts->ImgEnhStat[pInCmd->SensorStat^1]=0;
 			}
 		MSGDRIV_send(MSGID_EXT_INPUT_ENENHAN, 0);
-		MSGAPI_AckSnd(Ackenhance); 
-
+		//MSGAPI_AckSnd(Ackenhance);
      	}
 	else
 		{
-			MSGAPI_AckSnd(Ackenhance); 
-
+			//MSGAPI_AckSnd(Ackenhance);
 		}
 
 	
@@ -1066,24 +1060,22 @@ void app_ctrl_setPicp(CMD_EXT * pInCmd)
 		pIStuts->CmdType = pInCmd->CmdType;
 	
      if((pInCmd->ImgPicp[pInCmd->SensorStat] != pIStuts->ImgPicp[pInCmd->SensorStat])&&pInCmd->FrCollimation!=1)
-     	{
+     {
 	 	pIStuts->ImgPicp[pInCmd->SensorStat] = pInCmd->ImgPicp[pInCmd->SensorStat];
 		
 		MSGDRIV_send(MSGID_EXT_INPUT_PICPCROP, 0);
-		MSGAPI_AckSnd(AckPicp); 
+		//MSGAPI_AckSnd(AckPicp);
 		OSA_printf("[%d]  %s  ",__LINE__,__func__);
-
-     	}
+     }
      else if(pInCmd->ImgPicp[pInCmd->SensorStat]==3)
 	 	{
 			MSGDRIV_send(MSGID_EXT_INPUT_PICPCROP, 0);
-			MSGAPI_AckSnd(AckPicp); 
+			//MSGAPI_AckSnd(AckPicp);
 			OSA_printf("[%d]  %s  ",__LINE__,__func__);
 	 	}
 	else
 		{
-			MSGAPI_AckSnd(AckPicp); 
-
+			//MSGAPI_AckSnd(AckPicp);
 		}
    return ;
 }
@@ -1121,11 +1113,11 @@ void app_ctrl_detectvideo()
 
 void app_ctrl_ack()
 {
-	MSGAPI_AckSnd( AckFrColl);
+	//MSGAPI_AckSnd( AckFrColl);
 
 }
 
 void app_err_feedbak()
 {
-	MSGAPI_AckSnd( AckTrkErr);
+	//MSGAPI_AckSnd( AckTrkErr);
 }

@@ -1,4 +1,4 @@
-
+#if 0
 #include <port_tsk.h>
 #include <osa_rng.h>
 #include "UartMessage.h"
@@ -675,4 +675,4 @@ static int port_tskMain(struct OSA_TskHndl *pTsk, OSA_MsgHndl *pMsg, Uint32 curS
 }
 
 
-
+#endif

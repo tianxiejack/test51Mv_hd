@@ -1,4 +1,4 @@
-
+#if 0
 #ifndef _DATA_PORT_H_
 #define _DATA_PORT_H_
 
@@ -15,5 +15,7 @@ int data_port_recv_file(port_handle *port, char *file, Uint32 timeout, fxnDataPo
 int data_port_send_data(port_handle *port, Uint8 *data, Int32 size, Uint32 timeout, fxnDataPortTransNotify fxnNotify);
 int data_port_recv_data(port_handle *port, Uint8 *data, Int32 size, Uint32 timeout, fxnDataPortTransNotify fxnNotify,Bool isInit);
 
+
+#endif
 
 #endif
