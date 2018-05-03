@@ -190,13 +190,7 @@ void MultiChVideo::process(int chId)
 			return;
 	}else if(0 == ret)
 	{
-		if(((1 == GPIO_get(391))&&(chId==0))||((1 == GPIO_get(390))&&(chId==1)))
-		{
-			VCap[chId]->destroy();
-			VCap[chId]->creat();
-			VCap[chId]->run();		
-			return;
-		}
+
 	}
 
 	if(VCap[chId]->m_devFd != -1 && FD_ISSET(VCap[chId]->m_devFd, &fds))
@@ -208,24 +202,6 @@ void MultiChVideo::process(int chId)
 
 		if (-1 == v4l2_camera::xioctl(VCap[chId]->m_devFd, VIDIOC_DQBUF, &buf))
 		{
-			#if 1
-			if(chId == 0)
-			{
-				//OSA_waitMsecs(500);
-				if(1 == GPIO_get(391))
-				{
-					VCap[chId]->destroy();
-					VCap[chId]->creat();
-					VCap[chId]->run();
-				}
-			}
-			#endif
-			if((chId == 1) && (1 == GPIO_get(390)))
-			{
-				VCap[chId]->destroy();
-				VCap[chId]->creat();
-				VCap[chId]->run();
-			}
 		}
 		else
 		{

@@ -1,3 +1,5 @@
+
+#if 0
 #ifndef _GPIO_026_H_
 #define _GPIO_026_H_
 void Hard_Init();
@@ -10,5 +12,7 @@ void Hard_capturereset();
 int Hard_getccdstatus();
 int Hard_getfirstatus();
 
+
+#endif
 
 #endif

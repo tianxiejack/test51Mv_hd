@@ -1,3 +1,5 @@
+#if 0
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -200,3 +202,4 @@ int GPIO_ioctl(unsigned int num, unsigned int setValue)
     return 0;
 }
 
+#endif

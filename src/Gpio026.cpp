@@ -1,4 +1,4 @@
-
+#if 0
 #include "Gpio026.h"
 #include <fcntl.h>
 #include <unistd.h>
@@ -163,3 +163,5 @@ int Hard_getfirstatus()
 	return GPIO_get(getfir_gpio);
 	
 }
+
+#endif
