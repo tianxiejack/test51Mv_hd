@@ -3,7 +3,7 @@
 
 
 #define APP_FORMWARE       			 "/mnt/gyro/gyro_main.out"
-#define SCRIPT_FILE         				 "/config/default.txt"
+#define SCRIPT_FILE         			 "/config/default.txt"
 #define SYSCONFIG_FILE0     			 "/config/config_0.txt"
 #define SYSCONFIG_FILE1     			 "/config/config_1.txt"
 #define SYSCONFIG_FILE2     			 "/config/config_2.txt"
@@ -26,14 +26,14 @@
 
 //Real time ctrl blck 0
 #define BLOCK_BASE_RTCTRL                						  (2)
-#define CFGID_RT_CTRL_0_TAG             					   CFGID_BUILD(BLOCK_BASE_RTCTRL, 0)
-#define CFGID_RT_CTRL_WORK_MOD           					   CFGID_BUILD(BLOCK_BASE_RTCTRL, 1)
-#define CFGID_RT_CTRL_BOOT_DELAY       					   CFGID_BUILD(BLOCK_BASE_RTCTRL, 2)
-#define CFGID_RT_CTRL_BOARD_DATE         				   CFGID_BUILD(BLOCK_BASE_RTCTRL, 3)
-#define CFGID_RT_CTRL_BOARD_TIME         					   CFGID_BUILD(BLOCK_BASE_RTCTRL, 4)
-#define CFGID_RT_CTRL_AUTO_CHECK        					   CFGID_BUILD(BLOCK_BASE_RTCTRL, 5)
-#define CFGID_RT_CTRL_MAIN_SENSOR        				   CFGID_BUILD(BLOCK_BASE_RTCTRL, 6)
-#define CFGID_RT_CTRL_INIT_OSD_ID          				   CFGID_BUILD(BLOCK_BASE_RTCTRL, 7)
+#define CFGID_RT_CTRL_0_TAG             					CFGID_BUILD(BLOCK_BASE_RTCTRL, 0)
+#define CFGID_RT_CTRL_WORK_MOD           				CFGID_BUILD(BLOCK_BASE_RTCTRL, 1)
+#define CFGID_RT_CTRL_BOOT_DELAY       					CFGID_BUILD(BLOCK_BASE_RTCTRL, 2)
+#define CFGID_RT_CTRL_BOARD_DATE         				CFGID_BUILD(BLOCK_BASE_RTCTRL, 3)
+#define CFGID_RT_CTRL_BOARD_TIME         				CFGID_BUILD(BLOCK_BASE_RTCTRL, 4)
+#define CFGID_RT_CTRL_AUTO_CHECK        				CFGID_BUILD(BLOCK_BASE_RTCTRL, 5)
+#define CFGID_RT_CTRL_MAIN_SENSOR        				CFGID_BUILD(BLOCK_BASE_RTCTRL, 6)
+#define CFGID_RT_CTRL_INIT_OSD_ID          				CFGID_BUILD(BLOCK_BASE_RTCTRL, 7)
 
 //blk15 video display dev
 #define BLOCK_BASE_VDIS                  						  (15)
@@ -45,7 +45,7 @@
 #define CFGID_VDIS_DVO2_ENABLE            					  CFGID_BUILD(BLOCK_BASE_VDIS, 5)
 #define CFGID_VDIS_DVO2_RESOLUTION         				  CFGID_BUILD(BLOCK_BASE_VDIS, 6)
 #define CFGID_VDIS_SD_ENABLE              					  CFGID_BUILD(BLOCK_BASE_VDIS, 7)
-#define CFGID_VDIS_SD_RESOLUTION         					  CFGID_BUILD(BLOCK_BASE_VDIS, 8)
+#define CFGID_VDIS_SD_RESOLUTION         				  CFGID_BUILD(BLOCK_BASE_VDIS, 8)
 #define CFGID_VDIS_VENC_TIED             					  CFGID_BUILD(BLOCK_BASE_VDIS, 9) // 0:HDMI - HHCOMP 1:HDMI - DVO2 2:HDCOMP - DVO2
 
 //blk16 sensor tv cfg
@@ -53,9 +53,9 @@
 #define CFGID_SENSOR_TV_0_TAG             					 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 0)
 #define CFGID_SENSOR_TV_VDIS_DEV        					 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 1)
 #define CFGID_SENSOR_TV_VDIS_CHAN       			        CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 2)
-#define CFGID_SENSOR_TV_WIDTH              					 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 3)
-#define CFGID_SENSOR_TV_HEIGHT             					 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 4)
-#define CFGID_SENSOR_TV_SWMS_LAYOUT        				 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 5) //0 full,1 picture in picture,2 all video
+#define CFGID_SENSOR_TV_WIDTH              				 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 3)
+#define CFGID_SENSOR_TV_HEIGHT             				 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 4)
+#define CFGID_SENSOR_TV_SWMS_LAYOUT        			 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 5) //0 full,1 picture in picture,2 all video
 #define CFGID_SENSOR_TV_LAYOUT_PRM_UPDATE  			 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 6) // 0 : NO 1: off
 #define CFGID_SENSOR_TV_PICP_CHAN          				 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 7) // 0 tv, 1 flr
 #define CFGID_SENSOR_TV_PICP_LAYOUT_POS   			 CFGID_BUILD(BLOCK_BASE_SENSOR_TV, 8) // 0: TL 1: TR 2:BL 3:BR
@@ -69,8 +69,8 @@
 #define CFGID_SENSOR_FR_VDIS_DEV          				  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 1)
 #define CFGID_SENSOR_FR_VDIS_CHAN         				  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 2)
 #define CFGID_SENSOR_FR_WIDTH             					  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 3)
-#define CFGID_SENSOR_FR_HEIGHT             					  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 4)
-#define CFGID_SENSOR_FR_SWMS_LAYOUT        				  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 5) // 0 full,1 picture in picture,2 all video
+#define CFGID_SENSOR_FR_HEIGHT             				  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 4)
+#define CFGID_SENSOR_FR_SWMS_LAYOUT        			  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 5) // 0 full,1 picture in picture,2 all video
 #define CFGID_SENSOR_FR_LAYOUT_PRM_UPDATE 			  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 6) // 0 : NO 1: off
 #define CFGID_SENSOR_FR_PICP_CHAN         				  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 7) // 0 tv, 1 flr
 #define CFGID_SENSOR_FR_PICP_LAYOUT_POS    			  CFGID_BUILD(BLOCK_BASE_SENSOR_FR, 8) // 0: TL 1: TR 2:BL 3:BR
@@ -80,7 +80,7 @@
 
 //blk18 video crop used DEI0 cfg
 #define BLOCK_BASE_VID_CROP_DEI0         					 (18)
-#define CFGID_VID_CROP_DEI0_TAG           					  CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI0, 0)
+#define CFGID_VID_CROP_DEI0_TAG           				  CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI0, 0)
 #define CFGID_VID_CROP_DEI0_PRM_UPDATE   				  CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI0, 1) // param update
 #define CFGID_VID_CROP_DEI0_ENABLE       				  CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI0, 2) // video 0 used
 #define CFGID_VID_CROP_DEI0_VIDEO_CHAN  				  CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI0, 3) // video chan output from dei 0
@@ -97,8 +97,8 @@
 #define CFGID_VID_CROP_DEI1_VIDEO_CHAN   				 CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI1, 3) // video chan output from dei 0
 #define CFGID_VID_CROP_DEI1_IMG_CROP_X   				 CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI1, 4) // x coordinate
 #define CFGID_VID_CROP_DEI1_IMG_CROP_Y   				 CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI1, 5) // y coordinate
-#define CFGID_VID_CROP_DEI1_IMG_CROP_W   				 CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI1, 6) // width
-#define CFGID_VID_CROP_DEI1_IMG_CROP_H    				 CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI1, 7) // height
+#define CFGID_VID_CROP_DEI1_IMG_CROP_W   			 CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI1, 6) // width
+#define CFGID_VID_CROP_DEI1_IMG_CROP_H    			 CFGID_BUILD(BLOCK_BASE_VID_CROP_DEI1, 7) // height
 
 //blk20 video image enth cfg
 #define BLOCK_BASE_VIDEO_IMG_ENTH          				 (20)

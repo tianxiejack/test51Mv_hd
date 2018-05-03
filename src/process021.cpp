@@ -400,18 +400,18 @@ void CProcess021::OnCreate()
 	//App_dxmain();
 
 	#if 1
-	CMD_EXT *pIStuts = &extInCtrl;
+		CMD_EXT *pIStuts = &extInCtrl;
 
-	CFGID_FIELD_GET(pIStuts->DispColor[0] ,CFGID_RTS_TV_SEN_COLOR);
-	CFGID_FIELD_GET(pIStuts->DispColor[1] ,CFGID_RTS_FR_SEN_COLOR);
-	if(pIStuts->DispColor[0]<0||pIStuts->DispColor[0]>6)
-		pIStuts->DispColor[0]=2;
+		CFGID_FIELD_GET(pIStuts->DispColor[0] ,CFGID_RTS_TV_SEN_COLOR);
+		CFGID_FIELD_GET(pIStuts->DispColor[1] ,CFGID_RTS_FR_SEN_COLOR);
+		if(pIStuts->DispColor[0]<0||pIStuts->DispColor[0]>6)
+			pIStuts->DispColor[0]=2;
 
-	CFGID_FIELD_GET(pIStuts->PicpPosStat,CFGID_SENSOR_TV_PICP_POS);
-	if(pIStuts->PicpPosStat<0||pIStuts->PicpPosStat>3)
-		pIStuts->PicpPosStat=0;
-	//pIStuts->PicpPosStat=0;
-#endif
+		CFGID_FIELD_GET(pIStuts->PicpPosStat,CFGID_SENSOR_TV_PICP_POS);
+		if(pIStuts->PicpPosStat<0||pIStuts->PicpPosStat>3)
+			pIStuts->PicpPosStat=0;
+		//pIStuts->PicpPosStat=0;
+	#endif
 
 };
 void CProcess021::OnDestroy(){};
@@ -436,9 +436,9 @@ bool CProcess021::OnPreProcess(int chId, Mat &frame)
 			return false;
 		}
 		else
-			{
-				m_bCast=false;
-			}
+		{
+			m_bCast=false;
+		}
 	}
 
 	
@@ -450,7 +450,6 @@ bool CProcess021::OnPreProcess(int chId, Mat &frame)
 int onece=0;
 void CProcess021::process_osd(void *pPrm)
 {
-
 	int devId=0;
 	Mat frame=sThis->m_dc;
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
@@ -460,14 +459,9 @@ void CProcess021::process_osd(void *pPrm)
 	Text_Param_fb * textParampri = NULL;
 	Line_Param_fb * lineParampri = NULL;
 
-
-	//OSA_printf(" %d:%s devId %d grplevel %d grpcolor %d\n",OSA_getCurTimeInMsec(),__func__,
-	//	devId, pIStuts->DispGrp[devId], pIStuts->DispColor[devId]);
 	if(sThis->m_display.m_bOsd == false)
 		return ;
-	//memcpy(frame.d);
-//	OSA_printf(" %d:%s devId %d iFrameCnt %d\n",OSA_getCurTimeInMsec(),__func__,
-//		devId, grpxChWinPrms.chParam[devId].numWindows);
+
 	for(winId = 0; winId < grpxChWinPrms.chParam[devId].numWindows; winId++)
 	{
 		textParam = &grpxChWinPrms.chParam[devId].winPrms[winId];
@@ -484,7 +478,7 @@ void CProcess021::process_osd(void *pPrm)
 		{
 			//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
 		}
-		//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
+
 		if(!textParam->enableWin)
 			continue;
 		EraseDraw_graph_osd(frame,textParam,textParampri);
@@ -500,7 +494,6 @@ void CProcess021::process_osd1()
 {
 
 	int devId=0;
-	//Mat frame=sThis->m_dc;//.m_imgOsd;
 	Mat frame=sThis->m_dccv;//.m_imgOsd;
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	int winId;
@@ -508,21 +501,10 @@ void CProcess021::process_osd1()
 	Line_Param_fb * lineParam = NULL;
 	Text_Param_fb * textParampri = NULL;
 	Line_Param_fb * lineParampri = NULL;
-	
-#if 0
-	static int iFrameCnt=0;
-	iFrameCnt++;
-	OSA_printf(" %d:%s devId %d iFrameCnt %d\n",OSA_getCurTimeInMsec(),__func__,
-		devId, iFrameCnt);
-#endif
 
-	//OSA_printf(" %d:%s devId %d grplevel %d grpcolor %d\n",OSA_getCurTimeInMsec(),__func__,
-	//	devId, pIStuts->DispGrp[devId], pIStuts->DispColor[devId]);
 	if(sThis->m_display.m_bOsd == false)
 		return ;
-	//memcpy(frame.d);
-//	OSA_printf(" %d:%s devId %d iFrameCnt %d\n",OSA_getCurTimeInMsec(),__func__,
-//		devId, grpxChWinPrms.chParam[devId].numWindows);
+
 	for(winId = 0; winId < grpxChWinPrms.chParam[devId].numWindows; winId++)
 	{
 		textParam = &grpxChWinPrms.chParam[devId].winPrms[winId];
@@ -535,11 +517,10 @@ void CProcess021::process_osd1()
 			onece++;
 		}
 		
-
 		if(winId==WINID_TV_FOV_CHOOSE_1/2)
-			{
-				//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
-			}
+		{
+			//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
+		}
 		//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
 		if(!textParam->enableWin)
 			continue;
@@ -551,12 +532,6 @@ void CProcess021::process_osd1()
 		memcpy(textParampri,textParam,sizeof(Text_Param_fb));
 
 	}
-	
-	//sThis->m_display.UpDateOsd(0);
-	
-	
-
-
 
 }
 
@@ -601,10 +576,10 @@ void CProcess021::DrawBlob(BlobRect blobRct,  bool bShow /*= true*/)
 	int sensor=0;
 
 	if(bShow)
-		{
-			sensor=extInCtrl.SensorStat;
+	{
+		sensor=extInCtrl.SensorStat;
 
-		}
+	}
 	else
 		{
 			sensor=prisensorstatus;
@@ -975,249 +950,227 @@ void CProcess021::erassdrawmmtnew(TARGETDRAW tg[],bool bShow)
 
 void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 {
-			int startx=0;
-			int starty=0;
-			int endx=0;
-			int endy=0;
-			Mat frame=m_dccv;
-			int i=0,j=0;
-			cv::Rect result;
-			short tempmmtx=0;
-			short tempmmty=0;
-			int tempdata=0;
-			int testid=0;
-			extInCtrl.Mtdtargetnum=0;
-			char numbuf[3];
-			int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
-			unsigned char Alpha = (bShow) ? frcolor : 0;
-			CvScalar colour=GetcvColour(Alpha);
-			
-			//memset(extInCtrl.MtdOffsetXY,0,20);
-			for(i=0;i<20;i++)
+	int startx=0;
+	int starty=0;
+	int endx=0;
+	int endy=0;
+	Mat frame=m_dccv;
+	int i=0,j=0;
+	cv::Rect result;
+	short tempmmtx=0;
+	short tempmmty=0;
+	int tempdata=0;
+	int testid=0;
+	extInCtrl.Mtdtargetnum=0;
+	char numbuf[3];
+	int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
+	unsigned char Alpha = (bShow) ? frcolor : 0;
+	CvScalar colour=GetcvColour(Alpha);
+	
+	//memset(extInCtrl.MtdOffsetXY,0,20);
+	for(i=0;i<20;i++)
+	{
+		extInCtrl.MtdOffsetXY[i]=0;
+	}
+	for(i=0;i<MAX_TARGET_NUMBER;i++)
+	{
+
+		if(tg[majormmtid].valid==0)
+		{
+			//majormmtid++;
+			//find mmt major target;
+			if(extInCtrl.MMTTempStat==3)
+				majormmtid=(majormmtid+1)%MAX_TARGET_NUMBER;
+			else if(extInCtrl.MMTTempStat==4)
+				majormmtid=(majormmtid-1+MAX_TARGET_NUMBER)%MAX_TARGET_NUMBER;
+			else
+				majormmtid=(majormmtid+1)%MAX_TARGET_NUMBER;
+
+		}
+		if(tg[i].valid==1)
+		{
+			//valid mmt num;
+			extInCtrl.Mtdtargetnum++;
+		}
+		Mdrawbak[i].valid=0;//reset
+
+	}
+	
+	primajormmtid=tempdata=majormmtid;
+	for(i=0;i<MAX_TARGET_NUMBER;i++)
+	{
+		if((tg[majormmtid].valid)&&(i==majormmtid))
+		{
+
+			if(extInCtrl.SensorStat==0)
+			{
+				if(extInCtrl.FovCtrl!=5)
 				{
-					extInCtrl.MtdOffsetXY[i]=0;
+					result.width 	= 32;
+					result.height 	= 32;
 				}
-			for(i=0;i<MAX_TARGET_NUMBER;i++)
+				else
 				{
-
-					if(tg[majormmtid].valid==0)
-						{
-							//majormmtid++;
-							//find mmt major target;
-							if(extInCtrl.MMTTempStat==3)
-								majormmtid=(majormmtid+1)%MAX_TARGET_NUMBER;
-							else if(extInCtrl.MMTTempStat==4)
-								majormmtid=(majormmtid-1+MAX_TARGET_NUMBER)%MAX_TARGET_NUMBER;
-							else
-								majormmtid=(majormmtid+1)%MAX_TARGET_NUMBER;
-
-						}
-					if(tg[i].valid==1)
-						{
-							//valid mmt num;
-							extInCtrl.Mtdtargetnum++;
-							
-
-						}
-					Mdrawbak[i].valid=0;//reset
-
+					result.width 	= 16;
+					result.height 	= 16;
 				}
-			
-			primajormmtid=tempdata=majormmtid;
-			for(i=0;i<MAX_TARGET_NUMBER;i++)
-				{
-
-						//if(m_mtd[chId]->tg[i].valid)
-						
-						if((tg[majormmtid].valid)&&(i==majormmtid))
-						{
-
-							if(extInCtrl.SensorStat==0)
-								{
-									if(extInCtrl.FovCtrl!=5)
-										{
-											result.width = 32;
-											result.height = 32;
-										}
-									else
-										{
-											result.width = 16;
-											result.height = 16;
-
-
-										}
-								}
-							
-							else
-								{
-									result.width = 16;
-									result.height = 16;
-
-								}
-							tempmmtx=result.x = ((int)tg[majormmtid].cur_x) % _IMAGE_WIDTH_;
-							tempmmty=result.y = ((int)tg[majormmtid].cur_y ) % _IMAGE_HEIGHT_;
-
-							
-							//mmt track target set
-							extInCtrl.unitMtdPixelX=result.x;
-							extInCtrl.unitMtdPixelY=result.y;
-							extInCtrl.unitMtdValid=1;
-
-							
-						
-							result.x = result.x - result.width/2;
-							result.y = result.y - result.height/2;
-							
-							 startx=PiexltoWindowsxzoom(result.x,extInCtrl.SensorStat);
-							 starty=PiexltoWindowsyzoom(result.y,extInCtrl.SensorStat);
-							 endx=PiexltoWindowsxzoom(result.x+result.width,extInCtrl.SensorStat);
-						 	 endy=PiexltoWindowsyzoom(result.y+result.height,extInCtrl.SensorStat);
-							 //erase param
-							 Mdrawbak[i].startx=startx;
-							 Mdrawbak[i].starty=starty;
-							 Mdrawbak[i].endx=endx;
-							 Mdrawbak[i].endy=endy;
-							 Mdrawbak[i].valid=1;
-
-							//OSA_printf("the AvtTrkStat=%d  DispGrp=%d\n",extInCtrl.AvtTrkStat,extInCtrl.DispGrp[extInCtrl.SensorStat]);
-							if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)&&(extInCtrl.SysMode!=8)&&(extInCtrl.SysMode!=2))
-								{
-							rectangle( frame,
-								Point( startx, starty ),
-								Point( endx, endy),
-								colour, 1, 8);
-								Osdflag[osdindex]=1;
-
-								rectangle( frame,
-								Point( startx-1, starty-1 ),
-								Point( endx+1, endy+1),
-								colour, 1, 8);
-								}
-								//OSA_printf("******************the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
-								//	result.x,result.y,result.width,result.height);
-								tempmmtx  =PiexltoWindowsx(tempmmtx,extInCtrl.SensorStat);
-								tempmmty  =PiexltoWindowsy(tempmmty,extInCtrl.SensorStat);
-								extInCtrl.MtdOffsetXY[j]=tempmmtx&0xff;
-								extInCtrl.MtdOffsetXY[j+1]=(tempmmtx>>8)&0xff;
-								extInCtrl.MtdOffsetXY[j+2]=tempmmty&0xff;
-								extInCtrl.MtdOffsetXY[j+3]=(tempmmty>>8)&0xff;
-
-								//j++;
-
-								//tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
-									
-							//memcpy(extInCtrl.MtdOffsetXY,tempmmtx,sizeof(tempmmtx));
-							//memcpy(extInCtrl.MtdOffsetXY+2,tempmmty,sizeof(tempmmty));
-							
-						}
-						
-						if((tg[i].valid)&&(i!=majormmtid))
-							{
-								testid++;
-								if(extInCtrl.SensorStat==0)
-								{
-								if(extInCtrl.FovCtrl!=5)
-										{
-											result.width = 32;
-											result.height = 32;
-										}
-								else
-									{
-											result.width = 16;
-											result.height = 16;
-
-									}
-								}
-								else
-								{
-									result.width = 16;
-									result.height = 16;
-
-								}
-								
-								tempmmtx=result.x = ((int)tg[i].cur_x) % _IMAGE_WIDTH_;
-								tempmmty=result.y = ((int)tg[i].cur_y ) % _IMAGE_HEIGHT_;
-
-
-								
-
-								//OSA_printf("+++++++++++++++the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
-								//	result.x,result.y,result.width,result.height);
-								result.x = result.x - result.width/2;
-								result.y = result.y - result.height/2;
-								//OSA_printf("the num  majormmtid=%d\n",tempdata);
-
-								 startx=PiexltoWindowsxzoom(result.x,extInCtrl.SensorStat);
-								 starty=PiexltoWindowsyzoom(result.y,extInCtrl.SensorStat);
-								   endx=PiexltoWindowsxzoom(result.x+result.width,extInCtrl.SensorStat);
-						 	 	  endy=PiexltoWindowsyzoom(result.y+result.height,extInCtrl.SensorStat);
-
-								 Mdrawbak[i].startx=startx;
- 								 Mdrawbak[i].starty=starty;
-								  Mdrawbak[i].endx=endx;
- 								 Mdrawbak[i].endy=endy;
- 								 Mdrawbak[i].valid=1;
-									if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)&&(extInCtrl.SysMode!=8)&&(extInCtrl.SysMode!=2))
-								{
-								//DrawCross(result.x,result.y,frcolor,bShow);
-								//trkimgcross(frame,result.x,result.y,16);
-								#if 0
-								line(frame, cvPoint(startx-16,starty), cvPoint(startx+16,starty), colour, 1, 8, 0 ); 
-								line(frame, cvPoint(startx,starty-16), cvPoint(startx,starty+16), colour, 1, 8, 0 ); 
-								#else
-								rectangle( frame,
-								Point( startx, starty ),
-								Point( endx, endy),
-								colour, 1, 8);
-
-
-								#endif
-								//OSA_printf("******************the num  majormmtid=%d\n",majormmtid);
-								sprintf(numbuf,"%d",i+1);
-								putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
-								}
-								//memcpy(extInCtrl.MtdOffsetXY+testid*4,tempmmtx,sizeof(tempmmtx));
-								//memcpy(extInCtrl.MtdOffsetXY+2+testid*4,tempmmty,sizeof(tempmmty));
-								
-
-								extInCtrl.MtdOffsetXY[j+testid*4]=tempmmtx&0xff;
-								extInCtrl.MtdOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
-								extInCtrl.MtdOffsetXY[j+2+testid*4]=tempmmty&0xff;
-								extInCtrl.MtdOffsetXY[j+3+testid*4]=(tempmmty>>8)&0xff;
-
-								extInCtrl.MtdOffsetXY[j+testid*4]    =PiexltoWindowsx(extInCtrl.MtdOffsetXY[j+testid*4],extInCtrl.SensorStat);
-								extInCtrl.MtdOffsetXY[j+1+testid*4]=PiexltoWindowsx(extInCtrl.MtdOffsetXY[j+1+testid*4],extInCtrl.SensorStat);
-								extInCtrl.MtdOffsetXY[j+2+testid*4]=PiexltoWindowsy(extInCtrl.MtdOffsetXY[j+2+testid*4],extInCtrl.SensorStat);
-								extInCtrl.MtdOffsetXY[j+3+testid*4]=PiexltoWindowsy(extInCtrl.MtdOffsetXY[j+3+testid*4],extInCtrl.SensorStat);
-								//j++;
-								
-							}
-
-						//mmt show
-						tempmmtx=result.x = ((int)tg[i].cur_x) % _IMAGE_WIDTH_;
-						tempmmty=result.y = ((int)tg[i].cur_y ) % _IMAGE_HEIGHT_;
-						Mmtpos[i].x=tempmmtx-result.width/2;
-						Mmtpos[i].y=tempmmty-result.height/2;
-						Mmtpos[i].w=result.width;
-						Mmtpos[i].h=result.height;
-						Mmtpos[i].valid=tg[i].valid;
-				
-				
-					//	tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
-
-					}
+			}
+			else
+			{
+				result.width 	= 16;
+				result.height 	= 16;
+			}
+			tempmmtx=result.x = ((int)tg[majormmtid].cur_x) % VIDEO_IMAGE_WIDTH_0;
+			tempmmty=result.y = ((int)tg[majormmtid].cur_y ) % VIDEO_IMAGE_HEIGHT_0;
 
 			
+			//mmt track target set
+			extInCtrl.unitMtdPixelX=result.x;
+			extInCtrl.unitMtdPixelY=result.y;
+			extInCtrl.unitMtdValid=1;
 
-			if(Mmtsendtime==0)
-				;//MSGAPI_AckSnd( AckMtdInfo);
-			Mmtsendtime++;
-			if(Mmtsendtime==1)
+			
+		
+			result.x = result.x - result.width/2;
+			result.y = result.y - result.height/2;
+			
+			 startx=PiexltoWindowsxzoom(result.x,extInCtrl.SensorStat);
+			 starty=PiexltoWindowsyzoom(result.y,extInCtrl.SensorStat);
+			 endx=PiexltoWindowsxzoom(result.x+result.width,extInCtrl.SensorStat);
+		 	 endy=PiexltoWindowsyzoom(result.y+result.height,extInCtrl.SensorStat);
+			 //erase param
+			 Mdrawbak[i].startx=startx;
+			 Mdrawbak[i].starty=starty;
+			 Mdrawbak[i].endx=endx;
+			 Mdrawbak[i].endy=endy;
+			 Mdrawbak[i].valid=1;
+
+			//OSA_printf("the AvtTrkStat=%d  DispGrp=%d\n",extInCtrl.AvtTrkStat,extInCtrl.DispGrp[extInCtrl.SensorStat]);
+			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)&&(extInCtrl.SysMode!=8)&&(extInCtrl.SysMode!=2))
+			{
+				rectangle( frame,
+				Point( startx, starty ),
+				Point( endx, endy),
+				colour, 1, 8);
+				Osdflag[osdindex]=1;
+
+				rectangle( frame,
+				Point( startx-1, starty-1 ),
+				Point( endx+1, endy+1),
+				colour, 1, 8);
+			}
+				//OSA_printf("******************the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
+				//	result.x,result.y,result.width,result.height);
+				tempmmtx  =PiexltoWindowsx(tempmmtx,extInCtrl.SensorStat);
+				tempmmty  =PiexltoWindowsy(tempmmty,extInCtrl.SensorStat);
+				extInCtrl.MtdOffsetXY[j]=tempmmtx&0xff;
+				extInCtrl.MtdOffsetXY[j+1]=(tempmmtx>>8)&0xff;
+				extInCtrl.MtdOffsetXY[j+2]=tempmmty&0xff;
+				extInCtrl.MtdOffsetXY[j+3]=(tempmmty>>8)&0xff;
+			
+		}
+		
+		if((tg[i].valid)&&(i!=majormmtid))
+		{
+			testid++;
+			if(extInCtrl.SensorStat==0)
+			{
+				if(extInCtrl.FovCtrl!=5)
 				{
-					Mmtsendtime=0;
+					result.width = 32;
+					result.height = 32;
 				}
+				else
+				{
+					result.width = 16;
+					result.height = 16;
+				}
+			}
+			else
+			{
+				result.width = 16;
+				result.height = 16;
+
+			}
 			
-			msgdriv_event(MSGID_EXT_INPUT_MMTSHOWUPDATE, NULL);
+			tempmmtx=result.x = ((int)tg[i].cur_x) % _IMAGE_WIDTH_;
+			tempmmty=result.y = ((int)tg[i].cur_y ) % _IMAGE_HEIGHT_;
+
+
+			
+
+			//OSA_printf("+++++++++++++++the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
+			//	result.x,result.y,result.width,result.height);
+			result.x = result.x - result.width/2;
+			result.y = result.y - result.height/2;
+			//OSA_printf("the num  majormmtid=%d\n",tempdata);
+
+			startx=PiexltoWindowsxzoom(result.x,extInCtrl.SensorStat);
+			starty=PiexltoWindowsyzoom(result.y,extInCtrl.SensorStat);
+			endx=PiexltoWindowsxzoom(result.x+result.width,extInCtrl.SensorStat);
+			endy=PiexltoWindowsyzoom(result.y+result.height,extInCtrl.SensorStat);
+
+			Mdrawbak[i].startx=startx;
+			Mdrawbak[i].starty=starty;
+			Mdrawbak[i].endx=endx;
+			Mdrawbak[i].endy=endy;
+			Mdrawbak[i].valid=1;
+			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)&&(extInCtrl.SysMode!=8)&&(extInCtrl.SysMode!=2))
+			{
+				//DrawCross(result.x,result.y,frcolor,bShow);
+				//trkimgcross(frame,result.x,result.y,16);
+				#if 0
+				rectangle( frame,
+				Point( startx, starty ),
+				Point( endx, endy),
+				colour, 1, 8);
+				#endif
+				//OSA_printf("******************the num  majormmtid=%d\n",majormmtid);
+				sprintf(numbuf,"%d",i+1);
+				putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
+			}
+			//memcpy(extInCtrl.MtdOffsetXY+testid*4,tempmmtx,sizeof(tempmmtx));
+			//memcpy(extInCtrl.MtdOffsetXY+2+testid*4,tempmmty,sizeof(tempmmty));
+			
+
+			extInCtrl.MtdOffsetXY[j+testid*4]=tempmmtx&0xff;
+			extInCtrl.MtdOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
+			extInCtrl.MtdOffsetXY[j+2+testid*4]=tempmmty&0xff;
+			extInCtrl.MtdOffsetXY[j+3+testid*4]=(tempmmty>>8)&0xff;
+
+			extInCtrl.MtdOffsetXY[j+testid*4]    =PiexltoWindowsx(extInCtrl.MtdOffsetXY[j+testid*4],extInCtrl.SensorStat);
+			extInCtrl.MtdOffsetXY[j+1+testid*4]=PiexltoWindowsx(extInCtrl.MtdOffsetXY[j+1+testid*4],extInCtrl.SensorStat);
+			extInCtrl.MtdOffsetXY[j+2+testid*4]=PiexltoWindowsy(extInCtrl.MtdOffsetXY[j+2+testid*4],extInCtrl.SensorStat);
+			extInCtrl.MtdOffsetXY[j+3+testid*4]=PiexltoWindowsy(extInCtrl.MtdOffsetXY[j+3+testid*4],extInCtrl.SensorStat);
+			//j++;
+			
+		}
+
+		//mmt show
+		tempmmtx=result.x = ((int)tg[i].cur_x) % _IMAGE_WIDTH_;
+		tempmmty=result.y = ((int)tg[i].cur_y ) % _IMAGE_HEIGHT_;
+		Mmtpos[i].x=tempmmtx-result.width/2;
+		Mmtpos[i].y=tempmmty-result.height/2;
+		Mmtpos[i].w=result.width;
+		Mmtpos[i].h=result.height;
+		Mmtpos[i].valid=tg[i].valid;
+
+
+	//	tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
+
+	}
+
+	
+
+	if(Mmtsendtime==0)
+		;//MSGAPI_AckSnd( AckMtdInfo);
+	Mmtsendtime++;
+	if(Mmtsendtime==1)
+		{
+			Mmtsendtime=0;
+		}
+	
+	msgdriv_event(MSGID_EXT_INPUT_MMTSHOWUPDATE, NULL);
 
 }
 
@@ -1713,30 +1666,25 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 	//mtd
 osdindex++;
 	{
-		//osd_mtd_show(tgBak, false);
 		if(Osdflag[osdindex]==1)
-	 			{
-					erassdrawmmtnew(Mdrawbak, false);
-					Osdflag[osdindex]=0;
-				}
-		 if(m_bMtd){
-			//osd_mtd_show(m_mtd[chId]->tg, true);
-			drawmmtnew(m_mtd[chId]->tg, true);
-			//memcpy(tgBak, m_mtd[chId]->tg, sizeof(TARGET)*MAX_TARGET_NUMBER);
-			
-		 }
-
-		// drawmmt(chId,false);
+		{
+			erassdrawmmtnew(Mdrawbak, false);
+			Osdflag[osdindex]=0;
+		}
+		if(m_bMtd)
+		{
+			drawmmtnew(m_mtd[chId]->tg, true);		
+		}
 	}
 
 osdindex++;
 	// blob detect
 	{
-	if(Osdflag[osdindex]==1)
-	 			{
-					DrawBlob(blob_rectBak, false);
-					Osdflag[osdindex]=0;
-				}
+		if(Osdflag[osdindex]==1)
+		{
+			DrawBlob(blob_rectBak, false);
+			Osdflag[osdindex]=0;
+		}
 		if(m_bBlobDetect&&(extInCtrl.SensorStat==0)){
 			DrawBlob(m_blobRect, true);
 			memcpy(&blob_rectBak, &m_blobRect, sizeof(BlobRect));
