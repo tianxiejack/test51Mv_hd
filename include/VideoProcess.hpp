@@ -101,7 +101,7 @@ public:
 
 public :
 
-	CMSTracker trackInit;
+	//CMSTracker trackInit;
 	int detState ;
 	int trackEnd ;
 	int trackStart ;

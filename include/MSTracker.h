@@ -1,3 +1,5 @@
+
+#if 0
 #ifndef _MS_TRACKER_
 #define _MS_TRACKER_
 
@@ -83,5 +85,7 @@ public:
 	bool tgEnd;// = FALSE;       //保存检测最后一帧box坐标
 
 };
+
+#endif
 
 #endif

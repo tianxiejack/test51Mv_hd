@@ -1,3 +1,4 @@
+#if 0
 /*
 * Copyright 1993-2015 NVIDIA Corporation.  All rights reserved.
 *
@@ -54,3 +55,5 @@ void writeBigEndian(unsigned char *pData, T value)
     unsigned char *pValue = reinterpret_cast<unsigned char *>(&value);
     reverse_copy(pValue, pValue+sizeof(T), pData);
 }
+
+#endif

@@ -1,3 +1,5 @@
+
+#if 0
 /**
  * Copyright 1993-2015 NVIDIA Corporation.  All rights reserved.
  *
@@ -179,3 +181,5 @@ namespace npp
 } // npp namespace
 
 #endif // NV_UTIL_NPP_EXCEPTIONS_H
+
+#endif

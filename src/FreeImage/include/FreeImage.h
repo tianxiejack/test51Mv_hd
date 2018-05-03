@@ -1,3 +1,5 @@
+#if 0
+
 // ==========================================================
 // FreeImage 3
 //
@@ -1133,3 +1135,5 @@ DLL_API FIBITMAP *DLL_CALLCONV FreeImage_MultigridPoissonSolver(FIBITMAP *Laplac
 #endif
 
 #endif // FREEIMAGE_H
+
+#endif
