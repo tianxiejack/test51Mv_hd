@@ -1,9 +1,3 @@
-/*
- * process021.hpp
- *
- *  Created on: May 5, 2017
- *      Author: ubuntu
- */
 
 #ifndef PROCESS021_HPP_
 #define PROCESS021_HPP_
@@ -55,7 +49,6 @@ public:
 
 	
 	static CProcess021 *sThis;
-	static void process_osd(void *pPrm);
 	void process_osd_test(void *pPrm);
 
 protected:
@@ -120,7 +113,7 @@ private:
 	void process_status(void);
 
 	void osd_init(void);
-	void process_osd(int devId);
+	static void process_osd(void* pPrm);
 	void process_osd1();
 	void DrawLine(Mat frame, int startx, int starty, int endx, int endy, int width, UInt32 colorRGBA);
 	void DrawHLine(Mat frame, int startx, int starty, int width, int len, UInt32 colorRGBA);

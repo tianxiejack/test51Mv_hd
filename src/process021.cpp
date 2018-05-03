@@ -488,20 +488,14 @@ void CProcess021::process_osd(void *pPrm)
 {
 
 	int devId=0;
-	Mat frame=sThis->m_dc;//.m_imgOsd;
+	Mat frame=sThis->m_dc;
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	int winId;
 	Text_Param_fb * textParam = NULL;
 	Line_Param_fb * lineParam = NULL;
 	Text_Param_fb * textParampri = NULL;
 	Line_Param_fb * lineParampri = NULL;
-	
-#if 0
-	static int iFrameCnt=0;
-	iFrameCnt++;
-	OSA_printf(" %d:%s devId %d iFrameCnt %d\n",OSA_getCurTimeInMsec(),__func__,
-		devId, iFrameCnt);
-#endif
+
 
 	//OSA_printf(" %d:%s devId %d grplevel %d grpcolor %d\n",OSA_getCurTimeInMsec(),__func__,
 	//	devId, pIStuts->DispGrp[devId], pIStuts->DispColor[devId]);
@@ -517,39 +511,27 @@ void CProcess021::process_osd(void *pPrm)
 		lineParam = (Line_Param_fb *)&grpxChWinPrms.chParam[devId].winPrms[winId];
 		lineParampri = (Line_Param_fb *)&grpxChWinPrms.chParam[devId].winPrms_pri[winId];
 		if(onece<ALG_LINK_GRPX_MAX_WINDOWS)
-			{
-				memcpy(textParampri,textParam,sizeof(Text_Param_fb));
-				onece++;
-			}
-		
-		//if(textParampri->enableWin)
-		//	{
-				
-		//	}
+		{
+			memcpy(textParampri,textParam,sizeof(Text_Param_fb));
+			onece++;
+		}
 
 		if(winId==WINID_TV_FOV_CHOOSE_1/2)
-			{
-				//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
-			}
+		{
+			//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
+		}
 		//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
 		if(!textParam->enableWin)
 			continue;
 		EraseDraw_graph_osd(frame,textParam,textParampri);
-		Draw_graph_osd(frame,textParam,lineParam);
-		
+		Draw_graph_osd(frame,textParam,lineParam);	
 		//sThis->updata_osd[0]=true;
-		
 		memcpy(textParampri,textParam,sizeof(Text_Param_fb));
-
 	}
 	waitKey(1);
 	sThis->m_display.UpDateOsd(0);
-	
-	
-
-
-
 }
+
 void CProcess021::process_osd1()
 {
 
@@ -584,15 +566,11 @@ void CProcess021::process_osd1()
 		lineParam = (Line_Param_fb *)&grpxChWinPrms.chParam[devId].winPrms[winId];
 		lineParampri = (Line_Param_fb *)&grpxChWinPrms.chParam[devId].winPrms_pri[winId];
 		if(onece<ALG_LINK_GRPX_MAX_WINDOWS)
-			{
-				memcpy(textParampri,textParam,sizeof(Text_Param_fb));
-				onece++;
-			}
+		{
+			memcpy(textParampri,textParam,sizeof(Text_Param_fb));
+			onece++;
+		}
 		
-		//if(textParampri->enableWin)
-		//	{
-				
-		//	}
 
 		if(winId==WINID_TV_FOV_CHOOSE_1/2)
 			{

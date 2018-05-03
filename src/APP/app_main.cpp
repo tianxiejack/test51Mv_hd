@@ -88,57 +88,8 @@ static Int32 usercase_run( int type )
 
     while ( !done )
     {
-      // printf( gAPP_runMenu );
-
        ch = APP_getChar( );
-
-	 OSA_waitMsecs(1000000);
-
-	#if 0
-        switch ( ch )
-        {
-        case 'C':
-        case 'c':
-            Dx_configMenu( gDXD_info.scripts );
-            break;
-        case 'I':
-        case 'i':
-            Dx_sendMsg( NULL, DX_MSGID_CTRL, (void*)( DX_CTL_PRINT_INFO ), sizeof( Int32 ), FALSE );
-            break;
-        case 'S':
-        case 's':
-            Dx_sendMsg( NULL, DX_MSGID_CTRL, (void*)( DX_CTL_PRINT_CORE ), sizeof( Int32 ), FALSE );
-            break;
-        case 'B':
-        case 'b':
-            Dx_sendMsg( NULL, DX_MSGID_CTRL, (void*)( DX_CTL_PRINT_BUFFER ), sizeof( Int32 ), FALSE );
-            break;
-        case 'E':
-        case 'e':
-            done = TRUE;
-            break;
-/*			
-        case '4':
-		printf("input the value");
-		 brigthness = APP_getint( );
-            cltrl_dis_user(brigthness,0);
-            break;	
-	 case '5':
-		printf("input the value");
-		 brigthness = APP_getint( );
-            cltrl_dis_user(brigthness,1);
-            break;
- 	case '6':
-		printf("input the value");
-		 brigthness = APP_getint( );
-            cltrl_dis_user(brigthness,2);
-            break;
-*/
-			
-           
-           
-        }
-		#endif
+	OSA_waitMsecs(1000000);
     }
 
     status = Dx_postMsg( DX_MSGID_STOP, NULL, 0 );

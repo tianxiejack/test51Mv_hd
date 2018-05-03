@@ -20,9 +20,6 @@
 #include "cuda_mem.cpp"
 #include "app_status.h"
 
-#ifdef _WIN32
-#pragma comment (lib, "glew32.lib")
-#endif
 #define HISTEN 0
 #define CLAHEH 1
 #define DARKEN 0
@@ -660,7 +657,6 @@ void CDisplayer::display(Mat frame, int chId, int code)
 		if(chId==1)
 		{
 			//printf("display w=%d h=%d c=%d\n",frame.cols,frame.rows,frame.channels());
-
 		}
 }
 
@@ -1067,9 +1063,9 @@ void CDisplayer::gl_textureLoad(void)
 		//if(winId>2)
 		//	chId=1;
 		if(chId < 0 || chId >= DS_CHAN_MAX)
-			{
-				continue;
-			}
+		{
+			continue;
+		}
 		dism_img[chId]=m_img[chId];
 
 		if(dism_img[chId].cols <=0 || dism_img[chId].rows <=0 || dism_img[chId].channels() == 0)

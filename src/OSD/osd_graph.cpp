@@ -864,20 +864,13 @@ static void* MultichGrpx_task(void *pPrm)
        OSA_mutexLock(&pMultGraphicObj->muxLock);
 	//OSA_printf(" %s task start!!! \r\n", __func__);
 	fun(NULL);
-	//for(chId = 0; chId < pMultGraphicObj->devFb_num; chId++)
-	//{
-		//MultichGrpx_draw_chwins(&pMultGraphicObj->chParam[chId]);
-	//}
-
         OSA_mutexUnlock(&pMultGraphicObj->muxLock);
     }
-
     pMultGraphicObj->tskGraphicStopDone = TRUE;
-
     OSA_printf(" %s task exit!!! \r\n", __func__);
-
     return NULL;
 }
+
 #if 1
 void  osdgraph_init(osdprocess_CB fun)
 {
@@ -918,25 +911,10 @@ void  osdgraph_init(osdprocess_CB fun)
 				lineParam->lineGapHeight = lineParam->height/4;
 			}
 
-			/*if(winId == GRPX_WINID_TV_FOVAREA)
-			{
-				lineParam->enableWin = 1;
-				lineParam->objType = grpx_ObjId_Rect_gap;
-				lineParam->frcolor = WHITECOLOR;
-				lineParam->x = vdisWH[devId][0]/2;
-				lineParam->y = vdisWH[devId][1]/2;
-				lineParam->width = 300;
-				lineParam->height = 200;
-				lineParam->linePixels = 2;
-				lineParam->lineGapWidth = lineParam->width/6;
-				lineParam->lineGapHeight = lineParam->height/4;
-			}*/
-
 			if(winId == WINID_TV_AIMAREA)
 			{
 				lineParam->enableWin = 0;
 				lineParam->objType = grpx_ObjId_Rect;
-				//lineParam->objType = grpx_ObjId_Rect_gap;
 				lineParam->frcolor = WHITECOLOR;
 				lineParam->x = vdisWH[devId][0]/2;
 				lineParam->y = vdisWH[devId][1]/2;
@@ -946,54 +924,32 @@ void  osdgraph_init(osdprocess_CB fun)
 				lineParam->lineGapWidth = lineParam->width;
 				lineParam->lineGapHeight = lineParam->height;
 			}
-
-			/*if(winId == GRPX_WINID_TV_WORK_FOV_SEN_ALG)
-			{
-				textParam->enableWin = 0;
-				textParam->objType = grpx_ObjId_Text;
-				textParam->frcolor = RED;
-				textParam->bgcolor = BGCOLOR;
-				textParam->text_x[0] = 100;
-				textParam->text_y[0] = 200;
-				textParam->textLen[0] = 2;
-				textParam->text_valid = 7;
-				sprintf((char*)(textParam->textAddr+textParam->textLen[0]+1),"TV");
-				textParam->text_x[1] = 120;
-				textParam->text_y[1] = 220;
-				textParam->textLen[1] = 4;
-				sprintf((char*)(textParam->textAddr+textParam->textLen[1]+1),"TVFR");
-				textParam->text_x[2] = 160;
-				textParam->text_y[2] = 260;
-				textParam->textLen[2] = 3;
-				sprintf((char*)textParam->textAddr,"TRr");
-			}*/
 		}
 	}
 #endif
-	  grpxChWinPrms.tskGraphicLoop = TRUE;
-    grpxChWinPrms.tskGraphicStopDone = FALSE;
 
-    status = OSA_semCreate(&grpxChWinPrms.tskGraphicSem, 1, 0);
-    OSA_assert(status == OSA_SOK);
+	grpxChWinPrms.tskGraphicLoop = TRUE;
+	grpxChWinPrms.tskGraphicStopDone = FALSE;
 
-    status = OSA_thrCreate(
-                 &grpxChWinPrms.tskGraphicHndl,
-                 MultichGrpx_task,
-                 OSA_THR_PRI_DEFAULT,
-                 0,
-                (void *)fun
-             );
+	status = OSA_semCreate(&grpxChWinPrms.tskGraphicSem, 1, 0);
+	OSA_assert(status == OSA_SOK);
 
-    OSA_assert(status == OSA_SOK);
+	status = OSA_thrCreate(
+	             &grpxChWinPrms.tskGraphicHndl,
+	             MultichGrpx_task,
+	             OSA_THR_PRI_DEFAULT,
+	             0,
+	            (void *)fun
+	         );
 
-
-   OSA_mutexCreate(&osd_mutex);
-
-    grpxChWinPrms.bGraphicInit = TRUE;
-
-    OSA_printf(" %s done.\n", __func__);
+	OSA_assert(status == OSA_SOK);
 
 
+	OSA_mutexCreate(&osd_mutex);
+
+	grpxChWinPrms.bGraphicInit = TRUE;
+
+	OSA_printf(" %s done.\n", __func__);
 
 }
 #endif
@@ -1337,14 +1293,11 @@ Int32 APP_set_graphic_parms_line_fb( Int32 blkId, Int32 fieldId,Multich_graphic 
 
 void Draw_graph_osd(Mat frame, void *tParam,void *lParam)
 {
-
-
-		Text_Param_fb * textParam = (Text_Param_fb *)tParam;
-		Line_Param_fb * lineParam = (Line_Param_fb *)lParam;
-		//if(text)
-
-		switch(textParam->objType)
-		{
+	Text_Param_fb * textParam = (Text_Param_fb *)tParam;
+	Line_Param_fb * lineParam = (Line_Param_fb *)lParam;
+	
+	switch(textParam->objType)
+	{
 		case grpx_ObjId_Cross:
 			osd_draw_cross(frame, lineParam);
 			break;
@@ -1375,7 +1328,7 @@ void Draw_graph_osd(Mat frame, void *tParam,void *lParam)
 
 		default:
 			break;
-		}
+	}
 
 }
 
@@ -1391,66 +1344,57 @@ void EraseDraw_graph_osd(Mat frame, void *Param,void *Parampri)
 	memset(eraseflag,0,3*sizeof(int));
 	int eraseflag1=0;
 	if(textParam->objType==grpx_ObjId_Text)
+	{
+		for(i=0;i<3;i++)
 		{
-			for(i=0;i<3;i++)
-				{
 			if(textParam->text_x[i]!=textParampri->text_x[i])
-				{
-					eraseflag[i]++;
-				}
+			{
+				eraseflag[i]++;
+			}
 
 			if(textParam->text_y[i]!=textParampri->text_y[i])
-				{
-					eraseflag[i]++;
-				}
-			//BIT_CLRj(textParampri->text_valid,i);
-			//if(eraseflag[i]!=0)
+			{
+				eraseflag[i]++;
+			}
+		//BIT_CLRj(textParampri->text_valid,i);
+		//if(eraseflag[i]!=0)
 			textParampri->text_valid=0;
-			
-				}
-
 		}
+	}
 	else
-		{
-
-
+	{
 #if 1
-			if(lineParam->x!=lineParampri->x)
-				{
-					eraseflag1++;
-					OSA_printf("%s   line=%d  x=%d\n",__func__,__LINE__,lineParam->x);
-				}
-			if(lineParam->y!=lineParampri->y)
-				{
-					eraseflag1++;
-					OSA_printf("%s   line=%d  y=%d\n",__func__,__LINE__,lineParam->y);
-				}
-			
-			if(lineParam->width!=lineParampri->width)
-				{
-					eraseflag1++;
-					OSA_printf("%s   line=%d\n",__func__,__LINE__);
-				}
-			if(lineParam->height!=lineParampri->height)
-				{
-					eraseflag1++;
-					OSA_printf("%s   line=%d\n",__func__,__LINE__);
-				}
-			if(eraseflag1==0)
-				{
-					//printf("%s   line=%d\n",__func__,__LINE__);
-					return ;
-
-				}
-#endif
-			lineParampri->frcolor=lineParam->bgcolor;
-			//printf("%s   line=%d\n",__func__,__LINE__);
-
+		if(lineParam->x!=lineParampri->x)
+		{
+			eraseflag1++;
+			OSA_printf("%s   line=%d  x=%d\n",__func__,__LINE__,lineParam->x);
 		}
+		if(lineParam->y!=lineParampri->y)
+		{
+			eraseflag1++;
+			OSA_printf("%s   line=%d  y=%d\n",__func__,__LINE__,lineParam->y);
+		}
+	
+		if(lineParam->width!=lineParampri->width)
+		{
+			eraseflag1++;
+			OSA_printf("%s   line=%d\n",__func__,__LINE__);
+		}
+		if(lineParam->height!=lineParampri->height)
+		{
+			eraseflag1++;
+			OSA_printf("%s   line=%d\n",__func__,__LINE__);
+		}
+		if(eraseflag1==0)
+		{
+			//printf("%s   line=%d\n",__func__,__LINE__);
+			return ;
+		}
+#endif
+		lineParampri->frcolor=lineParam->bgcolor;
+		//printf("%s   line=%d\n",__func__,__LINE__);
+	}
 	Draw_graph_osd(frame,textParampri,lineParampri);
-
-
-
 }
 void APP_graphic_timer_alarm()
 {

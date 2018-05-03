@@ -354,7 +354,8 @@ void CVideoProcess::main_proc_func()
 
 				}
 			//Grayconvfilter(frame_gray, frame_gray, m_rcTrack);
-			if(0){//(algOsdRect == true){
+			if(0)
+			{//(algOsdRect == true){
 				if(iTrackStat == 0){
 					salientMap = cv::Mat(ScalerLarge, ScalerLarge, CV_8UC1);
 					sobelMap = cv::Mat(ScalerLarge, ScalerLarge, CV_8UC1);
@@ -402,14 +403,15 @@ void CVideoProcess::main_proc_func()
 					cv::cvtColor(sobelMap, sobelMat, CV_GRAY2BGRA);
 					pt.x = salientMat.cols; pt.y = m_display.m_imgOsd[1].rows - sobelMat.rows;
 					copyMat2Mat(sobelMat, m_display.m_imgOsd[1], pt);
-					//cv::imshow("after sobelMat",sobelMat);
-					//cv::waitKey(0);
+
 					#endif
 				}
 			}
 			
 			
 			m_iTrackStat = process_track(iTrackStat, frame_gray, m_dc, m_rcTrack);
+
+		//	drawcvrect(m_dc,m_rcTrack.x,m_rcTrack.y,m_rcTrack.width,m_rcTrack.height,2)
 
 				
 			#if  0//test move trk time
@@ -775,14 +777,7 @@ CVideoProcess::~CVideoProcess()
 int CVideoProcess::creat()
 {
 	int i = 0;
-
-/*****************************
-		cudaError_t ret = cudaSuccess;
-		ret = cudaHostAlloc((void**)&m_grayMem[0], 1920*1080, cudaHostAllocDefault);
-		OSA_assert(ret == cudaSuccess);
-		ret = cudaHostAlloc((void**)&m_grayMem[1], 1920*1080, cudaHostAllocDefault);
-		OSA_assert(ret == cudaSuccess);
-/***********************************/
+	
 	trackinfo_obj=(Track_InfoObj *)malloc(sizeof(Track_InfoObj));
 
 	m_display.create();
@@ -900,7 +895,7 @@ int CVideoProcess::init()
 
 	m_display.init(&dsInit);
 
-	m_display.m_bOsd = true;//false;//true;
+	m_display.m_bOsd = true;
 	m_dc = m_display.m_imgOsd[0];
 	m_dccv=m_display.m_imgOsd[1];
 	OnInit();

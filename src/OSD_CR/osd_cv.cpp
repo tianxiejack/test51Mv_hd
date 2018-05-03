@@ -454,10 +454,7 @@ void DrawcvDashsec(Mat frame,Line_Param_fb *lineparm)
 
 
 void Draw_cvgraph_osd(Mat frame,void *lParam)
-{
-
-
-		
+{	
 		Line_Param_fb * lineParam = (Line_Param_fb *)lParam;
 	
 
