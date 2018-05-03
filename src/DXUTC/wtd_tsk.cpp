@@ -1,3 +1,5 @@
+#if 0
+
 #include <stdio.h>
 #include <linux/rtc.h>
 #include <sys/ioctl.h>
@@ -173,3 +175,4 @@ static int wtd_tskMain(struct OSA_TskHndl *pTsk, OSA_MsgHndl *pMsg, Uint32 curSt
 
 
 
+#endif

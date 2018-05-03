@@ -1,3 +1,5 @@
+#if 0
+
 /*******************************************************************************
 * Copyright (C), 2011-2012, ChamRun Tech. Co., Ltd.
 * WorkContext:
@@ -62,3 +64,5 @@ Int32 uart_gpmc_port_destroy( port_handle *pHdl );
 
 #endif
 /************************************** The End Of File **************************************/
+
+#endif
