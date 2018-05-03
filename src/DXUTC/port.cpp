@@ -15,7 +15,7 @@ Int32 port_create(IN Int32 portType, OUT port_handle** ppHdl)
 
 	if(portType == PORT_NET_UDP)
 	{
-		return udp_port_create(ppHdl);
+		//return udp_port_create(ppHdl);
 	}
 
 	if(portType == PORT_I2C_UART)
@@ -41,7 +41,7 @@ Int32 port_destory(IN port_handle* pHdl)
 	}
 
 	if(pHdl != NULL && pHdl->portType == PORT_NET_UDP){
-		return udp_port_destroy(pHdl);
+		//return udp_port_destroy(pHdl);
 	}
 
 	if(pHdl != NULL && pHdl->portType == PORT_I2C_UART){

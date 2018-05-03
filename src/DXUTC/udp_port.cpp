@@ -1,3 +1,7 @@
+
+
+#if 0
+
 /*******************************************************************************
  *                                                                           
  * Copyright (c) 2012 ChamRun Tech Incorporated - http://www.casevision.com/ 
@@ -216,4 +220,4 @@ static Int32 udp_port_recv(void *Hdl, UInt8 *buffer, UInt32 size)
 	}
 	return  nread;
 }
-
+#endif
