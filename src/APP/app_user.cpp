@@ -161,7 +161,7 @@ int APP_startStop( int usercase, Bool IsActiveCase)
  * @Fun:        // fun name
  * @brief:      // fun discription
  * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
+ * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
  * @return:     // return value
  * @Others:     // others
  *******************************************************************************/
@@ -195,7 +195,7 @@ static Int32 APP_loadDefCfg( int item )
  * @Fun:        APP_create
  * @brief:      // fun discription
  * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
+ * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
  * @return:     // return value
  * @Others:     // others
  *******************************************************************************/
@@ -367,7 +367,7 @@ static Int32 APP_create( int item )
  * @Fun:        APP_destroy
  * @brief:      APP free
  * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
+ * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
  * @return:     // return value
  * @Others:     // others
  *******************************************************************************/
@@ -479,7 +479,7 @@ static Int32 APP_stop( int item )
  * @Fun:        // fun name
  * @brief:      // fun discription
  * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
+ * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
  * @return:     // return value
  * @Others:     // others
  *******************************************************************************/
@@ -492,7 +492,7 @@ static Int32 APP_getStatus( int item )
  * @Fun:        // fun name
  * @brief:      // fun discription
  * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
+ * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
  * @return:     // return value
  * @Others:     // others
  *******************************************************************************/
@@ -522,8 +522,7 @@ static Int32 APP_onTimer( Int32 timerId )
 
     if( timerId == GPIO_INSPECT_TIMER)
     {
-
-		APP_getvideostatus();
+		//APP_getvideostatus();
     }
 
     if(timerId == GRPX_SHOW_TIMER)

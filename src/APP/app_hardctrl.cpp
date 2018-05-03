@@ -1,4 +1,4 @@
-
+#if 0
 #include "app_hardctrl.h"
 #include "Gpio026.h"
 #include"app_ctrl.h"
@@ -98,3 +98,4 @@ void APP_getvideostatus()
 	// MSGDRIV_send(MSGID_EXT_INPUT_VIDEOEN, 0);
 
 }
+#endif
