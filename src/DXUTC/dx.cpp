@@ -277,7 +277,7 @@ static Int32 Dx_syscfgSelStartUp( Int32 blkId, Int32 feildId )
 
 /**
  * @Fun:		Dx_syscfgSaveStartUpAs
- * @brief:		 system start up configure save
+ * @brief:	system start up configure save
  * @param:	Int32 blkId:unused
  * @param:	Int32 feildId:unused
  * @Output	null
