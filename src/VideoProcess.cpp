@@ -742,9 +742,8 @@ CVideoProcess::CVideoProcess()
 	m_pwFile = NULL;
 
 	memset(m_mtd, 0, sizeof(m_mtd));
-//	memset(m_grayMem, 0, sizeof(m_grayMem));
-
 	memset(&mainProcThrObj, 0, sizeof(MAIN_ProcThrObj));
+	
 	detState = TRUE;
 	trackEnd = FALSE;
 	trackStart = TRUE;
@@ -766,7 +765,6 @@ CVideoProcess::CVideoProcess()
 
 CVideoProcess::~CVideoProcess()
 {
-	//destroy();
 	pThis = NULL;
 	if(m_pwFile != NULL){
 		fclose(m_pwFile);
@@ -786,16 +784,11 @@ int CVideoProcess::creat()
 	MultiCh.m_usrFunc = callback_process;
 	MultiCh.creat();
 
-	//BigChannel.creat();
-
 	MAIN_threadCreate();
 	
-
-	OSA_mutexCreate(&m_mutex);
-	
+	OSA_mutexCreate(&m_mutex);	
 
 	OnCreate();
-	
 
 	return 0;
 }

@@ -1,11 +1,4 @@
-/*******************************************************************************
- *                                                                             *
- * Copyright (c) 2011       *
- *                        ALL RIGHTS RESERVED                                  *
- *                                                                             *
- ******************************************************************************/
-
-
+#if 0
 
 #ifndef _MUDUL_CONTRAL_H_
 #define _MUDUL_CONTRAL_H_
@@ -54,3 +47,5 @@ Int32 mc_updateRemote2Local(mc_handle *mcHdl);
 BOOL mc_IsNeedRebootRemote(mc_handle *mcHdl);
 
 #endif /* _MUDUL_CONTRAL_H_ */
+
+#endif

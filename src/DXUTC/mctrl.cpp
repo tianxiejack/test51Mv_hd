@@ -1,3 +1,5 @@
+
+#if 0
 #include <mctrl.h>
 #include <stdio.h>
 #include <osa.h>
@@ -612,4 +614,4 @@ static Int32 mc_tskMain(struct OSA_TskHndl *pTsk, OSA_MsgHndl *pMsg, Uint32 curS
 
     return 0;
 }
-
+#endif

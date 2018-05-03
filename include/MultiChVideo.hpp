@@ -1,9 +1,3 @@
-/*
- * MultiChVideo.hpp
- *
- *  Created on:
- *      Author: sh
- */
 
 #ifndef MULTICHVIDEO_HPP_
 #define MULTICHVIDEO_HPP_
@@ -12,15 +6,7 @@
 #include "osa_thr.h"
 #include "osa_buf.h"
 #include "osa_sem.h"
-
-//#define SIM_CAM
-
-#ifndef SIM_CAM
 #include "v4l2camera.hpp"
-#else
-#include "v4l2camera_sim.hpp"
-#endif
-
 
 typedef int (* MultiCh_CB)(void *handle, int chId, Mat frame);
 
