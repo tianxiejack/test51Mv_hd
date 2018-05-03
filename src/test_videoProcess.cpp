@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 	proc.run();
 	glutMainLoop();
 	proc.destroy();
-    return 0;
+    	return 0;
 }
 
 //__MMT__

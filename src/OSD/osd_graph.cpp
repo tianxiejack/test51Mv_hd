@@ -4,11 +4,11 @@
 #include "osa_buf.h"
 #include "osd_graph.h"
 #include "app_osdgrp.h"
-#include "grpFont.h"
 #include "app_status.h"
 #include"dx.h"
 #include"app_ctrl.h"
 #include "msgDriv.h"
+#include "grpFont.h"
 
 Multich_graphic grpxChWinPrms;
 
@@ -860,7 +860,6 @@ static void* MultichGrpx_task(void *pPrm)
 
         if (pMultGraphicObj->tskGraphicLoop == FALSE)
             break;
-
        OSA_mutexLock(&pMultGraphicObj->muxLock);
 	//OSA_printf(" %s task start!!! \r\n", __func__);
 	fun(NULL);
@@ -871,7 +870,7 @@ static void* MultichGrpx_task(void *pPrm)
     return NULL;
 }
 
-#if 1
+
 void  osdgraph_init(osdprocess_CB fun)
 {
 	int status=0;
@@ -880,9 +879,6 @@ void  osdgraph_init(osdprocess_CB fun)
 	Line_Param_fb * lineParam = NULL;
 	memset(&grpxChWinPrms, 0, sizeof(Multich_graphic));
 
-	
-
-#if PROJ_XGS026
 	grpxChWinPrms.devFb_num = 1;
 	for ( devId = 0; devId < grpxChWinPrms.devFb_num; devId++)
 	{
@@ -898,38 +894,37 @@ void  osdgraph_init(osdprocess_CB fun)
 
 			if(winId == WINID_TV_CROSSAXIS)
 			{
-				lineParam->enableWin = 1;
-				lineParam->objType = grpx_ObjId_Cross;
+				lineParam->enableWin 		= 1;
+				lineParam->objType 		= grpx_ObjId_Cross;
 				//lineParam->objType = grpx_ObjId_Cross_Black_White;
-				lineParam->frcolor = WHITECOLOR;
-				lineParam->x = vdisWH[devId][0]/2;
-				lineParam->y = vdisWH[devId][1]/2;
-				lineParam->width = 60;
-				lineParam->height = 40;
-				lineParam->linePixels = 2;
-				lineParam->lineGapWidth = lineParam->width/4;
-				lineParam->lineGapHeight = lineParam->height/4;
+				lineParam->frcolor 		= WHITECOLOR;
+				lineParam->x 				= vdisWH[devId][0]/2;
+				lineParam->y 				= vdisWH[devId][1]/2;
+				lineParam->width 			= 60;
+				lineParam->height 		= 40;
+				lineParam->linePixels 		= 2;
+				lineParam->lineGapWidth 	= lineParam->width/4;
+				lineParam->lineGapHeight 	= lineParam->height/4;
 			}
 
 			if(winId == WINID_TV_AIMAREA)
 			{
-				lineParam->enableWin = 0;
-				lineParam->objType = grpx_ObjId_Rect;
-				lineParam->frcolor = WHITECOLOR;
-				lineParam->x = vdisWH[devId][0]/2;
-				lineParam->y = vdisWH[devId][1]/2;
-				lineParam->width = 60;
-				lineParam->height = 40;
-				lineParam->linePixels = 2;
-				lineParam->lineGapWidth = lineParam->width;
-				lineParam->lineGapHeight = lineParam->height;
+				lineParam->enableWin 		= 0;
+				lineParam->objType 		= grpx_ObjId_Rect;
+				lineParam->frcolor 		= WHITECOLOR;
+				lineParam->x 				= vdisWH[devId][0]/2;
+				lineParam->y 				= vdisWH[devId][1]/2;
+				lineParam->width 			= 60;
+				lineParam->height 		= 40;
+				lineParam->linePixels 		= 2;
+				lineParam->lineGapWidth 	= lineParam->width;
+				lineParam->lineGapHeight 	= lineParam->height;
 			}
 		}
 	}
-#endif
 
-	grpxChWinPrms.tskGraphicLoop = TRUE;
-	grpxChWinPrms.tskGraphicStopDone = FALSE;
+	grpxChWinPrms.tskGraphicLoop 			= TRUE;
+	grpxChWinPrms.tskGraphicStopDone 		= FALSE;
 
 	status = OSA_semCreate(&grpxChWinPrms.tskGraphicSem, 1, 0);
 	OSA_assert(status == OSA_SOK);
@@ -948,11 +943,10 @@ void  osdgraph_init(osdprocess_CB fun)
 	OSA_mutexCreate(&osd_mutex);
 
 	grpxChWinPrms.bGraphicInit = TRUE;
-
+	
 	OSA_printf(" %s done.\n", __func__);
 
 }
-#endif
 
 
 int timesta=0;
@@ -1508,4 +1502,5 @@ void  APP_Err_feedback_timer_alarm()
 }
 
 
+#include "grpFont.h"
 

@@ -392,26 +392,21 @@ int  CProcess021::PiexltoWindowsyzoom_TrkRect(int y,int channel)
 }
 void CProcess021::OnCreate()
 {
-
-
 	osdgraph_init(process_osd);
 	MSGDRIV_create();
 	MSGAPI_initial();
-	//App_dxmain();
 
-	#if 1
-		CMD_EXT *pIStuts = &extInCtrl;
+	CMD_EXT *pIStuts = &extInCtrl;
 
-		CFGID_FIELD_GET(pIStuts->DispColor[0] ,CFGID_RTS_TV_SEN_COLOR);
-		CFGID_FIELD_GET(pIStuts->DispColor[1] ,CFGID_RTS_FR_SEN_COLOR);
-		if(pIStuts->DispColor[0]<0||pIStuts->DispColor[0]>6)
-			pIStuts->DispColor[0]=2;
+	CFGID_FIELD_GET(pIStuts->DispColor[0] ,CFGID_RTS_TV_SEN_COLOR);
+	CFGID_FIELD_GET(pIStuts->DispColor[1] ,CFGID_RTS_FR_SEN_COLOR);
+	if(pIStuts->DispColor[0]<0||pIStuts->DispColor[0]>6)
+		pIStuts->DispColor[0]=2;
 
-		CFGID_FIELD_GET(pIStuts->PicpPosStat,CFGID_SENSOR_TV_PICP_POS);
-		if(pIStuts->PicpPosStat<0||pIStuts->PicpPosStat>3)
-			pIStuts->PicpPosStat=0;
-		//pIStuts->PicpPosStat=0;
-	#endif
+	CFGID_FIELD_GET(pIStuts->PicpPosStat,CFGID_SENSOR_TV_PICP_POS);
+	if(pIStuts->PicpPosStat<0||pIStuts->PicpPosStat>3)
+		pIStuts->PicpPosStat=0;
+
 
 };
 void CProcess021::OnDestroy(){};
@@ -450,6 +445,7 @@ bool CProcess021::OnPreProcess(int chId, Mat &frame)
 int onece=0;
 void CProcess021::process_osd(void *pPrm)
 {
+	return ;//!! ! no used
 	int devId=0;
 	Mat frame=sThis->m_dc;
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
@@ -492,9 +488,8 @@ void CProcess021::process_osd(void *pPrm)
 
 void CProcess021::process_osd1()
 {
-
 	int devId=0;
-	Mat frame=sThis->m_dccv;//.m_imgOsd;
+	Mat frame=sThis->m_dccv;
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	int winId;
 	Text_Param_fb * textParam = NULL;
@@ -525,12 +520,12 @@ void CProcess021::process_osd1()
 		if(!textParam->enableWin)
 			continue;
 		EraseDraw_graph_osd(frame,textParam,textParampri);
-		Draw_graph_osd(frame,textParam,lineParam);
-		
-		//sThis->updata_osd[0]=true;
-		
-		memcpy(textParampri,textParam,sizeof(Text_Param_fb));
 
+		if(lineParam->objType == grpx_ObjId_Cross)
+		;//Draw_graph_osd(frame,textParam,lineParam);
+		
+		//sThis->updata_osd[0]=true;		
+		memcpy(textParampri,textParam,sizeof(Text_Param_fb));
 	}
 
 }
@@ -2015,7 +2010,7 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 	int tempvalue=0;
 	CMD_EXT *pIStuts = &extInCtrl;
 	CMD_EXT *pInCmd = NULL;
-//printf("*************x=%d y=%d\n",pIStuts->unitAxisX[extInCtrl.SensorStat ],pIStuts->unitAxisY[extInCtrl.SensorStat ]);
+	//printf("*************x=%d y=%d\n",pIStuts->unitAxisX[extInCtrl.SensorStat ],pIStuts->unitAxisY[extInCtrl.SensorStat ]);
 	if(msgId == MSGID_EXT_INPUT_SENSOR || msgId == MSGID_EXT_INPUT_ENPICP)
 	{
 		if(prm != NULL)
@@ -2039,30 +2034,23 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 #if 1//change the sensor picp change too
 		if(pIStuts->PicpSensorStat==0||pIStuts->PicpSensorStat==1)
+		{
+			if(pIStuts->SensorStat==0)
 			{
-				if(pIStuts->SensorStat==0)
-					{
-						pIStuts->PicpSensorStat=1;
-						
-					//	pIStuts->ImgPicp[pIStuts->SensorStat^1]=0;
-					//	pIStuts->ImgPicp[pIStuts->SensorStat]=1;
-					}
-				else
-					{
-						pIStuts->PicpSensorStat=0;
-					//	pIStuts->ImgPicp[pIStuts->SensorStat^1]=0;
-					//	pIStuts->ImgPicp[pIStuts->SensorStat]=1;
-					}
-				if(pIStuts->ImgPicp[pIStuts->SensorStat]==1||pIStuts->ImgPicp[pIStuts->SensorStat^1]==1)
-					{
-					pIStuts->PicpSensorStatpri=pIStuts->PicpSensorStat;
-					pIStuts->ImgPicp[pIStuts->SensorStat^1]=0;
-					pIStuts->ImgPicp[pIStuts->SensorStat]=1;
-					OSA_printf("the picp sensorstatpir=%d\n",pIStuts->PicpSensorStatpri);
-					}
-				
-				
+				pIStuts->PicpSensorStat=1;
 			}
+			else
+			{
+				pIStuts->PicpSensorStat=0;
+			}
+			if(pIStuts->ImgPicp[pIStuts->SensorStat]==1||pIStuts->ImgPicp[pIStuts->SensorStat^1]==1)
+			{
+				pIStuts->PicpSensorStatpri=pIStuts->PicpSensorStat;
+				pIStuts->ImgPicp[pIStuts->SensorStat^1]=0;
+				pIStuts->ImgPicp[pIStuts->SensorStat]=1;
+				OSA_printf("the picp sensorstatpir=%d\n",pIStuts->PicpSensorStatpri);
+			}		
+		}
 #endif
 
 		itmp = pIStuts->PicpSensorStat;//freeze change
@@ -2073,35 +2061,31 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		{
 			int ENHStatus=0;
 			if(pIStuts->ImgEnhStat[pIStuts->SensorStat] ==0x00)
-				{
-					
-					ENHStatus=pIStuts->ImgEnhStat[pIStuts->SensorStat]=pIStuts->ImgEnhStat[pIStuts->SensorStat^1];
-					
-					OSA_printf("the enhstaus=%d  pIStuts->SensorStat=%d\n",ENHStatus,pIStuts->SensorStat);
-					dynamic_config(CDisplayer::DS_CFG_EnhEnable, pIStuts->SensorStat, &ENHStatus);
-				}
-				ENHStatus=0;
-				dynamic_config(CDisplayer::DS_CFG_EnhEnable, pIStuts->SensorStat^1, &ENHStatus);
-				pIStuts->ImgEnhStat[pIStuts->SensorStat^1]=0;
+			{
+				
+				ENHStatus=pIStuts->ImgEnhStat[pIStuts->SensorStat]=pIStuts->ImgEnhStat[pIStuts->SensorStat^1];
+				
+				OSA_printf("the enhstaus=%d  pIStuts->SensorStat=%d\n",ENHStatus,pIStuts->SensorStat);
+				dynamic_config(CDisplayer::DS_CFG_EnhEnable, pIStuts->SensorStat, &ENHStatus);
+			}
+			ENHStatus=0;
+			dynamic_config(CDisplayer::DS_CFG_EnhEnable, pIStuts->SensorStat^1, &ENHStatus);
+			pIStuts->ImgEnhStat[pIStuts->SensorStat^1]=0;
 				
 		}
 		
 //sec track sync
 		//if( pIStuts->SecAcqStat=)
 		if(pIStuts->SensorStat==0)
-			{
-				pIStuts->ImgPixelX[pIStuts->SensorStat] =PiexltoWindowsx( pIStuts->ImgPixelX[pIStuts->SensorStat^1],pIStuts->SensorStat^1);
-				pIStuts->ImgPixelY[pIStuts->SensorStat] =PiexltoWindowsy( pIStuts->ImgPixelY[pIStuts->SensorStat^1],pIStuts->SensorStat^1);
-			}
+		{
+			pIStuts->ImgPixelX[pIStuts->SensorStat] =PiexltoWindowsx( pIStuts->ImgPixelX[pIStuts->SensorStat^1],pIStuts->SensorStat^1);
+			pIStuts->ImgPixelY[pIStuts->SensorStat] =PiexltoWindowsy( pIStuts->ImgPixelY[pIStuts->SensorStat^1],pIStuts->SensorStat^1);
+		}
 		else
-			{
-
-				pIStuts->ImgPixelX[pIStuts->SensorStat] =WindowstoPiexlx( pIStuts->ImgPixelX[pIStuts->SensorStat^1],pIStuts->SensorStat);
-				pIStuts->ImgPixelY[pIStuts->SensorStat] =WindowstoPiexly( pIStuts->ImgPixelY[pIStuts->SensorStat^1],pIStuts->SensorStat);
-			}
-
-
-	
+		{
+			pIStuts->ImgPixelX[pIStuts->SensorStat] =WindowstoPiexlx( pIStuts->ImgPixelX[pIStuts->SensorStat^1],pIStuts->SensorStat);
+			pIStuts->ImgPixelY[pIStuts->SensorStat] =WindowstoPiexly( pIStuts->ImgPixelY[pIStuts->SensorStat^1],pIStuts->SensorStat);
+		}
 
  			//pIStuts->ImgPixelX[pIStuts->SensorStat^1] = pIStuts->ImgPixelX[pIStuts->SensorStat];
 			//pIStuts->ImgPixelY[pIStuts->SensorStat^1] = pIStuts->ImgPixelY[pIStuts->SensorStat] ;
@@ -2141,42 +2125,38 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 ///sensor zoom
 
 		if(pIStuts->ImgZoomStat[pIStuts->SensorStat])
+		{
+			memset(&lay_rect, 0, sizeof(DS_Rect));
+			if(pIStuts->SensorStat==0)//just tv zooom
 			{
-				memset(&lay_rect, 0, sizeof(DS_Rect));
-				if(pIStuts->SensorStat==0)//just tv zooom
-					{
-				
-					lay_rect.w = vcapWH[pIStuts->SensorStat][0]/2;
-					lay_rect.h = vcapWH[pIStuts->SensorStat][1]/2;
-					lay_rect.x = vcapWH[pIStuts->SensorStat][0]/4;
-					lay_rect.y = vcapWH[pIStuts->SensorStat][1]/4;
-					
-
-					}
-				
-				m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
-				if(pIStuts->PicpSensorStat==1)
-					{
-						
-						lay_rect.w = vcapWH[1][0]/3;
-						lay_rect.h = vcapWH[1][1]/3;
-						lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
-						lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;
-						m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
-					}
-				if(pIStuts->PicpSensorStat==0)
-					{
-						
-						lay_rect.w = vcapWH[0][0]/6;
-						lay_rect.h = vcapWH[0][1]/6;
-						lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
-						lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
-						m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
-					}
-
-
-				
+				lay_rect.w = vcapWH[pIStuts->SensorStat][0]/2;
+				lay_rect.h = vcapWH[pIStuts->SensorStat][1]/2;
+				lay_rect.x = vcapWH[pIStuts->SensorStat][0]/4;
+				lay_rect.y = vcapWH[pIStuts->SensorStat][1]/4;
 			}
+			
+			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
+			if(pIStuts->PicpSensorStat==1)
+			{
+				lay_rect.w = vcapWH[1][0]/3;
+				lay_rect.h = vcapWH[1][1]/3;
+				lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
+				lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;
+				m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
+			}
+			if(pIStuts->PicpSensorStat==0)
+				{
+					
+					lay_rect.w = vcapWH[0][0]/6;
+					lay_rect.h = vcapWH[0][1]/6;
+					lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
+					lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
+					m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
+				}
+
+
+			
+		}
 
 
 //mmt show change
@@ -2925,7 +2905,8 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
     MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_MMTSHOW,             MSGAPI_mmtshow,                 	     0);
     MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_FOVCMD,             MSGAPI_FOVcmd,                 	     0);
     MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_CFGSAVE,             MSGAPI_SaveCfgcmd,                 	     0);	
-    
+
+  
     return 0;
 }
 
@@ -3073,7 +3054,7 @@ int CProcess021::ReadAxisFromFile()
 	sThis->msgdriv_event(MSGID_EXT_INPUT_SENSOR,NULL);
 }
 
-  void CProcess021::MSGAPI_picp(long lParam )
+void CProcess021::MSGAPI_picp(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 		if(pIStuts->PicpSensorStat == 0xFF)
@@ -3457,9 +3438,10 @@ void CProcess021::MSGAPI_SaveCfgcmd(long lParam )
 {
 	
 	sThis->msgdriv_event(MSGID_EXT_INPUT_CFGSAVE,NULL);
-	
-
 }	
+
+
+
  #endif
 
 

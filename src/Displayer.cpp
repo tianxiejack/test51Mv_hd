@@ -243,18 +243,7 @@ void CDisplayer::_timeFunc(int value)
 	if(!gThis->m_bRun){
 		return ;
 	}
-	//gThis->dismodchanagcount++;
-	//if(gThis->dismodchanagcount<6000)
-	//	glutTimerFunc(gThis->m_initPrm.timerInterval, _timeFunc, value);
-	//else
-	//	gThis->dismodchanagcount=6000;
-	//glutTimerFunc(gThis->m_initPrm.timerInterval, _timeFunc, value);
 	gThis->_display();
-	
-	
-	
-	//if(gThis->m_initPrm.timerfunc != NULL)
-	//	gThis->m_initPrm.timerfunc(value);
 }
 
 void CDisplayer::_reshape(int width, int height)
@@ -269,12 +258,6 @@ void CDisplayer::_reshape(int width, int height)
 }
 void CDisplayer::gl_resize()
 {
-	//glGenBuffers(1, pixBuffObjs);
-	//glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
-	//glBufferData(GL_PIXEL_PACK_BUFFER,
-	//	m_mainWinWidth*m_mainWinHeight*3,
-	//	NULL, GL_DYNAMIC_COPY);
-	//glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 }
 
 void CDisplayer::_close(void)
@@ -307,12 +290,6 @@ int CDisplayer::init(DS_InitPrm *pPrm)
        }
        OSA_bufCreate(&tskSendBuffir, &tskSendBufCreatefir);
 
-
-
-
-
-
-	
 	if(pPrm != NULL)
 		memcpy(&m_initPrm, pPrm, sizeof(DS_InitPrm));
 
@@ -342,9 +319,6 @@ int CDisplayer::init(DS_InitPrm *pPrm)
 	//mouse event:
 	if(m_initPrm.mousefunc != NULL)
 		glutMouseFunc(m_initPrm.mousefunc);//GLUT_LEFT_BUTTON GLUT_MIDDLE_BUTTON GLUT_RIGHT_BUTTON; GLUT_DOWN GLUT_UP
-	//glutMotionFunc();//button down
-	//glutPassiveMotionFunc();//button up
-	//glutEntryFunc();//state GLUT_LEFT, GLUT_ENTERED
 
 	if(m_initPrm.visibilityfunc != NULL)
 		glutVisibilityFunc(m_initPrm.visibilityfunc);
@@ -406,9 +380,6 @@ int CDisplayer::dynamic_config(DS_CFG type, int iPrm, void* pPrm)
 		printf("the DS_CFG_RenderPosRect x=%d y=%d w=%d h=%d  pIStuts->PicpPosStat=%d\n",m_renders[iPrm].displayrect.x,m_renders[iPrm].displayrect.y,
 			m_renders[iPrm].displayrect.w,m_renders[iPrm].displayrect.h,iPrm);
 	}
-
-
-
 
 	if(type == DS_CFG_EnhEnable){
 		if(iPrm >= m_renderCount || iPrm < 0)
@@ -562,13 +533,6 @@ void CDisplayer::display(Mat frame, int chId, int code)
 	unsigned char tvbuffer=0;
 	unsigned char firbuffer=0;
 
-#if 0
-	Mat tmp = Mat(frame.rows,frame.cols,CV_8UC1);
-	extractYUYV2Gray(frame,tmp);
-	cv::imshow("1111111",tmp);
-	cv::waitKey(1);
-#endif
-
 	int nChannel = frame.channels();
 	unsigned int byteCount = frame.rows * frame.cols * nChannel * sizeof(unsigned char);
 	assert(chId>=0 && chId<DS_CHAN_MAX);
@@ -692,9 +656,6 @@ GLuint CDisplayer::async_display(int chId, int width, int height, int channels)
 void CDisplayer::run()
 {
 	m_bRun = true;
-	//glutSetOption();
-	//glutMainLoopEvent();
-	//glutMainLoop();
 	glutTimerFunc(0, _timeFunc, m_initPrm.timerfunc_value);
 }
 
@@ -703,18 +664,12 @@ void CDisplayer::stop()
 	m_bRun = false;
 }
 
-/*
-glutGet(Glenum state);
-GLUT_WINDOW_X ... GLUT_SCREEN_WIDTH ... 
-int glutDeviceGet(GLenum info);
-GLUT_HAS_KEYBOARD GLUT_HAS_MOUSE GLUT_NUM_MOUSE_BUTTONS
-*/
 int CDisplayer::setFullScreen(bool bFull)
 {
 	if(bFull)
 		glutFullScreen();
-	else{
-
+	else
+	{
 	}
 	m_bFullScreen = bFull;
 

@@ -254,14 +254,14 @@ void DrawcvLine(Mat frame,Osd_cvPoint *start,Osd_cvPoint *end,int frcolor,int li
 }
 void Drawcvcross(Mat frame,Line_Param_fb *lineparm)
 {
-
+	return ;
 	int centx, centy, width;
 	int crossw=width;
 	Point pt1,pt2,center;
 	if(lineparm==NULL)
-		{
-			return ;
-		}
+	{
+		return ;
+	}
 	Osd_cvPoint start;
 	Osd_cvPoint end;
 	start.x=lineparm->x-lineparm->width/2;
@@ -396,9 +396,9 @@ void Drawcvcrossnum(Mat frame,Line_Param_fb *lineparm)
 	int crossw=width;
 	Point pt1,pt2,center;
 	if(lineparm==NULL)
-		{
-			return ;
-		}
+	{
+		return ;
+	}
 	char numbuf[10];
 	Osd_cvPoint start;
 	Osd_cvPoint end;
@@ -446,37 +446,35 @@ void DrawcvDashsec(Mat frame,Line_Param_fb *lineparm)
 	//DrawcvDashline(frame,lineparm,4,4);
 	DrawcvDashliner(frame,startx,starty,endx,endy,4,4,lineparm->frcolor);
 	
-	
-
-	
 
 }
 
 
 void Draw_cvgraph_osd(Mat frame,void *lParam)
 {	
-		Line_Param_fb * lineParam = (Line_Param_fb *)lParam;
+	return ; //!!!
+	Line_Param_fb * lineParam = (Line_Param_fb *)lParam;
 	
 
-		switch(lineParam->objType)
-		{
-		case grpx_ObjId_Cross:
-			Drawcvcross(frame, lineParam);
-			break;
-		case grpx_ObjId_Rect:
-			Drawcvrect(frame, lineParam);
-			break;
-		case grpx_ObjId_Sectrk:
-			DrawcvDashsec(frame, lineParam);
-			break;
-		case grpx_ObjId_Cross_num:
-			Drawcvcrossnum(frame, lineParam);
-			break;
+	switch(lineParam->objType)
+	{
+	case grpx_ObjId_Cross:
+		Drawcvcross(frame, lineParam);
+		break;
+	case grpx_ObjId_Rect:
+		Drawcvrect(frame, lineParam);
+		break;
+	case grpx_ObjId_Sectrk:
+		DrawcvDashsec(frame, lineParam);
+		break;
+	case grpx_ObjId_Cross_num:
+		Drawcvcrossnum(frame, lineParam);
+		break;
 
 
-		default:
-			break;
-		}
+	default:
+		break;
+	}
 
 }
 

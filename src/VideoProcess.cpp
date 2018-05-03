@@ -43,8 +43,6 @@ int CVideoProcess::MAIN_threadCreate(void)
 	mainProcThrObj.pParent = (void*)this;
 
 	iRet = OSA_thrCreate(&mainProcThrObj.thrHandleProc, mainProcTsk, 0, 0, &mainProcThrObj);
-	
-	//OSA_waitMsecs(2);
 
 	return iRet;
 }
@@ -90,7 +88,7 @@ void CVideoProcess::main_proc_func()
 #endif
 	while(mainProcThrObj.exitProcThread ==  false)
 	{
-	/******************************************/
+		/******************************************/
 		if(m_pwFile==NULL && wFileFlag){
 			time(&timep);  
 			p = gmtime(&timep);
@@ -650,10 +648,10 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 			UTC_RECT_float rc;
 			rc.x = m_ImageAxisx - 30;
 			rc.y = m_ImageAxisy - 30;
-			rc.width = 60;
-			rc.height = 60;
+			rc.width 	= 60;
+			rc.height 	= 60;
 			m_rcTrack = rc;
-			m_rcAcq = rc;
+			m_rcAcq 	  = rc;
 		}
 		else
 		{
@@ -1045,12 +1043,12 @@ int CVideoProcess::Algconfig()
 		m_MMTDObj.SetSRLumThred(lumThred);
 		OSA_printf("DetectGapparm, MinArea, MaxArea,stillPixel, movePixel,lapScaler,lumThred = %d,%d,%d,%d,%d,%f,%d\n",DetectGapparm, MinArea, MaxArea,stillPixel, movePixel,lapScaler,lumThred);
 
-}
+	}
 	else
-		{
-			m_display.enhancemod=1;
-			m_display.enhanceparam=3.5;
-		}
+	{
+		m_display.enhancemod=1;
+		m_display.enhanceparam=3.5;
+	}
 	
 //avtrack
 	configAvtFromFile();
@@ -1061,14 +1059,9 @@ int CVideoProcess::Algconfig()
 int CVideoProcess::run()
 {
 	MultiCh.run();
-	
-	//BigChannel.run();
 	m_display.run();
-
 	m_track = CreateUtcTrk();
-
 	Algconfig();
-
 	for(int i=0; i<MAX_CHAN; i++){
 		m_mtd[i] = (target_t *)malloc(sizeof(target_t));
 		if(m_mtd[i] != NULL)
@@ -1078,9 +1071,7 @@ int CVideoProcess::run()
 	}
 
 	m_MMTDObj.SetTargetNum(MAX_TARGET_NUMBER);
-	
 	OnRun();
-
 	return 0;
 }
 
@@ -1089,23 +1080,11 @@ int CVideoProcess::stop()
 	if(m_track != NULL)
 		DestroyUtcTrk(m_track);
 	m_track = NULL;
-	/*
-	for(int i=0; i<MAX_CHAN; i++){
-		if(m_mtd[i] != NULL)
-		{
-			if(m_mtd[i]->state > 0)
-				detect.CloseTarget(m_mtd[i]);
-			free(m_mtd[i]);
-			m_mtd[i] = NULL;
-		}
-	}*/
 	
 	m_display.stop();
 	MultiCh.stop();
-	//BigChannel.stop();
 
 	OnStop();
-
 	return 0;
 }
 
@@ -1120,9 +1099,6 @@ void CVideoProcess::process_event(int type, int iPrm, void *pPrm)
 	Ontimer();
 	if(type == 0)//timer event from display
 	{
-//		MultiCh.process(callback_process, this);	// img alg part
-		//process_status();		// stauts part
-		//process_osd(0);			// osd part
 	}
 	
 }
@@ -1183,8 +1159,8 @@ void CVideoProcess::Track_fovreacq(int fov,int sensor,int sensorchange)
 	//UTC_RECT_float rect;
 	unsigned int currentx=0;
 	unsigned int currenty=0;
-	unsigned int TvFov[3] = {120,48,16};//Big-Mid-Sml:2400*5%,960*5%,330*5%
-	unsigned int FrFov[5] = {200,120,50,16,6};//Big-Mid-Sml-SuperSml-Zoom:4000*5%,2400*5%,1000*5%,330*5%,120*5%
+	unsigned int TvFov[3] 	= {120,48,16};//Big-Mid-Sml:2400*5%,960*5%,330*5%
+	unsigned int FrFov[5] 	= {200,120,50,16,6};//Big-Mid-Sml-SuperSml-Zoom:4000*5%,2400*5%,1000*5%,330*5%,120*5%
 
 	if(sensorchange == 1){
 		currentx = m_ImageAxisx;
@@ -1230,76 +1206,6 @@ void CVideoProcess::Track_fovreacq(int fov,int sensor,int sensorchange)
 	trackinfo_obj->reAcqRect.y=currenty-h/2;
 
 	//OSA_printf("XY(%f,%f),WH(%f,%f)\n",trackinfo_obj->reAcqRect.x,trackinfo_obj->reAcqRect.y,trackinfo_obj->reAcqRect.width,trackinfo_obj->reAcqRect.height);
-	#if 0
-	Track_reacq(trackinfo_obj->reAcqRect,1);
-	
-	if(trackinfo_obj->TrkStat == 1){
-		if(sensor == 0){
-			if((fov>((fovSize[sensor][0])-TvFov[0]))&&(fov<((fovSize[sensor][0])+TvFov[0]))){
-				rect.width=w;
-				rect.height=h;
-				rect.x=currentx-w/2;
-				rect.y=currenty-h/2;
-				Track_reacq(rect,1);
-				OSA_printf("Big chId%d  fov = %d,xy(%f,%f),WH(%f,%f) ratio=%f\n",sensor,fov,rect.x,rect.y,rect.width,rect.height,ratio);
-			}
-			else if((fov>((fovSize[sensor][1])-TvFov[1]))&&(fov<((fovSize[sensor][1])+TvFov[1]))){
-				rect.width=w;
-				rect.height=h;
-				rect.x=currentx-w/2;
-				rect.y=currenty-h/2;
-				Track_reacq(rect,1);
-				OSA_printf("Mid chId%d  fov = %d,xy(%f,%f),WH(%f,%f) ratio=%f\n",sensor,fov,rect.x,rect.y,rect.width,rect.height,ratio);
-			}
-			else if((fov>((fovSize[sensor][2])-TvFov[2]))&&(fov<((fovSize[sensor][2])+TvFov[2]))){
-				rect.width=w;
-				rect.height=h;
-				rect.x=currentx-w/2;
-				rect.y=currenty-h/2;
-				Track_reacq(rect,1);
-				OSA_printf("Sml chId%d  fov = %d,xy(%f,%f),WH(%f,%f) ratio=%f\n",sensor,fov,rect.x,rect.y,rect.width,rect.height,ratio);
-			}
-		}
-		else if(sensor == 1){
-			if((fov>((fovSize[sensor][0])-FrFov[0]))&&(fov<((fovSize[sensor][0])+FrFov[0]))){
-				rect.width=w;
-				rect.height=h;
-				rect.x=currentx-w/2;
-				rect.y=currenty-h/2;
-				Track_reacq(rect,1);
-			}
-			else if((fov>((fovSize[sensor][1])-FrFov[1]))&&(fov<((fovSize[sensor][1])+FrFov[1]))){
-				rect.width=w;
-				rect.height=h;
-				rect.x=currentx-w/2;
-				rect.y=currenty-h/2;
-				Track_reacq(rect,1);
-			}
-			else if((fov>((fovSize[sensor][2])-FrFov[2]))&&(fov<((fovSize[sensor][2])+FrFov[2]))){
-				rect.width=w;
-				rect.height=h;
-				rect.x=currentx-w/2;
-				rect.y=currenty-h/2;
-				Track_reacq(rect,1);
-			}
-			else if((fov>((fovSize[sensor][3])-FrFov[3]))&&(fov<((fovSize[sensor][3])+FrFov[3]))){
-				rect.width=w;
-				rect.height=h;
-				rect.x=currentx-w/2;
-				rect.y=currenty-h/2;
-				Track_reacq(rect,1);
-			}
-			else if((fov>((fovSize[sensor][4])-FrFov[4]))&&(fov<((fovSize[sensor][4])+FrFov[4]))){
-				rect.width=w;
-				rect.height=h;
-				rect.x=currentx-w/2;
-				rect.y=currenty-h/2;
-				Track_reacq(rect,1);
-			}
-
-		}
-	}	
-	#endif
 }
 void CVideoProcess::Track_reacq(UTC_RECT_float & rcTrack,int acqinterval)
 {

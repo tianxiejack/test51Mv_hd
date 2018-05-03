@@ -101,6 +101,7 @@ protected:
 	 static void MSGAPI_FOVcmd(long lParam );
 	 static void MSGAPI_SaveCfgcmd(long lParam );
 
+
 private:
 	ACK_EXT extOutAck;
 	bool     m_bCast;
