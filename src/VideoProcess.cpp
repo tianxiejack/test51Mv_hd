@@ -1,18 +1,15 @@
-/*
- * CVideoProcess.cpp
- *
- *  Created on: 2017
- *      Author: sh
- */
+
+
 #include <glut.h>
 #include "VideoProcess.hpp"
 #include "vmath.h"
-//#include "grpFont.h"
 #include "arm_neon.h"
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include "configable.h"
+
 
 using namespace vmath;
 
@@ -47,61 +44,11 @@ int CVideoProcess::MAIN_threadCreate(void)
 
 	iRet = OSA_thrCreate(&mainProcThrObj.thrHandleProc, mainProcTsk, 0, 0, &mainProcThrObj);
 	
-
-
-
-
 	//OSA_waitMsecs(2);
 
 	return iRet;
 }
 
-void CVideoProcess::Grayconvfilter(Mat src, Mat dst, UTC_RECT_float inrc)
-{
-	#if 0
-	MeanFilter(src.data,dst.data,2, src.cols,src.rows);
-	#elif 1
-	//blur(src,dst,Size(3,3));
-	int areax, areay, areaw, areah;
-	areax = inrc.x;
-	areay = inrc.y;
-	areaw = inrc.width;
-	areah = inrc.height;
-	//printf("beforex=%d y=%d w=%d h=%d\n",areax, areay, areaw, areah);
-	// get center pos
-	areax = areax + areaw/2;
-	areay = areay + areah/2;
-	// set new area
-	areaw = areaw*5;
-	areah = areah*5;
-	areaw &= (~3);
-	areah &= (~3);
-	if(areaw > 640) areaw = 640-4;
-	if(areah > 512) areah = 512-4;
-	
-	areax = areax - areaw/2;
-	if(areax < 0)
-		areax = 0;
-	else if(areax > (src.cols-areaw-4))
-		areax = (src.cols-areaw-4);
-	areax &=(~3);
-	areay = areay - areah/2;
-	if(areay < 0)
-		areay = 0;
-	else if(areay > (src.rows-areah-4))
-		areay = (src.rows-areah-4);
-	areay &=(~3);
-
-	// do filter
-	//printf("afterx=%d y=%d w=%d h=%d src.cols=%d src.rows=%d\n",areax, areay, areaw, areah,src.cols,src.rows);
-	Mat dysrc = src(Rect(areax, areay, areaw, areah));
-	Mat dydst = dst(Rect(areax, areay, areaw, areah));
-	blur(dysrc,dydst,Size(3,3));
-	#else
-	Mat mask=(Mat_<float>(3,3)<<1/9,1/9,1/9, 1/9,1/9,1/9,1/9,1/9,1/9);
-	filter2D(src,dst,src.type(), mask);
-	#endif
-}
 
 static void copyMat2Mat(cv::Mat src, cv::Mat dst, cv::Point pt)
 {
@@ -751,14 +698,14 @@ CVideoProcess::CVideoProcess()
 	lastFrameBox=0;
 	moveStat = FALSE;
 
-	m_ImageAxisx=640;
-	m_ImageAxisy=512;
-	m_intervalFrame = 0;
+	m_ImageAxisx		=VIDEO_IMAGE_WIDTH_0/2;
+	m_ImageAxisy		=VIDEO_IMAGE_HEIGHT_0/2;
+	m_intervalFrame 		= 0;
 	m_intervalFrame_change = 0;
 	m_bakChId = m_curChId;
-	trackchange=0;
-	m_searchmod=0;
-	tvzoomStat=0;
+	trackchange		=0;
+	m_searchmod		=0;
+	tvzoomStat		=0;
 
 	memset(m_tgtBox, 0, sizeof(TARGETBOX)*MAX_TARGET_NUMBER);
 }
@@ -799,18 +746,11 @@ int CVideoProcess::destroy()
 	OSA_mutexDelete(&m_mutex);
 	MAIN_threadDestroy();
 
-	//BigChannel.destroy();
 	MultiCh.destroy();
 	m_display.destroy();
 
 	OnDestroy();
 
-/*	if(m_grayMem[0] != NULL){
-			cudaFreeHost(m_grayMem[0]);
-			cudaFreeHost(m_grayMem[1]);
-			m_grayMem[0] = NULL;
-			m_grayMem[1] = NULL;
-		}*/
 	if(m_pwFile != NULL){
 		fclose(m_pwFile);
 		m_pwFile = NULL;
@@ -932,8 +872,6 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 		if(pPrm == NULL)
 		{			
 			UTC_RECT_float rc;
-			//rc.x = (int)(m_mousex*frame.cols/m_display.m_mainWinWidth) - 20;
-			//rc.y = (int)(m_mousey*frame.rows/m_display.m_mainWinHeight) - 15;
 			rc.x = m_ImageAxisx - 30;
 			rc.y = m_ImageAxisy - 30;
 			rc.width = 60;
@@ -944,7 +882,6 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 		else
 		{
 			m_rcTrack = *(UTC_RECT_float*)pPrm;
-			//m_rcAcq = *(UTC_RECT_float*)pPrm;
 		}
 		break;
 	case VP_CFG_MtdEnable:
@@ -1298,41 +1235,41 @@ int CVideoProcess::Algconfig()
 {
 //enhment
 	if(0==configEnhFromFile())
+	{
+		switch(Enhmod)
 		{
-			switch(Enhmod)
-				{
-				case 0:
-					m_display.enhancemod=0;
-					break;
-				case 1:
-					m_display.enhancemod=1;
-					break;
-				case 2:
-					m_display.enhancemod=2;
-					break;
-				default:
-					m_display.enhancemod=1;
-				}
-			if((Enhparm>0.0)&&(Enhparm<5.0))
-				m_display.enhanceparam=Enhparm;
-			else
-				m_display.enhanceparam=3.5;
+			case 0:
+				m_display.enhancemod=0;
+				break;
+			case 1:
+				m_display.enhancemod=1;
+				break;
+			case 2:
+				m_display.enhancemod=2;
+				break;
+			default:
+				m_display.enhancemod=1;
+		}
+		if((Enhparm>0.0)&&(Enhparm<5.0))
+			m_display.enhanceparam=Enhparm;
+		else
+			m_display.enhanceparam=3.5;
 
-			if((DetectGapparm<0) || (DetectGapparm>15))
-				DetectGapparm = 10;
-			m_MMTDObj.SetSRDetectGap(DetectGapparm);
+		if((DetectGapparm<0) || (DetectGapparm>15))
+			DetectGapparm = 10;
+		m_MMTDObj.SetSRDetectGap(DetectGapparm);
 
 
-			m_MMTDObj.SetConRegMinMaxArea(MinArea, MaxArea);
+		m_MMTDObj.SetConRegMinMaxArea(MinArea, MaxArea);
 
-			m_MMTDObj.SetMoveThred(stillPixel, movePixel);
+		m_MMTDObj.SetMoveThred(stillPixel, movePixel);
 
-			m_MMTDObj.SetLapScaler(lapScaler);
+		m_MMTDObj.SetLapScaler(lapScaler);
 
-			m_MMTDObj.SetSRLumThred(lumThred);
-			OSA_printf("DetectGapparm, MinArea, MaxArea,stillPixel, movePixel,lapScaler,lumThred = %d,%d,%d,%d,%d,%f,%d\n",DetectGapparm, MinArea, MaxArea,stillPixel, movePixel,lapScaler,lumThred);
+		m_MMTDObj.SetSRLumThred(lumThred);
+		OSA_printf("DetectGapparm, MinArea, MaxArea,stillPixel, movePixel,lapScaler,lumThred = %d,%d,%d,%d,%d,%f,%d\n",DetectGapparm, MinArea, MaxArea,stillPixel, movePixel,lapScaler,lumThred);
 
-	}
+}
 	else
 		{
 			m_display.enhancemod=1;

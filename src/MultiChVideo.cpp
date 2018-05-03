@@ -6,7 +6,6 @@
 #include <linux/videodev2.h>
 #include "MultiChVideo.hpp"
 #include "v4l2camera.hpp"
-#include "gpio_rdwr.h"
 #include <stdio.h>
 #include <sys/time.h>
 #include <stdlib.h>

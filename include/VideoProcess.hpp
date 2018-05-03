@@ -166,7 +166,6 @@ protected:
 	int process_track(int trackStatus, Mat frame_gray, Mat frame_dis, UTC_RECT_float &rcResult);
 	int process_mtd(ALGMTD_HANDLE pChPrm, Mat frame_gray, Mat frame_dis);
 	int ReAcqTarget();
-	void Grayconvfilter(Mat src, Mat dst, UTC_RECT_float inrc);
 	void Track_reacq(UTC_RECT_float & m_rcTrack,int acqinterval);
 	void Track_fovreacq(int fov,int sensor,int sensorchange);
 	
