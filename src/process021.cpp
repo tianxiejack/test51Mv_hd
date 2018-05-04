@@ -611,14 +611,11 @@ void CProcess021::DrawCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 	
 	unsigned char colour = (bShow) ?fcolour : 0;
 	Line_Param_fb lineparm;
-	lineparm.x=x;
-	lineparm.y=y;
-	lineparm.width=48;
-	lineparm.height=48;
-	lineparm.frcolor=colour;
-
-
-	//Drawcvcross(m_dccv,&lineparm);
+	lineparm.x		=	x;
+	lineparm.y		=	y;
+	lineparm.width	=	AXIS_WIDTH_FOV0;
+	lineparm.height	=	AXIS_HEIGHT_FOV0;
+	lineparm.frcolor	=	colour;
 	Drawcvcrossaim(m_dccv,&lineparm);
 }
 
@@ -1694,7 +1691,7 @@ osdindex++;	//cross aim
 			Osdflag[osdindex]=0;
  		}
 
-		startx=PiexltoWindowsx(extInCtrl.unitAxisX[extInCtrl.SensorStat],extInCtrl.SensorStat);
+		startx=PiexltoWindowsx(extInCtrl.unitAxisX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 	 	starty=PiexltoWindowsy(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 		if(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)
 		{
@@ -1760,6 +1757,7 @@ osdindex++;
 		}
 	}
 ///fov
+#if 0 //take a bak
 	osdindex++;
 
 	if(Osdflag[osdindex]==1)
@@ -1785,12 +1783,10 @@ osdindex++;
 			int centery=vdisWH[0][1]/2;
 			 if(extInCtrl.ImgMmtshow[extInCtrl.SensorStat])
 		 	{
-				//ret =ret*2/3;//-vdisWH[0][0]/6;
 				centerx=centerx*2/3;
 				centery=centery*2/3;
 				fovw=fovw*2/3;
 				fovh=fovh*2/3;
-
 		 	}
 			DrawMeanuCross(fovw,fovh,frcolor,true,centerx,centery);
 			Osdflag[osdindex]=1;
@@ -1800,10 +1796,7 @@ osdindex++;
 			rectfovBak[1].y=centery;
 		}
 	}
-	
-	//process_osd_test(NULL);
-	
-	
+#endif
 	prisensorstatus=extInCtrl.SensorStat;
 
 	static unsigned int count = 0;
