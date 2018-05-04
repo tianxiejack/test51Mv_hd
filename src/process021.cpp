@@ -705,230 +705,200 @@ void CProcess021::erassdrawmmt(TARGET tg[],bool bShow)
 }
 
 
-#if 1
 void CProcess021::drawmmt(TARGET tg[],bool bShow)
 {
-			int startx=0;
-			int starty=0;
-			int endx=0;
-			int endy=0;
-			Mat frame=m_dccv;
-			int i=0,j=0;
-			cv::Rect result;
-			short tempmmtx=0;
-			short tempmmty=0;
-			int tempdata=0;
-			int testid=0;
-			extInCtrl.Mtdtargetnum=0;
-			char numbuf[3];
-			int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
-			unsigned char Alpha = (bShow) ? frcolor : 0;
-			CvScalar colour=GetcvColour(Alpha);
+	int startx=0;
+	int starty=0;
+	int endx=0;
+	int endy=0;
+	Mat frame=m_dccv;
+	int i=0,j=0;
+	cv::Rect result;
+	short tempmmtx=0;
+	short tempmmty=0;
+	int tempdata=0;
+	int testid=0;
+	extInCtrl.Mtdtargetnum=0;
+	char numbuf[3];
+	int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
+	unsigned char Alpha = (bShow) ? frcolor : 0;
+	CvScalar colour=GetcvColour(Alpha);
+	
+	//memset(extInCtrl.MtdOffsetXY,0,20);
+	for(i=0;i<20;i++)
+	{
+		extInCtrl.MtdOffsetXY[i]=0;
+	}
+	for(i=0;i<MAX_TARGET_NUMBER;i++)
+	{
+
+		if(tg[majormmtid].valid==0)
+		{
+			//majormmtid++;
+			majormmtid=(majormmtid+1)%MAX_TARGET_NUMBER;
+		}
+		if(tg[i].valid==1)
+		{
+			extInCtrl.Mtdtargetnum++;
+		}
+	}
+	//OSA_printf("the num detect=%d  majormmtid=%d\n",extInCtrl.Mtdtargetnum,majormmtid);
+	primajormmtid=tempdata=majormmtid;
+	for(i=0;i<MAX_TARGET_NUMBER;i++)
+	{
+		if((tg[majormmtid].valid)&&(i==0))
+		{
+			//majormmtid=i;
+			result.width = 32;
+			result.height = 32;
+			tempmmtx=result.x = ((int)tg[majormmtid].cur_x) % _IMAGE_WIDTH_;
+			tempmmty=result.y = ((int)tg[majormmtid].cur_y ) % _IMAGE_HEIGHT_;
+
+
+			extInCtrl.unitMtdPixelX=result.x;
+			extInCtrl.unitMtdPixelY=result.y;
+			extInCtrl.unitMtdValid=1;
 			
-			//memset(extInCtrl.MtdOffsetXY,0,20);
-			for(i=0;i<20;i++)
-				{
-					extInCtrl.MtdOffsetXY[i]=0;
-				}
-			for(i=0;i<MAX_TARGET_NUMBER;i++)
-				{
+			//OSA_printf("the num  majormmtid=%d\n",majormmtid);
+			result.x = result.x - result.width/2;
+			result.y = result.y - result.height/2;
 
-					if(tg[majormmtid].valid==0)
-						{
-							//majormmtid++;
-							majormmtid=(majormmtid+1)%MAX_TARGET_NUMBER;
+			 startx=PiexltoWindowsx(result.x,extInCtrl.SensorStat);
+			 starty=PiexltoWindowsy(result.y,extInCtrl.SensorStat);
+			 endx=PiexltoWindowsx(result.x+result.width,extInCtrl.SensorStat);
+		 	 endy=PiexltoWindowsy(result.y+result.height,extInCtrl.SensorStat);
 
-						}
-					if(tg[i].valid==1)
-						{
-							extInCtrl.Mtdtargetnum++;
-							
+			//OSA_printf("the AvtTrkStat=%d  DispGrp=%d\n",extInCtrl.AvtTrkStat,extInCtrl.DispGrp[extInCtrl.SensorStat]);
+			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3)&&(extInCtrl.SysMode!=9)&&(extInCtrl.SysMode!=2))
+			{
+				rectangle( frame,
+					Point( startx, starty ),
+					Point( endx, endy),
+					colour, 1, 8);
+			}
+			//OSA_printf("******************the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
+			//	result.x,result.y,result.width,result.height);
+			extInCtrl.MtdOffsetXY[j]=tempmmtx&0xff;
+			extInCtrl.MtdOffsetXY[j+1]=(tempmmtx>>8)&0xff;
+			extInCtrl.MtdOffsetXY[j+2]=tempmmty&0xff;
+			extInCtrl.MtdOffsetXY[j+3]=(tempmmty>>8)&0xff;
+			//j++;
 
-						}
-
-				}
-
-			//OSA_printf("the num detect=%d  majormmtid=%d\n",extInCtrl.Mtdtargetnum,majormmtid);
-			primajormmtid=tempdata=majormmtid;
-			for(i=0;i<MAX_TARGET_NUMBER;i++)
-				{
-
-						//if(m_mtd[chId]->tg[i].valid)
-						
-						if((tg[majormmtid].valid)&&(i==0))
-						{
-							//majormmtid=i;
-							result.width = 32;
-							result.height = 32;
-							tempmmtx=result.x = ((int)tg[majormmtid].cur_x) % _IMAGE_WIDTH_;
-							tempmmty=result.y = ((int)tg[majormmtid].cur_y ) % _IMAGE_HEIGHT_;
-
-
-							extInCtrl.unitMtdPixelX=result.x;
-							extInCtrl.unitMtdPixelY=result.y;
-							extInCtrl.unitMtdValid=1;
-							
-							//OSA_printf("the num  majormmtid=%d\n",majormmtid);
-							result.x = result.x - result.width/2;
-							result.y = result.y - result.height/2;
-
-							 startx=PiexltoWindowsx(result.x,extInCtrl.SensorStat);
-							 starty=PiexltoWindowsy(result.y,extInCtrl.SensorStat);
-							 endx=PiexltoWindowsx(result.x+result.width,extInCtrl.SensorStat);
-						 	 endy=PiexltoWindowsy(result.y+result.height,extInCtrl.SensorStat);
-
-							//OSA_printf("the AvtTrkStat=%d  DispGrp=%d\n",extInCtrl.AvtTrkStat,extInCtrl.DispGrp[extInCtrl.SensorStat]);
-							if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3)&&(extInCtrl.SysMode!=9)&&(extInCtrl.SysMode!=2))
-								{
-							rectangle( frame,
-								Point( startx, starty ),
-								Point( endx, endy),
-								colour, 1, 8);
-								}
-								//OSA_printf("******************the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
-								//	result.x,result.y,result.width,result.height);
-								extInCtrl.MtdOffsetXY[j]=tempmmtx&0xff;
-								extInCtrl.MtdOffsetXY[j+1]=(tempmmtx>>8)&0xff;
-								extInCtrl.MtdOffsetXY[j+2]=tempmmty&0xff;
-								extInCtrl.MtdOffsetXY[j+3]=(tempmmty>>8)&0xff;
-								//j++;
-
-								//tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
-									
-							//memcpy(extInCtrl.MtdOffsetXY,tempmmtx,sizeof(tempmmtx));
-							//memcpy(extInCtrl.MtdOffsetXY+2,tempmmty,sizeof(tempmmty));
-							
-						}
-						
-						else if(tg[tempdata].valid)
-							{
-								testid++;
-								result.width = 32;
-								result.height = 32;
-								tempmmtx=result.x = ((int)tg[tempdata].cur_x) % _IMAGE_WIDTH_;
-								tempmmty=result.y = ((int)tg[tempdata].cur_y ) % _IMAGE_HEIGHT_;
-
-								//OSA_printf("+++++++++++++++the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
-								//	result.x,result.y,result.width,result.height);
-								//result.x = result.x - result.width/2;
-								//result.y = result.y - result.height/2;
-								//OSA_printf("the num  majormmtid=%d\n",tempdata);
-
-								 startx=PiexltoWindowsx(result.x,extInCtrl.SensorStat);
-								 starty=PiexltoWindowsy(result.y,extInCtrl.SensorStat);
-									if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3)&&(extInCtrl.SysMode!=9)&&(extInCtrl.SysMode!=2))
-								{
-								//DrawCross(result.x,result.y,frcolor,bShow);
-								//trkimgcross(frame,result.x,result.y,16);
-								line(frame, cvPoint(startx-16,starty), cvPoint(startx+16,starty), colour, 1, 8, 0 ); 
-								line(frame, cvPoint(startx,starty-16), cvPoint(startx,starty+16), colour, 1, 8, 0 ); 
-								//OSA_printf("******************the num  majormmtid=%d\n",majormmtid);
-								sprintf(numbuf,"%d",(tempdata+MAX_TARGET_NUMBER-majormmtid)%MAX_TARGET_NUMBER);
-								putText(frame,numbuf,cvPoint(startx+14,starty+14),CV_FONT_HERSHEY_SIMPLEX,1,colour);
-								}
-								//memcpy(extInCtrl.MtdOffsetXY+testid*4,tempmmtx,sizeof(tempmmtx));
-								//memcpy(extInCtrl.MtdOffsetXY+2+testid*4,tempmmty,sizeof(tempmmty));
-								
-
-								extInCtrl.MtdOffsetXY[j+testid*4]=tempmmtx&0xff;
-								extInCtrl.MtdOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
-								extInCtrl.MtdOffsetXY[j+2+testid*4]=tempmmty&0xff;
-								extInCtrl.MtdOffsetXY[j+3+testid*4]=(tempmmty>>8)&0xff;
-								//j++;
-								
-							}
+			//tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
 				
-				
-						tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
+			//memcpy(extInCtrl.MtdOffsetXY,tempmmtx,sizeof(tempmmtx));
+			//memcpy(extInCtrl.MtdOffsetXY+2,tempmmty,sizeof(tempmmty));			
+		}	
+		else if(tg[tempdata].valid)
+		{
+			testid++;
+			result.width = 32;
+			result.height = 32;
+			tempmmtx=result.x = ((int)tg[tempdata].cur_x) % _IMAGE_WIDTH_;
+			tempmmty=result.y = ((int)tg[tempdata].cur_y ) % _IMAGE_HEIGHT_;
 
-					}
+			//OSA_printf("+++++++++++++++the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
+			//	result.x,result.y,result.width,result.height);
+			//result.x = result.x - result.width/2;
+			//result.y = result.y - result.height/2;
+			//OSA_printf("the num  majormmtid=%d\n",tempdata);
 
+			 startx=PiexltoWindowsx(result.x,extInCtrl.SensorStat);
+			 starty=PiexltoWindowsy(result.y,extInCtrl.SensorStat);
+			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3)&&(extInCtrl.SysMode!=9)&&(extInCtrl.SysMode!=2))
+			{
+				//DrawCross(result.x,result.y,frcolor,bShow);
+				//trkimgcross(frame,result.x,result.y,16);
+				line(frame, cvPoint(startx-16,starty), cvPoint(startx+16,starty), colour, 1, 8, 0 ); 
+				line(frame, cvPoint(startx,starty-16), cvPoint(startx,starty+16), colour, 1, 8, 0 ); 
+				//OSA_printf("******************the num  majormmtid=%d\n",majormmtid);
+				sprintf(numbuf,"%d",(tempdata+MAX_TARGET_NUMBER-majormmtid)%MAX_TARGET_NUMBER);
+				putText(frame,numbuf,cvPoint(startx+14,starty+14),CV_FONT_HERSHEY_SIMPLEX,1,colour);
+			}
+			//memcpy(extInCtrl.MtdOffsetXY+testid*4,tempmmtx,sizeof(tempmmtx));
+			//memcpy(extInCtrl.MtdOffsetXY+2+testid*4,tempmmty,sizeof(tempmmty));
+
+			extInCtrl.MtdOffsetXY[j+testid*4]=tempmmtx&0xff;
+			extInCtrl.MtdOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
+			extInCtrl.MtdOffsetXY[j+2+testid*4]=tempmmty&0xff;
+			extInCtrl.MtdOffsetXY[j+3+testid*4]=(tempmmty>>8)&0xff;
+			//j++;
 			
+		}
+		tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
+	}
 
-			if(Mmtsendtime==0)
-				;//MSGAPI_AckSnd( AckMtdInfo);
-			Mmtsendtime++;
-			if(Mmtsendtime==1)
-				{
-					Mmtsendtime=0;
-				}
-			
-
-
+	if(Mmtsendtime==0)
+		;//MSGAPI_AckSnd( AckMtdInfo);
+	Mmtsendtime++;
+	if(Mmtsendtime==1)
+	{
+		Mmtsendtime=0;
+	}
 }
-#endif
 
 
 void CProcess021::erassdrawmmtnew(TARGETDRAW tg[],bool bShow)
 {
-			int startx=0;
-			int starty=0;
-			int endx=0;
-			int endy=0;
-			Mat frame=m_dccv;
-			int i=0,j=0;
-			cv::Rect result;
-			short tempmmtx=0;
-			short tempmmty=0;
-			int tempdata=0;
-			int testid=0;
-			extInCtrl.Mtdtargetnum=0;
-			char numbuf[3];
-			int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
-			unsigned char Alpha = (bShow) ? frcolor : 0;
-			CvScalar colour=GetcvColour(Alpha);
+	int startx=0;
+	int starty=0;
+	int endx=0;
+	int endy=0;
+	Mat frame=m_dccv;
+	int i=0,j=0;
+	cv::Rect result;
+	short tempmmtx=0;
+	short tempmmty=0;
+	int tempdata=0;
+	int testid=0;
+	extInCtrl.Mtdtargetnum=0;
+	char numbuf[3];
+	int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
+	unsigned char Alpha = (bShow) ? frcolor : 0;
+	CvScalar colour=GetcvColour(Alpha);
 
-			primajormmtid;
-			for(i=0;i<MAX_TARGET_NUMBER;i++)
-				{
+	primajormmtid;
+	for(i=0;i<MAX_TARGET_NUMBER;i++)
+	{
+		if((tg[primajormmtid].valid)&&(i==primajormmtid))
+		{	
+			 startx=tg[primajormmtid].startx;//PiexltoWindowsx(result.x,prisensorstatus);
+			 starty=tg[primajormmtid].starty;//PiexltoWindowsy(result.y,prisensorstatus);
+			 endx=tg[primajormmtid].endx;//PiexltoWindowsx(result.x+result.width,prisensorstatus);
+		 	 endy=tg[primajormmtid].endy;//PiexltoWindowsy(result.y+result.height,prisensorstatus);
 
+			rectangle( frame,
+				Point( startx, starty ),
+				Point( endx, endy),
+				colour, 1, 8);
+			rectangle( frame,
+				Point( startx-1, starty-1 ),
+				Point( endx+1, endy+1),
+				colour, 1, 8);
 			
-						if((tg[primajormmtid].valid)&&(i==primajormmtid))
-						{	
-							 startx=tg[primajormmtid].startx;//PiexltoWindowsx(result.x,prisensorstatus);
-							 starty=tg[primajormmtid].starty;//PiexltoWindowsy(result.y,prisensorstatus);
-							 endx=tg[primajormmtid].endx;//PiexltoWindowsx(result.x+result.width,prisensorstatus);
-						 	 endy=tg[primajormmtid].endy;//PiexltoWindowsy(result.y+result.height,prisensorstatus);
+		}
 
-							rectangle( frame,
-								Point( startx, starty ),
-								Point( endx, endy),
-								colour, 1, 8);
-							rectangle( frame,
-								Point( startx-1, starty-1 ),
-								Point( endx+1, endy+1),
-								colour, 1, 8);
-							
-						}
-						
-					if((tg[i].valid)&&(i!=primajormmtid))
-							{
-								
+		if((tg[i].valid)&&(i!=primajormmtid))
+		{
+			 startx=tg[i].startx;//PiexltoWindowsx(result.x,prisensorstatus);
+			 starty=tg[i].starty;//PiexltoWindowsy(result.y,prisensorstatus);
+			 endx=tg[i].endx;
+			 endy=tg[i].endy;
+			 #if 0
+			line(frame, cvPoint(startx-16,starty), cvPoint(startx+16,starty), colour, 1, 8, 0 ); 
+			line(frame, cvPoint(startx,starty-16), cvPoint(startx,starty+16), colour, 1, 8, 0 ); 
+			#else
+			rectangle( frame,
+			Point( startx, starty ),
+			Point( endx, endy),
+			colour, 1, 8);
 
-								 startx=tg[i].startx;//PiexltoWindowsx(result.x,prisensorstatus);
-								 starty=tg[i].starty;//PiexltoWindowsy(result.y,prisensorstatus);
-								 endx=tg[i].endx;
-								 endy=tg[i].endy;
-								 #if 0
-								line(frame, cvPoint(startx-16,starty), cvPoint(startx+16,starty), colour, 1, 8, 0 ); 
-								line(frame, cvPoint(startx,starty-16), cvPoint(startx,starty+16), colour, 1, 8, 0 ); 
-								#else
-								rectangle( frame,
-								Point( startx, starty ),
-								Point( endx, endy),
-								colour, 1, 8);
-
-								#endif
-								//OSA_printf("******************the num  majormmtid=%d\n",majormmtid);
-								sprintf(numbuf,"%d",i+1);
-								putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
-							}
-				
-				
-
-					}
-
-
+			#endif
+			//OSA_printf("******************the num  majormmtid=%d\n",majormmtid);
+			sprintf(numbuf,"%d",i+1);
+			putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
+		}
+	}
 }
 
 
@@ -1042,15 +1012,19 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 				Point( startx-1, starty-1 ),
 				Point( endx+1, endy+1),
 				colour, 1, 8);
+
+				//sprintf(numbuf,"%d",majormmtid+1);
+				//putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
+
 			}
-				//OSA_printf("******************the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
-				//	result.x,result.y,result.width,result.height);
-				tempmmtx  =PiexltoWindowsx(tempmmtx,extInCtrl.SensorStat);
-				tempmmty  =PiexltoWindowsy(tempmmty,extInCtrl.SensorStat);
-				extInCtrl.MtdOffsetXY[j]=tempmmtx&0xff;
-				extInCtrl.MtdOffsetXY[j+1]=(tempmmtx>>8)&0xff;
-				extInCtrl.MtdOffsetXY[j+2]=tempmmty&0xff;
-				extInCtrl.MtdOffsetXY[j+3]=(tempmmty>>8)&0xff;
+			//OSA_printf("******************the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
+			//	result.x,result.y,result.width,result.height);
+			tempmmtx  =PiexltoWindowsx(tempmmtx,extInCtrl.SensorStat);
+			tempmmty  =PiexltoWindowsy(tempmmty,extInCtrl.SensorStat);
+			extInCtrl.MtdOffsetXY[j]=tempmmtx&0xff;
+			extInCtrl.MtdOffsetXY[j+1]=(tempmmtx>>8)&0xff;
+			extInCtrl.MtdOffsetXY[j+2]=tempmmty&0xff;
+			extInCtrl.MtdOffsetXY[j+3]=(tempmmty>>8)&0xff;
 			
 		}
 		
@@ -1081,7 +1055,7 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 			tempmmty=result.y = ((int)tg[i].cur_y ) % _IMAGE_HEIGHT_;		
 
 			//OSA_printf("+++++++++++++++the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
-			//	result.x,result.y,result.width,result.height);
+			//result.x,result.y,result.width,result.height);
 			result.x = result.x - result.width/2;
 			result.y = result.y - result.height/2;
 			//OSA_printf("the num  majormmtid=%d\n",tempdata);
@@ -1135,17 +1109,15 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 		Mmtpos[i].h=result.height;
 		Mmtpos[i].valid=tg[i].valid;
 
-	}
-
-	
+	}	
 
 	if(Mmtsendtime==0)
 		;//MSGAPI_AckSnd( AckMtdInfo);
 	Mmtsendtime++;
 	if(Mmtsendtime==1)
-		{
-			Mmtsendtime=0;
-		}
+	{
+		Mmtsendtime=0;
+	}
 	
 	msgdriv_event(MSGID_EXT_INPUT_MMTSHOWUPDATE, NULL);
 
@@ -1214,11 +1186,6 @@ void CProcess021::DrawMeanuCross(int lenx,int leny,int fcolour , bool bShow ,int
 	end.y=centery+templeny;
 	DrawcvLine(m_dccv,&start,&end,colour,1);
 
-
-
-	
-
-
 }
 
 void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
@@ -1245,51 +1212,49 @@ void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 	Point start,end;
 
 	if(!bShow)
-		{
-				//startx=PiexltoWindowsx(secBak[1].x,extInCtrl.SensorStat);
-				//starty=PiexltoWindowsy(secBak[1].y,extInCtrl.SensorStat);
-				lineparm.x=secBak[1].x;
-				lineparm.y=secBak[1].y;
-				DrawcvDashcross(m_dccv,&lineparm,dashlen,dashlen);
-				startx=secBak[0].x;//PiexltoWindowsx(secBak[0].x,extInCtrl.SensorStat);
-				starty=secBak[0].y;//PiexltoWindowsy(secBak[0].y,extInCtrl.SensorStat);
-				endx=secBak[1].x;//PiexltoWindowsx(secBak[1].x,extInCtrl.SensorStat);
- 				endy=secBak[1].y;//PiexltoWindowsy(secBak[1].y,extInCtrl.SensorStat);
-				
-				drawdashlinepri(m_dccv,startx,starty,endx,endy,dashlen,dashlen,colour);
-		}
+	{
+		//startx=PiexltoWindowsx(secBak[1].x,extInCtrl.SensorStat);
+		//starty=PiexltoWindowsy(secBak[1].y,extInCtrl.SensorStat);
+		lineparm.x=secBak[1].x;
+		lineparm.y=secBak[1].y;
+		DrawcvDashcross(m_dccv,&lineparm,dashlen,dashlen);
+		startx=secBak[0].x;//PiexltoWindowsx(secBak[0].x,extInCtrl.SensorStat);
+		starty=secBak[0].y;//PiexltoWindowsy(secBak[0].y,extInCtrl.SensorStat);
+		endx=secBak[1].x;//PiexltoWindowsx(secBak[1].x,extInCtrl.SensorStat);
+			endy=secBak[1].y;//PiexltoWindowsy(secBak[1].y,extInCtrl.SensorStat);
+		
+		drawdashlinepri(m_dccv,startx,starty,endx,endy,dashlen,dashlen,colour);
+	}
 
 	else if((extInCtrl.SecAcqFlag)&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3))
-		{
-				//printf("ImgPixelX=%d,ImgPixelY=%d  extInCtrl.DispGrp[extInCtrl.SensorStat]=%d \n",extInCtrl.ImgPixelX,extInCtrl.ImgPixelY,extInCtrl.DispGrp[extInCtrl.SensorStat]);
-				DrawcvDashcross(m_dccv,&lineparm,dashlen,dashlen);
-				startx=PiexltoWindowsxzoom(extInCtrl.unitAxisX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
-				starty=PiexltoWindowsyzoom(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
-				endx=lineparm.x;//PiexltoWindowsx(extInCtrl.ImgPixelX[extInCtrl.SensorStat],extInCtrl.SensorStat);
- 				endy=lineparm.y;//PiexltoWindowsy(extInCtrl.ImgPixelY[extInCtrl.SensorStat],extInCtrl.SensorStat);
-				
-				drawdashlinepri(m_dccv,startx,starty,endx,endy,dashlen,dashlen,colour);
+	{
+		//printf("ImgPixelX=%d,ImgPixelY=%d  extInCtrl.DispGrp[extInCtrl.SensorStat]=%d \n",extInCtrl.ImgPixelX,extInCtrl.ImgPixelY,extInCtrl.DispGrp[extInCtrl.SensorStat]);
+		DrawcvDashcross(m_dccv,&lineparm,dashlen,dashlen);
+		startx=PiexltoWindowsxzoom(extInCtrl.unitAxisX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
+		starty=PiexltoWindowsyzoom(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
+		endx=lineparm.x;//PiexltoWindowsx(extInCtrl.ImgPixelX[extInCtrl.SensorStat],extInCtrl.SensorStat);
+			endy=lineparm.y;//PiexltoWindowsy(extInCtrl.ImgPixelY[extInCtrl.SensorStat],extInCtrl.SensorStat);
+		
+		drawdashlinepri(m_dccv,startx,starty,endx,endy,dashlen,dashlen,colour);
 
-				secBak[0].x=startx;
-				secBak[0].y=starty;
-				secBak[1].x=endx;
-				secBak[1].y=endy;
-				
-				Osdflag[osdindex]=1;
-				
-		}
+		secBak[0].x=startx;
+		secBak[0].y=starty;
+		secBak[1].x=endx;
+		secBak[1].y=endy;
+		
+		Osdflag[osdindex]=1;
+		
+	}
 }
 
 
 void CProcess021::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
 {
-
 	int dashlen=3;
 	drawdashlinepri(m_dccv,startx,starty,endx,starty,dashlen,dashlen,colour);
 	drawdashlinepri(m_dccv,startx,endy,endx,endy,dashlen,dashlen,colour);
 	drawdashlinepri(m_dccv,endx,starty,endx,endy,dashlen,dashlen,colour);
 	drawdashlinepri(m_dccv,startx,starty,startx,endy,dashlen,dashlen,colour);
-
 }
 
 bool CProcess021::OnProcess(int chId, Mat &frame)
@@ -1387,11 +1352,11 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 			starty=0;
 		}
 		if(((extInCtrl.PicpSensorStat==1)||(extInCtrl.PicpSensorStat==0))&&(extInCtrl.FrCollimation!=1)&&	(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3))
-			{
-				DrawCross(startx,starty,frcolor,true);
-				//printf("picp***********lat the startx=%d  starty=%d\n ",startx,starty);
-				Osdflag[osdindex]=1;
-			}
+		{
+			DrawCross(startx,starty,frcolor,true);
+			//printf("picp***********lat the startx=%d  starty=%d\n ",startx,starty);
+			Osdflag[osdindex]=1;
+		}
 		crosspicpBak.x=startx;
 		crosspicpBak.y=starty;
 
