@@ -1335,67 +1335,65 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 	}
 	countnofresh++;
 
-	osdindex=0;
-		//picp cross
+	osdindex=0;	//picp cross
 	{
+		startx=crosspicpBak.x;//PiexltoWindowsx(crossBak.x,extInCtrl.SensorStat);
+		starty=crosspicpBak.y;//PiexltoWindowsy(crossBak.y,extInCtrl.SensorStat);
+		if(Osdflag[osdindex]==1)
+		{
+			DrawCross(startx,starty,frcolor,false);
+			Osdflag[osdindex]=0;
+		}
+		startx=PiexltoWindowsx(extInCtrl.SensorStat?extInCtrl.AvtPosXTv:extInCtrl.AvtPosXFir,1-extInCtrl.SensorStat);
+			starty=PiexltoWindowsy(extInCtrl.SensorStat?extInCtrl.AvtPosYTv:extInCtrl.AvtPosYFir,1-extInCtrl.SensorStat);
+		//printf("pri the startx=%d  starty=%d\n ",startx,starty);
+		switch(extInCtrl.PicpPosStat)
+		{
+			case 0:
+				startx+=crossshiftx;
+				starty-=crossshifty;
+				break;
+			case 1:
+				startx+=crossshiftx;
+				starty+=crossshifty;
+				break;
+			case 2:
+				startx-=crossshiftx;
+				starty+=crossshifty;
+				break;
+			case 3:
+				startx-=crossshiftx;
+				starty-=crossshifty;
+				break;
 
-			startx=crosspicpBak.x;//PiexltoWindowsx(crossBak.x,extInCtrl.SensorStat);
-	 		starty=crosspicpBak.y;//PiexltoWindowsy(crossBak.y,extInCtrl.SensorStat);
-	 		if(Osdflag[osdindex]==1)
- 			{
-				DrawCross(startx,starty,frcolor,false);
-				Osdflag[osdindex]=0;
- 			}
-			startx=PiexltoWindowsx(extInCtrl.SensorStat?extInCtrl.AvtPosXTv:extInCtrl.AvtPosXFir,1-extInCtrl.SensorStat);
-	 		starty=PiexltoWindowsy(extInCtrl.SensorStat?extInCtrl.AvtPosYTv:extInCtrl.AvtPosYFir,1-extInCtrl.SensorStat);
-			//printf("pri the startx=%d  starty=%d\n ",startx,starty);
-			switch(extInCtrl.PicpPosStat)
+			default:
+				break;
+		}
+		
+		if(startx<0)
+		{
+			startx=0;
+		}
+		else if(startx>vdisWH[0][0])
+		{
+			startx=0;
+		}
+		if(starty<0)
+		{
+			starty=0;
+		}
+		else if(starty>vdisWH[0][0])
+		{
+			starty=0;
+		}
+		if(((extInCtrl.PicpSensorStat==1)||(extInCtrl.PicpSensorStat==0))&&(extInCtrl.FrCollimation!=1)&&	(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3))
 			{
-				case 0:
-					startx+=crossshiftx;
-					starty-=crossshifty;
-					break;
-				case 1:
-					startx+=crossshiftx;
-					starty+=crossshifty;
-					break;
-				case 2:
-					startx-=crossshiftx;
-					starty+=crossshifty;
-					break;
-				case 3:
-					startx-=crossshiftx;
-					starty-=crossshifty;
-					break;
-
-				default:
-					break;
+				DrawCross(startx,starty,frcolor,true);
+				//printf("picp***********lat the startx=%d  starty=%d\n ",startx,starty);
+				Osdflag[osdindex]=1;
 			}
-			
-			if(startx<0)
-			{
-				startx=0;
-			}
-			else if(startx>vdisWH[0][0])
-			{
-				startx=0;
-			}
-			if(starty<0)
-			{
-				starty=0;
-			}
-			else if(starty>vdisWH[0][0])
-			{
-				starty=0;
-			}
-			if(((extInCtrl.PicpSensorStat==1)||(extInCtrl.PicpSensorStat==0))&&(extInCtrl.FrCollimation!=1)&&	(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3))
-				{
-					DrawCross(startx,starty,frcolor,true);
-					//printf("picp***********lat the startx=%d  starty=%d\n ",startx,starty);
-					Osdflag[osdindex]=1;
-				}
-			crosspicpBak.x=startx;
-			crosspicpBak.y=starty;
+		crosspicpBak.x=startx;
+		crosspicpBak.y=starty;
 
 	}
 
@@ -1803,7 +1801,12 @@ void CProcess021::OnKeyDwn(unsigned char key)
 
 	if(key == 'b' || key == 'B')
 	{
-		pIStuts->PicpSensorStat = (pIStuts->PicpSensorStat + 1) % (eSen_Max+1);
+		//pIStuts->PicpSensorStat = (pIStuts->PicpSensorStat + 1) % (eSen_Max+1);
+		if(pIStuts->PicpSensorStat==0xff)
+			pIStuts->PicpSensorStat=1;
+		else 
+			pIStuts->PicpSensorStat=0xff;
+		
 		msgdriv_event(MSGID_EXT_INPUT_ENPICP, NULL);
 	}
 
