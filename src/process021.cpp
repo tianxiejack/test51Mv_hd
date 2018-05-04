@@ -1456,7 +1456,8 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 			extInCtrl.unitTrkYtmp = rcResult.y+rcResult.height/2;
 			coastRectx = extInCtrl.unitAxisX[0];
 			coastRecty = extInCtrl.unitAxisY[0];
-			if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0){
+			if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
+			{
 				if(extInCtrl.unitTrkXtmp>=vdisWH[0][0]/2)
 					extInCtrl.unitTrkXtmp = (extInCtrl.unitTrkXtmp-vdisWH[0][0]/2)*2+vdisWH[0][0]/2 ;
 				else if(extInCtrl.unitTrkXtmp<vdisWH[0][0]/2)
@@ -1505,7 +1506,6 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 			}
 			else
 			{
-				//for display  20180419
 				if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0){
 					
 					startx=PiexltoWindowsxzoom_TrkRect(coastRectx-aimw,extInCtrl.SensorStat);			
@@ -1592,38 +1592,32 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 			}
 		 	 if((extInCtrl.unitTrkStat == 1)||(extInCtrl.unitTrkStat == 2))
 		 	 {
+				extInCtrl.unitTrkX =rcResult.x+rcResult.width/2;
+				extInCtrl.unitTrkY = rcResult.y+rcResult.height/2;
+				if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0){
+					if(extInCtrl.unitTrkX>=vdisWH[0][0]/2)
+						extInCtrl.unitTrkX = (extInCtrl.unitTrkX-vdisWH[0][0]/2)*2+vdisWH[0][0]/2 ;
+					else if(extInCtrl.unitTrkX<vdisWH[0][0]/2)
+						extInCtrl.unitTrkX = vdisWH[0][0]/2 -(vdisWH[0][0]/2 - extInCtrl.unitTrkX)*2 ;
 
+					if(extInCtrl.unitTrkY>=vdisWH[0][1]/2)
+						extInCtrl.unitTrkY = (extInCtrl.unitTrkY-vdisWH[0][1]/2)*2+vdisWH[0][1]/2;
+					else if(extInCtrl.unitTrkY<vdisWH[0][1]/2)
+						extInCtrl.unitTrkY = vdisWH[0][1]/2 -(vdisWH[0][1]/2 - extInCtrl.unitTrkY)*2;
+				}
+				
+				//OSA_printf("transferbefore ********* trkxy(%f,%f)\n",extInCtrl.unitTrkX,extInCtrl.unitTrkY);
+				extInCtrl.trkerrx=(PiexltoWindowsxf(extInCtrl.unitTrkX ,extInCtrl.SensorStat));//*10;
+				extInCtrl.trkerry=(PiexltoWindowsyf(extInCtrl.unitTrkY ,extInCtrl.SensorStat));//*10;
+				OSA_printf("transferafter ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
+				if(extInCtrl.unitTrkStat == 2)
+				{
+					extInCtrl.trkerrx=(PiexltoWindowsx(m_ImageAxisx ,extInCtrl.SensorStat))*10;
+					extInCtrl.trkerry=(PiexltoWindowsy(m_ImageAxisy ,extInCtrl.SensorStat))*10;
+				}
 
-		 	 		//rememflag=false;
-		 	 		
-					extInCtrl.unitTrkX =rcResult.x+rcResult.width/2;
-					extInCtrl.unitTrkY = rcResult.y+rcResult.height/2;
-					////for replay  20180419
-					if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0){
-						if(extInCtrl.unitTrkX>=vdisWH[0][0]/2)
-							extInCtrl.unitTrkX = (extInCtrl.unitTrkX-vdisWH[0][0]/2)*2+vdisWH[0][0]/2 ;
-						else if(extInCtrl.unitTrkX<vdisWH[0][0]/2)
-							extInCtrl.unitTrkX = vdisWH[0][0]/2 -(vdisWH[0][0]/2 - extInCtrl.unitTrkX)*2 ;
-
-						if(extInCtrl.unitTrkY>=vdisWH[0][1]/2)
-							extInCtrl.unitTrkY = (extInCtrl.unitTrkY-vdisWH[0][1]/2)*2+vdisWH[0][1]/2;
-						else if(extInCtrl.unitTrkY<vdisWH[0][1]/2)
-							extInCtrl.unitTrkY = vdisWH[0][1]/2 -(vdisWH[0][1]/2 - extInCtrl.unitTrkY)*2;
-					}
-					
-					//OSA_printf("transferbefore ********* trkxy(%f,%f)\n",extInCtrl.unitTrkX,extInCtrl.unitTrkY);
-					extInCtrl.trkerrx=(PiexltoWindowsxf(extInCtrl.unitTrkX ,extInCtrl.SensorStat))*10;
-					extInCtrl.trkerry=(PiexltoWindowsyf(extInCtrl.unitTrkY ,extInCtrl.SensorStat))*10;
-					//OSA_printf("transferafter ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
-					if(extInCtrl.unitTrkStat == 2)
-					{
-							extInCtrl.trkerrx=(PiexltoWindowsx(m_ImageAxisx ,extInCtrl.SensorStat))*10;
-							extInCtrl.trkerry=(PiexltoWindowsy(m_ImageAxisy ,extInCtrl.SensorStat))*10;
-	
-					}
-
-					//MSGAPI_AckSnd( AckTrkErr);
-					extInCtrl.TrkErrFeedback = 1;
+				//MSGAPI_AckSnd( AckTrkErr);
+				extInCtrl.TrkErrFeedback = 1;
 		 	 }
 			 else
 			 	extInCtrl.TrkErrFeedback = 0;
@@ -1633,14 +1627,12 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 				extInCtrl.unitTrkStatpri=extInCtrl.unitTrkStat;
 				//MSGAPI_AckSnd( AckTrkType);
 			}
-
 		 }
 		 else
 	 	{
 			rememflag=false;
 			extInCtrl.TrkErrFeedback = 0;
 	 	}
-
 	}
 
 	//mtd

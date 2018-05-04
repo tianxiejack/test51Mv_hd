@@ -177,14 +177,12 @@ void CVideoProcess::main_proc_func()
 				
 				unsigned int currentx=MoveAcpSR.x+MoveAcpSR.width/2;
 				unsigned int currenty=MoveAcpSR.y+MoveAcpSR.height/2;
-						
 					
 				if((m_rcTrack.x+m_rcTrack.width>MoveAcpSR.x&&
 					m_rcTrack.x<MoveAcpSR.x+MoveAcpSR.width)||
 					(m_rcTrack.y+m_rcTrack.height>MoveAcpSR.y&&
 					m_rcTrack.y<MoveAcpSR.y+MoveAcpSR.height))
 					{
-
 						MoveAcpSR.width=MoveAcpSR.width*1.4;
 						MoveAcpSR.height=MoveAcpSR.height*1.4;
 						
