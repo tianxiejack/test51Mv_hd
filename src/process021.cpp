@@ -1078,10 +1078,7 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 			}
 			
 			tempmmtx=result.x = ((int)tg[i].cur_x) % _IMAGE_WIDTH_;
-			tempmmty=result.y = ((int)tg[i].cur_y ) % _IMAGE_HEIGHT_;
-
-
-			
+			tempmmty=result.y = ((int)tg[i].cur_y ) % _IMAGE_HEIGHT_;		
 
 			//OSA_printf("+++++++++++++++the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
 			//	result.x,result.y,result.width,result.height);
@@ -1116,7 +1113,6 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 			//memcpy(extInCtrl.MtdOffsetXY+testid*4,tempmmtx,sizeof(tempmmtx));
 			//memcpy(extInCtrl.MtdOffsetXY+2+testid*4,tempmmty,sizeof(tempmmty));
 			
-
 			extInCtrl.MtdOffsetXY[j+testid*4]=tempmmtx&0xff;
 			extInCtrl.MtdOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
 			extInCtrl.MtdOffsetXY[j+2+testid*4]=tempmmty&0xff;
@@ -1138,9 +1134,6 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 		Mmtpos[i].w=result.width;
 		Mmtpos[i].h=result.height;
 		Mmtpos[i].valid=tg[i].valid;
-
-
-	//	tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
 
 	}
 
@@ -1166,8 +1159,6 @@ void CProcess021::DrawMeanuCross(int lenx,int leny,int fcolour , bool bShow ,int
 	int templeny=leny;
 	int lenw=35;
 	unsigned char colour = (bShow) ?fcolour : 0;
-	//int centerx=vdisWH[0][0]/2;
-	//int centery=vdisWH[0][1]/2;
 	Osd_cvPoint start;
 	Osd_cvPoint end;
 
@@ -1253,12 +1244,6 @@ void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 
 	Point start,end;
 
-	// startx=PiexltoWindowsx(result.x,extInCtrl.SensorStat);
-	// starty=PiexltoWindowsy(result.y,extInCtrl.SensorStat);
-	// endx=PiexltoWindowsx(result.x+result.width,extInCtrl.SensorStat);
- 	// endy=PiexltoWindowsy(result.y+result.height,extInCtrl.SensorStat);
-	
-	//Drawcvcross(m_dc,&lineparm);
 	if(!bShow)
 		{
 				//startx=PiexltoWindowsx(secBak[1].x,extInCtrl.SensorStat);
@@ -1291,11 +1276,6 @@ void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 				secBak[1].y=endy;
 				
 				Osdflag[osdindex]=1;
-				
-		      	
-				//DrawcvDashliner(m_dc,extInCtrl.unitAxisX,extInCtrl.unitAxisX,extInCtrl.ImgPixelX,extInCtrl.ImgPixelY,4,4,colour);
-				//drawdashcross(frame,extInCtrl.ImgPixelX,extInCtrl.ImgPixelY,50,4,4);
-				//drawdashline(frame,extInCtrl.unitAxisX,extInCtrl.unitAxisX,extInCtrl.ImgPixelX,extInCtrl.ImgPixelY,4,4);
 				
 		}
 }
@@ -1492,10 +1472,12 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 			#endif
 			if( m_iTrackStat == 1)
 			{
-				rectangle( m_dccv,
-					Point( startx, starty ),
-					Point( endx, endy),
-					colour, 1, 8 );
+				#if 0	// trackRect
+					rectangle( m_dccv,
+						Point( startx, starty ),
+						Point( endx, endy),
+						colour, 1, 8 );
+				#endif
 				#if 1 //dft alg reply x y w h
 				if(algOsdRect == true)
 					rectangle( m_dccv,
@@ -1520,15 +1502,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 					endy=PiexltoWindowsyzoom(extInCtrl.unitAxisY[extInCtrl.SensorStat]+aimh/2 ,extInCtrl.SensorStat);
 					}
 				if(bDraw != 0){
-					#if 0
-					rectangle( m_dccv,
-						Point( startx, starty),
-						Point( endx, endy),
-						colour, 1, 8 );
-					#else
-					DrawdashRect(startx,starty,endx,endy,frcolor);
-					#endif
-					
+					DrawdashRect(startx,starty,endx,endy,frcolor);	// track lost DashRect				
 				}
 				#if 1 //dft alg reply x y w h
 				if(algOsdRect == true)
@@ -1612,8 +1586,8 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 				OSA_printf("transferafter ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
 				if(extInCtrl.unitTrkStat == 2)
 				{
-					extInCtrl.trkerrx=(PiexltoWindowsx(m_ImageAxisx ,extInCtrl.SensorStat))*10;
-					extInCtrl.trkerry=(PiexltoWindowsy(m_ImageAxisy ,extInCtrl.SensorStat))*10;
+					extInCtrl.trkerrx=(PiexltoWindowsx(m_ImageAxisx ,extInCtrl.SensorStat));//*10;
+					extInCtrl.trkerry=(PiexltoWindowsy(m_ImageAxisy ,extInCtrl.SensorStat));//*10;
 				}
 
 				//MSGAPI_AckSnd( AckTrkErr);
@@ -1732,8 +1706,6 @@ osdindex++;
 			freezecrossBak.y=starty;
 			
 			Osdflag[osdindex]=1;
-			//if((tvcorx+1280/3)
-			//DrawCross(1280*5/6,1024*1/6,frcolor,true);
 			
 		}
 		else
@@ -1745,7 +1717,6 @@ osdindex++;
 				DrawCross(freezecrossBak.x,freezecrossBak.y,frcolor,false);
 				Osdflag[osdindex]=0;
 			}
-			//DrawCross(1280*5/6,1024*1/6,frcolor,false);
 		}
 	}
 ///fov
@@ -1969,11 +1940,11 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		{
 			if(pIStuts->SensorStat==0)
 			{
-				pIStuts->PicpSensorStat=1;
+				pIStuts->PicpSensorStat=0;
 			}
 			else
 			{
-				pIStuts->PicpSensorStat=0;
+				pIStuts->PicpSensorStat=1;
 			}
 			if(pIStuts->ImgPicp[pIStuts->SensorStat]==1||pIStuts->ImgPicp[pIStuts->SensorStat^1]==1)
 			{
@@ -2019,32 +1990,26 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			pIStuts->ImgPixelY[pIStuts->SensorStat] =WindowstoPiexly( pIStuts->ImgPixelY[pIStuts->SensorStat^1],pIStuts->SensorStat);
 		}
 
- 			//pIStuts->ImgPixelX[pIStuts->SensorStat^1] = pIStuts->ImgPixelX[pIStuts->SensorStat];
-			//pIStuts->ImgPixelY[pIStuts->SensorStat^1] = pIStuts->ImgPixelY[pIStuts->SensorStat] ;
-
 //sensor 1 rect
 
 		DS_Rect lay_rect;
 	#if 1
-		lay_rect.w = vdisWH[0][0]/3;
-		lay_rect.h = vdisWH[0][1]/3;
-		lay_rect.x = vdisWH[0][0]/2-lay_rect.w/2;
-		lay_rect.y = vdisWH[0][1]/2-lay_rect.h/2;
+		lay_rect.w =vdisWH[0][0]/6;
+		lay_rect.h = vdisWH[0][1]/6;
+		lay_rect.x = crossBak.x - lay_rect.w/2;//vdisWH[0][0]/2-lay_rect.w/2;
+		lay_rect.y = crossBak.y - lay_rect.h/2;//vdisWH[0][1]/2-lay_rect.h/2;
+		//pIStuts->unitAxisX[extInCtrl.SensorStat]
 	#endif
 		if(pIStuts->PicpSensorStat==1)
-			{
-			#if 1
-				lay_rect.w = vcapWH[1][0]/3;
-				lay_rect.h = vcapWH[1][1]/3;
-				lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
-				lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;
-			#endif
-
-			}
+		{
+			lay_rect.w = vcapWH[1][0]/3;
+			lay_rect.h = vcapWH[1][1]/3;
+			lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
+			lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;
+		}
 		m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
+
 //picp position
-//18.3.31
-#if 1
 		lay_rect=rendpos[pIStuts->PicpPosStat];
 		m_ImageAxisx=pIStuts->unitAxisX[extInCtrl.SensorStat ];
 		m_ImageAxisy=pIStuts->unitAxisY[extInCtrl.SensorStat ];
@@ -2053,13 +2018,13 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		
 		
 		m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 1, &lay_rect);
-#endif
+
 ///sensor zoom
 
 		if(pIStuts->ImgZoomStat[pIStuts->SensorStat])
 		{
 			memset(&lay_rect, 0, sizeof(DS_Rect));
-			if(pIStuts->SensorStat==0)//just tv zooom
+			//if(pIStuts->SensorStat==0)//just tv zooom
 			{
 				lay_rect.w = vcapWH[pIStuts->SensorStat][0]/2;
 				lay_rect.h = vcapWH[pIStuts->SensorStat][1]/2;
@@ -2070,21 +2035,20 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
 			if(pIStuts->PicpSensorStat==1)
 			{
-				lay_rect.w = vcapWH[1][0]/3;
-				lay_rect.h = vcapWH[1][1]/3;
+				lay_rect.w = vcapWH[1][0]/6;
+				lay_rect.h = vcapWH[1][1]/6;
 				lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
 				lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;
 				m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
 			}
 			if(pIStuts->PicpSensorStat==0)
-				{
-					
-					lay_rect.w = vcapWH[0][0]/6;
-					lay_rect.h = vcapWH[0][1]/6;
-					lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
-					lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
-					m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
-				}
+			{	
+				lay_rect.w = vcapWH[0][0]/6;
+				lay_rect.h = vcapWH[0][1]/6;
+				lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
+				lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
+				m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
+			}
 
 
 			
@@ -2505,89 +2469,49 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		DS_Rect lay_rect;
 		
 		if(pIStuts->SensorStat==0)//tv
+		{
+			memset(&lay_rect, 0, sizeof(DS_Rect));
+			if(pIStuts->ImgZoomStat[0])
 			{
-					memset(&lay_rect, 0, sizeof(DS_Rect));
-					if(pIStuts->ImgZoomStat[0])
-					{
-						lay_rect.w = vdisWH[0][0]/2;
-						lay_rect.h = vdisWH[0][1]/2;
-						lay_rect.x = vdisWH[0][0]/4;
-						lay_rect.y = vdisWH[0][1]/4;
-						OSA_printf("MSGID_EXT_INPUT_ENZOOM*********tv  w=%d h=%d x=%d y=%d\n",lay_rect.w,lay_rect.h,lay_rect.x,lay_rect.y);
-					}
-					
-					m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
-
-
-					memset(&lay_rect, 0, sizeof(DS_Rect));
-					#if 0
-					if(pIStuts->ImgZoomStat[0]&&(pIStuts->PicpSensorStat==1))
-					{
-						
-						lay_rect.w = vcapWH[1][0]/6;
-						lay_rect.h = vcapWH[1][1]/6;
-						lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
-						lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;
-						printf("MSGID_EXT_INPUT_ENZOOM*********tv  w=%d h=%d x=%d y=%d\n",lay_rect.w,lay_rect.h,lay_rect.x,lay_rect.y);
-					}
-					#endif
-					//else 
-						{
-
-							lay_rect.w = vcapWH[1][0]/3;
-							lay_rect.h = vcapWH[1][1]/3;
-							lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
-							lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;
-							
-						}
-					
-						m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
-					
-					
+				lay_rect.w = vdisWH[0][0]/2;
+				lay_rect.h = vdisWH[0][1]/2;
+				lay_rect.x = vdisWH[0][0]/4;
+				lay_rect.y = vdisWH[0][1]/4;
+				OSA_printf("MSGID_EXT_INPUT_ENZOOM*********tv  w=%d h=%d x=%d y=%d\n",
+					lay_rect.w,lay_rect.h,lay_rect.x,lay_rect.y);
 			}
+			
+			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
+			memset(&lay_rect, 0, sizeof(DS_Rect));
+			
+			lay_rect.w = vcapWH[1][0]/3;
+			lay_rect.h = vcapWH[1][1]/3;
+			lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
+			lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;	
+			
+			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);			
+		}
 		else
+		{
+			memset(&lay_rect, 0, sizeof(DS_Rect));
+			memset(&lay_rect, 0, sizeof(DS_Rect));
+			if(pIStuts->ImgZoomStat[0]&&(pIStuts->PicpSensorStat==0))
 			{
-		
-					memset(&lay_rect, 0, sizeof(DS_Rect));
-					#if 0
-					if(pIStuts->ImgZoomStat[1])
-					{
-						//lay_rect.w = vdisWH[0][0]/2;
-						//lay_rect.h = vdisWH[0][1]/2;
-						//lay_rect.x = vdisWH[0][0]/4;
-						//lay_rect.y = vdisWH[0][1]/4;
-						lay_rect.w = vcapWH[pIStuts->SensorStat][0]/2;
-						lay_rect.h = vcapWH[pIStuts->SensorStat][1]/2;
-						lay_rect.x = vcapWH[pIStuts->SensorStat][0]/4;
-						lay_rect.y = vcapWH[pIStuts->SensorStat][1]/4;
-
-						printf("*************************fir  w=%d h=%d x=%d y=%d\n",lay_rect.w,lay_rect.h,lay_rect.x,lay_rect.y);
-					}
-					m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
-					#endif
-
-					memset(&lay_rect, 0, sizeof(DS_Rect));
-					if(pIStuts->ImgZoomStat[0]&&(pIStuts->PicpSensorStat==0))
-					{
-						
-						lay_rect.w = vcapWH[0][0]/6;
-						lay_rect.h = vcapWH[0][1]/6;
-						lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
-						lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
-						OSA_printf("MSGID_EXT_INPUT_ENZOOM*********tv  w=%d h=%d x=%d y=%d\n",lay_rect.w,lay_rect.h,lay_rect.x,lay_rect.y);
-					}
-					else 
-						{
-
-							lay_rect.w = vcapWH[0][0]/3;
-							lay_rect.h = vcapWH[0][1]/3;
-							lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
-							lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
-							
-						}
-					
-						m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
+				lay_rect.w = vcapWH[0][0]/6;
+				lay_rect.h = vcapWH[0][1]/6;
+				lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
+				lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
+				OSA_printf("MSGID_EXT_INPUT_ENZOOM*********tv  w=%d h=%d x=%d y=%d\n",lay_rect.w,lay_rect.h,lay_rect.x,lay_rect.y);
 			}
+			else 
+			{
+				lay_rect.w = vcapWH[0][0]/3;
+				lay_rect.h = vcapWH[0][1]/3;
+				lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
+				lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;		
+			}
+			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
+		}
 
 		
 #endif

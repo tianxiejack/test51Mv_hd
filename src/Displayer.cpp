@@ -377,7 +377,8 @@ int CDisplayer::dynamic_config(DS_CFG type, int iPrm, void* pPrm)
 		OSA_mutexLock(&m_mutex);
 		m_renders[iPrm].displayrect= *rc;
 		OSA_mutexUnlock(&m_mutex);
-		printf("the DS_CFG_RenderPosRect x=%d y=%d w=%d h=%d  pIStuts->PicpPosStat=%d\n",m_renders[iPrm].displayrect.x,m_renders[iPrm].displayrect.y,
+		printf("the DS_CFG_RenderPosRect x=%d y=%d w=%d h=%d  pIStuts->PicpPosStat=%d\n",
+			m_renders[iPrm].displayrect.x,m_renders[iPrm].displayrect.y,
 			m_renders[iPrm].displayrect.w,m_renders[iPrm].displayrect.h,iPrm);
 	}
 
