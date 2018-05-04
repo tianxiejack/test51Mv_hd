@@ -1100,7 +1100,7 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 			{
 				//DrawCross(result.x,result.y,frcolor,bShow);
 				//trkimgcross(frame,result.x,result.y,16);
-				#if 0
+				#if 1
 				rectangle( frame,
 				Point( startx, starty ),
 				Point( endx, endy),
@@ -1470,7 +1470,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 			#endif
 			if( m_iTrackStat == 1)
 			{
-				#if 0	// trackRect
+				#if 1	// trackRect
 					rectangle( m_dccv,
 						Point( startx, starty ),
 						Point( endx, endy),
