@@ -33,7 +33,7 @@ typedef enum
     mmt,/*10*/
     mmtselect,/*11*/
     axismove,/*12*/
-    read_shm,/*13*/
+    read_shm_trkpos,/*13*/
     exit_img,
     invalid
 }CMD_ID;
@@ -59,9 +59,9 @@ typedef enum
 
 typedef enum 
 {
-    IPC_TOIMG_MSG,  
-    IPC_FRIMG_MSG,
-    IPC_SHA,
+    IPC_TOIMG_MSG,  		// SERVER TO CLIENT
+    IPC_FRIMG_MSG,		// CLIENT TO SERCER
+    IPC_SHA,		
     IPC_SEM,
     IPC_MAX
 }IPC_STATUS;

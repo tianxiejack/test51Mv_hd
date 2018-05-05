@@ -55,7 +55,7 @@ int ipc_recvmsg(SENDST* Param,int Mesgthe )
 	int mtype=1;
 	clearMessage(&msg);
 	ret = messageQueueReceive(Ipc_Handl[Mesgthe].IPCID, &msg, mtype);
-    memcpy(Param,msg.buffer,sizeof(SENDST));
+    	memcpy(Param,msg.buffer,sizeof(SENDST));
 
 	return ret;
 

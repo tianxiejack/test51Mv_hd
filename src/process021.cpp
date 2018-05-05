@@ -9,8 +9,18 @@
 #include"osd_cv.h"
 
 #include "configable.h"
-CProcess021 * CProcess021::sThis = NULL;
+#include "Ipcctl.h"
 
+
+CProcess021 * CProcess021::sThis = NULL;
+CProcess021* plat = NULL;
+
+SENDST trkmsg={0};
+
+void inputtmp(unsigned char cmdid)
+{
+	plat->OnKeyDwn(cmdid);
+}
 
 CProcess021::CProcess021()
 {
@@ -111,6 +121,7 @@ CProcess021::CProcess021()
 
 	msgextInCtrl=&extInCtrl;
 	sThis = this;
+	plat = this;
 	
 }
 
@@ -1552,7 +1563,13 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 					extInCtrl.trkerrx=(PiexltoWindowsx(m_ImageAxisx ,extInCtrl.SensorStat));//*10;
 					extInCtrl.trkerry=(PiexltoWindowsy(m_ImageAxisy ,extInCtrl.SensorStat));//*10;
 				}
-
+				
+				//handle date match to the platform need
+				extInCtrl.trkerrx = extInCtrl.trkerrx - VIDEO_IMAGE_WIDTH_0/2;
+				extInCtrl.trkerry = extInCtrl.trkerry - VIDEO_IMAGE_HEIGHT_0/2;
+				ipc_settrack(extInCtrl.unitTrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);
+				trkmsg.cmd_ID = read_shm_trkpos;
+				ipc_sendmsg(&trkmsg, IPC_FRIMG_MSG);
 				//MSGAPI_AckSnd( AckTrkErr);
 				extInCtrl.TrkErrFeedback = 1;
 		 	 }
