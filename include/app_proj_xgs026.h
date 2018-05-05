@@ -19,8 +19,8 @@
 
 typedef enum
 {
-    PowerOn    = 0xaa,
-    CheckStart = 0x01,
+    PowerOn   =0xaa ,
+    CheckStart =0x01,
     SensorStat,
     CmdTrack,
     CmdMmt,
@@ -31,19 +31,19 @@ typedef enum
 
     
     CmdPicp,
-    CmdZoom =0x0a,
+    CmdZoom,
     FrColl,
     TvColl,
     AimScal,
     TargetPal,
 
-    ReadProcId  =0x10,
+    ReadProcId ,
     CmdFov,
 
-    CmdSerTrk = 0x12,
-    CmdSerTrkXY = 0x13,
+    CmdSerTrk ,
+    CmdSerTrkXY ,
 
-    SysInit =0x14,
+    SysInit ,
     SoftVer,
     SysMode,
     FovSelect,
@@ -56,7 +56,7 @@ typedef enum
     CmdShowLv,
     CmdShowColor,
 
-    ChangeCrossPos=0x20,
+    ChangeCrossPos,
     TarCoordinate,
     SysInfoDisp,
     AngleStat,

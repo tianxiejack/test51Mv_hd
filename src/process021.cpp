@@ -1557,7 +1557,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 				//OSA_printf("transferbefore ********* trkxy(%f,%f)\n",extInCtrl.unitTrkX,extInCtrl.unitTrkY);
 				extInCtrl.trkerrx=(PiexltoWindowsxf(extInCtrl.unitTrkX ,extInCtrl.SensorStat));//*10;
 				extInCtrl.trkerry=(PiexltoWindowsyf(extInCtrl.unitTrkY ,extInCtrl.SensorStat));//*10;
-				OSA_printf("transferafter ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
+				//OSA_printf("transferafter ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
 				if(extInCtrl.unitTrkStat == 2)
 				{
 					extInCtrl.trkerrx=(PiexltoWindowsx(m_ImageAxisx ,extInCtrl.SensorStat));//*10;
@@ -1570,6 +1570,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 				ipc_settrack(extInCtrl.unitTrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);
 				trkmsg.cmd_ID = read_shm_trkpos;
 				ipc_sendmsg(&trkmsg, IPC_FRIMG_MSG);
+				
 				//MSGAPI_AckSnd( AckTrkErr);
 				extInCtrl.TrkErrFeedback = 1;
 		 	 }
@@ -2252,7 +2253,7 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			}
 		}
 			
-		OSA_printf("rc. xy(%f,%f),wh(%f,%f)\n",rc.x,rc.y,rc.width,rc.height);
+		//OSA_printf("rc. xy(%f,%f),wh(%f,%f)\n",rc.x,rc.y,rc.width,rc.height);
 		dynamic_config(VP_CFG_TrkEnable, 1,&rc);
 		if((pIStuts->AvtTrkStat == eTrk_mode_sectrk)||(pIStuts->AvtTrkStat == eTrk_mode_search))
 		{
