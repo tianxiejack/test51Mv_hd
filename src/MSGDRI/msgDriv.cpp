@@ -154,7 +154,7 @@ void MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, i
 
     handle->msgTab[msgId].refContext = context;
 
-   OSA_printf("^^^^^^msgId=%d  pRtnFun=%p\n",msgId,pRtnFun);
+   //OSA_printf("^^^^^^msgId=%d  pRtnFun=%p\n",msgId,pRtnFun);
 }
 
 /********************************************************************************************************

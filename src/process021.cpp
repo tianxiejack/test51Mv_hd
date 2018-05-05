@@ -2486,207 +2486,198 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		return ;
 	}
 	if(msgId ==MSGID_EXT_INPUT_ENFREZZ)
-		{
-			int freeze=pIStuts->ImgFrezzStat[pIStuts->SensorStat];
-			DS_Rect rendposr;
-			//wj20180319
-			#if 0
-			rendposr.x=vdisWH[0][0]*2/3;
-			rendposr.y=vdisWH[0][1]*2/3;
-			rendposr.w=vdisWH[0][0]/3;
-			rendposr.h=vdisWH[0][1]/3;
-			#else
-			rendposr.x=0;
-			rendposr.y=vdisWH[0][1]*2/3;
-			rendposr.w=vdisWH[0][0]/3;
-			rendposr.h=vdisWH[0][1]/3;
-			
-			#endif
-			if(freeze)
-				m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 1, &rendposr);
-			else
-				{
-				rendposr=rendpos[pIStuts->PicpPosStat];
-				m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 1, &rendposr);
-				}
-			//tui chu freeze
-			m_display.dynamic_config(CDisplayer::DS_CFG_FreezeEnable, 1, &freeze);
-			m_display.dynamic_config(CDisplayer::DS_CFG_FreezeEnable, 0, &freeze);
-
-		}
-	if(msgId ==MSGID_EXT_INPUT_PICPCROP)
-		{
-
-			//DS_Rect rendpos;
-			//rendposr.x=0;
-			//rendpos.y=0;
-			//rendpos.w=vdisWH[1][0]/3;
-			//rendpos.w=vdisWH[1][1]/3;
-
-			//printf("the x=%d y=%d w=%d h=%d  pIStuts->PicpPosStat=%d\n",rendpos[pIStuts->PicpPosStat].x,rendpos[pIStuts->PicpPosStat].y,
-			//rendpos[pIStuts->PicpPosStat].w,rendpos[pIStuts->PicpPosStat].h,pIStuts->PicpPosStat);
+	{
+		int freeze=pIStuts->ImgFrezzStat[pIStuts->SensorStat];
+		DS_Rect rendposr;
+		//wj20180319
+		#if 0
+		rendposr.x=vdisWH[0][0]*2/3;
+		rendposr.y=vdisWH[0][1]*2/3;
+		rendposr.w=vdisWH[0][0]/3;
+		rendposr.h=vdisWH[0][1]/3;
+		#else
+		rendposr.x=0;
+		rendposr.y=vdisWH[0][1]*2/3;
+		rendposr.w=vdisWH[0][0]/3;
+		rendposr.h=vdisWH[0][1]/3;
 		
-			
-			m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 1, &rendpos[pIStuts->PicpPosStat]);
-
-		}
-	if(msgId ==MSGID_EXT_INPUT_COAST)
-		{
-			m_castTm=OSA_getCurTimeInMsec();
-			m_bCast=true;
-			
-
-		}
-	if(msgId ==MSGID_EXT_INPUT_VIDEOEN)
-		{
-			int status=pIStuts->unitFaultStat&0x01;
-			status^=1;
-			m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, 0, &status);
-			OSA_printf("MSGID_EXT_INPUT_VIDEOEN status0=%d\n",status);
-			 status=(pIStuts->unitFaultStat>1)&0x01;
-			 status^=1;
-			m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, 1, &status);
-			OSA_printf("MSGID_EXT_INPUT_VIDEOEN status1=%d\n",status);
-			
-
-		}
-	if(msgId ==MSGID_EXT_INPUT_MMTSHOW)
-		{
-			int itmp=0;
-			int mmtchid=0;
-			DS_Rect lay_rect;
-			//Mat frame;
-
-			//int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
-			//extInCtrl.DispColor[extInCtrl.SensorStat]=0;
-			//OnProcess(pIStuts->SensorStat,frame);
-			//extInCtrl.DispColor[extInCtrl.SensorStat]=frcolor;
-			if(pIStuts->ImgMmtshow[pIStuts->SensorStat])
-				{
-					int chid=pIStuts->SensorStat;
-					itmp = chid;
-					mmtchid=2;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					//chid++;
-					itmp=chid;
-					mmtchid=3;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					//chid++;
-					itmp=chid;
-					mmtchid=4;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					//chid++;
-					itmp=chid;
-					mmtchid=5;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					//chid++;
-					itmp=chid;
-					mmtchid=6;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					lay_rect.w = vdisWH[0][0]/3*2;
-					lay_rect.h = vdisWH[0][1]/3*2;
-					lay_rect.x = 0;
-					lay_rect.y = vdisWH[0][1]/3;
-					m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 0, &lay_rect);
-					//m_display.dynamic_config(CDisplayer::DS_CFG_Rendercount, 7, NULL);
-
-					//m_display.m_renderCount
-				}
-			else
-				{
-					itmp = 8;
-					mmtchid=2;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					itmp=8;
-					mmtchid=3;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					itmp=8;
-					mmtchid=4;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					itmp=8;
-					mmtchid=5;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					itmp=8;
-					mmtchid=6;
-					dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
-					lay_rect.w = vdisWH[0][0];
-					lay_rect.h = vdisWH[0][1];
-					lay_rect.x = 0;
-					lay_rect.y = 0;
-					m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 0, &lay_rect);
-					//m_display.dynamic_config(CDisplayer::DS_CFG_Rendercount, 2, NULL);
-				}
-			
-		#if 1	
-		lay_rect.w = 30;
-		lay_rect.h = 30;
-		lay_rect.x = 0;
-		lay_rect.y = 0;
-		m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 2, &lay_rect);
-		m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 3, &lay_rect);
-		m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 4, &lay_rect);
-		m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 5, &lay_rect);
-		m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 6, &lay_rect);
-		lay_rect.w = vdisWH[0][0]/3;
-		lay_rect.h = vdisWH[0][1]/3;
-		lay_rect.x = 0;
-		lay_rect.y = 0;
-		m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 2, &lay_rect);
-		lay_rect.w = vdisWH[0][0]/3;
-		lay_rect.h = vdisWH[0][1]/3;
-		lay_rect.x = vdisWH[0][0]/3;
-		lay_rect.y = 0;
-		m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 3, &lay_rect);
-		lay_rect.w = vdisWH[0][0]/3;
-		lay_rect.h = vdisWH[0][1]/3;
-		lay_rect.x = vdisWH[0][0]/3;
-		lay_rect.x=lay_rect.x*2;
-		lay_rect.y = 0;
-		m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 4, &lay_rect);
-		lay_rect.w = vdisWH[0][0]/3;
-		lay_rect.h = vdisWH[0][1]/3;
-		lay_rect.x = vdisWH[0][0]/3;
-		lay_rect.x=lay_rect.x*2;
-		lay_rect.y = vdisWH[0][1]/3;
-		m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 5, &lay_rect);
-		lay_rect.w = vdisWH[0][0]/3;
-		lay_rect.h = vdisWH[0][1]/3;
-		lay_rect.x = vdisWH[0][0]/3;
-		lay_rect.x=lay_rect.x*2;
-		lay_rect.y = vdisWH[0][1]/3;
-		lay_rect.y=lay_rect.y*2;
-		m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 6, &lay_rect);
 		#endif
-
+		if(freeze)		//QQQQQQ
+			;//m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 1, &rendposr);
+		else
+		{
+			rendposr=rendpos[pIStuts->PicpPosStat];
+			//m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 1, &rendposr);
 		}
+		//tui chu freeze
+		m_display.dynamic_config(CDisplayer::DS_CFG_FreezeEnable, 1, &freeze);
+		m_display.dynamic_config(CDisplayer::DS_CFG_FreezeEnable, 0, &freeze);
+
+	}
+	if(msgId ==MSGID_EXT_INPUT_PICPCROP)
+	{
+
+		//DS_Rect rendpos;
+		//rendposr.x=0;
+		//rendpos.y=0;
+		//rendpos.w=vdisWH[1][0]/3;
+		//rendpos.w=vdisWH[1][1]/3;
+
+		//printf("the x=%d y=%d w=%d h=%d  pIStuts->PicpPosStat=%d\n",rendpos[pIStuts->PicpPosStat].x,rendpos[pIStuts->PicpPosStat].y,
+		//rendpos[pIStuts->PicpPosStat].w,rendpos[pIStuts->PicpPosStat].h,pIStuts->PicpPosStat);
+	
+		
+		m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 1, &rendpos[pIStuts->PicpPosStat]);
+
+	}
+	if(msgId ==MSGID_EXT_INPUT_COAST)
+	{
+		m_castTm=OSA_getCurTimeInMsec();
+		m_bCast=true;
+		
+
+	}
+	if(msgId ==MSGID_EXT_INPUT_VIDEOEN)
+	{
+		int status=pIStuts->unitFaultStat&0x01;
+		status^=1;
+		m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, 0, &status);
+		OSA_printf("MSGID_EXT_INPUT_VIDEOEN status0=%d\n",status);
+		 status=(pIStuts->unitFaultStat>1)&0x01;
+		 status^=1;
+		m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, 1, &status);
+		OSA_printf("MSGID_EXT_INPUT_VIDEOEN status1=%d\n",status);
+		
+
+	}
+	if(msgId ==MSGID_EXT_INPUT_MMTSHOW)
+	{
+		int itmp=0;
+		int mmtchid=0;
+		DS_Rect lay_rect;
+		//Mat frame;
+
+		//int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
+		//extInCtrl.DispColor[extInCtrl.SensorStat]=0;
+		//OnProcess(pIStuts->SensorStat,frame);
+		//extInCtrl.DispColor[extInCtrl.SensorStat]=frcolor;
+		if(pIStuts->ImgMmtshow[pIStuts->SensorStat])
+		{
+			int chid=pIStuts->SensorStat;
+			itmp = chid;
+			mmtchid=2;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			//chid++;
+			itmp=chid;
+			mmtchid=3;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			//chid++;
+			itmp=chid;
+			mmtchid=4;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			//chid++;
+			itmp=chid;
+			mmtchid=5;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			//chid++;
+			itmp=chid;
+			mmtchid=6;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			lay_rect.w = vdisWH[0][0]/3*2;
+			lay_rect.h = vdisWH[0][1]/3*2;
+			lay_rect.x = 0;
+			lay_rect.y = vdisWH[0][1]/3;
+			m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 0, &lay_rect);
+			//m_display.dynamic_config(CDisplayer::DS_CFG_Rendercount, 7, NULL);
+
+			//m_display.m_renderCount
+		}
+		else
+		{
+			itmp = 8;
+			mmtchid=2;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			itmp=8;
+			mmtchid=3;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			itmp=8;
+			mmtchid=4;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			itmp=8;
+			mmtchid=5;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			itmp=8;
+			mmtchid=6;
+			dynamic_config(VP_CFG_SubPicpChId, itmp, &mmtchid);
+			lay_rect.w = vdisWH[0][0];
+			lay_rect.h = vdisWH[0][1];
+			lay_rect.x = 0;
+			lay_rect.y = 0;
+			m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 0, &lay_rect);
+			//m_display.dynamic_config(CDisplayer::DS_CFG_Rendercount, 2, NULL);
+		}
+		
+	#if 1	
+	lay_rect.w = 30;
+	lay_rect.h = 30;
+	lay_rect.x = 0;
+	lay_rect.y = 0;
+	m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 2, &lay_rect);
+	m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 3, &lay_rect);
+	m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 4, &lay_rect);
+	m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 5, &lay_rect);
+	m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 6, &lay_rect);
+	lay_rect.w = vdisWH[0][0]/3;
+	lay_rect.h = vdisWH[0][1]/3;
+	lay_rect.x = 0;
+	lay_rect.y = 0;
+	m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 2, &lay_rect);
+	lay_rect.w = vdisWH[0][0]/3;
+	lay_rect.h = vdisWH[0][1]/3;
+	lay_rect.x = vdisWH[0][0]/3;
+	lay_rect.y = 0;
+	m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 3, &lay_rect);
+	lay_rect.w = vdisWH[0][0]/3;
+	lay_rect.h = vdisWH[0][1]/3;
+	lay_rect.x = vdisWH[0][0]/3;
+	lay_rect.x=lay_rect.x*2;
+	lay_rect.y = 0;
+	m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 4, &lay_rect);
+	lay_rect.w = vdisWH[0][0]/3;
+	lay_rect.h = vdisWH[0][1]/3;
+	lay_rect.x = vdisWH[0][0]/3;
+	lay_rect.x=lay_rect.x*2;
+	lay_rect.y = vdisWH[0][1]/3;
+	m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 5, &lay_rect);
+	lay_rect.w = vdisWH[0][0]/3;
+	lay_rect.h = vdisWH[0][1]/3;
+	lay_rect.x = vdisWH[0][0]/3;
+	lay_rect.x=lay_rect.x*2;
+	lay_rect.y = vdisWH[0][1]/3;
+	lay_rect.y=lay_rect.y*2;
+	m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 6, &lay_rect);
+	#endif
+
+	}
 
 	if(msgId ==MSGID_EXT_INPUT_MMTSHOWUPDATE)
-		{
-
-		
+	{	
 		for(int i=0;i<5;i++)
+		{
+			if(Mmtpos[i].valid)
 			{
-				if(Mmtpos[i].valid)
-					{
-						//m_display.m_renders[i+2].videodect=1;
-						m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, i+2, &Mmtpos[i].valid);
-						m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, i+2, &Mmtpos[i]);
-					}
-				else
-					{
-						//m_display.m_renders[i+2].videodect=0;
-						//OSA_printf("the id=%d valid =%d\n",i+2,Mmtpos[i].valid);
-						m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, i+2, &Mmtpos[i].valid);
-						
-					}
-				//int valid=0;
-				//if(i==4)
-				//	m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, i+2, &valid);
-				//if()
-				
+				//m_display.m_renders[i+2].videodect=1;
+				m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, i+2, &Mmtpos[i].valid);
+				m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, i+2, &Mmtpos[i]);
 			}
-
+			else
+			{
+				//m_display.m_renders[i+2].videodect=0;
+				//OSA_printf("the id=%d valid =%d\n",i+2,Mmtpos[i].valid);
+				m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, i+2, &Mmtpos[i].valid);	
+			}
 		}
+	}
 	
 	/*if(msgId == MSGID_EXT_INPUT_DISPGRADE)
 	{

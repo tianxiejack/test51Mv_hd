@@ -1165,7 +1165,7 @@ void CDisplayer::gl_textureLoad(void)
 				{
 					//m_bEnh[chId^1]=m_bEnh[chId];
 					Mat dst = dism_img[chId];
-				//	dst.data = dev_pbo;
+					//dst.data = dev_pbo;
 					dst.data = x11m_img.data;
 					//enhancetime = getTickCount();
 					//int64 enhtstart = getTickCount();
@@ -1181,33 +1181,30 @@ void CDisplayer::gl_textureLoad(void)
 					#endif
 					#else
 					if(chId==0)//tv enh
-						{
-
-						#if 0
-							if(enhancemod==0)
+					{	
+						if(enhancemod==0)
 							cuHistEnh( dism_img[chId], dst);
-							else if(enhancemod==1)
+						else if(enhancemod==1)
 							cuClahe( dism_img[chId], dst,4,4,enhanceparam,1);
-							else if(enhancemod==2)
+						else if(enhancemod==2)
 							cuUnhazed( dism_img[chId], dst);
-							else if(enhancemod==3)
-								{
-									Mat mid = dism_img[chId];
-									unsigned char *d_src_rgb = NULL;
-									int nChannel = dism_img[chId].channels();
-									unsigned int byteCount2 = dism_img[chId].rows * dism_img[chId].cols * nChannel * sizeof(unsigned char);
-									cudaMalloc_share((void**)&d_src_rgb, byteCount2, 12);
-									mid.data = d_src_rgb;
-									cuUnhazed( dism_img[chId], mid);
-									cuClahe( mid, dst, 4, 4, 3.0, 1);
-									cudaFree_share(d_src_rgb, 12);
-								}
-							else
-							cuHistEnh( dism_img[chId], dst);
-							#endif
+						else if(enhancemod==3)
+						{
+							Mat mid = dism_img[chId];
+							unsigned char *d_src_rgb = NULL;
+							int nChannel = dism_img[chId].channels();
+							unsigned int byteCount2 = dism_img[chId].rows * dism_img[chId].cols * nChannel * sizeof(unsigned char);
+							cudaMalloc_share((void**)&d_src_rgb, byteCount2, 12);
+							mid.data = d_src_rgb;
+							cuUnhazed( dism_img[chId], mid);
+							cuClahe( mid, dst, 4, 4, 3.0, 1);
+							cudaFree_share(d_src_rgb, 12);
 						}
+						else
+							cuHistEnh( dism_img[chId], dst);
+					}
 					else
-						;//cuUnhazed( dism_img[chId], dst);
+						cuUnhazed( dism_img[chId], dst);
 					
 					if(m_renders[chId].videodect)
 					{
