@@ -33,6 +33,7 @@ typedef enum
     mmt,/*10*/
     mmtselect,/*11*/
     axismove,/*12*/
+    read_shm,/*13*/
     exit_img,
     invalid
 }CMD_ID;
