@@ -251,7 +251,7 @@ typedef struct
 
 
 	volatile unsigned char CmdType;  // recv cmd id
-	volatile unsigned char  TrkCmd; //only for ack trk mod
+	//volatile unsigned char  TrkCmd; //only for ack trk mod
 	volatile unsigned char TrkBomenCtrl; // osd Trk Aim
 	volatile  unsigned char  FovMov; // 1:fang wei 2: fu yang 3:all
 
@@ -311,8 +311,8 @@ typedef struct
     volatile short PaneData;
     volatile short TitleData;
     volatile unsigned int  Distant;
-    volatile unsigned int  trkerrx;
-    volatile unsigned int  trkerry;
+    volatile int  trkerrx;
+    volatile int  trkerry;
     volatile  short  TrkPanev;
     volatile  short  TrkTitlev;
     volatile float ZoomMultiple;

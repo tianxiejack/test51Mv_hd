@@ -83,6 +83,8 @@ void* recv_msg(SENDST *RS422)
 	CMD_POSMOVE Raxismove;
 	CMD_ZOOM Rzoom;
 
+	
+
 	if(RS422==NULL)
 	{
 		return NULL ;
@@ -100,142 +102,47 @@ void* recv_msg(SENDST *RS422)
 	memset(pMsg,0,sizeof(CMD_EXT));
 	app_ctrl_getSysData(pMsg);
 
-
+	static CMD_EXT inCtrlPri = {0};
 	
 	//printf("recv++++++++ cmdID = %02x,imgID(%02x,%02x,%02x,%02x,%02x)\n",cmdID,imgID1,imgID2,imgID3,imgID4,imgID5);
 	switch(cmdID)
 	{	
 		case trk:	
-			//inputtmp('c');
-			//MSGAPI_msgsend(trk);
-			//break;
-			
+			printf("11111111111\n\n");
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;
-		
-			if(imgID1 == 0x01)
-			    pMsg->TrkCmd = 0x01;
-			else
-			    pMsg->TrkCmd = 0x02;
 
-			//if(pMsg->ImgMtdStat[pMsg->SensorStat] == eImgAlg_Disable)
-			{
-				if(pMsg->AvtTrkStat != eTrk_mode_mtd)
-				{
-					if(imgID1 == 0x1)
-						pMsg->AvtTrkStat =eTrk_mode_target;
-					else if(imgID1 == 0x2)		             
-						pMsg->AvtTrkStat =eTrk_mode_mtd;
-					else if(imgID1 == 0x3)
-						pMsg->AvtTrkStat =eTrk_mode_sectrk;
-				}
-			}
+			if(imgID1 == 0x1)
+				pMsg->AvtTrkStat =eTrk_mode_target;
+			else if(imgID1 == 0x2)		             
+				pMsg->AvtTrkStat =eTrk_mode_mtd;
+			else if(imgID1 == 0x3)
+				pMsg->AvtTrkStat =eTrk_mode_sectrk;
+			else
+				pMsg->AvtTrkStat = eTrk_mode_acq;
 
 			app_ctrl_setTrkStat(pMsg); 
-			MSGAPI_msgsend(trk);
-			
+			MSGAPI_msgsend(trk);			
+			inCtrlPri.AvtTrkStat = imgID1;
 			break;
-			
-			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
-			imgID1 = Rtrk.AvtTrkStat;	
-			
-			if(imgID1 == 0x01)
-			    pMsg->TrkCmd = 0x01;
-			else
-			    pMsg->TrkCmd = 0x02;
-	             
-			if(pMsg->ImgMtdStat[pMsg->SensorStat] == eImgAlg_Disable)
-			{
-				if(pMsg->AvtTrkStat != eTrk_mode_mtd)
-				{
-				    if(imgID1 == 0x1)
-				        pMsg->AvtTrkStat=eTrk_mode_acq;
-				    else if(imgID1 == 0x2)		             
-				   		 pMsg->AvtTrkStat=eTrk_mode_target;
-				}
-				else if(pMsg->AvtTrkStat == eTrk_mode_mtd)
-				{
-				    if(imgID1 == 0x01)
-				        pMsg->AvtTrkStat = eTrk_mode_acq;
-				}
-			}
-			else if(pMsg->ImgMtdStat[pMsg->SensorStat] == eImgAlg_Enable)
-			{
-				if((pMsg->AvtTrkStat == eTrk_mode_acq) || (pMsg->AvtTrkStat == eTrk_mode_target) || (pMsg->AvtTrkStat == eTrk_mode_mtd))
-				{
-				    if(imgID1 == 0x01)
-				        pMsg->AvtTrkStat = eTrk_mode_acq;         			 
-				    else if(imgID1 == 0x02)
-				    {
-				       if((pMsg->AvtTrkStat == eTrk_mode_acq) || (pMsg->AvtTrkStat == eTrk_mode_target))
-				            pMsg->AvtTrkStat = eTrk_mode_target;	       
-				    }
-				    else if(imgID1 == 0x03)
-				    {
-				        if(pMsg->AvtTrkStat == eTrk_mode_acq)
-				                    pMsg->AvtTrkStat = eTrk_mode_mtd;
-				    }
-				}
-			}
-						
-			if(imgID1 == 0x04 && pMsg->SecAcqStat)
-			{
-				pMsg->AvtTrkStat = eTrk_mode_search;
-			}
-			app_ctrl_setTrkStat(pMsg);  
-			MSGAPI_msgsend(trk);
-			break;	
 			
 		case mmt:
 			memcpy(&Rmtd,RS422->param,sizeof(Rmtd));
-			imgID1 = Rmtd.ImgMtdStat;				
-			if(imgID1 ==0x1)
+			imgID1 = Rmtd.ImgMtdStat;	
+			
+			if(imgID1 == 0x01)
 			{
-				pMsg->MMTTempStat = 0x01;//two channel mtd open all
-				pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Enable;
-				pMsg->ImgMtdStat[(pMsg->SensorStat + 1) % 2] = eImgAlg_Enable;
+				pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Enable;	
 			}
-			else if(imgID1 ==0x2)
+			else if(imgID1 == 0x00)
 			{
-				pMsg->MMTTempStat = 0x02;
 				pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Disable;
-				pMsg->ImgMtdStat[(pMsg->SensorStat + 1) % 2] = eImgAlg_Disable;
 			}
-			else if(imgID1 ==0x3)
-			{
-				pMsg->MMTTempStat= 0x03;
-				if (pMsg->ImgMtdStat[pMsg->SensorStat] ==  eImgAlg_Enable)
-				{
-					pMsg->ImgMtdSelect[pMsg->SensorStat]  =  eMMT_Next;  //mtd num to next
-					app_ctrl_setMmtSelect(pMsg);
-					//MSGAPI_AckSnd( AckMtdStat);
-					break;
-				}
-				else
-					pMsg->MMTTempStat = 0x02;
-			}
-			else if(imgID1 ==0x4)
-			{
-				pMsg->MMTTempStat= 0x04;
-				if (pMsg->ImgMtdStat[pMsg->SensorStat] ==  eImgAlg_Enable)
-				{
-					pMsg->ImgMtdSelect[pMsg->SensorStat]  =  eMMT_Prev;  //mtd num to next
-					app_ctrl_setMmtSelect(pMsg);
-					//MSGAPI_AckSnd(  AckMtdStat);
-					break;
-				}
-				else
-					pMsg->MMTTempStat = 0x02;
-			}
-			else
-			{
-				if(pMsg->ImgMtdStat[pMsg->SensorStat] ==  eImgAlg_Enable)
-					pMsg->MMTTempStat = 0x01;
-				else
-					pMsg->MMTTempStat = 0x02;  
-			}
+			
 			app_ctrl_setMMT(pMsg);
 			MSGAPI_msgsend(mmt);
+			inCtrlPri.ImgMtdStat[pMsg->SensorStat] = imgID1;
+			
 			break;
 		case enh:
 			memcpy(&Renh,RS422->param,sizeof(Renh));
@@ -284,7 +191,6 @@ void* recv_msg(SENDST *RS422)
 		default:
 			break;
 		}
-
 }
 
 int send_msg(SENDST *RS422)

@@ -214,7 +214,7 @@ typedef struct{
 
 typedef struct{
 	volatile unsigned char AvtTrkStat;// eTrkMode 
-    volatile unsigned char TrkCmd;//only for ack trk mod
+    	volatile unsigned char TrkCmd;//only for ack trk mod
 }CMD_TRK;
 	
 typedef struct{

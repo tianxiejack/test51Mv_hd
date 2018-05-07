@@ -86,8 +86,6 @@ CProcess021::CProcess021()
 
 	pIStuts->FrCollimation=2;
 	pIStuts->PicpSensorStatpri=2;
-
-	extInCtrl.TrkCmd = 0;
 	
 	tvcorx=VIDEO_IMAGE_WIDTH_0 -100;
 	tvcory=VIDEO_IMAGE_HEIGHT_0 -100;
@@ -1563,10 +1561,11 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 					extInCtrl.trkerrx=(PiexltoWindowsx(m_ImageAxisx ,extInCtrl.SensorStat));//*10;
 					extInCtrl.trkerry=(PiexltoWindowsy(m_ImageAxisy ,extInCtrl.SensorStat));//*10;
 				}
-				
+				OSA_printf("send ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
 				//handle date match to the platform need
 				extInCtrl.trkerrx = extInCtrl.trkerrx - VIDEO_IMAGE_WIDTH_0/2;
 				extInCtrl.trkerry = extInCtrl.trkerry - VIDEO_IMAGE_HEIGHT_0/2;
+				
 				ipc_settrack(extInCtrl.unitTrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);
 				trkmsg.cmd_ID = read_shm_trkpos;
 				ipc_sendmsg(&trkmsg, IPC_FRIMG_MSG);

@@ -143,9 +143,6 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
     if(pInCmd->CmdType != pIStuts->CmdType)
         pIStuts->CmdType = pInCmd->CmdType;
 
-    if(pInCmd->TrkCmd != pIStuts->TrkCmd)
-        pIStuts->TrkCmd = pInCmd->TrkCmd;
-
     if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
         pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
 	
@@ -165,7 +162,6 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 	//printf("*****************%s  avtrkstat=%d  \n",__func__,pIStuts->AvtTrkStat);	
         MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
     }
-    //MSGAPI_AckSnd(AckTrkState);
    return ;
 }
 
