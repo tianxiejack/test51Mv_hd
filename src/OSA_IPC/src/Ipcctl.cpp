@@ -71,7 +71,7 @@ void  ipc_status_V()
 	semSignal(Ipc_Handl[IPC_SEM].IPCID,0);
 }
 
-int ipc_settrack(unsigned int trackstatus, float trackposx, float trackposy)
+int ipc_settrack(unsigned int trackstatus, int trackposx, int trackposy)
 {
 	int ret=0;
 	if(IMGstatus==NULL)

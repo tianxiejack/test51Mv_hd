@@ -319,8 +319,8 @@ typedef struct{
 
 typedef struct{
     unsigned int m_trackstatus;// acq/trk/assi/lost
-     float m_trackpos_x;
-     float m_trackpos_y;
+     int m_trackpos_x;
+     int m_trackpos_y;
      unsigned int unitFaultStat;
 }IMGSTATUS;
 
@@ -380,8 +380,8 @@ typedef struct prevent_jam
 }prevent_jam_t;
 
 
-int ipc_settrack(unsigned int trackstatus, float trackposx, float trackposy);
-int ipc_gettrack(unsigned int* trackstatus, float* trackposx, float* trackposy);
+int ipc_settrack(unsigned int trackstatus, int trackposx, int trackposy);
+int ipc_gettrack(unsigned int* trackstatus, int* trackposx, int* trackposy);
 int ipc_setSensorstat(unsigned int unitFaultStat);
 int ipc_getSensorstat(unsigned int* unitFaultStat);
 int ipc_sendmsg(SENDST* Param,int Mesgthe );
