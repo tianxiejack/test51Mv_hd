@@ -14,6 +14,10 @@
 #define AXIS_WIDTH_FOV0			200		//wait to add other fov class situation
 #define AXIS_HEIGHT_FOV0			200		//wait to add other fov class situation
 
+#define AIM_WIDTH					64
+#define AIM_HEIGHT					64
+
+#define AVT_TRK_AIM_SIZE			2
 
 
 

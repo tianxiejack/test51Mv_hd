@@ -104,6 +104,8 @@ void* recv_msg(SENDST *RS422)
 	switch(cmdID)
 	{	
 		case trk:	
+			//inputtmp('c');
+			//break;
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;	
 			

@@ -49,15 +49,15 @@ CProcess021::CProcess021()
 	pIStuts->unitAxisYtmp[1] = VIDEO_IMAGE_WIDTH_1/2;
 	
 	
-	pIStuts->unitAimW 	= 64;
-	pIStuts->unitAimH 	= 64;
-	pIStuts->unitAimX		=VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->unitAimY		=VIDEO_IMAGE_HEIGHT_0/2;
-	pIStuts->SensorStat     = eSen_TV;
-	pIStuts->PicpSensorStatpri=pIStuts->PicpSensorStat = 0xFF;
+	pIStuts->unitAimW 	= 	AIM_WIDTH;
+	pIStuts->unitAimH 	= 	AIM_HEIGHT;
+	pIStuts->unitAimX		=	VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->unitAimY		=	VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->SensorStat     = 	eSen_TV;
+	pIStuts->PicpSensorStatpri	=	pIStuts->PicpSensorStat = 0xFF;
 
 	pIStuts->DispGrp[0] = 1;//(eDisp_show_rect | eDisp_show_text/* | eDisp_show_dbg*/);
-	pIStuts->DispGrp[1] =1;// (eDisp_show_rect | eDisp_show_text/* | eDisp_show_dbg*/);
+	pIStuts->DispGrp[1] = 1;// (eDisp_show_rect | eDisp_show_text/* | eDisp_show_dbg*/);
 
 
 	pIStuts->DispColor[0]=2;
@@ -68,7 +68,7 @@ CProcess021::CProcess021()
 	pIStuts->unitWorkMode = NORMAL_MODE; // self init check end
 	crossBak.x=extInCtrl.unitAxisX[pIStuts->SensorStat ];
 	crossBak.y=extInCtrl.unitAxisY[pIStuts->SensorStat ];
-	pIStuts->AvtTrkAimSize=2;
+	pIStuts->AvtTrkAimSize= AVT_TRK_AIM_SIZE;
 
 	pIStuts->ImgPixelX[0]	=VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->ImgPixelY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
@@ -86,19 +86,16 @@ CProcess021::CProcess021()
 
 	pIStuts->FrCollimation=2;
 	pIStuts->PicpSensorStatpri=2;
-	tvcorx=_IMAGE_WIDTH_-100;
-	tvcory=_IMAGE_HEIGHT_-100;
+	tvcorx=VIDEO_IMAGE_WIDTH_0 -100;
+	tvcory=VIDEO_IMAGE_HEIGHT_0 -100;
 
 	pIStuts->Firpoweron=2;
 	memset(secBak,0,sizeof(secBak));
 
 	memset(Osdflag,0,sizeof(Osdflag));
-
 	
 	Mmtsendtime=0;
 
-	//for(i=0;i<4;i++)
-	//
 	rendpos[0].x=vdisWH[0][0]*2/3;
 	rendpos[0].y=vdisWH[0][1]*2/3;
 	rendpos[0].w=vdisWH[0][0]/3;
