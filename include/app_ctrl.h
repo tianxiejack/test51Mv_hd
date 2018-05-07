@@ -1,9 +1,3 @@
-/*
- * app_ctrl.h
- *
- *  Created on: 2017年5月7日
- *      Author: s123
- */
 
 #ifndef APP_CTRL_H_
 #define APP_CTRL_H_

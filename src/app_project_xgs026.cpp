@@ -1,26 +1,10 @@
-/*****************************************************************************
- * Copyright (C), 2011-2012, ChamRun Tech. Co., Ltd.
- * FileName:        APP_project_xgs012.c
- * Author:          xavier
- * Date:            2016-05-20
- * Description:     // description
- * Version:         // version
- * Function List:   // funs and description
- *     1. -------
- * History:         // histroy modfiy record
- *     <author>  <time>   <version >   <desc>
- *     xavier    16/05/20     1.0     build this moudle
-*****************************************************************************/
+
 #include "app_global.h"
-
-//#ifdef PROJECT_XGS026
-
 #include <stdio.h>
 #include "dx.h"
 #include "dx_config.h"
 #include "app_osdgrp.h"
 #include"app_status.h"
-//#include "app_osd_priv.h"
 #include "app_proj_xgs026.h"
 
 #define UNUSED 0
@@ -173,23 +157,6 @@ Osd_Menu_t gMenu_Info[33] =
 		},		
 };
 
-#if 0
-char gWorkStr[9][10] =
-{     
-	{'I','N','I','T',' ',' ',' ',' ',' ','\0',},
-	{'H','I','D','E',' ',' ',' ',' ',' ','\0',},
-	{'C','A','G','E',' ',' ',' ',' ',' ','\0',},
-	{'M','A','N','U','A','L',' ',' ',' ','\0'},
-	{'S','C','A','N',' ',' ',' ',' ',' ','\0',},
-	{'T','R','A','C','K',' ',' ',' ',' ','\0',},
-	{'G','P','C',' ','T','R','A','C','K','\0'},
-	{'S','L','A','V','E',' ',' ',' ',' ','\0',},
-	{'S','E','R','V','I','C','E',' ',' ','\0'},
-};
-#else
-
-#endif
-
 Osd_SysInit_t gSysInit[16] = 
 {
 	{0x11,
@@ -339,15 +306,9 @@ char gGrap_view[7] = {35,33,38,39,92,126,32};/*xia jian tou  shang zuo you \  wu
 //static int lrf_preid = 0;
 static unsigned int lrf_count  = 0;
 static unsigned int SysInfo_count = 0;
-/*****************************************************************************
-* FunctionName : convert_fixed32_to_float
-* Description  :
-* ReturnValue  :
-* Parameter[0] :
-* Parameter[1] :
-* Author : xavier
-* Date : 2016-05-20
-*****************************************************************************/
+
+
+
 inline float convert_fixed32_to_float(int iTmp)
 {
     float  fTmp = 0.0;
@@ -365,15 +326,9 @@ inline float convert_fixed32_to_float(int iTmp)
     }
     return fTmp;
 }
-/*****************************************************************************
-* FunctionName : sysinfo_loop_deal
-* Description  :
-* ReturnValue  :
-* Parameter[0] :
-* Parameter[1] :
-* Author : xavier
-* Date : 2016-05-20
-*****************************************************************************/
+
+
+
 void sysinfo_loop_deal(char *pStr,int *lineStrLen,int sysinfo_subsys,int sysinfo_bit )
 {
 	int i;

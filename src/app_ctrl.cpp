@@ -1,13 +1,4 @@
 
-/**
- * Copyright 1993-2012 NVIDIA Corporation.  All rights reserved.
- *
- * Please refer to the NVIDIA end user license agreement (EULA) associated
- * with this source code for terms and conditions that govern your use of
- * this software. Any use, reproduction, disclosure, or distribution of
- * this software and related documentation outside the terms of the EULA
- * is strictly prohibited.
- */
 #include"app_ctrl.h"
 #include"osa.h"
 #include "msgDriv.h"
@@ -153,10 +144,6 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 	{
 		pIStuts->AvtPixelX = pInCmd->ImgPixelX[pIStuts->SensorStat] ;
 		pIStuts->AvtPixelY   = pInCmd->ImgPixelY[pIStuts->SensorStat] ;
-		//if(pIStuts->AvtTrkStat)
-		//		pIStuts->AvtTrkStat = eTrk_mode_sectrk;
-		//else
-		//		pIStuts->AvtTrkStat = eTrk_mode_search;	
 	}
 
 	//printf("*****************%s  avtrkstat=%d  \n",__func__,pIStuts->AvtTrkStat);	
@@ -187,8 +174,6 @@ void app_ctrl_setMmtSelect(CMD_EXT * pInCmd)
         if (pIStuts->ImgMtdSelect[pIStuts->SensorStat])
             MSGDRIV_send(MSGID_EXT_INPUT_MTD_SELECT, 0);
     }
-//   else
-   //         MSGAPI_AckSnd( pPortObj, AckMtdStat);
    
    return ;
 }
@@ -403,60 +388,6 @@ void app_ctrl_setFRColl(CMD_EXT * pInCmd)
     /***for **reply*****/
     //MSGAPI_AckSnd( AckFrColl);
    MSGDRIV_send(MSGID_EXT_INPUT_ENFREZZ, 0);
-	#if 0
-
-    if(iMoveMask)
-    {  
-        if(pIStuts->FrCollimation == 0x02)
-        {
-#if Coll_Save
-            pIStuts->AvtMoveX = pInCmd->AvtPixelX;
-            pIStuts->AvtMoveY = pInCmd->AvtPixelY;
-            //OSA_printf("x:%d ****y:%d****\n",pIStuts->AvtMoveX,pIStuts->AvtMoveY);
-            pIStuts->AvtCfgSave = eSave_Enable;
-
-            CFGID_CONFIG_SET(CFGID_IMAGE_FR_ADJUST_EN, 0x0);
-            CFGID_CONFIG_SET(CFGID_IMAGE_ADJUST_PRM_UPDATE, 1);
-
-            MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
-            MSGDRIV_send(MSGID_EXT_INPUT_CFGSAVE, 0);
-#else
-            
-            CFGID_CONFIG_SET(CFGID_IMAGE_FR_ADJUST_EN, 0x0);
-            CFGID_CONFIG_SET(CFGID_IMAGE_ADJUST_PRM_UPDATE, 1);
-#endif
-
-        }
-        else if(pIStuts->FrCollimation == 0x01)
-        {
-            CFGID_CONFIG_SET(CFGID_IMAGE_FR_ADJUST_EN, pIStuts->FrCollimation);
-            CFGID_CONFIG_SET(CFGID_IMAGE_FR_ADJUST_CROSS_X, pIStuts->AvtPixelX);
-            CFGID_CONFIG_SET(CFGID_IMAGE_FR_ADJUST_CROSS_Y, pIStuts->AvtPixelY);
-            CFGID_CONFIG_SET(CFGID_IMAGE_ADJUST_PRM_UPDATE, 1);
-#if (!FrColl_Change)
-            iShow = 0;//cross hide
-            CFGID_CONFIG_SET(CFGID_OSD_GRAPH_EN_WIN(BLOCK_BASE_OSD_GRAPH_AXIS + iSens), iShow);
-            iShow = 1;
-            iSens = (iSens + 1)%eSen_Max;
-            CFGID_CONFIG_SET(CFGID_OSD_GRAPH_EN_WIN(BLOCK_BASE_OSD_GRAPH_AXIS + iSens), iShow);
-
-            for (iSens = 0; iSens < eSen_Max; iSens++)
-            {
-                CFGID_CONFIG_SET(CFGID_OSD_GRAPH_UPDATE(BLOCK_BASE_OSD_GRAPH_AXIS + iSens),    0);
-            }
- #else
-            iShow = 0;//cross hide
-            CFGID_CONFIG_SET(CFGID_OSD_GRAPH_EN_WIN(BLOCK_BASE_OSD_GRAPH_AXIS + iSens), iShow);
-
-            CFGID_CONFIG_SET(CFGID_OSD_GRAPH_UPDATE(BLOCK_BASE_OSD_GRAPH_AXIS + iSens),    0);
- #endif
-        }
-
-		
-
-    }
-
-	#endif
 
    return ;
 }
@@ -490,25 +421,6 @@ void app_ctrl_setTvColl(CMD_EXT * pInCmd)
         
         MSGDRIV_send(MSGID_EXT_INPUT_ENBDT, 0);
 
-		#if 0
-        if(pIStuts->TvCollimation == 0x01)
-        {
-            MSGDRIV_send(MSGID_EXT_INPUT_AIMSIZE, 0);
-        }
-        else /*if(pIStuts->TvCollimation == 0x02)*/
-        {
-            MSGDRIV_send(MSGID_EXT_INPUT_AIMSIZE, 0);
-#if Coll_Save
-            pIStuts->AvtMoveX = pIStuts->unitTvCollX;
-            pIStuts->AvtMoveY = pIStuts->unitTvCollY;
-
-            pIStuts->AvtCfgSave = eSave_Enable;
-
-            MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
-            MSGDRIV_send(MSGID_EXT_INPUT_CFGSAVE, 0);
-#endif
-        }
-		#endif
     }
    // else
           //MSGAPI_AckSnd( AckTvColl);
@@ -583,52 +495,11 @@ void app_ctrl_setFovCtrl(CMD_EXT * pInCmd)
 
     if(pIStuts->FovCtrl != pInCmd->FovCtrl)
     {
-    /*
-        if(pIStuts->SensorStat == 0x00)
-        {
-            if(pInCmd->FovCtrl <= 0x02)
-            {
-
-                if(pIStuts->FovSelectColor == 1)
-                {
-                    pIStuts->FovSelectColor = 0;
-                    MSGDRIV_send(MSGID_EXT_INPUT_COLOR, 0);
-                }
-
-                if(pIStuts->ZoomMultiple != 1.0)
-                {
-                	OSA_printf("app_ctrl_setFovCtrl   ZoomMultiple= %f\n",pIStuts->ZoomMultiple);
-                    pIStuts->ZoomMultiple = 1.0;
-                    MSGDRIV_send(MSGID_EXT_INPUT_ENZOOM, 0);
-                }
-            }
-            else if(pInCmd->FovCtrl >= 0x03)
-            {
-                if(pIStuts->FovSelectColor == 0)
-                {
-                    pIStuts->FovSelectColor = 1;
-                    MSGDRIV_send(MSGID_EXT_INPUT_COLOR, 0);
-                }
-            }
-        }*/
-        pIStuts->FovCtrl = pInCmd->FovCtrl;
-	MSGDRIV_send(MSGID_EXT_INPUT_FOVCMD, 0);
+		pIStuts->FovCtrl = pInCmd->FovCtrl;
+		MSGDRIV_send(MSGID_EXT_INPUT_FOVCMD, 0);
     }
     //MSGDRIV_send(MSGID_EXT_INPUT_FOVCMD, 0);
 
-/*
-    if(pIStuts->SensorStat == 0x01) // flir
-    {
-        //  if(pIStuts->FovCtrl < 0x05)
-        {
-            fDiffMask = pIStuts->unitFovAngle[pInCmd->SensorStat] - pInCmd->unitFovAngle[pInCmd->SensorStat];
-            if (fDiffMask > 0.0 || fDiffMask < 0.0)
-            {
-                pIStuts->unitFovAngle[pInCmd->SensorStat] = pInCmd->unitFovAngle[pInCmd->SensorStat];
-                MSGDRIV_send(MSGID_EXT_INPUT_FOVSTAT, 0);
-            }
-        }
-    }*/
     /***for **reply*****/
     //MSGAPI_AckSnd( AckFov);
    return ;
@@ -674,9 +545,6 @@ void app_ctrl_poweron(CMD_EXT * pInCmd )
      	CMD_EXT *pIStuts = msgextInCtrl;
 	 if(pInCmd->Firpoweron!= pIStuts->Firpoweron)
             pIStuts->Firpoweron = pInCmd->Firpoweron;
-	
-
-	
 
 	return ;	
 }
@@ -717,7 +585,6 @@ void app_ctrl_setSaveCfg(CMD_EXT * pInCmd)
 
     if(pInCmd->CmdType != pIStuts->CmdType)
         pIStuts->CmdType = pInCmd->CmdType;
-
 	
     //if (pIStuts->AvtCfgSave != pInCmd->AvtCfgSave)
     {
@@ -870,116 +737,110 @@ void app_ctrl_setTvdispaly(CMD_EXT * pInCmd)
 		FR:4000~1000=Big,1000~330=Mid,330~120=Sml,120~90=SuperSml,60=Zoom
 	*/
 	if(pIStuts->SensorStat==0)
+	{
+
+		//OSA_printf("TVfov*************the unitFovAngle=%f  \n",pIStuts->unitFovAngle[pInCmd->SensorStat]);
+		if(pIStuts->unitFovAngle[pInCmd->SensorStat]>960&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=2400)
 		{
-
-			//OSA_printf("TVfov*************the unitFovAngle=%f  \n",pIStuts->unitFovAngle[pInCmd->SensorStat]);
-			if(pIStuts->unitFovAngle[pInCmd->SensorStat]>960&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=2400)
-				{
-					//940 big fov position <- y positon
-					int tvunit=(2400-960)/30;
-					int tvpos=940-(2400-pIStuts->unitFovAngle[pInCmd->SensorStat])/tvunit;
-					if(tvpos>940)
-						tvpos=940;
-					
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-	 				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), tvpos);
-
-				}
-			else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>330&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=960)
-				{
-					//910 big fov position<- yposition
-					int tvunit=(960-330)/30;
-					int tvpos=910-(960-pIStuts->unitFovAngle[pInCmd->SensorStat])/tvunit;
-					if(tvpos>910)
-						tvpos=910;
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), tvpos);
-
-
-				}
-			else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>260&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=330)
-				{
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 880);
-				}
-			else if(pIStuts->unitFovAngle[pInCmd->SensorStat]==110){
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 850);
-			}
-			else if(pIStuts->unitFovAngle[pInCmd->SensorStat]==55){
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 820);
-			}
-			else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>2400)
-				{
-
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-					 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 940);
-				}
+			//940 big fov position <- y positon
+			int tvunit=(2400-960)/30;
+			int tvpos=940-(2400-pIStuts->unitFovAngle[pInCmd->SensorStat])/tvunit;
+			if(tvpos>940)
+				tvpos=940;
 			
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), tvpos);
 
+		}
+		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>330&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=960)
+		{
+			//910 big fov position<- yposition
+			int tvunit=(960-330)/30;
+			int tvpos=910-(960-pIStuts->unitFovAngle[pInCmd->SensorStat])/tvunit;
+			if(tvpos>910)
+				tvpos=910;
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), tvpos);
 
 
 		}
+		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>260&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=330)
+		{
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 880);
+		}
+		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]==110){
+				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 850);
+		}
+		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]==55){
+				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 820);
+		}
+		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>2400)
+		{
+
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 940);
+		}		
+	}
 	else
 	{
 		//OSA_printf("FRfov*************the unitFovAngle=%f  \n",pIStuts->unitFovAngle[pInCmd->SensorStat]);
 		if(pIStuts->unitFovAngle[pInCmd->SensorStat]>1000&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=4000)
-			{
-				//940 big fov position <- y positon
-				int frunit=(4000-1000)/30;
-				int frpos=940-(4000-pIStuts->unitFovAngle[pInCmd->SensorStat])/frunit;
-				if(frpos>940)
-					frpos=940;
-				
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
- 				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), frpos);
+		{
+			//940 big fov position <- y positon
+			int frunit=(4000-1000)/30;
+			int frpos=940-(4000-pIStuts->unitFovAngle[pInCmd->SensorStat])/frunit;
+			if(frpos>940)
+				frpos=940;
+			
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), frpos);
 
-			}
+		}
 		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>330&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=1000)
-			{
-				//910 big fov position<- yposition
-				int frunit=(1000-330)/30;
-				int frpos=910-(1000-pIStuts->unitFovAngle[pInCmd->SensorStat])/frunit;
-				if(frpos>910)
-					frpos=910;
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), frpos);
+		{
+			//910 big fov position<- yposition
+			int frunit=(1000-330)/30;
+			int frpos=910-(1000-pIStuts->unitFovAngle[pInCmd->SensorStat])/frunit;
+			if(frpos>910)
+				frpos=910;
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), frpos);
 
 
-			}
+		}
 		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>120&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=330)
-			{
-				//880 big fov position<- yposition
-				int frunit=(330-120)/30;
-				int frpos=880-(330-pIStuts->unitFovAngle[pInCmd->SensorStat])/frunit;
-				if(frpos>880)
-					frpos=880;
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), frpos);
+		{
+			//880 big fov position<- yposition
+			int frunit=(330-120)/30;
+			int frpos=880-(330-pIStuts->unitFovAngle[pInCmd->SensorStat])/frunit;
+			if(frpos>880)
+				frpos=880;
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), frpos);
 
 
-			}
+		}
 		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>90&&pIStuts->unitFovAngle[pInCmd->SensorStat]<=120)
-			{
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 850);
+		{
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 850);
 
 
-			}
+		}
 		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]==60){
 			CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
 			CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 820);
 
 		}
 		else if(pIStuts->unitFovAngle[pInCmd->SensorStat]>4000)
-			{
+		{
 
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
-				 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 940);
-			}
-
-
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_LEFT_X(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1), 150); 
+			 CFGID_CONFIG_SET(CFGID_OSD_TEXT_2_TOP_Y(BLOCK_BASE_OSD_TEXT_FOVCHOOSE_1 ), 940);
+		}
 	}
 
 }
@@ -1028,11 +889,7 @@ void app_ctrl_setEnhance(CMD_EXT * pInCmd)
 	else
 		{
 			//MSGAPI_AckSnd(Ackenhance);
-		}
-
-	
-  
-   
+		}   
    return ;
 }
 
@@ -1077,14 +934,7 @@ void app_ctrl_setverti(CMD_EXT * pInCmd)
   if(pInCmd->TrkPanev != pIStuts->TrkPanev)
 		pIStuts->TrkPanev = pInCmd->TrkPanev;
    if(pInCmd->TrkTitlev != pIStuts->TrkTitlev)
-		pIStuts->TrkTitlev = pInCmd->TrkTitlev;
- //   MSGDRIV_send(MSGID_EXT_INPUT_SEARCHMOD, 0);
-   
-
-   //printf("the TrkPanev=%f TrkTitlev=%f\n",pIStuts->TrkPanev/100.0,pIStuts->TrkTitlev/100.0);
-	
-  
-   
+		pIStuts->TrkTitlev = pInCmd->TrkTitlev;  
    return ;
 }
 
@@ -1097,11 +947,9 @@ void app_ctrl_detectvideo()
 
 }
 
-
 void app_ctrl_ack()
 {
 	//MSGAPI_AckSnd( AckFrColl);
-
 }
 
 void app_err_feedbak()

@@ -1,14 +1,3 @@
-/*************************************************************************
-  Copyright (C), 2015-2016, ChamRun Tech. Co., Ltd.
-  File name:    Multich_graphic.h
-  Author:       zr       Version:  1.0.0      Date: 2016-9-23
-  Description:
-  Version:      1.0.0
-  Function List:
-  History:
-      <author>  <time>   <version >   <desc>
-        zr   16/09/23     1.0     build this moudle
-**************************************************************************/
 
 #ifndef _MULTICH_GRAPHIC_H
 #define _MULTICH_GRAPHIC_H
@@ -114,4 +103,3 @@ typedef struct _Multich_graphic_
 #define BIT_CLRj(val,bit) (val&(~(1<<bit)))
 
 #endif
-/*******************************END***************************************/

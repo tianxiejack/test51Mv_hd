@@ -1,28 +1,4 @@
-/*************************************************************************
-* Copyright (C), 2011-2012, ChamRun Tech. Co., Ltd.
-* FileName:		user_app.h
-* Author:			xavier
-* Date:			2014-01-14
-* Description:		uaer interface api include file
-* Version:			V 1.0.0
-* Function List:	
-*     				char APP_getChar( );
-* 				static Int32 APP_loadDefCfg( );
-* 				static Int32 APP_create( );
-* 				static Int32 APP_destroy( );
-* 				static Int32 APP_start( );
-* 				static Int32 APP_stop( );
-* 				static Int32 APP_getStatus( );
-* 				static Int32 APP_control( );
-* 				static Int32 APP_getConfig( );
-*				static Int32 APP_setConfig( );
-* 				static Int32 APP_stop( );
-* 				static Int32 APP_onTimer( );
-*
-* History:			// histroy modfiy record
-*     <author>  <time>   <version >   <desc>
-*     xavier    14/01/14     1.0     build this moudle
-***********************************************************************/
+
 #ifndef __USER_APP_H__
 #define __USER_APP_H__
 #define MAX_INPUT_STR_SIZE 		( 128 )
@@ -63,4 +39,4 @@ unsigned char APP_getint( );
 void initgdxd_info();
 void APP_setPrms( int nType );
 #endif
-/************************************** The End Of File *********************/
+

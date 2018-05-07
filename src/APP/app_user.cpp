@@ -55,19 +55,6 @@ static Int32 APP_onTimer( int item);
 
 DXD_Info gDXD_info ;
 DXD_Info gDXD_infoSave;
-#if 0
-=
-    {
-        .OnLoadDefCfg  = APP_loadDefCfg,
-        .OnCreate      = APP_create,
-        .OnDestroy     = APP_destroy,
-        .OnStart       = APP_start,
-        .OnStop        = APP_stop,
-        .OnGetStatus   = APP_getStatus,
-        .OnControl     = APP_control,
-        .OnTimer       = APP_onTimer,
-    };
-#endif
 static Bool  gAPP_Started   = FALSE;
 static Int32 gAPP_Usecase   = 0x00;
 
@@ -84,13 +71,7 @@ void initgdxd_info()
 
 }
 
-/********************************************************************************
- * @brief:      APP_getChar: receive char from terminal
- * @param:
- * @param:
- * @return:
- * @Others:
- *******************************************************************************/
+
 char APP_getChar( )
 {
     char buffer[100];
@@ -156,14 +137,8 @@ int APP_startStop( int usercase, Bool IsActiveCase)
     return 0;
 }
 
-/********************************************************************************
- * @Fun:        // fun name
- * @brief:      // fun discription
- * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
- * @return:     // return value
- * @Others:     // others
- *******************************************************************************/
+
+
 static Int32 APP_loadDefCfg( int item )
 {
     int i = 0;
@@ -190,14 +165,7 @@ static Int32 APP_loadDefCfg( int item )
     return OSA_SOK;
 }
 
-/********************************************************************************
- * @Fun:        APP_create
- * @brief:      // fun discription
- * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
- * @return:     // return value
- * @Others:     // others
- *******************************************************************************/
+
 static Int32 APP_create( int item )
 {
     int i = 0;
@@ -362,44 +330,22 @@ static Int32 APP_create( int item )
     return OSA_SOK;
 }
 
-/********************************************************************************
- * @Fun:        APP_destroy
- * @brief:      APP free
- * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
- * @return:     // return value
- * @Others:     // others
- *******************************************************************************/
+
+
 static Int32 APP_destroy( int item )
 {
     Int32 status = OSA_SOK;
     return status;
 }
 
-/********************************************************************************
- * @Fun:    // APP_setPrms(  )
- * @brief:  // fun discription
- * @param:  // 1.input param description
- * @param:  // 2.input param description
- * @Output  // 1.output param description
- * @return: // return value
- * @Others: // others
- *******************************************************************************/
+
+
 void APP_setPrms( int nType )
-{
-
-   	
-
+{ 	
 }
-/********************************************************************************
- * @Fun:    // fun name
- * @brief:  // fun discription
- * @param:  // 1.input param description
- * @param:  // 2.input param description
- * @Output  // 1.output param description
- * @return: // return value
- * @Others: // others
- *******************************************************************************/
+
+
+
 static Int32 APP_start( int nType )
 {
     Int32 status = 0;
@@ -421,9 +367,6 @@ static Int32 APP_start( int nType )
 
     gAPP_Started = TRUE;
 
-	
-
-	
 	//	Dx_setTimer(OSD_SHOW_TIMER, OSD_SHOW_TIMER_TICKS);
 	Dx_setTimer(GRPX_SHOW_TIMER,GRPX_SHOW_TIME_TICKS);
 	
@@ -442,15 +385,8 @@ static Int32 APP_start( int nType )
     return OSA_SOK;
 }
 
-/********************************************************************************
- * @Fun:        APP_stop
- * @brief:      // fun discription
- * @param:      // 1.input param description
- * @param:      // 2.input param description
- * @Output      // 1.output param description
- * @return:     // return value
- * @Others:     // others
- *******************************************************************************/
+
+
 static Int32 APP_stop( int item )
 {
     Int32 status = 0;
@@ -474,80 +410,48 @@ static Int32 APP_stop( int item )
     return OSA_SOK;
 }
 
-/********************************************************************************
- * @Fun:        // fun name
- * @brief:      // fun discription
- * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
- * @return:     // return value
- * @Others:     // others
- *******************************************************************************/
+
+
 static Int32 APP_getStatus( int item )
 {
     return OSA_SOK;
 }
 
-/********************************************************************************
- * @Fun:        // fun name
- * @brief:      // fun discription
- * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤�? * @Output      // 1.output param 1锟斤拷description
- * @return:     // return value
- * @Others:     // others
- *******************************************************************************/
+
+
 static Int32 APP_control( Int32 cmd )
 {
   
     return OSA_SOK;
 }
 
-/********************************************************************************
- * @Fun:    APP_onTimer
- * @brief:  user timer,timer0 print system information
- * @param:  Int32 timerId : timer Id
- * @param:
- * @Output  NULL
- * @return: OSA_SOK
- * @Others: NULL
- *******************************************************************************/
+
+
 static Int32 APP_onTimer( Int32 timerId )
 {
+	if( timerId == SYS_INFOR_SHOW_TIMER)
+	{
 
-    //printf("**********************************\n");
-    if( timerId == SYS_INFOR_SHOW_TIMER)
-    {
-    	
-    }
+	}
 
-    if( timerId == GPIO_INSPECT_TIMER)
-    {
+	if( timerId == GPIO_INSPECT_TIMER)
+	{
 		//APP_getvideostatus();
-    }
+	}
 
-    if(timerId == GRPX_SHOW_TIMER)
-    {
-    	 //Hard_getccdstatus();
-        APP_graphic_timer_alarm();
-    }
+	if(timerId == GRPX_SHOW_TIMER)
+	{
+		APP_graphic_timer_alarm();
+	}
 
-   if(timerId == ALG_TRACK_TIMER)
-   	{
-	  APP_tracker_timer_alarm();
-   	}
-   if(timerId == ALG_TRACK_TIMER_ERRFEEDBACK)
-   	{
-	/*//test zhou qi  time
-		int curtime = OSA_getCurTimeInMsec();
-		static int pretime = 0;
-		int time = curtime - pretime;
-		pretime = curtime;
-		printf("*****************time = %dms\n",time);
-	*/
-	  APP_Err_feedback_timer_alarm();
-
-	
-	  
-   	}
+	if(timerId == ALG_TRACK_TIMER)
+	{
+		APP_tracker_timer_alarm();
+	}
+	if(timerId == ALG_TRACK_TIMER_ERRFEEDBACK)
+	{
+		APP_Err_feedback_timer_alarm();
+	}
 	
     return OSA_SOK;
 }
@@ -555,8 +459,3 @@ static Int32 APP_onTimer( Int32 timerId )
 int cltrl_dis_user(int value,int id)
 {
 }
-
-
-
-
-/**************************************/

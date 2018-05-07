@@ -2,7 +2,6 @@
 #include <glut.h>
 #include <cuda.h>
 #include <cuda_gl_interop.h>
-//#include <cuda_runtime.h>
 #include "cuda_runtime_api.h"
 #include "osa_tsk.h"
 

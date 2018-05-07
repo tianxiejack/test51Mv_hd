@@ -1,21 +1,3 @@
-/******************************************************************************
-   Copyright (C), 2011-2012, ChamRun Tech. Co., Ltd.
-   File name:   app_main.c
-   Author:      xavier
-   Description:
-   Version:         1.0.0
-   Function List:
-      1.    int main()
-      2.    char multich_getChar()
-      3.    int multich_printInfo(int usercase)
-      4.    int multich_printBuffersInfo()
-      5.    int multich_startStop(int usercase, Bool IsActiveCase)
-      6.    int multich_run(int usercase)
-      7.    Int32 multich_eventHandler(UInt32 eventId, Ptr pPrm, Ptr appData)
-   History:
-      <author>      <time>          <version >          <desc>
-      xavier        2014-02-14  1.0.0
-*****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,8 +11,6 @@
 #include "dx_config.h"
 #include "app_user.h"
 #include "dx_main.h"
-//#include "Ti_vdis.h"
-
 
 char gAPP_mainMenu[] =
     {
@@ -60,15 +40,7 @@ char gAPP_runMenu[] =
         "\r\n Enter Choice: "
     };
 
-/**
- * @Fun:        APP_usercase_run
- * @brief:      // fun discription
- * @param:      // 1.input param 1锟斤拷description
- * @param:      // 2.input param 2锟斤拷description锟斤拷
- * @Output      // 1.output param 1锟斤拷description
- * @return:     // return value
- * @Others:     // others
- */
+
 static Int32 usercase_run( int type )
 {
     int status;
@@ -97,13 +69,7 @@ static Int32 usercase_run( int type )
     return 0;
 }
 
-/**
- * @brief:      main:
- * @param:
- * @param:
- * @return:
- * @Others:
- */
+
 static void* dxmain(void *pPrm)
 {
     Bool ui_loop = TRUE;
@@ -170,5 +136,3 @@ int App_dxmain( )
 
 }
 
-
-/**************************************/

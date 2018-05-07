@@ -1,9 +1,3 @@
-/*
- * BlobDetector.h
- *
- *  Created on: 2017年4月28日
- *      Author: fsmdn113
- */
 
 #ifndef BLOBDETECTOR_H_
 #define BLOBDETECTOR_H_

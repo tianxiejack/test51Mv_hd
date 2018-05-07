@@ -1,16 +1,4 @@
-/*****************************************************************************
- * Copyright (C), 2011-2012, ChamRun Tech. Co., Ltd.
- * FileName:        app_project_XXX.h
- * Author:          xavier
- * Date:            2016-05-20
- * Description:     // description
- * Version:         // version
- * Function List:   // funs and description
- *     1. -------
- * History:          // histroy modfiy record
- *     <author>  <time>   <version >   <desc>
- *     aloysa    16/06/28     1.0     build this moudle
-*****************************************************************************/
+
 
 #ifndef __APP_PROJ_XGS026_H_
 #define __APP_PROJ_XGS026_H_
@@ -453,5 +441,3 @@ typedef struct
 }osd_id_t;
 int APP_text_genContext(int chId, int winId, char * str, int strBufLen, short *textLen);
 #endif
-/*************************************END***************************************/
-

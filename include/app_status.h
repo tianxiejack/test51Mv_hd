@@ -1,20 +1,3 @@
-/********************************************************************************
-  Copyright (C), 2011-2012, CamRun Tech. Co., Ltd.
-  File name:    app_status.h
-  Author:   xavier       Version:  1.0.0      Date: 2013-04-17
-  Description: this file define the globle externel input state struct
-              together with the avt ouput state struct.
-  Others:
-  Function List:
-  History:
-    1. Date:
-       Author:
-       Modification:
-    2. ...
-  History:
-    <author>  <time>      <version >   <desc>
-      aloysa     17/04/25   1.0     
-********************************************************************************/
 
 #ifndef _GLOBAL_STATUS_H_
 #define _GLOBAL_STATUS_H_
@@ -23,17 +6,7 @@
 extern "C" {
 #endif
 
-/*
-* *PROJ ITEM
-*/
-//#define PROJ_BASE
-#define PROJ_XGS026	1
-
-
-
-#if PROJ_XGS026
 #include "app_proj_xgs026.h"
-#endif
 
 #ifndef MTD_TARGET_NUM
 #define MTD_TARGET_NUM  8

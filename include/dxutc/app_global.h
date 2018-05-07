@@ -90,19 +90,6 @@ typedef OSA_MsgHndl     MSG_ID;
 #define SDK_MSGQUE_SEND(to,from,cmd,prm,msgFlags,msg)                   OSA_msgqSendMsg(to,from,cmd,prm,msgFlags,msg)
 #define SDK_MSGQUE_RECV(hndl,msg,timeout)                               OSA_msgqRecvMsgEx(hndl,msg,timeout)
 
-#if 0
-#define SDK_MBX_PEND                MBX_pend
-#define SDK_MBX_POST                MBX_post
-
-#define SDK_MBX_PEND                MRngBufGet
-#define SDK_MBX_POST                MRngBufPut
-
-#endif
-
-/*
-#define OSA_SOK      0  ///< Status : OK
-#define OSA_EFAIL   -1  ///< Status : Generic error
-*/
 #define SDK_ASSERT(f)               assert(f)
 #define SDK_SOK                     0           ///< Status : OK
 #define SDK_EFAIL                   -1          ///< Status : Generic error
@@ -127,9 +114,7 @@ typedef OSA_MsgHndl     MSG_ID;
 
 #define WORD_ALIGNED(x) (_nassert(((int)(x) & 0x3) == 0))
 
-/*
-* *SDK ERR
-*/
+
 #define ERR_SUCCESS                                         0
 #define ERR_FAIL                                            -1
 #define ERR_OUTOFMEM                                        1
@@ -148,18 +133,5 @@ typedef OSA_MsgHndl     MSG_ID;
 #define VENC_MAX_CH 2
 
 #define Bit(val,i) (val&(1<<i))
-#if 0
-typedef enum {
-	eSen_TV	= 0x00,
-	eSen_FR    = 0x01,
-	eSen_Max   = 0x02
-}eSenserStat;
-#endif
-/*
-* *PROJ ITEM
-*/
-//#define PROJ_BASE
-#define PROJ_GM2_LGS009	1
-
 
 #endif
