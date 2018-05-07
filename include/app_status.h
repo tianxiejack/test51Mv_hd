@@ -231,7 +231,6 @@ typedef struct
     //volatile unsigned int  DispTimePrm;    // bit0-bit7 second  bit8-bit15 minute  bit16-bit31 hours
     //volatile unsigned int  DispYearPrm;    // bit0-bit7 day  bit8-bit15 month  bit16-bit31 year
 
-#if PROJ_XGS026
     volatile unsigned int  DispWorkMode;    // eWorkMode
 
     volatile unsigned int  DispPlatAngle[2];       // [0] is pos [1] is pitch
@@ -246,9 +245,6 @@ typedef struct
     volatile unsigned int  DispLaserStat;   // bit16 powerstat 0-off 1-on  bit0-bit15 modestat 000-stop 001-wait 010-once measure ...
     volatile unsigned int  DispDistance;    // laser distance 0-65535
     volatile unsigned int  DispLaserCode;   // laser code values
-#endif
-
-
 
 	volatile unsigned char CmdType;  // recv cmd id
 	//volatile unsigned char  TrkCmd; //only for ack trk mod
@@ -278,45 +274,45 @@ typedef struct
 	volatile unsigned char SecAcqFlag;
 	volatile unsigned int  TrkCoastCount;
 	volatile unsigned int  FreezeresetCount;
-	  volatile unsigned char  FovSelectColor;
-	    volatile unsigned int  ImgPixelX[eSen_Max];    // for img trk alg
-    volatile unsigned int  ImgPixelY[eSen_Max];    // for img trk alg
-        volatile unsigned char  SysMode; 
-	 volatile unsigned char  Swdata[5];
-	     volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
-		     volatile unsigned char TVSStat; //for ack tv
-	    volatile unsigned char FLIRPower;//for ack flir
-    volatile unsigned char FLIRStat;//for ack flir
-    volatile unsigned char FLIRPal;//for ack flir
+	volatile unsigned char  FovSelectColor;
+	volatile unsigned int  ImgPixelX[eSen_Max];    // for img trk alg
+	volatile unsigned int  ImgPixelY[eSen_Max];    // for img trk alg
+	volatile unsigned char  SysMode; 
+	volatile unsigned char  Swdata[5];
+	volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
+	volatile unsigned char TVSStat; //for ack tv
+	volatile unsigned char FLIRPower;//for ack flir
+	volatile unsigned char FLIRStat;//for ack flir
+	volatile unsigned char FLIRPal;//for ack flir
 
-	    volatile unsigned char  LRFPowerOn;		// 0-off 1-on
-    volatile unsigned char  LRFReady;	
-    volatile unsigned char  LRFStat;
-    volatile unsigned char  LRFNStat;	 
-    volatile unsigned char  LRFBright;
-    volatile unsigned char  LRFRun;
-    volatile unsigned char  LRFAllow;
-    volatile unsigned char  LRFEngLev;
-    volatile unsigned int  unitTvCollX;
-    volatile unsigned int  unitTvCollY;
-    volatile unsigned char  MenuStat;
-    volatile int  TarLongitude;//jin du
-    volatile int  TarLatitude;//wei du
-    volatile short  TarHeight;	
+	volatile unsigned char  LRFPowerOn;		// 0-off 1-on
+	volatile unsigned char  LRFReady;	
+	volatile unsigned char  LRFStat;
+	volatile unsigned char  LRFNStat;	 
+	volatile unsigned char  LRFBright;
+	volatile unsigned char  LRFRun;
+	volatile unsigned char  LRFAllow;
+	volatile unsigned char  LRFEngLev;
+	volatile unsigned int  unitTvCollX;
+	volatile unsigned int  unitTvCollY;
+	volatile unsigned char  MenuStat;
+	volatile int  TarLongitude;//jin du
+	volatile int  TarLatitude;//wei du
+	volatile short  TarHeight;	
 
 
-    volatile unsigned char SysMsgId;
-    volatile unsigned char SysMsgData[64];  
-    volatile unsigned char SysMsgLen;
-    volatile short PaneData;
-    volatile short TitleData;
-    volatile unsigned int  Distant;
-    volatile int  trkerrx;
-    volatile int  trkerry;
-    volatile  short  TrkPanev;
-    volatile  short  TrkTitlev;
-    volatile float ZoomMultiple;
-    volatile char Firpoweron;
+	volatile unsigned char SysMsgId;
+	volatile unsigned char SysMsgData[64];  
+	volatile unsigned char SysMsgLen;
+	volatile short PaneData;
+	volatile short TitleData;
+	volatile unsigned int  Distant;
+	volatile int  trkerrx;
+	volatile int  trkerry;
+	volatile  short  TrkPanev;
+	volatile  short  TrkTitlev;
+	volatile float ZoomMultiple;
+	volatile char Firpoweron;
 
         //   volatile unsigned int  ImgZoomStat[eSen_Max];   // eImgAlgStat
       //       volatile unsigned char TrkBomenCtrl; // osd Trk Aim
@@ -391,7 +387,7 @@ typedef enum
 
     // video control
     MSGID_EXT_INPUT_VIDEOCTRL,              ///< external cmd, video record or replay.
-    MSGID_EXT_TEST,
+    MSGID_EXT_MVDETECT,
 }MSG_PROC_ID;
 
 

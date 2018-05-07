@@ -1466,7 +1466,6 @@ int CVideoProcess::process_track(int trackStatus, Mat frame_gray, Mat frame_dis,
 			moveStat = false;
 		}
 		else
-		
 			rcResult = UtcTrkAcqSR(m_track, image, acq, true);
 		#endif
 		trackStatus = 1;

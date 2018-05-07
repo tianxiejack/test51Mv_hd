@@ -1,54 +1,11 @@
-/********************************************************************************************************
-  Copyright (C), 2011-2012, ChamRun Tech. Co., Ltd.
-  File name:    msgDriv.c
-  Author:       xavier       Version:  1.0.0      Date: 2013-4-17
-  Description:  Message driver module in this file
-  Version:      1.0.0
-  Function List:
-    1.  MSGDRIV_Handle  MSGDRIV_create()
-        This function creates MSGDRIV Object.
-        Here we init the message api map and create the message queue.
-        Then message driver task is created here.
-        And we return the MSGDRIV_Handle handle.
 
-    2.  MSGDRIV_destroy(MSGDRIV_Handle handle)
-        This function destroy MSGDRIV Object.
-        Before MSGDRIV Object destroied, we first set taskQuit = 1 together with the MSGDRIV_FREE_CMD
-        cmd to exit MSGDRIV process task thread.
-        If no msg is in current message queue, the message receive function is blocked,after MSGDRIV_FREE_CMD put
-        into this the message queue, and message receive function process MSGDRIV_FREE_CMD,as taskQuit is set,
-        then the task quit,else when current message queue has messages then when the last message is process,
-        task will quit,MSGDRIV_FREE_CMD just ignore then.
-        Finally message driver task is destroied here.
-
-    3.  MSGDRIV_attachMsgFun(MSGDRIV_Handle handle,int msgId, pMsgProcessFun pRtnFun, int context)
-        This funtion init the message process function api with the message id, all this infomation will
-        saved in the msgTab[MAX_MSG_NUM] filed of MSGDRIV Object.
-
-    4.  MSGDRIV_ProcTask(void *pPrm)
-        This is the message driver loop task, it will read the message from message queue,if
-        no message in current, it will be blocked in the receive function, else it will look for the
-        msgTab[MAX_MSG_NUM] filed of MSGDRIV Object call the message process api funtion.
-
-  History:
-      <author>  <time>   <version >   <desc>
-      xavier    13/04/17     1.0     build this moudle
-********************************************************************************************************/
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
 #include"osa.h"
 #include"osa_sem.h"
 #include"osa_buf.h"
 #include"osa_thr.h"
 #include"osa_msgq.h"
-//    #ifdef __cplusplus
- //   }
- //   #endif
-//#include "app_global.h"
 #include "msgDriv.h"
-#include "msgProssDef.h"
-//#include "MessageProcess.hpp"
+#include "app_global.h"
 MSGDRIV_Class g_MsgDrvObj;
 
 /********************************************************************************************************
