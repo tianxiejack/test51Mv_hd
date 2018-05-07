@@ -99,13 +99,43 @@ void* recv_msg(SENDST *RS422)
 	pMsg = &inCtrl;
 	memset(pMsg,0,sizeof(CMD_EXT));
 	app_ctrl_getSysData(pMsg);
+
+
 	
 	//printf("recv++++++++ cmdID = %02x,imgID(%02x,%02x,%02x,%02x,%02x)\n",cmdID,imgID1,imgID2,imgID3,imgID4,imgID5);
 	switch(cmdID)
 	{	
 		case trk:	
 			//inputtmp('c');
+			//MSGAPI_msgsend(trk);
 			//break;
+			
+			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
+			imgID1 = Rtrk.AvtTrkStat;
+		
+			if(imgID1 == 0x01)
+			    pMsg->TrkCmd = 0x01;
+			else
+			    pMsg->TrkCmd = 0x02;
+
+			//if(pMsg->ImgMtdStat[pMsg->SensorStat] == eImgAlg_Disable)
+			{
+				if(pMsg->AvtTrkStat != eTrk_mode_mtd)
+				{
+					if(imgID1 == 0x1)
+						pMsg->AvtTrkStat =eTrk_mode_target;
+					else if(imgID1 == 0x2)		             
+						pMsg->AvtTrkStat =eTrk_mode_mtd;
+					else if(imgID1 == 0x3)
+						pMsg->AvtTrkStat =eTrk_mode_sectrk;
+				}
+			}
+
+			app_ctrl_setTrkStat(pMsg); 
+			MSGAPI_msgsend(trk);
+			
+			break;
+			
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;	
 			
@@ -147,6 +177,7 @@ void* recv_msg(SENDST *RS422)
 				    }
 				}
 			}
+						
 			if(imgID1 == 0x04 && pMsg->SecAcqStat)
 			{
 				pMsg->AvtTrkStat = eTrk_mode_search;

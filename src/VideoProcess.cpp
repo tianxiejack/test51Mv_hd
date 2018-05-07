@@ -455,7 +455,7 @@ int CVideoProcess::MAIN_threadDestroy(void)
 
 
 CVideoProcess::CVideoProcess()
-	:m_track(NULL),m_curChId(0),m_curSubChId(-1),adaptiveThred(40)
+	:m_track(NULL),m_curChId(0),m_curSubChId(-1),adaptiveThred(40)		
 {
 	pThis = this;
 	m_pwFile = NULL;
@@ -470,15 +470,16 @@ CVideoProcess::CVideoProcess()
 	lastFrameBox=0;
 	moveStat = FALSE;
 
-	m_ImageAxisx		=VIDEO_IMAGE_WIDTH_0/2; //trkrefine after lost
-	m_ImageAxisy		=VIDEO_IMAGE_HEIGHT_0/2;//trkrefine after lost
-	m_intervalFrame 		= 0;
-	m_intervalFrame_change = 0;
+	m_ImageAxisx		=	VIDEO_IMAGE_WIDTH_0/2; //trkrefine after lost
+	m_ImageAxisy		=	VIDEO_IMAGE_HEIGHT_0/2;//trkrefine after lost
+	m_intervalFrame 			= 0;
+	m_intervalFrame_change 	= 0;
 	m_bakChId = m_curChId;
 	trackchange		=0;
 	m_searchmod		=0;
 	tvzoomStat		=0;
-
+	wFileFlag			=0;
+	
 	memset(m_tgtBox, 0, sizeof(TARGETBOX)*MAX_TARGET_NUMBER);
 }
 

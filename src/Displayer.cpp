@@ -1076,7 +1076,7 @@ void CDisplayer::gl_textureLoad(void)
 							OSA_bufPutEmpty(&tskSendBuftv, bufid);
 						if(OSA_bufGetFull(&tskSendBuftv, &bufid, OSA_TIMEOUT_NONE)==0)
 							OSA_bufPutEmpty(&tskSendBuftv, bufid);
-						OSA_printf("111dis frame\n");
+						//OSA_printf("111dis frame\n");
 					}
 					disbuffer=OSA_bufGetFull(&tskSendBuftv, &bufid, OSA_TIMEOUT_NONE);
 				}

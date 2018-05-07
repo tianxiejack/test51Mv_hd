@@ -86,6 +86,9 @@ CProcess021::CProcess021()
 
 	pIStuts->FrCollimation=2;
 	pIStuts->PicpSensorStatpri=2;
+
+	extInCtrl.TrkCmd = 0;
+	
 	tvcorx=VIDEO_IMAGE_WIDTH_0 -100;
 	tvcory=VIDEO_IMAGE_HEIGHT_0 -100;
 

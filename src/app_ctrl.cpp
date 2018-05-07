@@ -148,32 +148,24 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 
     if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
         pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
-
+	
     if (pInCmd->AvtTrkStat != pIStuts->AvtTrkStat)
     {
-
-	
-
         pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
 	 if((pIStuts->AvtTrkStat==eTrk_mode_search)||(pIStuts->AvtTrkStat==eTrk_mode_sectrk))
-	 	{
-			      pIStuts->AvtPixelX = pInCmd->ImgPixelX[pIStuts->SensorStat] ;
-			      pIStuts->AvtPixelY   = pInCmd->ImgPixelY[pIStuts->SensorStat] ;
-			      //if(pIStuts->AvtTrkStat)
-				//		pIStuts->AvtTrkStat = eTrk_mode_sectrk;
-				//else
-				//		pIStuts->AvtTrkStat = eTrk_mode_search;	
-	 	}
+	{
+		pIStuts->AvtPixelX = pInCmd->ImgPixelX[pIStuts->SensorStat] ;
+		pIStuts->AvtPixelY   = pInCmd->ImgPixelY[pIStuts->SensorStat] ;
+		//if(pIStuts->AvtTrkStat)
+		//		pIStuts->AvtTrkStat = eTrk_mode_sectrk;
+		//else
+		//		pIStuts->AvtTrkStat = eTrk_mode_search;	
+	}
 
-	//printf("*****************%s  avtrkstat=%d  \n",__func__,pIStuts->AvtTrkStat);
-	
-	 
+	//printf("*****************%s  avtrkstat=%d  \n",__func__,pIStuts->AvtTrkStat);	
         MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
-	
     }
-
     //MSGAPI_AckSnd(AckTrkState);
-   
    return ;
 }
 
