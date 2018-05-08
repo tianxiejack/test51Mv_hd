@@ -27,6 +27,10 @@ int main(int argc, char **argv)
     	return 0;
 }
 
+//__IPC__
+//__MOVE_DETECT__
+
+
 //__MMT__
 //__BLOCK__
 //__TRACK__

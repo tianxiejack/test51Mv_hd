@@ -10,7 +10,6 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "configable.h"
 
-
 using namespace vmath;
 
 int CVideoProcess::m_mouseEvent = 0;
@@ -348,83 +347,10 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bMoveDetect)
 		{
-			IMG_MAT image;
-			image.data_u8 = frame_gray.data;
-			image.width = frame_gray.cols;
-			image.height = frame_gray.rows;
-			image.channels = 1;
-			image.step[0] = image.width;
-			image.dtype = 0;
-			image.size = frame_gray.cols*frame_gray.rows;
-
-			if(moveDetectRect)
-				rectangle( m_display.m_imgOsd[1],
-					Point( preAcpSR.x, preAcpSR.y ),
-					Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-					cvScalar(0,0,0,0), 1, 8 );
-
-			acqRect.axisX = m_ImageAxisx;
-			acqRect.axisY = m_ImageAxisy;
-
-			if(m_SensorStat == 0){
-				acqRect.rcWin.x = m_ImageAxisx - 50;
-				acqRect.rcWin.y = m_ImageAxisy -50;
-				acqRect.rcWin.width = 100;
-				acqRect.rcWin.height = 100;
-			}
-			else if(m_SensorStat == 1){
-				acqRect.rcWin.x = m_ImageAxisx - 25;
-				acqRect.rcWin.y = m_ImageAxisy -25;
-				acqRect.rcWin.width = 50;
-				acqRect.rcWin.height = 50;
-			}
-			
-			if((acqRect.rcWin.width!=50)&&(acqRect.rcWin.width!=100))
-			{
-				acqRect.rcWin.width=50;
-				acqRect.rcWin.height=50;
-			}
-			if(acqRect.rcWin.x<0)
-			{
-				acqRect.rcWin.x=0;
-				acqRect.axisX=image.width/2;
-				acqRect.axisY=image.height/2;
-			}
-			else if(acqRect.rcWin.x+acqRect.rcWin.width>image.width)
-			{
-				acqRect.rcWin.x=image.width/2-25;
-				acqRect.axisX=image.width/2;
-				acqRect.axisY=image.height/2;
-			}
-			if(acqRect.rcWin.y<0)
-			{
-				acqRect.rcWin.y=0;
-				acqRect.axisX=image.width/2;
-				acqRect.axisY=image.height/2;
-			}
-			else if(acqRect.rcWin.y+acqRect.rcWin.height>image.height)
-			{
-				acqRect.rcWin.y=image.height/2-25;
-				acqRect.axisX=image.width/2;
-				acqRect.axisY=image.height/2;
-			}
-					
-			Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
-			if(Movedetect)
-			{
-				//printf("+++++++++xy(%d,%d),wh(%d,%d)\n",preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);		
-				preAcpSR.x = MoveAcpSR.x*m_display.m_imgOsd[1].cols/frame.cols;
-				preAcpSR.y = MoveAcpSR.y*m_display.m_imgOsd[1].rows/frame.rows;
-				preAcpSR.width = MoveAcpSR.width*m_display.m_imgOsd[1].cols/frame.cols;
-				preAcpSR.height = MoveAcpSR.height*m_display.m_imgOsd[1].rows/frame.rows;
-
-				if(moveDetectRect)
-					rectangle( m_display.m_imgOsd[1],
-						Point( preAcpSR.x, preAcpSR.y ),
-						Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-						cvScalar(255,0,0,255), 1, 8 );
-			}
-
+		#if __MOVE_DETECT__
+			if(m_pMovDetector != NULL)
+				m_pMovDetector->setFrame(frame_gray,0);	//chId
+		#endif
 		}
 
 		if(chId != m_curChId)
@@ -479,6 +405,10 @@ CVideoProcess::CVideoProcess()
 	m_searchmod		=0;
 	tvzoomStat		=0;
 	wFileFlag			=0;
+
+	#if __MOVE_DETECT__
+	m_pMovDetector	=NULL;
+	#endif
 	
 	memset(m_tgtBox, 0, sizeof(TARGETBOX)*MAX_TARGET_NUMBER);
 }
@@ -509,7 +439,11 @@ int CVideoProcess::creat()
 	OSA_mutexCreate(&m_mutex);	
 
 	OnCreate();
-
+#if __MOVE_DETECT__
+	if(m_pMovDetector == NULL)
+		m_pMovDetector = MvDetector_Create();
+	OSA_assert(m_pMovDetector != NULL);
+#endif
 	return 0;
 }
 
@@ -528,6 +462,9 @@ int CVideoProcess::destroy()
 		fclose(m_pwFile);
 		m_pwFile = NULL;
 	}
+#if __MOVE_DETECT__
+	DeInitMvDetect();
+#endif
 
 	return 0;
 }
@@ -585,7 +522,7 @@ int CVideoProcess::init()
 
 	memset(&dsInit, 0, sizeof(DS_InitPrm));
 	dsInit.mousefunc = mouse_event;
-	//dsInit.keyboardfunc = keyboard_event;
+	dsInit.keyboardfunc = keyboard_event;
 	//dsInit.keySpecialfunc = keySpecial_event;
 	dsInit.timerfunc = call_run;
 	//dsInit.idlefunc = call_run;
@@ -609,7 +546,10 @@ int CVideoProcess::init()
 
 	moveDetectRect = false;
 	trackinfo_obj->trackfov=TVBIGFOV;
-
+#if __MOVE_DETECT__
+	initMvDetect();
+#endif
+	
 	return 0;
 }
 
@@ -671,6 +611,9 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 		if(pPrm!=NULL)
 		render=*(int *)pPrm;
 		m_display.dynamic_config(CDisplayer::DS_CFG_ChId, render, &m_curSubChId);
+		break;
+	case VP_CFG_MvDetect:
+		m_bMoveDetect = iPrm;
 		break;
 	default:
 		break;
@@ -1504,4 +1447,47 @@ int CVideoProcess::process_mtd(ALGMTD_HANDLE pChPrm, Mat frame_gray, Mat frame_d
 #endif
 	return 0;
 }
+
+#if __MOVE_DETECT__
+void	CVideoProcess::initMvDetect()
+{
+	int	i;
+	OSA_printf("%s:mvDetect start ", __func__);
+	OSA_assert(m_pMovDetector != NULL);
+
+	m_pMovDetector->init(NotifyFunc, (void*)this);
+	
+	std::vector<cv::Point> polyWarnRoi ;
+	polyWarnRoi.resize(4);
+	polyWarnRoi[0]	= cv::Point(70,80);
+	polyWarnRoi[1]	= cv::Point(70,390);
+	polyWarnRoi[2]	= cv::Point(660,80);
+	polyWarnRoi[3]	= cv::Point(660,390);
+	for(i=0; i<DETECTOR_NUM; i++)
+	{
+		m_pMovDetector->setWarningRoi(polyWarnRoi,	i);
+		m_pMovDetector->setDrawOSD(m_dccv, i);
+		m_pMovDetector->enableSelfDraw(false, i);
+		m_pMovDetector->setWarnMode(WARN_MOVEDETECT_MODE, i);
+	} 
+}
+
+void	CVideoProcess::DeInitMvDetect()
+{
+	if(m_pMovDetector != NULL)
+		m_pMovDetector->destroy();
+}
+
+void CVideoProcess::NotifyFunc(void *context, int chId)
+{
+	//int num;
+	CVideoProcess *pParent = (CVideoProcess*)context;
+	pParent->m_display.m_bOsd = true;
+
+	pThis->m_pMovDetector->getMoveTarget(pThis->detect_vect,0);
+
+	pParent->m_display.UpDateOsd(1);
+}
+
+#endif
 

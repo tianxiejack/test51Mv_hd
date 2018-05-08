@@ -1,9 +1,3 @@
-/*
- * VideoProcess.hpp
- *
- *  Created on:
- *      Author: sh
- */
 
 #ifndef VIDEOPROCESS_HPP_
 #define VIDEOPROCESS_HPP_
@@ -11,7 +5,6 @@
 #include "MultiChVideo.hpp"
 #include "Displayer.hpp"
 #include "UtcTrack.h"
-#include "clahe.h"
 #include "multitarget.h"
 #include "BlobDetector.h"
 #include "app_osdgrp.h"
@@ -19,7 +12,7 @@
 #include"osd_graph.h"
 
 #include "MMTD.h"
-//#include "BigVideo.hpp"
+#include "mvdetectInterface.hpp"
 
 typedef struct _main_thr_obj_cxt{
 	bool bTrack;
@@ -71,6 +64,7 @@ public:
 		VP_CFG_BlobEnable,
 		VP_CFG_MoveDectEnable,
 		VP_CFG_SubPicpChId,
+		VP_CFG_MvDetect,
 		VP_CFG_Max
 	}VP_CFG;
 	int dynamic_config(int type, int iPrm, void* pPrm = NULL);
@@ -216,6 +210,17 @@ protected: //track
 
 	CMMTD	m_MMTDObj;
 	TARGETBOX	m_tgtBox[MAX_TARGET_NUMBER];	
+
+#if __MOVE_DETECT__
+protected:
+	CMvDectInterface *m_pMovDetector;
+	void	initMvDetect();
+	void	DeInitMvDetect();
+	static void NotifyFunc(void *context, int chId);
+	std::vector<TRK_RECT_INFO> detect_vect;
+	std::vector<TRK_RECT_INFO> detect_bak;
+#endif
+
 };
 
 

@@ -23,6 +23,8 @@ class CProcess021 : public CVideoProcess
 	int prisensorstatus;
 	int Fovpri[2];
 	DS_Rectmmt Mmtpos[5];
+	DS_Rect random;
+	
 public:
 	CProcess021();
 	~CProcess021();

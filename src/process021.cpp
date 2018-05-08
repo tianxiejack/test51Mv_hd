@@ -7,12 +7,13 @@
 #include"app_ctrl.h"
 #include"dx.h"
 #include"osd_cv.h"
-
+#include "app_status.h"
 #include "configable.h"
 #include "Ipcctl.h"
 
 
 CProcess021 * CProcess021::sThis = NULL;
+static bool DrawMoveDetect = 0;
 CProcess021* plat = NULL;
 
 SENDST trkmsg={0};
@@ -1276,7 +1277,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 	int endy=0;
 	int crossshiftx=cvRound(vdisWH[0][0]/3);
 	int crossshifty=cvRound(vdisWH[0][1]/3);
-
+	int detect_num = 0,i;
 	int coastRectx,coastRecty;
 	
 	static int coastCnt = 1;
@@ -1287,7 +1288,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 	if(extInCtrl.changeSensorFlag == 1)
 		++changesensorCnt;
 	if(changesensorCnt == 3){
-		extInCtrl.changeSensorFlag =  0;
+		//extInCtrl.changeSewasnsorFlag =  0; //don't know
 		changesensorCnt = 0;
 	}
 	
@@ -1700,6 +1701,45 @@ osdindex++;
 			}
 		}
 	}
+
+	
+#if __MOVE_DETECT__
+	osdindex++;
+	{
+		
+		if(Osdflag[osdindex]==1)
+		{
+			detect_num = detect_bak.size();
+			for(i=0;i<detect_num;i++)
+			{	
+				;//DrawjsRect(m_dccv, detect_bak[i].targetRect,0);
+			}			
+			Osdflag[osdindex]=0;
+		}
+		if(m_bMoveDetect)
+		{
+			detect_num = detect_vect.size();		
+			DrawMoveDetect = 1;
+			for(i =0;i<detect_num;i++)
+			{
+				if(detect_vect[i].targetRect.width > 10 && detect_vect[i].targetRect.height > 10 )
+				{
+					//DrawjsRect(m_dccv, detect_vect[i].targetRect,2);
+					random.x = detect_vect[i].targetRect.x;
+					random.y = detect_vect[i].targetRect.y;
+					random.h = detect_vect[i].targetRect.height;
+					random.w =detect_vect[i].targetRect.width;	
+					
+				}
+			}		
+			detect_bak = detect_vect;
+			Osdflag[osdindex]=1;
+		}
+		else
+			DrawMoveDetect = 0 ;
+	}
+#endif	
+
 ///fov
 #if 0 //take a bak
 	osdindex++;
@@ -1819,6 +1859,11 @@ void CProcess021::OnKeyDwn(unsigned char key)
 		else
 			pIStuts->ImgEnhStat[pIStuts->SensorStat] = eImgAlg_Enable;
 		msgdriv_event(MSGID_EXT_INPUT_ENENHAN, NULL);
+	}
+
+	if (key == 'e' || key == 'E')
+	{
+		msgdriv_event(MSGID_EXT_MVDETECT, NULL);
 	}
 
 	if (key == 'o' || key == 'O')
@@ -2102,13 +2147,20 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 			pIStuts->AvtTrkAimSize = 2;
 			dynamic_config(VP_CFG_TrkEnable, 0);
-			pIStuts->unitAimX = pIStuts->unitAxisX[extInCtrl.SensorStat ] ;//- pIStuts->unitAimW/2;
+\
+			if(DrawMoveDetect)
+				pIStuts->unitAimX =  random.x+random.w/2;
+			else
+				pIStuts->unitAimX = pIStuts->unitAxisX[extInCtrl.SensorStat ] ;//- pIStuts->unitAimW/2;
 			if(pIStuts->unitAimX<0)
 			{
 				pIStuts->unitAimX=0;
 			}
-			
-			pIStuts->unitAimY = pIStuts->unitAxisY[extInCtrl.SensorStat ];// - pIStuts->unitAimH/2;
+			if(DrawMoveDetect)
+				pIStuts->unitAimY = random.y+random.h/2;
+			else
+				pIStuts->unitAimY = pIStuts->unitAxisY[extInCtrl.SensorStat ];// - pIStuts->unitAimH/2;
+
 			if(pIStuts->unitAimY<0)
 			{
 				pIStuts->unitAimY=0;
@@ -2694,6 +2746,22 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				//OSA_printf("the id=%d valid =%d\n",i+2,Mmtpos[i].valid);
 				m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, i+2, &Mmtpos[i].valid);	
 			}
+		}
+	}
+
+	if(msgId == MSGID_EXT_MVDETECT)
+	{	
+		static bool open_close_movedetect = 1;
+		
+		if(open_close_movedetect)
+		{
+			dynamic_config(VP_CFG_MvDetect, 1,NULL);
+			open_close_movedetect = 0;
+		}
+		else
+		{
+			dynamic_config(VP_CFG_MvDetect, 0,NULL);
+			open_close_movedetect = 1;
 		}
 	}
 	
