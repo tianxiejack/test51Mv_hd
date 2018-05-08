@@ -103,7 +103,6 @@ void* recv_msg(SENDST *RS422)
 	app_ctrl_getSysData(pMsg);
 
 	static CMD_EXT inCtrlPri = {0};
-	
 	//printf("recv++++++++ cmdID = %02x,imgID(%02x,%02x,%02x,%02x,%02x)\n",cmdID,imgID1,imgID2,imgID3,imgID4,imgID5);
 	switch(cmdID)
 	{	

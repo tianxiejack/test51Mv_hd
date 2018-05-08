@@ -522,7 +522,7 @@ int CVideoProcess::init()
 
 	memset(&dsInit, 0, sizeof(DS_InitPrm));
 	dsInit.mousefunc = mouse_event;
-	dsInit.keyboardfunc = keyboard_event;
+	//dsInit.keyboardfunc = keyboard_event;
 	//dsInit.keySpecialfunc = keySpecial_event;
 	dsInit.timerfunc = call_run;
 	//dsInit.idlefunc = call_run;
