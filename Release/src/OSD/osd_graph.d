@@ -245,7 +245,6 @@ src/OSD/osd_graph.o : ../src/OSD/osd_graph.cpp \
     /usr/include/c++/5/bits/stl_set.h \
     /usr/include/c++/5/bits/stl_multiset.h \
     /usr/include/opencv2/legacy/compat.hpp \
-    ../include/grpFont.h \
     ../include/app_status.h \
     ../include/app_proj_xgs026.h \
     ../include/dxutc/dx.h \
@@ -274,4 +273,5 @@ src/OSD/osd_graph.o : ../src/OSD/osd_graph.cpp \
     /usr/include/aarch64-linux-gnu/bits/fcntl2.h \
     ../include/dxutc/dx_config.h \
     ../include/app_ctrl.h \
-    ../include/APP/msgDriv.h
+    ../include/APP/msgDriv.h \
+    ../include/grpFont.h

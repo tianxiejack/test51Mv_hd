@@ -11,6 +11,7 @@ using namespace cv;
 
 int main(int argc, char **argv)
 {
+	printf("Oh my God \n\n");
 	CProcess021 proc;
 #ifdef __IPC__
 	Ipc_pthread_start();
@@ -29,8 +30,9 @@ int main(int argc, char **argv)
 
 //__IPC__
 //__MOVE_DETECT__
+//__TRACK__
 
 
 //__MMT__
 //__BLOCK__
-//__TRACK__
+

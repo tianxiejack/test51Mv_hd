@@ -265,7 +265,6 @@ src/process021.o : ../src/process021.cpp \
     /usr/local/cuda-8.0/bin/../targets/aarch64-linux/include/cuda_device_runtime_api.h \
     ../include/UtcTrack.h \
     ../include/PCTracker.h \
-    ../include/clahe.h \
     ../include/multitarget.h \
     ../include/BlobDetector.h \
     ../include/app_osdgrp.h \
@@ -273,42 +272,38 @@ src/process021.o : ../src/process021.cpp \
     ../include/app_proj_xgs026.h \
     ../include/osd_graph.h \
     /usr/include/opencv2/legacy/compat.hpp \
-    ../include/MeanShiftKalman.h \
-    ../include/Kalman.h \
-    ../include/prehead.h \
-    ../include/MSTracker.h \
     ../include/MMTD.h \
+    ../include/mvdetectInterface.hpp \
+    ../include/infoHead.h \
     ../include/osd_cv.h \
     ../src/vmath.h \
     ../include/APP/dx_main.h \
-    ../include/UartMessage.h \
-    /usr/include/unistd.h \
-    /usr/include/aarch64-linux-gnu/bits/posix_opt.h \
-    /usr/include/aarch64-linux-gnu/bits/environments.h \
-    /usr/include/aarch64-linux-gnu/bits/confname.h \
-    /usr/include/getopt.h \
-    /usr/include/aarch64-linux-gnu/bits/unistd.h \
-    /usr/include/aarch64-linux-gnu/sys/stat.h \
-    /usr/include/aarch64-linux-gnu/bits/stat.h \
-    /usr/include/fcntl.h \
-    /usr/include/aarch64-linux-gnu/bits/fcntl.h \
-    /usr/include/aarch64-linux-gnu/bits/fcntl-linux.h \
-    /usr/include/aarch64-linux-gnu/bits/uio.h \
-    /usr/include/aarch64-linux-gnu/bits/fcntl2.h \
-    /usr/include/termios.h \
-    /usr/include/aarch64-linux-gnu/bits/termios.h \
-    /usr/include/aarch64-linux-gnu/sys/ttydefaults.h \
-    /usr/include/errno.h \
-    /usr/include/aarch64-linux-gnu/bits/errno.h \
-    /usr/include/linux/errno.h \
-    /usr/include/aarch64-linux-gnu/asm/errno.h \
-    /usr/include/asm-generic/errno.h \
-    /usr/include/asm-generic/errno-base.h \
     ../include/APP/msgDriv.h \
     ../src/OSA_CAP/inc/osa_tsk.h \
     ../src/OSA_CAP/inc/osa_mbx.h \
     ../src/OSA_CAP/inc/osa_msgq.h \
     ../include/app_ctrl.h \
     ../include/dxutc/dx.h \
+    /usr/include/errno.h \
+    /usr/include/aarch64-linux-gnu/bits/errno.h \
+    /usr/include/linux/errno.h \
+    /usr/include/aarch64-linux-gnu/asm/errno.h \
+    /usr/include/asm-generic/errno.h \
+    /usr/include/asm-generic/errno-base.h \
     /usr/include/aarch64-linux-gnu/sys/wait.h \
-    ../include/dxutc/dx_config.h
+    /usr/include/aarch64-linux-gnu/sys/stat.h \
+    /usr/include/aarch64-linux-gnu/bits/stat.h \
+    /usr/include/unistd.h \
+    /usr/include/aarch64-linux-gnu/bits/posix_opt.h \
+    /usr/include/aarch64-linux-gnu/bits/environments.h \
+    /usr/include/aarch64-linux-gnu/bits/confname.h \
+    /usr/include/getopt.h \
+    /usr/include/aarch64-linux-gnu/bits/unistd.h \
+    /usr/include/fcntl.h \
+    /usr/include/aarch64-linux-gnu/bits/fcntl.h \
+    /usr/include/aarch64-linux-gnu/bits/fcntl-linux.h \
+    /usr/include/aarch64-linux-gnu/bits/uio.h \
+    /usr/include/aarch64-linux-gnu/bits/fcntl2.h \
+    ../include/dxutc/dx_config.h \
+    ../include/configable.h \
+    ../src/OSA_IPC/inc/Ipcctl.h

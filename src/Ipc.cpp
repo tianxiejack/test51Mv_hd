@@ -54,10 +54,10 @@ int  send_msgpth(SENDST * RS422)
 	memset(RS422,0,sizeof(char)*(PARAMLEN+1));
 	int bufId=0;
 	int sendLen=0;
-      OSA_bufGetFull(&msgSendBuf, &bufId, OSA_TIMEOUT_FOREVER);
-      memcpy(RS422, msgSendBuf.bufInfo[bufId].virtAddr,sizeof(SENDST));
-      OSA_bufPutEmpty(&msgSendBuf, bufId);
-      send_msg(RS422);
+	OSA_bufGetFull(&msgSendBuf, &bufId, OSA_TIMEOUT_FOREVER);
+	memcpy(RS422, msgSendBuf.bufInfo[bufId].virtAddr,sizeof(SENDST));
+	OSA_bufPutEmpty(&msgSendBuf, bufId);
+	send_msg(RS422);
 	return 0;
 }
 

@@ -78,7 +78,6 @@ src/MSGDRI/msgDriv.o : ../src/MSGDRI/msgDriv.cpp \
     ../include/APP/msgDriv.h \
     ../src/OSA_CAP/inc/osa_tsk.h \
     ../src/OSA_CAP/inc/osa_mbx.h \
-    ../include/APP/msgProssDef.h \
     ../include/dxutc/app_global.h \
     ../src/OSA_CAP/inc/osa_i2c.h \
     /usr/include/errno.h \

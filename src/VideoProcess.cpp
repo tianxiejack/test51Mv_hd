@@ -1449,6 +1449,7 @@ int CVideoProcess::process_mtd(ALGMTD_HANDLE pChPrm, Mat frame_gray, Mat frame_d
 }
 
 #if __MOVE_DETECT__
+#if 1
 void	CVideoProcess::initMvDetect()
 {
 	int	i;
@@ -1488,6 +1489,6 @@ void CVideoProcess::NotifyFunc(void *context, int chId)
 
 	pParent->m_display.UpDateOsd(1);
 }
-
+#endif
 #endif
 

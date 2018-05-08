@@ -77,33 +77,29 @@ src/app_ctrl.o : ../src/app_ctrl.cpp \
     ../src/OSA_CAP/inc/osa_tsk.h \
     ../src/OSA_CAP/inc/osa_mbx.h \
     ../src/OSA_CAP/inc/osa_msgq.h \
-    ../include/UartMessage.h \
-    /usr/include/unistd.h \
-    /usr/include/aarch64-linux-gnu/bits/posix_opt.h \
-    /usr/include/aarch64-linux-gnu/bits/environments.h \
-    /usr/include/aarch64-linux-gnu/bits/confname.h \
-    /usr/include/getopt.h \
-    /usr/include/aarch64-linux-gnu/bits/unistd.h \
-    /usr/include/aarch64-linux-gnu/sys/stat.h \
-    /usr/include/aarch64-linux-gnu/bits/stat.h \
-    /usr/include/fcntl.h \
-    /usr/include/aarch64-linux-gnu/bits/fcntl.h \
-    /usr/include/aarch64-linux-gnu/bits/fcntl-linux.h \
-    /usr/include/aarch64-linux-gnu/bits/uio.h \
-    /usr/include/aarch64-linux-gnu/bits/fcntl2.h \
-    /usr/include/termios.h \
-    /usr/include/aarch64-linux-gnu/bits/termios.h \
-    /usr/include/aarch64-linux-gnu/sys/ttydefaults.h \
+    ../include/dxutc/dx.h \
+    ../src/OSA_CAP/inc/osa_sem.h \
+    ../src/OSA_CAP/inc/osa_mutex.h \
     /usr/include/errno.h \
     /usr/include/aarch64-linux-gnu/bits/errno.h \
     /usr/include/linux/errno.h \
     /usr/include/aarch64-linux-gnu/asm/errno.h \
     /usr/include/asm-generic/errno.h \
     /usr/include/asm-generic/errno-base.h \
-    ../include/dxutc/dx.h \
-    ../src/OSA_CAP/inc/osa_sem.h \
-    ../src/OSA_CAP/inc/osa_mutex.h \
     /usr/include/ctype.h \
     /usr/include/aarch64-linux-gnu/sys/wait.h \
+    /usr/include/aarch64-linux-gnu/sys/stat.h \
+    /usr/include/aarch64-linux-gnu/bits/stat.h \
     /usr/include/assert.h \
+    /usr/include/unistd.h \
+    /usr/include/aarch64-linux-gnu/bits/posix_opt.h \
+    /usr/include/aarch64-linux-gnu/bits/environments.h \
+    /usr/include/aarch64-linux-gnu/bits/confname.h \
+    /usr/include/getopt.h \
+    /usr/include/aarch64-linux-gnu/bits/unistd.h \
+    /usr/include/fcntl.h \
+    /usr/include/aarch64-linux-gnu/bits/fcntl.h \
+    /usr/include/aarch64-linux-gnu/bits/fcntl-linux.h \
+    /usr/include/aarch64-linux-gnu/bits/uio.h \
+    /usr/include/aarch64-linux-gnu/bits/fcntl2.h \
     ../include/dxutc/dx_config.h

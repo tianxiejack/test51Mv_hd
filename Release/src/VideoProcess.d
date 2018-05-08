@@ -264,7 +264,6 @@ src/VideoProcess.o : ../src/VideoProcess.cpp \
     /usr/local/cuda-8.0/bin/../targets/aarch64-linux/include/cuda_device_runtime_api.h \
     ../include/UtcTrack.h \
     ../include/PCTracker.h \
-    ../include/clahe.h \
     ../include/multitarget.h \
     ../include/BlobDetector.h \
     ../include/app_osdgrp.h \
@@ -272,10 +271,9 @@ src/VideoProcess.o : ../src/VideoProcess.cpp \
     ../include/app_proj_xgs026.h \
     ../include/osd_graph.h \
     /usr/include/opencv2/legacy/compat.hpp \
-    ../include/MeanShiftKalman.h \
-    ../include/Kalman.h \
-    ../include/prehead.h \
-    ../include/MSTracker.h \
     ../include/MMTD.h \
+    ../include/mvdetectInterface.hpp \
+    ../include/infoHead.h \
     ../src/vmath.h \
-    ../include/arm_neon.h
+    ../include/arm_neon.h \
+    ../include/configable.h

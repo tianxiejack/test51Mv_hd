@@ -268,7 +268,6 @@ src/MultiChVideo.o : ../src/MultiChVideo.cpp \
     /usr/include/c++/5/set \
     /usr/include/c++/5/bits/stl_set.h \
     /usr/include/c++/5/bits/stl_multiset.h \
-    ../include/gpio_rdwr.h \
     /usr/include/fcntl.h \
     /usr/include/aarch64-linux-gnu/bits/fcntl.h \
     /usr/include/aarch64-linux-gnu/bits/fcntl-linux.h \

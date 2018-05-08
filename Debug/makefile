@@ -10,14 +10,12 @@ RM := rm -rf
 -include sources.mk
 -include subdir.mk
 -include src/subdir.mk
--include src/UART/subdir.mk
 -include src/OSD_CR/subdir.mk
 -include src/OSD/subdir.mk
+-include src/OSA_IPC/src/subdir.mk
 -include src/OSA_CAP/src/subdir.mk
 -include src/MSGDRI/subdir.mk
 -include src/LASERBLOB/subdir.mk
--include src/JPEG/subdir.mk
--include src/GPIO/subdir.mk
 -include src/DXUTC/subdir.mk
 -include src/APP/subdir.mk
 
@@ -62,19 +60,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: 026
+all: 51
 
 # Tool invocations
-026: $(OBJS) $(USER_OBJS)
+51: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: NVCC Linker'
-	/usr/local/cuda-8.0/bin/nvcc --cudart static -L/usr/lib/aarch64-linux-gnu -L/usr/lib/aarch64-linux-gnu/tegra -L/usr/local/cuda-8.0/targets/aarch64-linux-gnu/lib --relocatable-device-code=false -gencode arch=compute_20,code=compute_20 -gencode arch=compute_20,code=sm_20 -m64 -ccbin aarch64-linux-gnu-g++ -link -o  "026" $(OBJS) $(USER_OBJS) $(LIBS)
+	/usr/local/cuda-8.0/bin/nvcc --cudart static -L/usr/lib/aarch64-linux-gnu -L/usr/lib/aarch64-linux-gnu/tegra -L/usr/local/cuda-8.0/targets/aarch64-linux-gnu/lib --relocatable-device-code=false -gencode arch=compute_30,code=compute_30 -gencode arch=compute_30,code=sm_30 -m64 -ccbin aarch64-linux-gnu-g++ -link -o  "51" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CU_DEPS)$(CPP_DEPS)$(C_DEPS) 026
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CU_DEPS)$(CPP_DEPS)$(C_DEPS) 51
 	-@echo ' '
 
 .PHONY: all clean dependents

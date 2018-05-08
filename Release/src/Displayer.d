@@ -303,4 +303,6 @@ src/Displayer.o : ../src/Displayer.cpp \
     ../src/OSA_CAP/inc/osa_buf.h \
     ../src/OSA_CAP/inc/osa_que.h \
     ../include/enh.hpp \
-    ../src/cuda_mem.cpp
+    ../src/cuda_mem.cpp \
+    ../include/app_status.h \
+    ../include/app_proj_xgs026.h

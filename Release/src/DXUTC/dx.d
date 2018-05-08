@@ -103,20 +103,4 @@ src/DXUTC/dx.o : ../src/DXUTC/dx.cpp \
     ../include/dxutc/dx_priv.h \
     ../include/dxutc/script.h \
     ../include/dxutc/sys_config.h \
-    ../include/dxutc/port_tsk.h \
-    ../include/dxutc/port.h \
-    /usr/include/aarch64-linux-gnu/sys/mman.h \
-    /usr/include/aarch64-linux-gnu/bits/mman.h \
-    /usr/include/aarch64-linux-gnu/bits/mman-linux.h \
-    /usr/include/aarch64-linux-gnu/sys/ioctl.h \
-    /usr/include/aarch64-linux-gnu/bits/ioctls.h \
-    /usr/include/aarch64-linux-gnu/asm/ioctls.h \
-    /usr/include/asm-generic/ioctls.h \
-    /usr/include/linux/ioctl.h \
-    /usr/include/aarch64-linux-gnu/asm/ioctl.h \
-    /usr/include/asm-generic/ioctl.h \
-    /usr/include/aarch64-linux-gnu/bits/ioctl-types.h \
-    /usr/include/aarch64-linux-gnu/sys/ttydefaults.h \
-    ../include/dxutc/data_port.h \
-    ../include/dxutc/ipc_port.h \
     ../include/APP/app_user.h

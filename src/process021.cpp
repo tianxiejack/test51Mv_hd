@@ -1528,11 +1528,10 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 				
 				if((OSA_getCurTimeInMsec()-rememtime)>5000)
 				{							
-					extInCtrl.unitTrkStat=3;
+					extInCtrl.unitTrkStat=3;	
 				}
 				else
 				{
-
 					//printf("rcResult.xy =(%f,%f)   wh=(%f,%f)\n",rcResult.x,rcResult.y,rcResult.width,rcResult.height);
 					extInCtrl.unitTrkStat=2;
 				}
@@ -1565,12 +1564,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 				}
 				//OSA_printf("send ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
 				//handle date match to the platform need
-				extInCtrl.trkerrx = extInCtrl.trkerrx - VIDEO_IMAGE_WIDTH_0/2;
-				extInCtrl.trkerry = extInCtrl.trkerry - VIDEO_IMAGE_HEIGHT_0/2;
-				
-				ipc_settrack(extInCtrl.AvtTrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);//unitTrkStat
-				trkmsg.cmd_ID = read_shm_trkpos;
-				ipc_sendmsg(&trkmsg, IPC_FRIMG_MSG);
+
 				
 				//MSGAPI_AckSnd( AckTrkErr);
 				extInCtrl.TrkErrFeedback = 1;
@@ -1583,6 +1577,16 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 				extInCtrl.unitTrkStatpri=extInCtrl.unitTrkStat;
 				//MSGAPI_AckSnd( AckTrkType);
 			}
+
+			#if __IPC__
+					extInCtrl.trkerrx = extInCtrl.trkerrx - VIDEO_IMAGE_WIDTH_0/2;
+					extInCtrl.trkerry = extInCtrl.trkerry - VIDEO_IMAGE_HEIGHT_0/2;
+					//printf("@@@@@@@@@@extInCtrl.unitTrkStat = %d \n",extInCtrl.unitTrkStat);
+					ipc_settrack(extInCtrl.unitTrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);//unitTrkStat
+					trkmsg.cmd_ID = read_shm_trkpos;
+					ipc_sendmsg(&trkmsg, IPC_FRIMG_MSG);
+			#endif	
+				
 		 }
 		 else
 	 	{
@@ -1704,6 +1708,7 @@ osdindex++;
 
 	
 #if __MOVE_DETECT__
+#if 1
 	osdindex++;
 	{
 		
@@ -1738,6 +1743,7 @@ osdindex++;
 		else
 			DrawMoveDetect = 0 ;
 	}
+#endif
 #endif	
 
 ///fov

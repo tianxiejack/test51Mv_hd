@@ -296,5 +296,4 @@ src/APP/app_user.o : ../src/APP/app_user.cpp \
     /usr/include/c++/5/bits/stl_set.h \
     /usr/include/c++/5/bits/stl_multiset.h \
     /usr/include/opencv2/legacy/compat.hpp \
-    ../src/OSA_CAP/inc/osa_buf.h \
-    ../include/app_hardctrl.h
+    ../src/OSA_CAP/inc/osa_buf.h

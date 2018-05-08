@@ -103,20 +103,6 @@ src/DXUTC/config_menu.o : ../src/DXUTC/config_menu.cpp \
     ../include/dxutc/dx_priv.h \
     ../include/dxutc/script.h \
     ../include/dxutc/sys_config.h \
-    ../include/dxutc/port_tsk.h \
-    ../include/dxutc/port.h \
-    /usr/include/aarch64-linux-gnu/sys/mman.h \
-    /usr/include/aarch64-linux-gnu/bits/mman.h \
-    /usr/include/aarch64-linux-gnu/bits/mman-linux.h \
-    /usr/include/aarch64-linux-gnu/sys/ioctl.h \
-    /usr/include/aarch64-linux-gnu/bits/ioctls.h \
-    /usr/include/aarch64-linux-gnu/asm/ioctls.h \
-    /usr/include/asm-generic/ioctls.h \
-    /usr/include/linux/ioctl.h \
-    /usr/include/aarch64-linux-gnu/asm/ioctl.h \
-    /usr/include/asm-generic/ioctl.h \
-    /usr/include/aarch64-linux-gnu/bits/ioctl-types.h \
-    /usr/include/aarch64-linux-gnu/sys/ttydefaults.h \
     /usr/include/arpa/inet.h \
     /usr/include/netinet/in.h \
     /usr/lib/gcc/aarch64-linux-gnu/5/include/stdint.h \
