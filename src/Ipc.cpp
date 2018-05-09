@@ -152,7 +152,10 @@ void* recv_msg(SENDST *RS422)
 			app_ctrl_setEnhance(pMsg);
 			MSGAPI_msgsend(enh);
 			break;		
-		case trkdoor:		
+		case trkdoor:	
+	
+			inputtmp('K');
+			break;
 			memcpy(&Rtrkdoor,RS422->param,sizeof(Rtrkdoor));
 			imgID1 = Rtrkdoor.TrkBomenCtrl;
 			imgID2 = Rtrkdoor.AvtTrkAimSize;
