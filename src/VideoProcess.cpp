@@ -19,7 +19,7 @@ CVideoProcess * CVideoProcess::pThis = NULL;
 bool CVideoProcess::m_bTrack = false;
 bool CVideoProcess::m_bMtd = false;
 bool CVideoProcess::m_bBlobDetect = false;
-bool CVideoProcess::m_bMoveDetect = true;
+bool CVideoProcess::m_bMoveDetect = false;
 int CVideoProcess::m_iTrackStat = 0;
 int CVideoProcess::m_iTrackLostCnt = 0;
 int64 CVideoProcess::tstart = 0;
@@ -149,6 +149,7 @@ void CVideoProcess::main_proc_func()
 #endif		
 		if(bTrack)
 		{
+		#if __TRACK__
 			iTrackStat = ReAcqTarget();
 			if(Movedetect&&(iTrackStat==0))
 			{
@@ -304,6 +305,7 @@ void CVideoProcess::main_proc_func()
 					totaltime = 0.0;
 				}
 			}
+		#endif
 		}
 		else if(bMtd)
 		{
@@ -425,9 +427,9 @@ CVideoProcess::~CVideoProcess()
 int CVideoProcess::creat()
 {
 	int i = 0;
-	
+	#if __TRACK__
 	trackinfo_obj=(Track_InfoObj *)malloc(sizeof(Track_InfoObj));
-
+	#endif
 	m_display.create();
 
 	MultiCh.m_user = this;
@@ -522,7 +524,9 @@ int CVideoProcess::init()
 
 	memset(&dsInit, 0, sizeof(DS_InitPrm));
 	dsInit.mousefunc = mouse_event;
-	//dsInit.keyboardfunc = keyboard_event;
+#if (!__IPC__)
+	dsInit.keyboardfunc = keyboard_event;
+#endif
 	//dsInit.keySpecialfunc = keySpecial_event;
 	dsInit.timerfunc = call_run;
 	//dsInit.idlefunc = call_run;
@@ -545,7 +549,10 @@ int CVideoProcess::init()
 	prichnalid=1;//fir
 
 	moveDetectRect = false;
+#if __TRACK__
 	trackinfo_obj->trackfov=TVBIGFOV;
+#endif
+
 #if __MOVE_DETECT__
 	initMvDetect();
 #endif
@@ -602,9 +609,6 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 		break;
 	case VP_CFG_BlobEnable:
 		m_bBlobDetect = iPrm;
-		break;
-	case VP_CFG_MoveDectEnable:
-		m_bMoveDetect = iPrm;
 		break;
 	case VP_CFG_SubPicpChId:
 		m_curSubChId = iPrm;
@@ -692,6 +696,7 @@ int CVideoProcess::configEnhFromFile()
 }
 #endif
 
+
 int CVideoProcess::configAvtFromFile()
 {
 	string cfgAvtFile;
@@ -723,7 +728,7 @@ int CVideoProcess::configAvtFromFile()
 			}else
 				return -1;
 		}
-
+#if __TRACK__
 		UTC_DYN_PARAM dynamicParam;
 		if(cfg_blk_val[0] > 0)
 			dynamicParam.occlusion_thred = cfg_blk_val[0];
@@ -936,7 +941,7 @@ int CVideoProcess::configAvtFromFile()
 			UtcSetRoiMaxWidth(m_track, 400);
 
 		UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
-
+#endif
 		return 0;
 
 	}
@@ -993,8 +998,9 @@ int CVideoProcess::Algconfig()
 	}
 	
 //avtrack
+#if __TRACK__
 	configAvtFromFile();
-	
+#endif
 
 }
 
@@ -1002,7 +1008,10 @@ int CVideoProcess::run()
 {
 	MultiCh.run();
 	m_display.run();
+	
+	#if __TRACK__
 	m_track = CreateUtcTrk();
+	#endif
 	Algconfig();
 	for(int i=0; i<MAX_CHAN; i++){
 		m_mtd[i] = (target_t *)malloc(sizeof(target_t));
@@ -1020,7 +1029,11 @@ int CVideoProcess::run()
 int CVideoProcess::stop()
 {
 	if(m_track != NULL)
-		DestroyUtcTrk(m_track);
+	{
+		#if __TRACK__
+			DestroyUtcTrk(m_track);
+		#endif
+	}
 	m_track = NULL;
 	
 	m_display.stop();
@@ -1096,6 +1109,9 @@ void CVideoProcess::extractYUYV2Gray2(Mat src, Mat dst)
 		pDst8_t[y] = pSrc8_t[y*2];
 	}
 }
+
+
+#if __TRACK__
 void CVideoProcess::Track_fovreacq(int fov,int sensor,int sensorchange)
 {
 	//UTC_RECT_float rect;
@@ -1180,6 +1196,9 @@ int CVideoProcess::ReAcqTarget()
 	return iRet;
 
 }
+
+#endif
+
 extern void cutColor(cv::Mat src, cv::Mat &dst, int code);
 
 #define TM
@@ -1335,6 +1354,8 @@ int CVideoProcess::process_frame(int chId, Mat frame)
 	return 0;
 }
 
+
+#if __TRACK__
 int CVideoProcess::process_track(int trackStatus, Mat frame_gray, Mat frame_dis, UTC_RECT_float &rcResult)
 {
 	IMG_MAT image;
@@ -1416,6 +1437,9 @@ int CVideoProcess::process_track(int trackStatus, Mat frame_gray, Mat frame_dis,
 
 	return trackStatus;
 }
+
+#endif
+
 vector<Rect> Box(MAX_TARGET_NUMBER);
 int CVideoProcess::process_mtd(ALGMTD_HANDLE pChPrm, Mat frame_gray, Mat frame_dis)
 {
@@ -1449,7 +1473,6 @@ int CVideoProcess::process_mtd(ALGMTD_HANDLE pChPrm, Mat frame_gray, Mat frame_d
 }
 
 #if __MOVE_DETECT__
-#if 1
 void	CVideoProcess::initMvDetect()
 {
 	int	i;
@@ -1460,10 +1483,10 @@ void	CVideoProcess::initMvDetect()
 	
 	std::vector<cv::Point> polyWarnRoi ;
 	polyWarnRoi.resize(4);
-	polyWarnRoi[0]	= cv::Point(70,80);
-	polyWarnRoi[1]	= cv::Point(70,390);
-	polyWarnRoi[2]	= cv::Point(660,80);
-	polyWarnRoi[3]	= cv::Point(660,390);
+	polyWarnRoi[0]	= cv::Point(100,100);
+	polyWarnRoi[1]	= cv::Point(1820,100);
+	polyWarnRoi[2]	= cv::Point(1820,980);
+	polyWarnRoi[3]	= cv::Point(100,980);
 	for(i=0; i<DETECTOR_NUM; i++)
 	{
 		m_pMovDetector->setWarningRoi(polyWarnRoi,	i);
@@ -1489,6 +1512,5 @@ void CVideoProcess::NotifyFunc(void *context, int chId)
 
 	pParent->m_display.UpDateOsd(1);
 }
-#endif
 #endif
 

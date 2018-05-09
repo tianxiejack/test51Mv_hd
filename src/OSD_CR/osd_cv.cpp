@@ -359,8 +359,6 @@ void drawcvrect(Mat frame,int x,int y,int width,int height,int frcolor)
 	
 	CvScalar colour=GetcvColour(frcolor);
 	rectangle( frame,Point( x,y ),Point( x+width, y+height),colour, 1, 8);
-								
-
 }
 
 

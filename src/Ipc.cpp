@@ -102,7 +102,6 @@ void* recv_msg(SENDST *RS422)
 	memset(pMsg,0,sizeof(CMD_EXT));
 	app_ctrl_getSysData(pMsg);
 
-	static CMD_EXT inCtrlPri = {0};
 	//printf("recv++++++++ cmdID = %02x,imgID(%02x,%02x,%02x,%02x,%02x)\n",cmdID,imgID1,imgID2,imgID3,imgID4,imgID5);
 	switch(cmdID)
 	{	
@@ -122,7 +121,6 @@ void* recv_msg(SENDST *RS422)
 
 			app_ctrl_setTrkStat(pMsg); 
 			MSGAPI_msgsend(trk);			
-			inCtrlPri.AvtTrkStat = imgID1;
 			break;
 			
 		case mmt:
@@ -140,7 +138,6 @@ void* recv_msg(SENDST *RS422)
 			
 			app_ctrl_setMMT(pMsg);
 			MSGAPI_msgsend(mmt);
-			inCtrlPri.ImgMtdStat[pMsg->SensorStat] = imgID1;
 			
 			break;
 		case enh:
@@ -183,6 +180,27 @@ void* recv_msg(SENDST *RS422)
 			app_ctrl_setAimPos(pMsg);
 			MSGAPI_msgsend(posmove);
 			break;					
+
+		case sectrk:
+			if(pMsg->AvtTrkStat == 0)
+				break;
+			memcpy(&Rsectrk,RS422->param,sizeof(Rsectrk));
+			imgID1 = Rsectrk.SecAcqStat;
+			if(imgID1 == 1)
+			{
+				pMsg->unitAxisX[eSen_TV] = Rsectrk.ImgPixelX;
+				pMsg->unitAxisY[eSen_TV] = Rsectrk.ImgPixelY;
+				pMsg->AvtTrkStat = eTrk_mode_sectrk;
+				app_ctrl_setAxisPos(pMsg);
+			}
+			else if(imgID1 == 0)
+			{
+				pMsg->AvtTrkStat = eTrk_mode_target;	
+			}
+			app_ctrl_setTrkStat(pMsg); 
+			MSGAPI_msgsend(trk);
+			break;
+			
 		case exit_img:
 			MSGAPI_msgsend(exit_img);
 			ipc_loop = 0;			

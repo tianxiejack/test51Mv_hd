@@ -135,6 +135,8 @@ private:
 	int process_draw_instance(Mat frame);
 	int draw_circle_display(Mat frame);
 
+	void	DrawRect(Mat frame,cv::Rect rec,int frcolor);
+
 
 	
 };

@@ -62,7 +62,6 @@ public:
 		VP_CFG_TrkEnable,
 		VP_CFG_MtdEnable,
 		VP_CFG_BlobEnable,
-		VP_CFG_MoveDectEnable,
 		VP_CFG_SubPicpChId,
 		VP_CFG_MvDetect,
 		VP_CFG_Max
@@ -147,8 +146,6 @@ protected:
 	float lapScaler;
 	int lumThred;
 
-	Track_InfoObj *trackinfo_obj;
-
 	FILE *m_pwFile;
 
 	int configEnhFromFile();
@@ -157,11 +154,15 @@ protected:
 	
 	void process_event(int type, int iPrm, void *pPrm);
 	int process_frame(int chId, Mat frame);
-	int process_track(int trackStatus, Mat frame_gray, Mat frame_dis, UTC_RECT_float &rcResult);
 	int process_mtd(ALGMTD_HANDLE pChPrm, Mat frame_gray, Mat frame_dis);
+
+	#if __TRACK__
+	Track_InfoObj *trackinfo_obj;
+	int process_track(int trackStatus, Mat frame_gray, Mat frame_dis, UTC_RECT_float &rcResult);
 	int ReAcqTarget();
 	void Track_reacq(UTC_RECT_float & m_rcTrack,int acqinterval);
 	void Track_fovreacq(int fov,int sensor,int sensorchange);
+	#endif
 	
 
 	static int m_mouseEvent, m_mousex, m_mousey;

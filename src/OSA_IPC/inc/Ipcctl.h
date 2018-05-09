@@ -218,11 +218,9 @@ typedef struct{
 }CMD_TRK;
 	
 typedef struct{
-	volatile unsigned char SecAcqStat;// eSecTrkMode 
-	volatile unsigned char ImgPixelX1;// SecTrk X1
-	volatile unsigned char ImgPixelX2;// SecTrk X2
-	volatile unsigned char ImgPixelY1;// SecTrk Y1
-	volatile unsigned char ImgPixelY2;// SecTrk Y2
+	volatile unsigned char SecAcqStat;// eSecTrkMode
+	volatile  int ImgPixelX; //SecTrk X
+	volatile  int ImgPixelY; //SecTrk Y
 }CMD_SECTRK;
 
 typedef struct{

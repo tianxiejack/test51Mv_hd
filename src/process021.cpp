@@ -10,6 +10,7 @@
 #include "app_status.h"
 #include "configable.h"
 #include "Ipcctl.h"
+#include "osd_cv.h"
 
 
 CProcess021 * CProcess021::sThis = NULL;
@@ -627,6 +628,15 @@ void CProcess021::DrawCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 	lineparm.height	=	AXIS_HEIGHT_FOV0;
 	lineparm.frcolor	=	colour;
 	Drawcvcrossaim(m_dccv,&lineparm);
+}
+
+void CProcess021::DrawRect(Mat frame,cv::Rect rec,int frcolor)
+{
+	int x = rec.x,y = rec.y;
+	int width = rec.width;
+	int height = rec.height;
+	drawcvrect(frame,x,y,width,height,frcolor);
+	return ;
 }
 
 
@@ -1371,7 +1381,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 		crosspicpBak.y=starty;
 
 	}
-
+#if __TRACK__
 	osdindex++;
 	{
 		 UTC_RECT_float rcResult = m_rcTrack;
@@ -1594,6 +1604,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 			extInCtrl.TrkErrFeedback = 0;
 	 	}
 	}
+#endif
 
 	//mtd
 osdindex++;
@@ -1717,7 +1728,7 @@ osdindex++;
 			detect_num = detect_bak.size();
 			for(i=0;i<detect_num;i++)
 			{	
-				;//DrawjsRect(m_dccv, detect_bak[i].targetRect,0);
+				DrawRect(m_dccv, detect_bak[i].targetRect,0);
 			}			
 			Osdflag[osdindex]=0;
 		}
@@ -1727,9 +1738,9 @@ osdindex++;
 			DrawMoveDetect = 1;
 			for(i =0;i<detect_num;i++)
 			{
-				if(detect_vect[i].targetRect.width > 10 && detect_vect[i].targetRect.height > 10 )
+				if(detect_vect[i].targetRect.width > 20 && detect_vect[i].targetRect.height > 20 )
 				{
-					//DrawjsRect(m_dccv, detect_vect[i].targetRect,2);
+					DrawRect(m_dccv, detect_vect[i].targetRect,2);
 					random.x = detect_vect[i].targetRect.x;
 					random.y = detect_vect[i].targetRect.y;
 					random.h = detect_vect[i].targetRect.height;
@@ -1867,8 +1878,9 @@ void CProcess021::OnKeyDwn(unsigned char key)
 		msgdriv_event(MSGID_EXT_INPUT_ENENHAN, NULL);
 	}
 
-	if (key == 'e' || key == 'E')
+	if (key == 'k' || key == 'K')
 	{
+		printf("kkkkkkkkkkkkkkkk\n");
 		msgdriv_event(MSGID_EXT_MVDETECT, NULL);
 	}
 
@@ -3216,6 +3228,7 @@ void CProcess021::MSGAPI_inputfovselect(long lParam )
 		//OSA_printf("FovStat = %d SensorStat=%d\n",pIStuts->FovStat,pIStuts->SensorStat);
 		if(pIStuts->SensorStat == 0)
 		{
+		#if __TRACK__
 			if(pIStuts->FovStat == 1)
 				sThis->Track_fovreacq( 2400,pIStuts->SensorStat,0);
 			else if(pIStuts->FovStat == 3)
@@ -3225,21 +3238,25 @@ void CProcess021::MSGAPI_inputfovselect(long lParam )
 			else if(pIStuts->FovStat == 5){
 				sThis->Track_fovreacq( 55,pIStuts->SensorStat,0);
 			}
+		#endif
 		}
 		else if(pIStuts->SensorStat == 1){
+		#if __TRACK__
 			if(pIStuts->FovStat == 1)
 				sThis->Track_fovreacq( 4000,pIStuts->SensorStat,0);
 			else if(pIStuts->FovStat == 4)
 				sThis->Track_fovreacq( 120,pIStuts->SensorStat,0);
 			else if(pIStuts->FovStat == 5)
 				sThis->Track_fovreacq( 60,pIStuts->SensorStat,0);
-
+		#endif
 		}
 
 		//OSA_printf("fovselectXY(%f,%f),WH(%f,%f)\n",sThis->trackinfo_obj->reAcqRect.x,sThis->trackinfo_obj->reAcqRect.y,sThis->trackinfo_obj->reAcqRect.width,sThis->trackinfo_obj->reAcqRect.height);
+		#if __TRACK__
 		if(pIStuts->AvtTrkStat){	
 			sThis->Track_reacq(sThis->trackinfo_obj->reAcqRect,2);
 		}
+		#endif
 	}
 }
 
@@ -3257,8 +3274,9 @@ void CProcess021::MSGAPI_inputfovchange(long lParam )
 	#endif
 
 	//OSA_printf("%s:unitFovAngle = %f\n",__func__,pIStuts->unitFovAngle[pIStuts->SensorStat]);
+	#if __TRACK__
 	sThis->Track_fovreacq( pIStuts->unitFovAngle[pIStuts->SensorStat],pIStuts->SensorStat,0);
-
+	#endif
 }
 
 

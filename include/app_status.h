@@ -137,8 +137,8 @@ typedef struct
     // trk real-time info
     volatile unsigned int unitTrkStatpri;
     volatile unsigned int  unitTrkStat;     // acp/trk/assi/lost
-    volatile unsigned int  unitAxisX[eSen_Max];     // pixel
-    volatile unsigned int  unitAxisY[eSen_Max];     // pixel
+    volatile  int  unitAxisX[eSen_Max];     // pixel
+    volatile  int  unitAxisY[eSen_Max];     // pixel
     volatile  int  unitAxisXtmp[eSen_Max];     // pixel
     volatile  int  unitAxisYtmp[eSen_Max];     // pixel
     volatile unsigned int  unitAimW;      // aim size

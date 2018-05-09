@@ -697,31 +697,18 @@ void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
      	CMD_EXT *pIStuts = msgextInCtrl;
     int iMoveMask =0;	
 
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
-
     if (pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
     {
         pIStuts->AvtPosXTv = pInCmd->AvtPosXTv;
         pIStuts->AvtPosYTv = pInCmd->AvtPosYTv;
         iMoveMask++;
     }
-        if (pIStuts->AvtPosXFir!= pInCmd->AvtPosXFir || pIStuts->AvtPosYFir!= pInCmd->AvtPosYFir)
-    {
-        pIStuts->AvtPosXFir = pInCmd->AvtPosXFir;
-        pIStuts->AvtPosYFir = pInCmd->AvtPosYFir;
-        iMoveMask++;
-    }
 
-  //  if(iMoveMask)
+    if(iMoveMask)
     {
-        //OSA_printf("cmdType:%x\n",pIStuts->CmdType);
         MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
     }
- 
-        /***for **reply*****/	
-        //MSGAPI_AckSnd( ACK);
-   
+
    return ;
 }
 
