@@ -1589,8 +1589,16 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 			}
 
 			#if __IPC__
-					extInCtrl.trkerrx = extInCtrl.trkerrx - VIDEO_IMAGE_WIDTH_0/2;
-					extInCtrl.trkerry = extInCtrl.trkerry - VIDEO_IMAGE_HEIGHT_0/2;
+					if(extInCtrl.unitTrkStat != 3)
+					{
+						extInCtrl.trkerrx = extInCtrl.trkerrx - VIDEO_IMAGE_WIDTH_0/2;
+						extInCtrl.trkerry = extInCtrl.trkerry - VIDEO_IMAGE_HEIGHT_0/2;
+					}
+					else
+					{
+						extInCtrl.trkerrx = 0;
+						extInCtrl.trkerry = 0;
+					}
 					//printf("@@@@@@@@@@extInCtrl.unitTrkStat = %d \n",extInCtrl.unitTrkStat);
 					ipc_settrack(extInCtrl.unitTrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);//unitTrkStat
 					trkmsg.cmd_ID = read_shm_trkpos;
