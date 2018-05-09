@@ -106,19 +106,14 @@ void* recv_msg(SENDST *RS422)
 	switch(cmdID)
 	{	
 		case trk:	
-			printf("11111111111\n\n");
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;
 
 			if(imgID1 == 0x1)
 				pMsg->AvtTrkStat =eTrk_mode_target;
-			else if(imgID1 == 0x2)		             
-				pMsg->AvtTrkStat =eTrk_mode_mtd;
-			else if(imgID1 == 0x3)
-				pMsg->AvtTrkStat =eTrk_mode_sectrk;
 			else
 				pMsg->AvtTrkStat = eTrk_mode_acq;
-
+			
 			app_ctrl_setTrkStat(pMsg); 
 			MSGAPI_msgsend(trk);			
 			break;
@@ -179,28 +174,27 @@ void* recv_msg(SENDST *RS422)
 			pMsg->AvtMoveY = imgID2;
 			app_ctrl_setAimPos(pMsg);
 			MSGAPI_msgsend(posmove);
-			break;					
-
+			break;	
 		case sectrk:
-			if(pMsg->AvtTrkStat == 0)
-				break;
 			memcpy(&Rsectrk,RS422->param,sizeof(Rsectrk));
-			imgID1 = Rsectrk.SecAcqStat;
-			if(imgID1 == 1)
+			imgID1 = Rsectrk.SecAcqStat ;
+
+			pMsg->AvtPosXTv = Rsectrk.ImgPixelX;
+			pMsg->AvtPosYTv = Rsectrk.ImgPixelY;
+			printf("Rsectrk.ImgPixelX =%d",Rsectrk.ImgPixelX);
+			printf("\tRsectrk.ImgPixelY =%d\n",Rsectrk.ImgPixelY);
+			app_ctrl_setAxisPos(pMsg);
+			if(1 == imgID1)
+				pMsg->AvtTrkStat =eTrk_mode_search;
+			else if(0 == imgID1)
 			{
-				pMsg->unitAxisX[eSen_TV] = Rsectrk.ImgPixelX;
-				pMsg->unitAxisY[eSen_TV] = Rsectrk.ImgPixelY;
-				pMsg->AvtTrkStat = eTrk_mode_sectrk;
-				app_ctrl_setAxisPos(pMsg);
-			}
-			else if(imgID1 == 0)
-			{
-				pMsg->AvtTrkStat = eTrk_mode_target;	
-			}
-			app_ctrl_setTrkStat(pMsg); 
-			MSGAPI_msgsend(trk);
+				pMsg->AvtTrkStat = eTrk_mode_sectrk;	
+				app_ctrl_setTrkStat(pMsg);
+				printf("enter trk again \n\n");
+			}			
+			MSGAPI_msgsend(sectrk);						
 			break;
-			
+		
 		case exit_img:
 			MSGAPI_msgsend(exit_img);
 			ipc_loop = 0;			
@@ -276,6 +270,10 @@ int send_msg(SENDST *RS422)
 			}
 			printf("send ++++++++++ AvtMoveXY = (%02x,%02x)  ++++++++++\n",RS422->param[0],RS422->param[1]);				
 			break;
+		case sectrk:
+			RS422->param[0] = pIStuts.AvtTrkStat;
+			printf("send ++++++++++ AvtTrkStat %02x  ++++++++++\n",RS422->param[0]);			
+			break;							
 		case exit_img:					
 			break;
 		default:

@@ -16,7 +16,7 @@
 #define SHMEMSTATUSSIZE 200
 #define SHMEMFRAMESIZE 10485760
 #define MMTNUM 10
-#define PARAMLEN 10
+#define PARAMLEN 12
 
 typedef enum 
 {

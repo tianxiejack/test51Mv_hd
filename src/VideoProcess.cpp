@@ -1174,6 +1174,7 @@ void CVideoProcess::Track_reacq(UTC_RECT_float & rcTrack,int acqinterval)
 
 int CVideoProcess::ReAcqTarget()
 {
+	//printf("m_intervalFrame = %d \n\n",m_intervalFrame);
 	int iRet = m_iTrackStat;
 	if(m_bakChId != m_curChId){
 		iRet = 0;
@@ -1189,7 +1190,7 @@ int CVideoProcess::ReAcqTarget()
 			iRet = 0;
 			m_rcTrack = m_rcAcq;
 			m_iTrackLostCnt = 0;
-			//OSA_printf("++++++++++++++++++++++++++++\n");
+			OSA_printf("++++++++++++++++++++++++++++\n");
 		}
 	}
 

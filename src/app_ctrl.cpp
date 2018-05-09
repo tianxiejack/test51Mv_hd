@@ -131,13 +131,13 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 		return ;
      CMD_EXT *pIStuts = msgextInCtrl;
 
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
+    //if(pInCmd->CmdType != pIStuts->CmdType)
+    //    pIStuts->CmdType = pInCmd->CmdType;
 
     if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
         pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
 	
-    if (pInCmd->AvtTrkStat != pIStuts->AvtTrkStat)
+    if ((pInCmd->AvtTrkStat != pIStuts->AvtTrkStat) || pIStuts->AvtTrkStat == eTrk_mode_sectrk)
     {
         pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
 	 if((pIStuts->AvtTrkStat==eTrk_mode_search)||(pIStuts->AvtTrkStat==eTrk_mode_sectrk))
@@ -268,14 +268,13 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
 {
            if(msgextInCtrl==NULL)
 		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
- 
+    CMD_EXT *pIStuts = msgextInCtrl;
 	
-    if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
+    //if(pInCmd->CmdType != pIStuts->CmdType)
+	//pIStuts->CmdType = pInCmd->CmdType;
 
     if(pInCmd->FovMov!= pIStuts->FovMov)
-		pIStuts->FovMov= pInCmd->FovMov;
+	pIStuts->FovMov= pInCmd->FovMov;
 	
     if (pIStuts->AvtMoveX != pInCmd->AvtMoveX ||pIStuts->AvtMoveY != pInCmd->AvtMoveY)
     {
@@ -292,7 +291,6 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
     
     if((pIStuts->CmdType == 0x07) &&(iChangeMask))
     {
-	  //OSA_printf("cmdType:%d\n",pIStuts->CmdType);
          MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
         iChangeMask = 0;
     }

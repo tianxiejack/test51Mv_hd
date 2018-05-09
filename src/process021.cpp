@@ -2173,7 +2173,7 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 			pIStuts->AvtTrkAimSize = 2;
 			dynamic_config(VP_CFG_TrkEnable, 0);
-\
+			
 			if(DrawMoveDetect)
 				pIStuts->unitAimX =  random.x+random.w/2;
 			else
@@ -2240,7 +2240,7 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				pIStuts->unitAimY=pIStuts->unitMtdPixelY;
 		 	}
 
-				if(pIStuts->unitMtdValid)
+			if(pIStuts->unitMtdValid)
 			{
 				tempvalue=pIStuts->unitMtdPixelX;
 					//- pIStuts->unitAimW/2;
@@ -2279,7 +2279,7 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			//return ;
 		}
 
-		OSA_printf(" %d:%s set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
+		OSA_printf(" %d:%s 111set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
 					   procStr[pIStuts->AvtTrkStat]);
 		UTC_RECT_float rc;
 		if((pIStuts->FovCtrl==5)&&(pIStuts->SensorStat==0))
@@ -2324,6 +2324,11 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			}
 			else
 			{
+				printf("pIStuts->unitAimX = %d   ,  pIStuts->unitAimY = %d \n",pIStuts->unitAimX,pIStuts->unitAimY);
+				if(pIStuts->AvtTrkStat == eTrk_mode_sectrk){
+					pIStuts->unitAimX = pIStuts->unitAxisX[eSen_TV];
+					pIStuts->unitAimY = pIStuts->unitAxisY[eSen_TV];
+				}
 				rc.x=pIStuts->unitAimX-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
 				rc.y=pIStuts->unitAimY-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
 				rc.width= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
@@ -2331,16 +2336,15 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			}
 		}
 			
-		//OSA_printf("rc. xy(%f,%f),wh(%f,%f)\n",rc.x,rc.y,rc.width,rc.height);
+		OSA_printf("rc. xy(%f,%f),wh(%f,%f)\n",rc.x,rc.y,rc.width,rc.height);
 		dynamic_config(VP_CFG_TrkEnable, 1,&rc);
-		if((pIStuts->AvtTrkStat == eTrk_mode_sectrk)||(pIStuts->AvtTrkStat == eTrk_mode_search))
+		if(pIStuts->AvtTrkStat == eTrk_mode_sectrk)
 		{
 			m_intervalFrame=2;
 			m_rcAcq=rc;
 			pIStuts->AvtTrkStat = eTrk_mode_target;
 			
-			OSA_printf("***********************set sec track\n ");
-			
+			OSA_printf("***********************set sec track\n ");	
 		}
 	//	printf("the rc.x=%d rc.y=%d ,unitAimX=%d  unitAimY=%d \n",rc.x,rc.y,pIStuts->unitAimX,pIStuts->unitAimY);
 	//	printf("w=%d h=%d\n",pIStuts->unitAimW,pIStuts->unitAimH);
