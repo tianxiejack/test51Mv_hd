@@ -141,12 +141,12 @@ void* recv_msg(SENDST *RS422)
 			
 			if(imgID1 == 1)
 			{
-				pMsg->ImgEnhStat[0] = ipc_eImgAlg_Enable;
+				pMsg->ImgEnhStat[eSen_TV] = ipc_eImgAlg_Enable;
 
 			}
 			else if(imgID1 == 0)
 			{
-				pMsg->ImgEnhStat[0] = ipc_eImgAlg_Disable;
+				pMsg->ImgEnhStat[eSen_TV] = ipc_eImgAlg_Disable;
 			}
 			
 			app_ctrl_setEnhance(pMsg);

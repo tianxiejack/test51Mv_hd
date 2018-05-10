@@ -1051,7 +1051,7 @@ void CDisplayer::gl_textureLoad(void)
 				//printf("chId =%d w=%d h=%d c=%d\n",chId,m_img[chId].cols,m_img[chId].rows,m_img[chId].channels());
 				OSA_assert(pbo == buffId_input[chId]);
 
-				#if 0
+				#if 1
 				cudaResource_RegisterBuffer(chId, pbo, byteCount);
 				cudaResource_mapBuffer(chId, (void **)&dev_pbo, &tmpSize);
 				#endif
@@ -1167,8 +1167,14 @@ void CDisplayer::gl_textureLoad(void)
 					Mat dst = dism_img[chId];
 					//dst.data = dev_pbo;
 					dst.data = x11m_img.data;
+
+
+					//Mat dst = m_img[chId];
+					//dst.data = dev_pbo;
+					cuClahe( dism_img[chId],dst, 4,4,3.5,1);
 					//enhancetime = getTickCount();
 					//int64 enhtstart = getTickCount();
+					
 					#if 0
 					#if HISTEN
 					cuHistEnh( m_img[chId], dst);
@@ -1180,6 +1186,7 @@ void CDisplayer::gl_textureLoad(void)
 					cuHistEnh( m_img[chId], dst);
 					#endif
 					#else
+					/*
 					if(chId==0)//tv enh
 					{	
 						if(enhancemod==0)
@@ -1205,6 +1212,8 @@ void CDisplayer::gl_textureLoad(void)
 					}
 					else
 						cuUnhazed( dism_img[chId], dst);
+					*/
+						
 					
 					if(m_renders[chId].videodect)
 					{
@@ -1215,102 +1224,51 @@ void CDisplayer::gl_textureLoad(void)
 						//cudaMemcpy(dev_pbo, m_img_novideo.data, byteCount, cudaMemcpyDeviceToDevice);
 						cudaMemcpy(x11disbuffer, m_img_novideo.data,byteCount, cudaMemcpyDeviceToHost);
 					}
-
-
 					#endif
 					//m_initPrm.timerInterval=16;
 					//OSA_printf("chId = %d, enhance: time = %f sec \n", chId, ( (getTickCount() - enhancetime)/getTickFrequency()) );
-					#if  0//test enh process time
-					int time = ( (getTickCount() - enhtstart)/getTickFrequency())*1000;
-					static int totaltime = 0;
-					static int count11 = 1;
-					totaltime += time;
-					if((count11++)%100 == 0)
-					{
-						OSA_printf("ALL-ENH: time = %f msec \n", totaltime/100.0 );
-						//OSA_printf("ALL-MTD: time = %d msec \n", time);
-						count11 = 1;
-						totaltime=0;
-					}
-					#endif
 				}
 				else
 				{
-					//m_bEnh[chId^1]=m_bEnh[chId];
-					//if(chId==3)
-					//printf("m_img_novideom_renders[chId=%d winId=%d].videodect=%d\n",chId,winId,m_renders[winId].videodect);
-						if(m_renders[chId].videodect)
-							{
-								//cudaMemcpy(dev_pbo, m_img[chId].data, byteCount, cudaMemcpyDeviceToDevice);
-								cudaMemcpy(x11disbuffer, dism_img[chId].data,byteCount, cudaMemcpyDeviceToHost);
-							}
-						else
-							{
-								//cudaMemcpy(dev_pbo, m_img_novideo.data, byteCount, cudaMemcpyDeviceToDevice);
-								cudaMemcpy(x11disbuffer, m_img_novideo.data,byteCount, cudaMemcpyDeviceToHost);
-							}
-						//m_initPrm.timerInterval=8;
-						
+					if(m_renders[chId].videodect)
+					{
+						//cudaMemcpy(dev_pbo, m_img[chId].data, byteCount, cudaMemcpyDeviceToDevice);
+						cudaMemcpy(x11disbuffer, dism_img[chId].data,byteCount, cudaMemcpyDeviceToHost);
+					}
+					else
+					{
+						//cudaMemcpy(dev_pbo, m_img_novideo.data, byteCount, cudaMemcpyDeviceToDevice);
+						cudaMemcpy(x11disbuffer, m_img_novideo.data,byteCount, cudaMemcpyDeviceToHost);
+					}
 				}
 
 				//add for kaidun
-					#if 1
+				#if 1
 					if((disbuffer==0)&&(chId==0))
 						OSA_bufPutEmpty(&tskSendBuftv, bufid);
 					else if((disbuffer==0)&&(chId==1))
 						OSA_bufPutEmpty(&tskSendBuffir, bufid);
 				#endif
 			
-
-
-				#if 0
-				cudaResource_unmapBuffer(chId);
-				cudaResource_UnregisterBuffer(chId);
-				#endif
 			}
-#if 0
-			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buffId_input[chId]);
-			glBindTexture(GL_TEXTURE_2D, textureId_input[chId]);
-			if(m_img[chId].channels() == 1){
-				glTexImage2D(GL_TEXTURE_2D, 0, m_videoSize[chId].c, m_videoSize[chId].w, m_videoSize[chId].h, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
-				//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_videoSize[chId].w, m_videoSize[chId].h, GL_RED, GL_UNSIGNED_BYTE, NULL);
-			}else{
-				//glTexImage2D(GL_TEXTURE_2D, 0, m_videoSize[chId].c, m_videoSize[chId].w, m_videoSize[chId].h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, NULL);
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_videoSize[chId].w, m_videoSize[chId].h, GL_BGR_EXT, GL_UNSIGNED_BYTE, NULL);
-			}
-			glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-
-//			OSA_mutexUnlock(&m_mutex);
-			///
-
-#else
-			
-			
 			glBindTexture(GL_TEXTURE_2D, textureId_input[chId]);
 			if(dism_img[chId].channels() == 1){
 				if(!m_renders[winId].bFreeze)
 				glTexImage2D(GL_TEXTURE_2D, 0, m_videoSize[chId].c, m_videoSize[chId].w, m_videoSize[chId].h, 0, GL_RED, GL_UNSIGNED_BYTE, x11disbuffer);
-				;
-				//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_videoSize[chId].w, m_videoSize[chId].h, GL_RED, GL_UNSIGNED_BYTE, NULL);
 			}else{
-				//glTexImage2D(GL_TEXTURE_2D, 0, m_videoSize[chId].c, m_videoSize[chId].w, m_videoSize[chId].h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, NULL);
 				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_videoSize[chId].w, m_videoSize[chId].h, GL_BGR_EXT, GL_UNSIGNED_BYTE, x11disbuffer);
 			}
-			//glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
-
-#endif
 			mask |= (1<<chId);
 		}
 	}
 
-	//if(m_bOsd&&0)
 	if(m_bOsd)
 	{
 		for(int i=1; i<DS_DC_CNT;  i++)
 		{
 			if(updata_osd[i])
-				{
+			{
 				glBindTexture(GL_TEXTURE_2D, textureId_osd[i]);
 				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_imgOsd[i].cols, m_imgOsd[i].rows, GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_disOsd[i].data);
 				updata_osd[i] = false;

@@ -182,35 +182,30 @@ void app_ctrl_setMmtSelect(CMD_EXT * pInCmd)
 
 void app_ctrl_setMMT(CMD_EXT * pInCmd)
 {
-  if(msgextInCtrl==NULL)
+	if(msgextInCtrl==NULL)
 		return ;
-     CMD_EXT *pIStuts = msgextInCtrl;
+	CMD_EXT *pIStuts = msgextInCtrl;
 
-    if(pInCmd->CmdType != pIStuts->CmdType)
+	if(pInCmd->CmdType != pIStuts->CmdType)
 		pIStuts->CmdType = pInCmd->CmdType;
-	
-     if(pInCmd->MMTTempStat != pIStuts->MMTTempStat)
-	 	pIStuts->MMTTempStat = pInCmd->MMTTempStat;
 
-    if (pIStuts->ImgMtdStat[0] != pInCmd->ImgMtdStat[0] || pIStuts->ImgMtdStat[1] != pInCmd->ImgMtdStat[1])
-    {     
-        pIStuts->ImgMtdStat[0] = pInCmd->ImgMtdStat[0];
-        pIStuts->ImgMtdStat[1] = pInCmd->ImgMtdStat[1];
-        if(pInCmd->AvtTrkStat == eTrk_mode_acq)
-        	{
-            MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
-		//MSGAPI_AckSnd(AckMtdStat);
-        	}
-        else
-           ;//MSGAPI_AckSnd(AckMtdStat);
-    }
-   else
-        ;//MSGAPI_AckSnd(  AckMtdStat);
+	if(pInCmd->MMTTempStat != pIStuts->MMTTempStat)
+		pIStuts->MMTTempStat = pInCmd->MMTTempStat;
 
-   if(pIStuts->MMTTempStat==3||pIStuts->MMTTempStat==4)
-   	{
+	if (pIStuts->ImgMtdStat[0] != pInCmd->ImgMtdStat[0] || pIStuts->ImgMtdStat[1] != pInCmd->ImgMtdStat[1])
+	{     
+		pIStuts->ImgMtdStat[0] = pInCmd->ImgMtdStat[0];
+		pIStuts->ImgMtdStat[1] = pInCmd->ImgMtdStat[1];
+		if(pInCmd->AvtTrkStat == eTrk_mode_acq)
+		{
+		    MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
+		}
+	}
+
+	if(pIStuts->MMTTempStat==3||pIStuts->MMTTempStat==4)
+	{
 		MSGDRIV_send(MSGID_EXT_INPUT_MTD_SELECT, 0);
-   	}
+	}
    
    return ;
 }
