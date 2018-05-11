@@ -1725,9 +1725,12 @@ osdindex++;
 		}
 	}
 
+
 	
 #if __MOVE_DETECT__
-#if 1
+
+
+#if __DETECT_SWITCH_Z__
 	osdindex++;
 	{
 		
@@ -1762,9 +1765,25 @@ osdindex++;
 		else
 			DrawMoveDetect = 0 ;
 	}
-#endif
+#else
+	osdindex++;
+	{
+		if(Osdflag[osdindex]==1){
+			for(i=0;i<6;i++){	
+				DrawRect(m_dccv, backRect[i],0);
+			}			
+			Osdflag[osdindex]=0;
+		}
+		if(m_bMoveDetect){
+			for(i=0;i<6;i++){	
+				DrawRect(m_dccv, boundRect[i],4);
+				backRect[i] = boundRect[i];
+			}			
+			Osdflag[osdindex]=1;
+		}		
+	}
 #endif	
-
+#endif
 ///fov
 #if 0 //take a bak
 	osdindex++;
@@ -1888,7 +1907,7 @@ void CProcess021::OnKeyDwn(unsigned char key)
 
 	if (key == 'k' || key == 'K')
 	{
-		printf("kkkkkkkkkkkkkkkk\n");
+		
 		msgdriv_event(MSGID_EXT_MVDETECT, NULL);
 	}
 
@@ -2782,7 +2801,7 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 	if(msgId == MSGID_EXT_MVDETECT)
 	{	
 		static bool open_close_movedetect = 1;
-		
+		printf("MoveDetect open? = %d\n",open_close_movedetect);
 		if(open_close_movedetect)
 		{
 			dynamic_config(VP_CFG_MvDetect, 1,NULL);

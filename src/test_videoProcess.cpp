@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 }
 
 //__IPC__
-//__MOVE_DETECT__
+//__MOVE_DETECT__		__DETECT_SWITCH_Z__
 //__TRACK__
 
 //---------------------------

@@ -10,6 +10,8 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "configable.h"
 
+#include "MvDetect.hpp"
+
 using namespace vmath;
 
 int CVideoProcess::m_mouseEvent = 0;
@@ -349,9 +351,18 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bMoveDetect)
 		{
+			//cv::Rect boundRect[6];
+			
+
+
+
 		#if __MOVE_DETECT__
-			if(m_pMovDetector != NULL)
-				m_pMovDetector->setFrame(frame_gray,0);	//chId
+			#if __DETECT_SWITCH_Z__
+				if(m_pMovDetector != NULL)
+					m_pMovDetector->setFrame(frame_gray,0);	//chId
+			#else
+				mvDetect(1,frame_gray.data,frame_gray.cols,frame_gray.rows,boundRect);
+			#endif
 		#endif
 		}
 
@@ -409,7 +420,9 @@ CVideoProcess::CVideoProcess()
 	wFileFlag			=0;
 
 	#if __MOVE_DETECT__
-	m_pMovDetector	=NULL;
+		#if __DETECT_SWITCH_Z__
+			m_pMovDetector	=NULL;
+		#endif
 	#endif
 	
 	memset(m_tgtBox, 0, sizeof(TARGETBOX)*MAX_TARGET_NUMBER);
@@ -441,10 +454,16 @@ int CVideoProcess::creat()
 	OSA_mutexCreate(&m_mutex);	
 
 	OnCreate();
+
+	
 #if __MOVE_DETECT__
-	if(m_pMovDetector == NULL)
-		m_pMovDetector = MvDetector_Create();
-	OSA_assert(m_pMovDetector != NULL);
+	#if __DETECT_SWITCH_Z__
+		if(m_pMovDetector == NULL)
+			m_pMovDetector = MvDetector_Create();
+		OSA_assert(m_pMovDetector != NULL);
+	#else
+		createDetect(1,1920,1080);
+	#endif
 #endif
 	return 0;
 }
@@ -464,8 +483,14 @@ int CVideoProcess::destroy()
 		fclose(m_pwFile);
 		m_pwFile = NULL;
 	}
+
+
 #if __MOVE_DETECT__
-	DeInitMvDetect();
+	#if __DETECT_SWITCH_Z__
+		DeInitMvDetect();
+	#else
+		exitDetect();
+	#endif
 #endif
 
 	return 0;
@@ -554,7 +579,9 @@ int CVideoProcess::init()
 #endif
 
 #if __MOVE_DETECT__
-	initMvDetect();
+	#if __DETECT_SWITCH_Z__
+		initMvDetect();
+	#endif
 #endif
 	
 	return 0;
@@ -1474,6 +1501,7 @@ int CVideoProcess::process_mtd(ALGMTD_HANDLE pChPrm, Mat frame_gray, Mat frame_d
 }
 
 #if __MOVE_DETECT__
+#if __DETECT_SWITCH_Z__
 void	CVideoProcess::initMvDetect()
 {
 	int	i;
@@ -1492,7 +1520,7 @@ void	CVideoProcess::initMvDetect()
 	{
 		m_pMovDetector->setWarningRoi(polyWarnRoi,	i);
 		m_pMovDetector->setDrawOSD(m_dccv, i);
-		m_pMovDetector->enableSelfDraw(false, i);
+		m_pMovDetector->enableSelfDraw(true, i);
 		m_pMovDetector->setWarnMode(WARN_MOVEDETECT_MODE, i);
 	} 
 }
@@ -1513,5 +1541,6 @@ void CVideoProcess::NotifyFunc(void *context, int chId)
 
 	pParent->m_display.UpDateOsd(1);
 }
+#endif
 #endif
 
