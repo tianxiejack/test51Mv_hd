@@ -1171,7 +1171,7 @@ void CDisplayer::gl_textureLoad(void)
 
 					//Mat dst = m_img[chId];
 					//dst.data = dev_pbo;
-					cuClahe( dism_img[chId],dst, 4,4,3.5,1);
+					cuClahe( dism_img[chId],dism_img[chId], 8,8,enhanceparam,1);
 					//enhancetime = getTickCount();
 					//int64 enhtstart = getTickCount();
 					
@@ -1217,7 +1217,7 @@ void CDisplayer::gl_textureLoad(void)
 					
 					if(m_renders[chId].videodect)
 					{
-						cudaMemcpy(x11disbuffer, dst.data, byteCount, cudaMemcpyDeviceToHost);
+						cudaMemcpy(x11disbuffer, dism_img[chId].data, byteCount, cudaMemcpyDeviceToHost);
 					}
 					else
 					{
