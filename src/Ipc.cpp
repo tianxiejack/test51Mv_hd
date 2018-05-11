@@ -4,6 +4,7 @@
 #include "osa_buf.h"
 #include "app_status.h"
 #include"app_ctrl.h"
+#include "configable.h"
 
 #define DATAIN_TSK_PRI              (2)
 #define DATAIN_TSK_STACK_SIZE       (0)
@@ -181,18 +182,27 @@ void* recv_msg(SENDST *RS422)
 		case sectrk:
 			memcpy(&Rsectrk,RS422->param,sizeof(Rsectrk));
 			imgID1 = Rsectrk.SecAcqStat ;
-
-			pMsg->AvtPosXTv = Rsectrk.ImgPixelX;
-			pMsg->AvtPosYTv = Rsectrk.ImgPixelY;
-			printf("Rsectrk.ImgPixelX =%d",Rsectrk.ImgPixelX);
-			printf("\tRsectrk.ImgPixelY =%d\n",Rsectrk.ImgPixelY);
-			app_ctrl_setAxisPos(pMsg);
+		
 			if(1 == imgID1)
-				pMsg->AvtTrkStat =eTrk_mode_search;
-			else if(0 == imgID1)
 			{
-				pMsg->AvtTrkStat = eTrk_mode_sectrk;	
+				pMsg->AvtPosXTv = Rsectrk.ImgPixelX;
+				pMsg->AvtPosYTv = Rsectrk.ImgPixelY;
+				//printf("Rsectrk.ImgPixelX =%d",Rsectrk.ImgPixelX);
+				//printf("\tRsectrk.ImgPixelY =%d\n",Rsectrk.ImgPixelY);	
+				pMsg->AvtTrkStat =eTrk_mode_search;
+				app_ctrl_setAxisPos(pMsg);
+			}
+			else if(0 == imgID1){
+				pMsg->AvtTrkStat = eTrk_mode_sectrk;
+				pMsg->NaimX = Rsectrk.ImgPixelX;
+				pMsg->NaimY = Rsectrk.ImgPixelY;
+				printf("next aimx ,aimy (%d,%d)\n",pMsg->NaimX,pMsg->NaimY);
 				app_ctrl_setTrkStat(pMsg);
+				
+				pMsg->AvtPosXTv = VIDEO_IMAGE_WIDTH_0/2;
+				pMsg->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
+				app_ctrl_setAxisPos(pMsg);
+				
 				printf("enter trk again \n\n");
 			}			
 			MSGAPI_msgsend(sectrk);						

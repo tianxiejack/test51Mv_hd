@@ -2343,10 +2343,10 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			}
 			else
 			{
-				printf("pIStuts->unitAimX = %d   ,  pIStuts->unitAimY = %d \n",pIStuts->unitAimX,pIStuts->unitAimY);
+				printf("pIStuts->unitAimX = %d   ,  pIStuts->unitAimY = %d \n",pIStuts->NaimX,pIStuts->NaimY);
 				if(pIStuts->AvtTrkStat == eTrk_mode_sectrk){
-					pIStuts->unitAimX = pIStuts->unitAxisX[eSen_TV];
-					pIStuts->unitAimY = pIStuts->unitAxisY[eSen_TV];
+					pIStuts->unitAimX = pIStuts->NaimX;//pIStuts->unitAxisX[eSen_TV];
+					pIStuts->unitAimY = pIStuts->NaimY;//pIStuts->unitAxisY[eSen_TV];
 				}
 				rc.x=pIStuts->unitAimX-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
 				rc.y=pIStuts->unitAimY-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;

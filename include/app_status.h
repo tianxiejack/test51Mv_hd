@@ -141,6 +141,8 @@ typedef struct
     volatile  int  unitAxisY[eSen_Max];     // pixel
     volatile  int  unitAxisXtmp[eSen_Max];     // pixel
     volatile  int  unitAxisYtmp[eSen_Max];     // pixel
+    volatile  int  NaimX;
+    volatile  int  NaimY;
     volatile unsigned int  unitAimW;      // aim size
     volatile unsigned int  unitAimH;      // aim size
     volatile unsigned int  unitAimX;

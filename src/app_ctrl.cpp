@@ -144,7 +144,11 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 	{
 		pIStuts->AvtPixelX = pInCmd->ImgPixelX[pIStuts->SensorStat] ;
 		pIStuts->AvtPixelY   = pInCmd->ImgPixelY[pIStuts->SensorStat] ;
+
+		pIStuts->NaimX = pInCmd->NaimX;
+		pIStuts->NaimY = pInCmd->NaimY;
 	}
+
 
 	//printf("*****************%s  avtrkstat=%d  \n",__func__,pIStuts->AvtTrkStat);	
         MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
