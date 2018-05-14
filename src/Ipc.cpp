@@ -287,7 +287,7 @@ int send_msg(SENDST *RS422)
 			if(pIStuts.AvtTrkStat == eTrk_mode_search)
 				RS422->param[0] = 0x03;
 			else
-				RS422->param[0] = pIStuts.AvtTrkStat;
+				RS422->param[0] = 0x01;//pIStuts.AvtTrkStat;
 			printf("send ++++++++++ AvtTrkStat %02x  ++++++++++\n",RS422->param[0]);			
 			break;							
 		case exit_img:					

@@ -1605,8 +1605,8 @@ osdindex++;	//cross aim
 			DrawCross(startx,starty,frcolor,true);
 			Osdflag[osdindex]=1;
 		}
-		crossBak.x=PiexltoWindowsx(extInCtrl.unitAxisX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
-		crossBak.y=PiexltoWindowsy(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
+		crossBak.x=startx;
+		crossBak.y=starty;
 	}
 
 osdindex++;
