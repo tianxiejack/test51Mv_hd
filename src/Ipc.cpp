@@ -284,7 +284,10 @@ int send_msg(SENDST *RS422)
 			printf("send ++++++++++ AvtMoveXY = (%02x,%02x)  ++++++++++\n",RS422->param[0],RS422->param[1]);				
 			break;
 		case sectrk:
-			RS422->param[0] = pIStuts.AvtTrkStat;
+			if(pIStuts.AvtTrkStat == eTrk_mode_search)
+				RS422->param[0] = 0x03;
+			else
+				RS422->param[0] = pIStuts.AvtTrkStat;
 			printf("send ++++++++++ AvtTrkStat %02x  ++++++++++\n",RS422->param[0]);			
 			break;							
 		case exit_img:					
