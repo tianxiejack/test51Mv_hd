@@ -13,9 +13,9 @@
 #include "osd_cv.h"
 
 
-CProcess021 * CProcess021::sThis = NULL;
+CProcess * CProcess::sThis = NULL;
 static bool DrawMoveDetect = 0;
-CProcess021* plat = NULL;
+CProcess* plat = NULL;
 
 SENDST trkmsg={0};
 
@@ -24,7 +24,7 @@ void inputtmp(unsigned char cmdid)
 	plat->OnKeyDwn(cmdid);
 }
 
-CProcess021::CProcess021()
+CProcess::CProcess()
 {
 	memset(&rcTrackBak, 0, sizeof(rcTrackBak));
 	memset(tgBak, 0, sizeof(tgBak));
@@ -125,12 +125,12 @@ CProcess021::CProcess021()
 	
 }
 
-CProcess021::~CProcess021()
+CProcess::~CProcess()
 {
 	sThis=NULL;
 }
 
-int  CProcess021::WindowstoPiexlx(int x,int channel)
+int  CProcess::WindowstoPiexlx(int x,int channel)
 {
 	int ret=0;
 	ret= cvRound(x*1.0/vdisWH[0][0]*vcapWH[channel][0]);
@@ -148,7 +148,7 @@ int  CProcess021::WindowstoPiexlx(int x,int channel)
 }
 
 
-int  CProcess021::WindowstoPiexly(int y,int channel)
+int  CProcess::WindowstoPiexly(int y,int channel)
 {
 	 int ret=0;
 	 ret= cvRound(y*1.0/vdisWH[0][1]*vcapWH[channel][1]);
@@ -166,7 +166,7 @@ int  CProcess021::WindowstoPiexly(int y,int channel)
 
 
 
-int  CProcess021::PiexltoWindowsx(int x,int channel)
+int  CProcess::PiexltoWindowsx(int x,int channel)
 {
 	 int ret=0;
 	 int aimw= trkWinWH[extInCtrl.SensorStat][extInCtrl.AvtTrkAimSize][0];
@@ -188,7 +188,7 @@ int  CProcess021::PiexltoWindowsx(int x,int channel)
 	 return ret;
 }
 
-int  CProcess021::PiexltoWindowsy(int y,int channel)
+int  CProcess::PiexltoWindowsy(int y,int channel)
 {
 	 int ret=0;
 	 int aimw= trkWinWH[extInCtrl.SensorStat][extInCtrl.AvtTrkAimSize][0];
@@ -212,7 +212,7 @@ int  CProcess021::PiexltoWindowsy(int y,int channel)
 	return  ret;
 }
 
-float  CProcess021::PiexltoWindowsxf(float x,int channel)
+float  CProcess::PiexltoWindowsxf(float x,int channel)
 {
 	float ret=0;
 	 ret= (x*1.0/vcapWH[channel][0]*vdisWH[0][0]);
@@ -228,7 +228,7 @@ float  CProcess021::PiexltoWindowsxf(float x,int channel)
 	  return ret;
 }
 
-float  CProcess021::PiexltoWindowsyf(float y,int channel)
+float  CProcess::PiexltoWindowsyf(float y,int channel)
 {
 	 float ret=0;
 	 ret= (y*1.0/vcapWH[channel][1]*vdisWH[0][1]);
@@ -246,7 +246,7 @@ float  CProcess021::PiexltoWindowsyf(float y,int channel)
 }
 
 
-int  CProcess021::PiexltoWindowsxzoom(int x,int channel)
+int  CProcess::PiexltoWindowsxzoom(int x,int channel)
 {
 	int ret=0;
 	 int aimw= trkWinWH[extInCtrl.SensorStat][extInCtrl.AvtTrkAimSize][0];
@@ -274,7 +274,7 @@ int  CProcess021::PiexltoWindowsxzoom(int x,int channel)
 	return ret;
 }
 
-int  CProcess021::PiexltoWindowsyzoom(int y,int channel)
+int  CProcess::PiexltoWindowsyzoom(int y,int channel)
 {
 	 int ret=0;
 	 int aimw= trkWinWH[extInCtrl.SensorStat][extInCtrl.AvtTrkAimSize][0];
@@ -295,7 +295,7 @@ int  CProcess021::PiexltoWindowsyzoom(int y,int channel)
 			ret =ret*2/3;//-vdisWH[0][1]/6;
 
 	 	}
-	  //zoom 18.4.6
+
 	 if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
 	 	{
 	 		ret=ret-256;
@@ -306,7 +306,7 @@ int  CProcess021::PiexltoWindowsyzoom(int y,int channel)
 	return  ret;
 }
 
-int  CProcess021::PiexltoWindowsxzoom_TrkRect(int x,int channel)
+int  CProcess::PiexltoWindowsxzoom_TrkRect(int x,int channel)
 {
 	int ret=0;
 
@@ -330,7 +330,7 @@ int  CProcess021::PiexltoWindowsxzoom_TrkRect(int x,int channel)
 	return ret;
 }
 
-int  CProcess021::PiexltoWindowsyzoom_TrkRect(int y,int channel)
+int  CProcess::PiexltoWindowsyzoom_TrkRect(int y,int channel)
 {
 	 int ret=0;
 
@@ -352,7 +352,7 @@ int  CProcess021::PiexltoWindowsyzoom_TrkRect(int y,int channel)
 
 	return  ret;
 }
-void CProcess021::OnCreate()
+void CProcess::OnCreate()
 {
 	osdgraph_init(process_osd);
 	MSGDRIV_create();
@@ -371,16 +371,16 @@ void CProcess021::OnCreate()
 
 
 };
-void CProcess021::OnDestroy(){};
-void CProcess021::OnInit(){};
-void CProcess021::OnConfig(){};
-void CProcess021::OnRun(){};
-void CProcess021::OnStop(){};
-void CProcess021::Ontimer(){
+void CProcess::OnDestroy(){};
+void CProcess::OnInit(){};
+void CProcess::OnConfig(){};
+void CProcess::OnRun(){};
+void CProcess::OnStop(){};
+void CProcess::Ontimer(){
 
 	//msgdriv_event(MSGID_EXT_INPUT_VIDEOEN,NULL);
 };
-bool CProcess021::OnPreProcess(int chId, Mat &frame)
+bool CProcess::OnPreProcess(int chId, Mat &frame)
 {
 	set_graph();
 
@@ -405,7 +405,7 @@ bool CProcess021::OnPreProcess(int chId, Mat &frame)
 
 
 int onece=0;
-void CProcess021::process_osd(void *pPrm)
+void CProcess::process_osd(void *pPrm)
 {
 	return ;//!! ! no used
 	int devId=0;
@@ -448,7 +448,7 @@ void CProcess021::process_osd(void *pPrm)
 	sThis->m_display.UpDateOsd(0);
 }
 
-void CProcess021::process_osd1()
+void CProcess::process_osd1()
 {
 	int devId=0;
 	Mat frame=sThis->m_dccv;
@@ -492,7 +492,7 @@ void CProcess021::process_osd1()
 
 }
 
-void CProcess021::osd_mtd_show(TARGET tg[], bool bShow)
+void CProcess::osd_mtd_show(TARGET tg[], bool bShow)
 {
 	int i;
 	
@@ -519,7 +519,7 @@ void CProcess021::osd_mtd_show(TARGET tg[], bool bShow)
 	}
 }
 
-void CProcess021::DrawBlob(BlobRect blobRct,  bool bShow /*= true*/)
+void CProcess::DrawBlob(BlobRect blobRct,  bool bShow /*= true*/)
 {
 	int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
 	unsigned char Alpha = (bShow) ? frcolor : 0;
@@ -571,7 +571,7 @@ void CProcess021::DrawBlob(BlobRect blobRct,  bool bShow /*= true*/)
 }
 
 
-void CProcess021::DrawCross(int x,int y,int fcolour ,bool bShow /*= true*/)
+void CProcess::DrawCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 {
 	
 	unsigned char colour = (bShow) ?fcolour : 0;
@@ -584,7 +584,7 @@ void CProcess021::DrawCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 	Drawcvcrossaim(m_dccv,&lineparm);
 }
 
-void CProcess021::DrawRect(Mat frame,cv::Rect rec,int frcolor)
+void CProcess::DrawRect(Mat frame,cv::Rect rec,int frcolor)
 {
 	int x = rec.x,y = rec.y;
 	int width = rec.width;
@@ -598,7 +598,7 @@ void CProcess021::DrawRect(Mat frame,cv::Rect rec,int frcolor)
 int majormmtid=0;
 int primajormmtid=0;
 
-void CProcess021::erassdrawmmt(TARGET tg[],bool bShow)
+void CProcess::erassdrawmmt(TARGET tg[],bool bShow)
 {
 			int startx=0;
 			int starty=0;
@@ -679,7 +679,7 @@ void CProcess021::erassdrawmmt(TARGET tg[],bool bShow)
 }
 
 
-void CProcess021::drawmmt(TARGET tg[],bool bShow)
+void CProcess::drawmmt(TARGET tg[],bool bShow)
 {
 	int startx=0;
 	int starty=0;
@@ -802,7 +802,7 @@ void CProcess021::drawmmt(TARGET tg[],bool bShow)
 }
 
 
-void CProcess021::erassdrawmmtnew(TARGETDRAW tg[],bool bShow)
+void CProcess::erassdrawmmtnew(TARGETDRAW tg[],bool bShow)
 {
 	int startx=0;
 	int starty=0;
@@ -862,7 +862,7 @@ void CProcess021::erassdrawmmtnew(TARGETDRAW tg[],bool bShow)
 }
 
 
-void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
+void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 {
 	int startx=0;
 	int starty=0;
@@ -1085,7 +1085,7 @@ void CProcess021::drawmmtnew(TARGET tg[],bool bShow)
 
 
 
-void CProcess021::DrawMeanuCross(int lenx,int leny,int fcolour , bool bShow ,int centerx,int centery)
+void CProcess::DrawMeanuCross(int lenx,int leny,int fcolour , bool bShow ,int centerx,int centery)
 {
 	int templenx=lenx;
 	int templeny=leny;
@@ -1148,7 +1148,7 @@ void CProcess021::DrawMeanuCross(int lenx,int leny,int fcolour , bool bShow ,int
 
 }
 
-void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
+void CProcess::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 {
 
 	int startx=0;
@@ -1207,7 +1207,7 @@ void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 }
 
 
-void CProcess021::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
+void CProcess::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
 {
 	int dashlen=3;
 	drawdashlinepri(m_dccv,startx,starty,endx,starty,dashlen,dashlen,colour);
@@ -1216,7 +1216,7 @@ void CProcess021::DrawdashRect(int startx,int starty,int endx,int endy,int colou
 	drawdashlinepri(m_dccv,startx,starty,startx,endy,dashlen,dashlen,colour);
 }
 
-bool CProcess021::OnProcess(int chId, Mat &frame)
+bool CProcess::OnProcess(int chId, Mat &frame)
 {
 	//track
 	int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
@@ -1744,12 +1744,12 @@ static inline void my_rotate(GLfloat result[16], float theta)
 	result[15] = 1.0f;
 }
 
-void CProcess021::OnMouseLeftDwn(int x, int y){};
-void CProcess021::OnMouseLeftUp(int x, int y){};
-void CProcess021::OnMouseRightDwn(int x, int y){};
-void CProcess021::OnMouseRightUp(int x, int y){};
+void CProcess::OnMouseLeftDwn(int x, int y){};
+void CProcess::OnMouseLeftUp(int x, int y){};
+void CProcess::OnMouseRightDwn(int x, int y){};
+void CProcess::OnMouseRightUp(int x, int y){};
 
-void CProcess021::OnKeyDwn(unsigned char key)
+void CProcess::OnKeyDwn(unsigned char key)
 {
 	CMD_EXT *pIStuts = &extInCtrl;
 
@@ -1877,7 +1877,7 @@ void CProcess021::OnKeyDwn(unsigned char key)
 }
 
 
-void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
+void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 {
 	int tempvalue=0;
 	CMD_EXT *pIStuts = &extInCtrl;
@@ -2665,7 +2665,7 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 /////////////////////////////////////////////////////
 //int majormmtid=0;
 
-void CProcess021::MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context)
+void CProcess::MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context)
 {
     assert(handle != NULL && msgId < MAX_MSG_NUM);
 
@@ -2679,7 +2679,7 @@ void CProcess021::MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiF
 }
 
 
- int  CProcess021::MSGAPI_initial()
+ int  CProcess::MSGAPI_initial()
 {
    MSGDRIV_Handle handle=&g_MsgDrvObj;
     assert(handle != NULL);
@@ -2713,18 +2713,18 @@ void CProcess021::MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiF
 }
 
 
-void CProcess021::MSGAPI_init_device(long lParam )
+void CProcess::MSGAPI_init_device(long lParam )
 {
 	sThis->msgdriv_event(MSGID_SYS_INIT,NULL);
 }
 
-  void CProcess021::MSGAPI_inputsensor(long lParam )
+  void CProcess::MSGAPI_inputsensor(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	sThis->msgdriv_event(MSGID_EXT_INPUT_SENSOR,NULL);
 }
 
-void CProcess021::MSGAPI_picp(long lParam )
+void CProcess::MSGAPI_picp(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 		if(pIStuts->PicpSensorStat == 0xFF)
@@ -2736,7 +2736,7 @@ void CProcess021::MSGAPI_picp(long lParam )
 }
 
 
-void CProcess021::MSGAPI_croppicp(long lParam )
+void CProcess::MSGAPI_croppicp(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	if(pIStuts->ImgPicp[pIStuts->SensorStat]==0x04)
@@ -2762,7 +2762,7 @@ void CProcess021::MSGAPI_croppicp(long lParam )
 
 }
 
-void CProcess021::MSGAPI_inputtrack(long lParam )
+void CProcess::MSGAPI_inputtrack(long lParam )
 {
 	OSA_printf("%s^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n",__func__);
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
@@ -2770,14 +2770,14 @@ void CProcess021::MSGAPI_inputtrack(long lParam )
 }
 
 
-void CProcess021::MSGAPI_inpumtd(long lParam )
+void CProcess::MSGAPI_inpumtd(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	sThis->msgdriv_event(MSGID_EXT_INPUT_ENMTD,NULL);
 	OSA_printf("hello world\n");
 }
 
-void CProcess021::MSGAPI_inpumtdSelect(long lParam )
+void CProcess::MSGAPI_inpumtdSelect(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	int i;
@@ -2812,13 +2812,13 @@ void CProcess021::MSGAPI_inpumtdSelect(long lParam )
 }
 
 
-void CProcess021::MSGAPI_inpuenhance(long lParam )
+void CProcess::MSGAPI_inpuenhance(long lParam )
 {
 	sThis->msgdriv_event(MSGID_EXT_INPUT_ENENHAN,NULL);
 	OSA_printf("hello world\n");
 }
 
-void CProcess021::MSGAPI_setAimRefine(long lParam          /*=NULL*/)
+void CProcess::MSGAPI_setAimRefine(long lParam          /*=NULL*/)
 {
 
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
@@ -2841,13 +2841,13 @@ void CProcess021::MSGAPI_setAimRefine(long lParam          /*=NULL*/)
 	}
 	sThis->msgdriv_event(MSGID_EXT_INPUT_AIMPOS,NULL);
 }
-void CProcess021::MSGAPI_setAimSize(long lParam          /*=NULL*/)
+void CProcess::MSGAPI_setAimSize(long lParam          /*=NULL*/)
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	sThis->msgdriv_event(MSGID_EXT_INPUT_AIMSIZE,NULL);
 }
 
-void CProcess021::MSGAPI_inputbdt(long lParam )
+void CProcess::MSGAPI_inputbdt(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	if(pIStuts->TvCollimation!=1)
@@ -2859,7 +2859,7 @@ void CProcess021::MSGAPI_inputbdt(long lParam )
 }
 
 
-void CProcess021::MSGAPI_inputzoom(long lParam )
+void CProcess::MSGAPI_inputzoom(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	sThis->msgdriv_event(MSGID_EXT_INPUT_ENZOOM,NULL);
@@ -2867,7 +2867,7 @@ void CProcess021::MSGAPI_inputzoom(long lParam )
 }
 
 
-void CProcess021::MSGAPI_inputfrezz(long lParam )
+void CProcess::MSGAPI_inputfrezz(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;	
 	if( pIStuts->FrCollimation==1)
@@ -2903,7 +2903,7 @@ void CProcess021::MSGAPI_inputfrezz(long lParam )
 }
 
 
-void CProcess021::MSGAPI_inputmmtselect(long lParam )
+void CProcess::MSGAPI_inputmmtselect(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	if(pIStuts->ImgMtdSelect[pIStuts->SensorStat]  ==eMMT_Next)
@@ -2917,7 +2917,7 @@ void CProcess021::MSGAPI_inputmmtselect(long lParam )
 
 
 
-void CProcess021::MSGAPI_inputpositon(long lParam )
+void CProcess::MSGAPI_inputpositon(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	if(pIStuts->SensorStat==0)
@@ -2954,7 +2954,7 @@ void CProcess021::MSGAPI_inputpositon(long lParam )
 	OSA_printf("%s   THE=unitAimX=%d unitAxisY=%d\n",__func__,pIStuts->unitAxisX[pIStuts->SensorStat ],pIStuts->unitAxisY[pIStuts->SensorStat ]);
 }
 
-void CProcess021::MSGAPI_inputcoast(long lParam )
+void CProcess::MSGAPI_inputcoast(long lParam )
 {
 
 	
@@ -2963,7 +2963,7 @@ void CProcess021::MSGAPI_inputcoast(long lParam )
 	//printf("%s\n",__func__);
 }
 
-void CProcess021::MSGAPI_inputfovselect(long lParam )
+void CProcess::MSGAPI_inputfovselect(long lParam )
 {
 
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
@@ -3005,7 +3005,7 @@ void CProcess021::MSGAPI_inputfovselect(long lParam )
 	}
 }
 
-void CProcess021::MSGAPI_inputfovchange(long lParam )
+void CProcess::MSGAPI_inputfovchange(long lParam )
 {
 
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
@@ -3017,7 +3017,7 @@ void CProcess021::MSGAPI_inputfovchange(long lParam )
 }
 
 
-void CProcess021::MSGAPI_inputsearchmod(long lParam )
+void CProcess::MSGAPI_inputsearchmod(long lParam )
 {
 
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
@@ -3028,17 +3028,17 @@ void CProcess021::MSGAPI_inputsearchmod(long lParam )
 }
 
 
- void CProcess021::MSGAPI_inputvideotect(long lParam )
+ void CProcess::MSGAPI_inputvideotect(long lParam )
 {
 	OSA_printf("MSGAPI_inputvideotect*******************\n");
 	sThis->msgdriv_event(MSGID_EXT_INPUT_VIDEOEN,NULL);
 }
 
-  void CProcess021::MSGAPI_mmtshow(long lParam )
+  void CProcess::MSGAPI_mmtshow(long lParam )
 {
 	OSA_printf("MSGAPI_mmtshow\n");
 }
-void CProcess021::MSGAPI_FOVcmd(long lParam )
+void CProcess::MSGAPI_FOVcmd(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	if((pIStuts->FovCtrl==5)&&(pIStuts->SensorStat==0))
@@ -3046,7 +3046,7 @@ void CProcess021::MSGAPI_FOVcmd(long lParam )
 	else
 		sThis->tvzoomStat=0;
 }
-void CProcess021::MSGAPI_SaveCfgcmd(long lParam )
+void CProcess::MSGAPI_SaveCfgcmd(long lParam )
 {
 	sThis->msgdriv_event(MSGID_EXT_INPUT_CFGSAVE,NULL);
 }	

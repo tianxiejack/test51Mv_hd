@@ -12,7 +12,7 @@ using namespace cv;
 int main(int argc, char **argv)
 {
 	printf("Oh my God \n\n");
-	CProcess021 proc;
+	CProcess proc;
 #ifdef __IPC__
 	Ipc_pthread_start();
 #endif

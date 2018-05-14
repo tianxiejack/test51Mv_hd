@@ -5,7 +5,7 @@
 #include "VideoProcess.hpp"
 #include "osd_graph.h"
 #include"osd_cv.h"
-class CProcess021 : public CVideoProcess
+class CProcess : public CVideoProcess
 {
 	UTC_RECT_float rcTrackBak,resultTrackBak;
 	TARGET tgBak[MAX_TARGET_NUMBER];
@@ -26,8 +26,8 @@ class CProcess021 : public CVideoProcess
 	DS_Rect random;
 	
 public:
-	CProcess021();
-	~CProcess021();
+	CProcess();
+	~CProcess();
 
 	void OnCreate();
 	void OnDestroy();
@@ -49,7 +49,7 @@ public:
 	MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context);
 	
 	
-	static CProcess021 *sThis;
+	static CProcess *sThis;
 	void process_osd_test(void *pPrm);
 	void MSGAPI_init_device(long lParam );
 
