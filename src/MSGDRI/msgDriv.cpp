@@ -101,7 +101,7 @@ void MSGDRIV_destroy(MSGDRIV_Handle handle)
   Return:       null
   Others:       null
 **********************************************************************************************************/
-/*
+
 void MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context)
 {
     assert(handle != NULL && msgId < MAX_MSG_NUM);
@@ -114,7 +114,7 @@ void MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, i
 
    //OSA_printf("^^^^^^msgId=%d  pRtnFun=%p\n",msgId,pRtnFun);
 }
-*/
+
 
 /********************************************************************************************************
   Function:     MSGDRIV_send(MSGDRIV_Handle handle,int msgId, void *prm)

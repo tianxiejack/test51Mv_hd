@@ -1,6 +1,6 @@
 
 #include <glut.h>
-#include "process021.hpp"
+#include "process51.hpp"
 #include "vmath.h"
 #include "dx_main.h"
 #include "msgDriv.h"
@@ -2664,20 +2664,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 /////////////////////////////////////////////////////
 //int majormmtid=0;
-
-void CProcess::MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context)
-{
-    assert(handle != NULL && msgId < MAX_MSG_NUM);
-
-    handle->msgTab[msgId].msgId = msgId;
-
-    handle->msgTab[msgId].pRtnFun = pRtnFun;
-
-    handle->msgTab[msgId].refContext = context;
-
-   //OSA_printf("^^^^^^msgId=%d  pRtnFun=%p\n",msgId,pRtnFun);
-}
-
 
  int  CProcess::MSGAPI_initial()
 {

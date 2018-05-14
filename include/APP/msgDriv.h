@@ -62,13 +62,12 @@ extern "C" {
 extern MSGDRIV_Class g_MsgDrvObj;
    MSGDRIV_Handle  MSGDRIV_create();
 
-#if 1
+
     void MSGDRIV_destroy(MSGDRIV_Handle handle);
-    //void MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context);
+    void MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context);
     void MSGDRIV_send(int msgId, void *prm);
     void* MSGDRIV_ProcTask(void *pPrm);
 
- #endif
     #ifdef __cplusplus
     }
     #endif
