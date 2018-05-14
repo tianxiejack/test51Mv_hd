@@ -43,15 +43,15 @@ public:
 	void OnMouseRightDwn(int x, int y);
 	void OnMouseRightUp(int x, int y);
 	void OnKeyDwn(unsigned char key);
-
-	int WriteAxisToFile();
-	int ReadAxisFromFile();
 	
 	CMD_EXT extInCtrl;
 
+	MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context);
+	
 	
 	static CProcess021 *sThis;
 	void process_osd_test(void *pPrm);
+	void MSGAPI_init_device(long lParam );
 
 protected:
 	void msgdriv_event(MSG_PROC_ID msgId, void *prm);
@@ -79,7 +79,7 @@ protected:
 
 
 	 static int  MSGAPI_initial(void);
-	 static void MSGAPI_init_device(long lParam );
+	
 	 static void MSGAPI_inputsensor(long lParam );
 	 static void MSGAPI_picp(long lParam );
 	 static void MSGAPI_inputtrack(long lParam );

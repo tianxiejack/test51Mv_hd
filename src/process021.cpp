@@ -321,33 +321,13 @@ int  CProcess021::PiexltoWindowsxzoom_TrkRect(int x,int channel)
 		ret=vdisWH[0][0];
 	}
 
-	//zoom 18.4.6
-	//if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
-	{
-		//ret=ret-320;
-		//ret=2*ret;
-		/*
-		if(ret>=vdisWH[0][0]/2)
-			ret = (ret-vdisWH[0][0]/2)/2+vdisWH[0][0]/2 ;
-		else if(ret<vdisWH[0][0]/2)
-			ret = vdisWH[0][0]/2 -(vdisWH[0][0]/2 - ret)/2 ;
-		*/
-		
-	}
-
-	#if 1
 	//result to even
 	if((ret%2)==0)
 		ret = ret;
 	else
 		ret = ret+1;
-	#else
-
-	if((ret>=vdisWH[0][0]/2-1)&&(ret<=vdisWH[0][0]/2+1))
-		ret = vdisWH[0][0]/2;
-
-	#endif
-	  return ret;
+	
+	return ret;
 }
 
 int  CProcess021::PiexltoWindowsyzoom_TrkRect(int y,int channel)
@@ -365,32 +345,11 @@ int  CProcess021::PiexltoWindowsyzoom_TrkRect(int y,int channel)
 		ret=vdisWH[0][1];
  	}
 
-	  //zoom 18.4.6
-	//if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
- 	{
- 		//ret=ret-256;
-		//ret=2*ret;
-
-		/*
-		if(ret>=vdisWH[0][1]/2)
-			ret = (ret-vdisWH[0][1]/2)/2+vdisWH[0][1]/2;
-		else if(ret<vdisWH[0][1]/2)
-			ret = vdisWH[0][1]/2 -(vdisWH[0][1]/2 - ret)/2;
-		*/
- 	}
-
-	 #if 1
-	//result to even
-	 if((ret%2)==0)
+	if((ret%2)==0)
 		ret = ret;
 	else
 		ret = ret+1;
-	#else
 
-	if((ret>=vdisWH[0][1]/2-1)&&(ret<=vdisWH[0][1]/2+1))
-		ret = vdisWH[0][1]/2;
-	
-	#endif
 	return  ret;
 }
 void CProcess021::OnCreate()
@@ -429,7 +388,7 @@ bool CProcess021::OnPreProcess(int chId, Mat &frame)
 	if(m_bCast){
 		Uint32 curTm = OSA_getCurTimeInMsec();
 		Uint32 elapse = curTm - m_castTm;
-		//MSGAPI_AckSnd( AckTrkErr);
+
 		if(elapse < 2000){
 			return false;
 		}
@@ -533,8 +492,6 @@ void CProcess021::process_osd1()
 
 }
 
-
-
 void CProcess021::osd_mtd_show(TARGET tg[], bool bShow)
 {
 	int i;
@@ -585,9 +542,6 @@ void CProcess021::DrawBlob(BlobRect blobRct,  bool bShow /*= true*/)
 		}
 
 	if(blobRct.bvalid){
-//		RotatedRect box = RotatedRect( blobRct.center, blobRct.size, blobRct.angle);
-//		ellipse(m_dc, box, cvScalar(0,0,255, Alpha), 4, CV_AA);
-	//	ellipse(m_dc, blobRct.center, blobRct.size*0.5f, blobRct.angle, 0, 360, colour, 4/*, CV_AA*/);
 
 		Point pt1,pt2,center;
 		center.x = blobRct.center.x;
@@ -817,26 +771,16 @@ void CProcess021::drawmmt(TARGET tg[],bool bShow)
 			tempmmtx=result.x = ((int)tg[tempdata].cur_x) % _IMAGE_WIDTH_;
 			tempmmty=result.y = ((int)tg[tempdata].cur_y ) % _IMAGE_HEIGHT_;
 
-			//OSA_printf("+++++++++++++++the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
-			//	result.x,result.y,result.width,result.height);
-			//result.x = result.x - result.width/2;
-			//result.y = result.y - result.height/2;
-			//OSA_printf("the num  majormmtid=%d\n",tempdata);
-
 			 startx=PiexltoWindowsx(result.x,extInCtrl.SensorStat);
 			 starty=PiexltoWindowsy(result.y,extInCtrl.SensorStat);
 			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3)&&(extInCtrl.SysMode!=9)&&(extInCtrl.SysMode!=2))
 			{
-				//DrawCross(result.x,result.y,frcolor,bShow);
-				//trkimgcross(frame,result.x,result.y,16);
 				line(frame, cvPoint(startx-16,starty), cvPoint(startx+16,starty), colour, 1, 8, 0 ); 
 				line(frame, cvPoint(startx,starty-16), cvPoint(startx,starty+16), colour, 1, 8, 0 ); 
 				//OSA_printf("******************the num  majormmtid=%d\n",majormmtid);
 				sprintf(numbuf,"%d",(tempdata+MAX_TARGET_NUMBER-majormmtid)%MAX_TARGET_NUMBER);
 				putText(frame,numbuf,cvPoint(startx+14,starty+14),CV_FONT_HERSHEY_SIMPLEX,1,colour);
 			}
-			//memcpy(extInCtrl.MtdOffsetXY+testid*4,tempmmtx,sizeof(tempmmtx));
-			//memcpy(extInCtrl.MtdOffsetXY+2+testid*4,tempmmty,sizeof(tempmmty));
 
 			extInCtrl.MtdOffsetXY[j+testid*4]=tempmmtx&0xff;
 			extInCtrl.MtdOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
@@ -904,16 +848,12 @@ void CProcess021::erassdrawmmtnew(TARGETDRAW tg[],bool bShow)
 			 starty=tg[i].starty;//PiexltoWindowsy(result.y,prisensorstatus);
 			 endx=tg[i].endx;
 			 endy=tg[i].endy;
-			 #if 0
-			line(frame, cvPoint(startx-16,starty), cvPoint(startx+16,starty), colour, 1, 8, 0 ); 
-			line(frame, cvPoint(startx,starty-16), cvPoint(startx,starty+16), colour, 1, 8, 0 ); 
-			#else
+
 			rectangle( frame,
 			Point( startx, starty ),
 			Point( endx, endy),
 			colour, 1, 8);
 
-			#endif
 			//OSA_printf("******************the num  majormmtid=%d\n",majormmtid);
 			sprintf(numbuf,"%d",i+1);
 			putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
@@ -1241,7 +1181,7 @@ void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 		startx=secBak[0].x;//PiexltoWindowsx(secBak[0].x,extInCtrl.SensorStat);
 		starty=secBak[0].y;//PiexltoWindowsy(secBak[0].y,extInCtrl.SensorStat);
 		endx=secBak[1].x;//PiexltoWindowsx(secBak[1].x,extInCtrl.SensorStat);
-			endy=secBak[1].y;//PiexltoWindowsy(secBak[1].y,extInCtrl.SensorStat);
+		endy=secBak[1].y;//PiexltoWindowsy(secBak[1].y,extInCtrl.SensorStat);
 		
 		drawdashlinepri(m_dccv,startx,starty,endx,endy,dashlen,dashlen,colour);
 	}
@@ -1253,7 +1193,7 @@ void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 		startx=PiexltoWindowsxzoom(extInCtrl.unitAxisX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 		starty=PiexltoWindowsyzoom(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 		endx=lineparm.x;//PiexltoWindowsx(extInCtrl.ImgPixelX[extInCtrl.SensorStat],extInCtrl.SensorStat);
-			endy=lineparm.y;//PiexltoWindowsy(extInCtrl.ImgPixelY[extInCtrl.SensorStat],extInCtrl.SensorStat);
+		endy=lineparm.y;//PiexltoWindowsy(extInCtrl.ImgPixelY[extInCtrl.SensorStat],extInCtrl.SensorStat);
 		
 		drawdashlinepri(m_dccv,startx,starty,endx,endy,dashlen,dashlen,colour);
 
@@ -1262,8 +1202,7 @@ void CProcess021::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 		secBak[1].x=endx;
 		secBak[1].y=endy;
 		
-		Osdflag[osdindex]=1;
-		
+		Osdflag[osdindex]=1;	
 	}
 }
 
@@ -1304,8 +1243,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 	
 	if(((++coastCnt)%10) == 0)
 	{
-		bDraw = !bDraw;
-		
+		bDraw = !bDraw;	
 		coastCnt = 0;
 	}
 	
@@ -1573,9 +1511,7 @@ bool CProcess021::OnProcess(int chId, Mat &frame)
 					extInCtrl.trkerry=(PiexltoWindowsy(m_ImageAxisy ,extInCtrl.SensorStat));//*10;
 				}
 				//OSA_printf("send ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
-				//handle date match to the platform need
-
-				
+				//handle date match to the platform need				
 				//MSGAPI_AckSnd( AckTrkErr);
 				extInCtrl.TrkErrFeedback = 1;
 		 	 }
@@ -1728,8 +1664,6 @@ osdindex++;
 
 	
 #if __MOVE_DETECT__
-
-
 #if __DETECT_SWITCH_Z__
 	osdindex++;
 	{
@@ -1783,47 +1717,6 @@ osdindex++;
 		}		
 	}
 #endif	
-#endif
-///fov
-#if 0 //take a bak
-	osdindex++;
-
-	if(Osdflag[osdindex]==1)
-	{
-		DrawMeanuCross(rectfovBak[0].x,rectfovBak[0].y,frcolor,false,rectfovBak[1].x,rectfovBak[1].y);
-		Osdflag[osdindex]=0;
-	}
-	if(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)
-	{
-		int fovw=0;
-		int fovh=0;
-		double ratiox=0.0;
-		double ratioy=0.0;
-		if(extInCtrl.FovStat<5)
-		{
-			ratiox=FOVw[extInCtrl.SensorStat][(extInCtrl.FovStat)%5][0]/FOVw[extInCtrl.SensorStat][(extInCtrl.FovStat-1)%5][0];
-			ratioy=FOVw[extInCtrl.SensorStat][(extInCtrl.FovStat)%5][1]/FOVw[extInCtrl.SensorStat][(extInCtrl.FovStat-1)%5][1];
-			fovw=vdisWH[0][0]/2*ratiox;
-			fovh=vdisWH[0][1]/2*ratioy;
-			Fovpri[extInCtrl.SensorStat]=extInCtrl.FovStat;
-
-			int centerx=vdisWH[0][0]/2;
-			int centery=vdisWH[0][1]/2;
-			 if(extInCtrl.ImgMmtshow[extInCtrl.SensorStat])
-		 	{
-				centerx=centerx*2/3;
-				centery=centery*2/3;
-				fovw=fovw*2/3;
-				fovh=fovh*2/3;
-		 	}
-			DrawMeanuCross(fovw,fovh,frcolor,true,centerx,centery);
-			Osdflag[osdindex]=1;
-			rectfovBak[0].x=fovw;
-			rectfovBak[0].y=fovh;
-			rectfovBak[1].x=centerx;
-			rectfovBak[1].y=centery;
-		}
-	}
 #endif
 	prisensorstatus=extInCtrl.SensorStat;
 
@@ -2518,30 +2411,6 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		return ;
 	}
 
-#if 0
-	if(msgId == MSGID_EXT_INPUT_CFGSAVE)
-	{
-		if(prm != NULL)
-		{
-			pInCmd = (CMD_EXT *)prm;
-			pIStuts->AvtCfgSave = pInCmd->AvtCfgSave;
-		}
-
-		OSA_printf(" %d:%s config save %d\n", OSA_getCurTimeInMsec(), __func__, 
-					pIStuts->AvtCfgSave);
-		if(pIStuts->AvtCfgSave == eSave_Enable){
-			WriteAxisToFile();
-		}
-		/*
-		else if(pIStuts->AvtCfgSave == eSave_Cancel){
-			ReadAxisFromFile();
-			// redraw cross
-			m_ImageAxisx = pIStuts->AxisCalibX[pIStuts->SensorStat];
-			m_ImageAxisy = pIStuts->AxisCalibY[pIStuts->SensorStat];
-		}*/
-		return ;
-	}
-#endif
 	if(msgId == MSGID_EXT_INPUT_ENZOOM)
 	{
 		if(prm != NULL)
@@ -2552,7 +2421,7 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			pIStuts->DispZoomMultiple[0] = pInCmd->DispZoomMultiple[0];
 			pIStuts->DispZoomMultiple[1] = pInCmd->DispZoomMultiple[1];
 		}
-#if 1
+
 		DS_Rect lay_rect;
 		
 		if(pIStuts->SensorStat==0)//tv
@@ -2600,8 +2469,6 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
 		}
 
-		
-#endif
 		return ;
 	}
 	if(msgId ==MSGID_EXT_INPUT_ENFREZZ)
@@ -2634,27 +2501,13 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 	}
 	if(msgId ==MSGID_EXT_INPUT_PICPCROP)
-	{
-
-		//DS_Rect rendpos;
-		//rendposr.x=0;
-		//rendpos.y=0;
-		//rendpos.w=vdisWH[1][0]/3;
-		//rendpos.w=vdisWH[1][1]/3;
-
-		//printf("the x=%d y=%d w=%d h=%d  pIStuts->PicpPosStat=%d\n",rendpos[pIStuts->PicpPosStat].x,rendpos[pIStuts->PicpPosStat].y,
-		//rendpos[pIStuts->PicpPosStat].w,rendpos[pIStuts->PicpPosStat].h,pIStuts->PicpPosStat);
-	
-		
+	{		
 		m_display.dynamic_config(CDisplayer::DS_CFG_RenderPosRect, 1, &rendpos[pIStuts->PicpPosStat]);
-
 	}
 	if(msgId ==MSGID_EXT_INPUT_COAST)
 	{
 		m_castTm=OSA_getCurTimeInMsec();
 		m_bCast=true;
-		
-
 	}
 	if(msgId ==MSGID_EXT_INPUT_VIDEOEN)
 	{
@@ -2666,20 +2519,12 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		 status^=1;
 		m_display.dynamic_config(CDisplayer::DS_CFG_VideodetEnable, 1, &status);
 		OSA_printf("MSGID_EXT_INPUT_VIDEOEN status1=%d\n",status);
-		
-
 	}
 	if(msgId ==MSGID_EXT_INPUT_MMTSHOW)
 	{
 		int itmp=0;
 		int mmtchid=0;
 		DS_Rect lay_rect;
-		//Mat frame;
-
-		//int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
-		//extInCtrl.DispColor[extInCtrl.SensorStat]=0;
-		//OnProcess(pIStuts->SensorStat,frame);
-		//extInCtrl.DispColor[extInCtrl.SensorStat]=frcolor;
 		if(pIStuts->ImgMmtshow[pIStuts->SensorStat])
 		{
 			int chid=pIStuts->SensorStat;
@@ -2814,18 +2659,25 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		}
 	}
 	
-	/*if(msgId == MSGID_EXT_INPUT_DISPGRADE)
-	{
-		if(pIStuts->DispGrp[0] == eDisp_hide)
-			pThis->m_display.m_bOsd = false;
-		else
-			pThis->m_display.m_bOsd = true;
-	}*/
 }
 
 
 /////////////////////////////////////////////////////
 //int majormmtid=0;
+
+void CProcess021::MSGDRIV_attachMsgFun(MSGDRIV_Handle handle, int msgId, MsgApiFun pRtnFun, int context)
+{
+    assert(handle != NULL && msgId < MAX_MSG_NUM);
+
+    handle->msgTab[msgId].msgId = msgId;
+
+    handle->msgTab[msgId].pRtnFun = pRtnFun;
+
+    handle->msgTab[msgId].refContext = context;
+
+   //OSA_printf("^^^^^^msgId=%d  pRtnFun=%p\n",msgId,pRtnFun);
+}
+
 
  int  CProcess021::MSGAPI_initial()
 {
@@ -2861,141 +2713,9 @@ void CProcess021::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 }
 
 
-int CProcess021::WriteAxisToFile()
+void CProcess021::MSGAPI_init_device(long lParam )
 {
-	string AxisFile;
-	AxisFile = AXIS_FILE;
-	char axis_x[10] = "axis_x";
-	char axis_y[10] = "axis_y";
-
-	FILE *fp = fopen(AxisFile.c_str(), "wt");
-	if(fp !=NULL)
-	{
-		fseek(fp, 0, SEEK_END);
-		int len = ftell(fp);
-		fclose(fp);
-		if(len == 0)
-		{
-			FileStorage fw(AxisFile,FileStorage::WRITE);
-			if(fw.isOpened())
-			{
-					/*if(extInCtrl.FovStat == 1){
-						sprintf(axis_x, "axis_x_%d", 0);
-						sprintf(axis_y, "axis_y_%d", 0);
-					}
-					else if(extInCtrl.FovStat == 2){
-						sprintf(axis_x, "axis_x_%d", 1);
-						sprintf(axis_y, "axis_y_%d", 1);
-					}
-					else if(extInCtrl.FovStat == 3){
-						sprintf(axis_x, "axis_x_%d", 2);
-						sprintf(axis_y, "axis_y_%d", 2);
-					}
-					else */if(extInCtrl.FovStat == 4){
-						sprintf(axis_x, "axis_x_%d", 3);
-						sprintf(axis_y, "axis_y_%d", 3);
-					}/*
-					else if(extInCtrl.FovStat == 5){
-						sprintf(axis_x, "axis_x_%d", 4);
-						sprintf(axis_y, "axis_y_%d", 4);
-					}*/
-					
-					fw <<axis_x<< (int)extInCtrl.unitAxisXtmp[0];
-					fw <<axis_y<< (int)extInCtrl.unitAxisYtmp[0];
-				
-			}
-		}
-	}
-
-	FILE *fpp = fopen(AxisFile.c_str(), "rt");
-	if(fpp !=NULL)
-	{
-		fseek(fpp, 0, SEEK_END);
-		int len = ftell(fpp);
-		fclose(fpp);
-		if(len > 10)
-			return 0;
-	}
-	else
-		return -1;
-}
-
-int CProcess021::ReadAxisFromFile()
-{
-	string AxisFile;
-	AxisFile = AXIS_FILE;
-
-	char axis_x[10] = "axis_x";
-	char axis_y[10] = "axis_y";
-
-	FILE *fp = fopen(AxisFile.c_str(), "rt");
-	if(fp != NULL)
-	{
-		fseek(fp, 0, SEEK_END);
-		int len = ftell(fp);
-		fclose(fp);
-
-		if(len < 10)
-			return -1;
-		else
-		{
-			FileStorage fr(AxisFile, FileStorage::READ);
-			if(fr.isOpened())
-			{
-
-				sprintf(axis_x, "axis_x_%d", 3);
-				sprintf(axis_y, "axis_y_%d", 3);
-				
-				extInCtrl.unitAxisXtmp[0] = (int)fr[axis_x];
-				extInCtrl.unitAxisYtmp[0] = (int)fr[axis_y];
-				//OSA_printf("axisXY=(%d,%d)\n",extInCtrl.unitAxisXtmp[0],extInCtrl.unitAxisYtmp[0]);
-				/*
-				for(int i=0; i<5; i++){
-					sprintf(axis_x, "axis_x_%d", i);
-					sprintf(axis_y, "axis_y_%d", i);
-					//OSA_printf("axisXY=(%d,%d)\n",(int)fr[axis_x],(int)fr[axis_y]);
-					//extInCtrl.unitAxisX[i] = (int)fr[axis_x];
-					//extInCtrl.unitAxisY[i] = (int)fr[axis_y];
-
-					if((extInCtrl.FovStat == 1)&&(i==0)){
-						extInCtrl.unitAxisX[0] = (int)fr[axis_x];
-						extInCtrl.unitAxisY[0] = (int)fr[axis_y];
-					}	
-					else if((extInCtrl.FovStat == 2)&&(i==1)){
-						extInCtrl.unitAxisX[0] = (int)fr[axis_x];
-						extInCtrl.unitAxisY[0] = (int)fr[axis_y];
-					}	
-					else if((extInCtrl.FovStat == 3)&&(i==2)){
-						extInCtrl.unitAxisX[0] = (int)fr[axis_x];
-						extInCtrl.unitAxisY[0] = (int)fr[axis_y];
-					}
-					else if((extInCtrl.FovStat == 4)&&(i==3)){
-						extInCtrl.unitAxisX[0] = (int)fr[axis_x];
-						extInCtrl.unitAxisY[0] = (int)fr[axis_y];
-					}
-					else if((extInCtrl.FovStat == 5)&&(i==4)){
-						extInCtrl.unitAxisX[0] = (int)fr[axis_x];
-						extInCtrl.unitAxisY[0] = (int)fr[axis_y];
-					}
-				}
-				*/
-				
-				return 0;
-			}else
-				return -1;
-		}
-	}
-	else
-		return -1;
-}
-
-
- #if 1
- void CProcess021::MSGAPI_init_device(long lParam )
-{
-	
 	sThis->msgdriv_event(MSGID_SYS_INIT,NULL);
-	OSA_printf("hello world\n");
 }
 
   void CProcess021::MSGAPI_inputsensor(long lParam )
@@ -3013,7 +2733,6 @@ void CProcess021::MSGAPI_picp(long lParam )
 			pIStuts->PicpSensorStat = 0xFF;
 	
 	sThis->msgdriv_event(MSGID_EXT_INPUT_ENPICP,NULL);
-	OSA_printf("hello world\n");
 }
 
 
@@ -3187,11 +2906,6 @@ void CProcess021::MSGAPI_inputfrezz(long lParam )
 void CProcess021::MSGAPI_inputmmtselect(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
-		//if(pIStuts->ImgZoomStat[pIStuts->SensorStat])
-		//	pIStuts->ImgZoomStat[pIStuts->SensorStat] = eImgAlg_Disable;
-		//else
-		//	pIStuts->ImgZoomStat[pIStuts->SensorStat] = eImgAlg_Enable;
-	//pThis->msgdriv_event(MSGID_EXT_INPUT_ENFREZZ,NULL);
 	if(pIStuts->ImgMtdSelect[pIStuts->SensorStat]  ==eMMT_Next)
 		majormmtid=(majormmtid+1)%MAX_TARGET_NUMBER;
 	else if(pIStuts->ImgMtdSelect[pIStuts->SensorStat]  ==  eMMT_Prev)
@@ -3295,14 +3009,6 @@ void CProcess021::MSGAPI_inputfovchange(long lParam )
 {
 
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
-	#if 0
-	sThis->m_intervalFrame=1;
-	
-	sThis->m_rcAcq.x=pIStuts->unitAxisX[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
-	sThis->m_rcAcq.y=pIStuts->unitAxisY[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
-	sThis->m_rcAcq.width=trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
-	sThis->m_rcAcq.height=trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
-	#endif
 
 	//OSA_printf("%s:unitFovAngle = %f\n",__func__,pIStuts->unitFovAngle[pIStuts->SensorStat]);
 	#if __TRACK__
@@ -3317,56 +3023,32 @@ void CProcess021::MSGAPI_inputsearchmod(long lParam )
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	float panenv=pIStuts->TrkPanev/100.0;
 	float TrkTitlev=pIStuts->TrkTitlev/100.0;
-	if(panenv>5)
-		{
-			//sThis->m_searchmod=1;
-		}
-	else if(panenv<-5)
-		{
-			//sThis->m_searchmod=2;
-		}
-	else 
-		{
-			//sThis->m_searchmod=0;
-		}
 	
 	// printf("the TrkPanev=%f TrkTitlev=%f\n",pIStuts->TrkPanev/100.0,pIStuts->TrkTitlev/100.0);
-	
 }
 
 
  void CProcess021::MSGAPI_inputvideotect(long lParam )
- 	{
-
-		OSA_printf("MSGAPI_inputvideotect*******************\n");
-		sThis->msgdriv_event(MSGID_EXT_INPUT_VIDEOEN,NULL);
- 	}
+{
+	OSA_printf("MSGAPI_inputvideotect*******************\n");
+	sThis->msgdriv_event(MSGID_EXT_INPUT_VIDEOEN,NULL);
+}
 
   void CProcess021::MSGAPI_mmtshow(long lParam )
- 	{
-
-		
-		OSA_printf("MSGAPI_mmtshow\n");
-		//sThis->msgdriv_event(MSGID_EXT_INPUT_MMTSHOW,NULL);
-		//sThis->msgdriv_event(MSGID_EXT_INPUT_VIDEOEN,NULL);
- 	}
-    void CProcess021::MSGAPI_FOVcmd(long lParam )
- 	{
-		CMD_EXT *pIStuts = &sThis->extInCtrl;
-		if((pIStuts->FovCtrl==5)&&(pIStuts->SensorStat==0))
-			sThis->tvzoomStat=1;
-		else
-			sThis->tvzoomStat=0;
-		
- 	}
+{
+	OSA_printf("MSGAPI_mmtshow\n");
+}
+void CProcess021::MSGAPI_FOVcmd(long lParam )
+{
+	CMD_EXT *pIStuts = &sThis->extInCtrl;
+	if((pIStuts->FovCtrl==5)&&(pIStuts->SensorStat==0))
+		sThis->tvzoomStat=1;
+	else
+		sThis->tvzoomStat=0;
+}
 void CProcess021::MSGAPI_SaveCfgcmd(long lParam )
 {
-	
 	sThis->msgdriv_event(MSGID_EXT_INPUT_CFGSAVE,NULL);
 }	
-
-
-
- #endif
 
 
