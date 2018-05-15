@@ -1824,7 +1824,13 @@ void CProcess::OnKeyDwn(unsigned char key)
 	if (key == 'g'|| key == 'G')
 	{
 
+		/**************aimSize**********/
+			pIStuts->AvtTrkAimSize = 0;
+			app_ctrl_setTrkBomen(pIStuts); // bomen show or hide
+			app_ctrl_setAimSize(pIStuts);
+
 		/**************mmtselect****************/
+		#if 0
 		int i = 3;
 		int ImgPixelX = (int)m_mtd[0]->tg[i].cur_x%1920;
 		int ImgPixelY = (int)m_mtd[0]->tg[i].cur_y%1080;
@@ -1839,13 +1845,21 @@ void CProcess::OnKeyDwn(unsigned char key)
 		pIStuts->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
 		app_ctrl_setAxisPos(pIStuts);
 		//printf("enter trk again \n\n");
-	
+		#endif
 		/***************posmov**************/
 		//pIStuts->AvtMoveX = eTrk_ref_right;
 		//app_ctrl_setAimPos(pIStuts);
 
 		//msgdriv_event(MSGID_EXT_INPUT_COAST, NULL);
 	}
+
+	if (key == 'h'|| key == 'H')
+	{
+		pIStuts->AvtTrkAimSize = 3;
+		app_ctrl_setAimSize(pIStuts);
+	}
+
+
 	if (key == 'z'|| key == 'Z')
 		{
 			
@@ -2751,9 +2765,7 @@ void CProcess::MSGAPI_inputtrack(long lParam )
 
 void CProcess::MSGAPI_inpumtd(long lParam )
 {
-	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	sThis->msgdriv_event(MSGID_EXT_INPUT_ENMTD,NULL);
-	OSA_printf("hello world\n");
 }
 
 void CProcess::MSGAPI_inpumtdSelect(long lParam )
@@ -2794,7 +2806,6 @@ void CProcess::MSGAPI_inpumtdSelect(long lParam )
 void CProcess::MSGAPI_inpuenhance(long lParam )
 {
 	sThis->msgdriv_event(MSGID_EXT_INPUT_ENENHAN,NULL);
-	OSA_printf("hello world\n");
 }
 
 void CProcess::MSGAPI_setAimRefine(long lParam)
@@ -2825,7 +2836,7 @@ void CProcess::MSGAPI_setAimRefine(long lParam)
 
 void CProcess::MSGAPI_setAimSize(long lParam)
 {
-	CMD_EXT *pIStuts = &sThis->extInCtrl;
+	//CMD_EXT *pIStuts = &sThis->extInCtrl;
 	sThis->msgdriv_event(MSGID_EXT_INPUT_AIMSIZE,NULL);
 }
 

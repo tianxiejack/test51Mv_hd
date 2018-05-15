@@ -25,9 +25,6 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 	if(msgextInCtrl==NULL)
 		return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
-
-    //if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
-    //    pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
 	
     if ((pInCmd->AvtTrkStat != pIStuts->AvtTrkStat) || pIStuts->AvtTrkStat == eTrk_mode_sectrk)
     {
@@ -433,25 +430,16 @@ void app_ctrl_setTvColl(CMD_EXT * pInCmd)
 
 void app_ctrl_setAimSize(CMD_EXT * pInCmd)
 {
-       if(msgextInCtrl==NULL)
+	if(msgextInCtrl==NULL)
 		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
-
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
-
-    if (pIStuts->AvtTrkAimSize != pInCmd->AvtTrkAimSize)
-    {
-        pIStuts->AvtTrkAimSize = pInCmd->AvtTrkAimSize;
-       // MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
-       MSGDRIV_send(MSGID_EXT_INPUT_AIMSIZE, 0);
-       
-	  //MSGAPI_AckSnd( AckWaveDoorScal);
-    }
-    else
-        ;//MSGAPI_AckSnd( AckWaveDoorScal);
-   
-   return ;
+	CMD_EXT *pIStuts = msgextInCtrl;
+	
+	if (pIStuts->AvtTrkAimSize != pInCmd->AvtTrkAimSize)
+	{
+		pIStuts->AvtTrkAimSize = pInCmd->AvtTrkAimSize;
+		MSGDRIV_send(MSGID_EXT_INPUT_AIMSIZE, 0);
+	}
+	return ;
 }
 
 
@@ -842,28 +830,20 @@ void app_ctrl_setTvFovCtrl(CMD_EXT * pInCmd)
 
 void app_ctrl_setEnhance(CMD_EXT * pInCmd)
 {
-  if(msgextInCtrl==NULL)
+	if(msgextInCtrl==NULL)
 		return ;
-     CMD_EXT *pIStuts = msgextInCtrl;
+	CMD_EXT *pIStuts = msgextInCtrl;
 
-    if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
-	
-     if(pInCmd->ImgEnhStat[pInCmd->SensorStat] != pIStuts->ImgEnhStat[pInCmd->SensorStat])
-     	{
-	 	pIStuts->ImgEnhStat[pInCmd->SensorStat] = pInCmd->ImgEnhStat[pInCmd->SensorStat];
+	if(pInCmd->ImgEnhStat[pInCmd->SensorStat] != pIStuts->ImgEnhStat[pInCmd->SensorStat])
+	{
+		pIStuts->ImgEnhStat[pInCmd->SensorStat] = pInCmd->ImgEnhStat[pInCmd->SensorStat];
 		if(pIStuts->ImgEnhStat[pInCmd->SensorStat]==0)
-			{
-				pIStuts->ImgEnhStat[pInCmd->SensorStat^1]=0;
-			}
-		MSGDRIV_send(MSGID_EXT_INPUT_ENENHAN, 0);
-		//MSGAPI_AckSnd(Ackenhance);
-     	}
-	else
 		{
-			//MSGAPI_AckSnd(Ackenhance);
-		}   
-   return ;
+			pIStuts->ImgEnhStat[pInCmd->SensorStat^1]=0;
+		}
+		MSGDRIV_send(MSGID_EXT_INPUT_ENENHAN, 0);
+	}
+	return ;
 }
 
 

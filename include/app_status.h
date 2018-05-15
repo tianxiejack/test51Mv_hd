@@ -144,7 +144,7 @@ typedef struct
 	volatile float unitTrkYtmp;    	// for report and osd text
 
 	volatile unsigned int  AvtTrkStat;      		// eTrkMode 
-	volatile unsigned int  AvtTrkAimSize;   	// 0-3
+	volatile unsigned int  AvtTrkAimSize;   	// 0-4
 	volatile unsigned int  AvtCfgSave;      	// eSaveMode
 	volatile unsigned int  AvtTrkCoast;
 	volatile unsigned int  TrkErrFeedback;  	// eTrkMode 
@@ -190,11 +190,11 @@ typedef struct
 	volatile unsigned char 	Mtdtargetnum; 		//mtd xy
 
 	/***** cmd osd part *****/
-	volatile unsigned char 	TrkBomenCtrl; // osd Trk Aim
 	volatile unsigned int  DispGrp[eSen_Max];       	// eDispGrade
 	volatile unsigned int  DispColor[eSen_Max];  	// eOSDColor or eGRPColor
 	
 	//don't know the usage
+	volatile unsigned char 	TrkBomenCtrl; // osd Trk Aim
 	volatile unsigned char SecAcqFlag;
 	volatile unsigned char SecAcqStat;
 	volatile unsigned int  TrkCoastCount;
