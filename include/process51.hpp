@@ -50,8 +50,6 @@ public:
 	static CProcess *sThis;
 	void process_osd_test(void *pPrm);
 
-	void getMmtTg(unsigned char index);
-
 
 protected:
 	void msgdriv_event(MSG_PROC_ID msgId, void *prm);

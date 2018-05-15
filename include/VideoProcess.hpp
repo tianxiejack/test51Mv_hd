@@ -108,6 +108,7 @@ public :
 	bool wFileFlag;
 	bool tvzoomStat;
 
+	ALGMTD_HANDLE m_mtd[MAX_CHAN];
 	
 protected:
 	MultiChVideo MultiCh;
@@ -119,7 +120,6 @@ protected:
 	int adaptiveThred;
 
 	UTCTRACK_HANDLE m_track;
-	ALGMTD_HANDLE m_mtd[MAX_CHAN];
 
 	
 	static bool m_bTrack;

@@ -3,12 +3,16 @@
 #include"osa.h"
 #include "msgDriv.h"
 #include"dx.h"
+#include "configable.h"
+
 CMD_EXT *msgextInCtrl;
 #define Coll_Save 0 //   1:quit coll is to save  cross  or  0:using save funtion to cross axis
 #define FrColl_Change 1 //0:frcoll v1.00 1:frcoll v1.01     //ver1.01 is using 
 
 static int pristatus=0;
-extern CProcess* plat;
+void getMmtTg(unsigned char index,int *x,int *y);
+
+
 
 void  app_ctrl_getSysData(CMD_EXT * exthandle)
 {
@@ -204,7 +208,7 @@ void app_ctrl_setSensor(CMD_EXT * pInCmd)
 void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index)
 {	
 	int curx,cury;
-	plat->getMmtTg(index, &curx, &cury);
+	getMmtTg(index, &curx, &cury);
 	
 	pIStuts->AvtTrkStat = eTrk_mode_sectrk;
 	pIStuts->NaimX = curx;

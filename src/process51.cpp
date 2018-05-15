@@ -24,6 +24,14 @@ void inputtmp(unsigned char cmdid)
 	plat->OnKeyDwn(cmdid);
 }
 
+void getMmtTg(unsigned char index,int *x,int *y)
+{
+	int cur_x = 
+	*x = (int)plat->m_mtd[eSen_TV]->tg[index].cur_x%_IMAGE_WIDTH_;
+	*y = (int)plat->m_mtd[eSen_TV]->tg[index].cur_y%_IMAGE_HEIGHT_;
+	return ;
+}
+
 CProcess::CProcess()
 {
 	memset(&rcTrackBak, 0, sizeof(rcTrackBak));
@@ -1727,13 +1735,6 @@ static inline void my_rotate(GLfloat result[16], float theta)
 	result[5] = c;
 	result[10] = 1.0f;
 	result[15] = 1.0f;
-}
-
-void CProcess::getMmtTg(unsigned char index,int *x,int *y)
-{
-	*x = (int)m_mtd[eSen_TV]->tg[index].cur_x%_IMAGE_WIDTH_;
-	*y = (int)m_mtd[eSen_TV]->tg[index].cur_y%_IMAGE_HEIGHT_;
-	return ;
 }
 
 void CProcess::OnMouseLeftDwn(int x, int y){};
