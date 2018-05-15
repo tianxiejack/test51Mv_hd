@@ -11,14 +11,13 @@ using namespace cv;
 
 int main(int argc, char **argv)
 {
-	printf("Oh my God \n\n");
 	CProcess proc;
-#ifdef __IPC__
-	Ipc_pthread_start();
-#endif
 	App_dxmain();
 	proc.creat();
 	proc.init();
+#ifdef __IPC__
+	Ipc_pthread_start();
+#endif
 	proc.run();
 	glutMainLoop();
 	proc.destroy();
