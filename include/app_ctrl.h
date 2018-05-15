@@ -44,4 +44,11 @@ void app_ctrl_detectvideo();
 void app_ctrl_ack();
 void app_err_feedbak();
 
+
+/******************set***************/
+unsigned char app_ctrl_getSysmode();
+
+
+
+
 #endif /* APP_CTRL_H_ */

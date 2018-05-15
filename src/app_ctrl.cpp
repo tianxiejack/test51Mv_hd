@@ -8,16 +8,66 @@ CMD_EXT *msgextInCtrl;
 #define FrColl_Change 1 //0:frcoll v1.00 1:frcoll v1.01     //ver1.01 is using 
 int iChangeMask = 0;
 static int pristatus=0;
+
 void  app_ctrl_getSysData(CMD_EXT * exthandle)
 {
     OSA_assert(exthandle!=NULL);
     if(msgextInCtrl==NULL)
-		return ;
+	return ;
     memcpy(exthandle,msgextInCtrl,sizeof(CMD_EXT));
-
     return ;
 }
 
+
+
+void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
+{
+	if(msgextInCtrl==NULL)
+		return ;
+	CMD_EXT *pIStuts = msgextInCtrl;
+
+    //if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
+    //    pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
+	
+    if ((pInCmd->AvtTrkStat != pIStuts->AvtTrkStat) || pIStuts->AvtTrkStat == eTrk_mode_sectrk)
+    {
+        pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
+	 if((pIStuts->AvtTrkStat==eTrk_mode_search)||(pIStuts->AvtTrkStat==eTrk_mode_sectrk))
+	{
+		pIStuts->AvtPixelX = pInCmd->ImgPixelX[pIStuts->SensorStat] ;
+		pIStuts->AvtPixelY = pInCmd->ImgPixelY[pIStuts->SensorStat] ;
+
+		pIStuts->NaimX = pInCmd->NaimX;
+		pIStuts->NaimY = pInCmd->NaimY;
+	}
+
+	MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
+    }
+   return ;
+}
+
+
+
+void app_ctrl_setSysmode(CMD_EXT * pInCmd)
+{
+	 if(msgextInCtrl==NULL)
+		return ;
+     	CMD_EXT *pIStuts = msgextInCtrl;
+        if(pInCmd->SysMode != pIStuts->SysMode)
+            pIStuts->SysMode = pInCmd->SysMode;
+
+        return ;
+}
+
+unsigned char app_ctrl_getSysmode()
+{
+	if(msgextInCtrl==NULL)
+		return ;
+	return  msgextInCtrl->SysMode;
+}
+
+
+//********************************************
 
 void app_ctrl_Sensorchange(CMD_EXT * pInCmd)
 {
@@ -26,7 +76,6 @@ void app_ctrl_Sensorchange(CMD_EXT * pInCmd)
 	CMD_EXT *pIStuts = msgextInCtrl;
 	pIStuts->unitAimX=pIStuts->unitAxisX[pIStuts->SensorStat];
 	pIStuts->unitAimY=pIStuts->unitAxisY[pIStuts->SensorStat];
-
 }
 
 void app_ctrl_setReset(CMD_EXT * pInCmd)
@@ -123,38 +172,6 @@ void app_ctrl_setSensor(CMD_EXT * pInCmd)
 
 
 
-void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
-{
-
-
-	if(msgextInCtrl==NULL)
-		return ;
-     CMD_EXT *pIStuts = msgextInCtrl;
-
-    //if(pInCmd->CmdType != pIStuts->CmdType)
-    //    pIStuts->CmdType = pInCmd->CmdType;
-
-    if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
-        pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
-	
-    if ((pInCmd->AvtTrkStat != pIStuts->AvtTrkStat) || pIStuts->AvtTrkStat == eTrk_mode_sectrk)
-    {
-        pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
-	 if((pIStuts->AvtTrkStat==eTrk_mode_search)||(pIStuts->AvtTrkStat==eTrk_mode_sectrk))
-	{
-		pIStuts->AvtPixelX = pInCmd->ImgPixelX[pIStuts->SensorStat] ;
-		pIStuts->AvtPixelY   = pInCmd->ImgPixelY[pIStuts->SensorStat] ;
-
-		pIStuts->NaimX = pInCmd->NaimX;
-		pIStuts->NaimY = pInCmd->NaimY;
-	}
-
-
-	//printf("*****************%s  avtrkstat=%d  \n",__func__,pIStuts->AvtTrkStat);	
-        MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
-    }
-   return ;
-}
 
 
 
@@ -528,17 +545,6 @@ void app_ctrl_poweron(CMD_EXT * pInCmd )
 	return ;	
 }
 
-
-void app_ctrl_setSysmode(CMD_EXT * pInCmd)
-{
-	 if(msgextInCtrl==NULL)
-		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
-        if(pInCmd->SysMode != pIStuts->SysMode)
-            pIStuts->SysMode = pInCmd->SysMode;
-
-        return ;
-}
 
 
 void app_ctrl_setFovselect(CMD_EXT * pInCmd)

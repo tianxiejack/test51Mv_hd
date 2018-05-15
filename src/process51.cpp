@@ -114,7 +114,6 @@ CProcess::CProcess()
 	msgextInCtrl=&extInCtrl;
 	sThis = this;
 	plat = this;
-	
 }
 
 CProcess::~CProcess()
@@ -364,7 +363,10 @@ void CProcess::OnCreate()
 
 };
 void CProcess::OnDestroy(){};
-void CProcess::OnInit(){};
+void CProcess::OnInit()
+{
+	extInCtrl.SysMode = 1;
+}
 void CProcess::OnConfig(){};
 void CProcess::OnRun(){};
 void CProcess::OnStop(){};
@@ -726,7 +728,7 @@ void CProcess::drawmmt(TARGET tg[],bool bShow)
 		 	 endy=PiexltoWindowsy(result.y+result.height,extInCtrl.SensorStat);
 
 			//OSA_printf("the AvtTrkStat=%d  DispGrp=%d\n",extInCtrl.AvtTrkStat,extInCtrl.DispGrp[extInCtrl.SensorStat]);
-			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3)&&(extInCtrl.SysMode!=9)&&(extInCtrl.SysMode!=2))
+			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3))
 			{
 				rectangle( frame,
 					Point( startx, starty ),
@@ -756,7 +758,7 @@ void CProcess::drawmmt(TARGET tg[],bool bShow)
 
 			 startx=PiexltoWindowsx(result.x,extInCtrl.SensorStat);
 			 starty=PiexltoWindowsy(result.y,extInCtrl.SensorStat);
-			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3)&&(extInCtrl.SysMode!=9)&&(extInCtrl.SysMode!=2))
+			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3))
 			{
 				line(frame, cvPoint(startx-16,starty), cvPoint(startx+16,starty), colour, 1, 8, 0 ); 
 				line(frame, cvPoint(startx,starty-16), cvPoint(startx,starty+16), colour, 1, 8, 0 ); 
@@ -943,7 +945,7 @@ void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 			 Mdrawbak[i].valid=1;
 
 			//OSA_printf("the AvtTrkStat=%d  DispGrp=%d\n",extInCtrl.AvtTrkStat,extInCtrl.DispGrp[extInCtrl.SensorStat]);
-			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)&&(extInCtrl.SysMode!=8)&&(extInCtrl.SysMode!=2))
+			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3))
 			{
 				rectangle( frame,
 				Point( startx, starty ),
@@ -1013,7 +1015,7 @@ void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 			Mdrawbak[i].endx=endx;
 			Mdrawbak[i].endy=endy;
 			Mdrawbak[i].valid=1;
-			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)&&(extInCtrl.SysMode!=8)&&(extInCtrl.SysMode!=2))
+			if((((extInCtrl.AvtTrkStat == eTrk_mode_mtd)||(extInCtrl.AvtTrkStat == eTrk_mode_acq)))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3))
 			{
 				//DrawCross(result.x,result.y,frcolor,bShow);
 				//trkimgcross(frame,result.x,result.y,16);
