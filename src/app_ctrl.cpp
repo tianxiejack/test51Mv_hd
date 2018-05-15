@@ -272,8 +272,6 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
     //if(pInCmd->CmdType != pIStuts->CmdType)
 	//pIStuts->CmdType = pInCmd->CmdType;
 
-    if(pInCmd->FovMov!= pIStuts->FovMov)
-	pIStuts->FovMov= pInCmd->FovMov;
 	
     if (pIStuts->AvtMoveX != pInCmd->AvtMoveX ||pIStuts->AvtMoveY != pInCmd->AvtMoveY)
     {
@@ -308,16 +306,7 @@ void app_ctrl_setZoom(CMD_EXT * pInCmd)
   */  
     if(pInCmd->CmdType != pIStuts->CmdType)
         pIStuts->CmdType = pInCmd->CmdType;
-    
-    if(pInCmd->ZoomMultiple!= pIStuts->ZoomMultiple)
-        pIStuts->ZoomMultiple = pInCmd->ZoomMultiple;
-    
-    if(pInCmd->ImgZoom != pIStuts->ImgZoom)
-        pIStuts->ImgZoom = pInCmd->ImgZoom;
-
-    if(pInCmd->ImgSmall != pIStuts->ImgSmall)
-        pIStuts->ImgSmall = pInCmd->ImgSmall;
-    
+           
     // (pIStuts->ImgZoomStat[0] != pInCmd->ImgZoomStat[0] || pIStuts->ImgZoomStat[1] != pInCmd->ImgZoomStat[1])
     {
         pIStuts->ImgZoomStat[0] = pInCmd->ImgZoomStat[0];
@@ -405,8 +394,6 @@ void app_ctrl_setTvColl(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
 
-    //OSA_printf("TvCollX:%d****TvCollY:%d\n",pIStuts->unitTvCollX,pIStuts->unitTvCollY);
-
     if(pInCmd->CmdType != pIStuts->CmdType)
         pIStuts->CmdType = pInCmd->CmdType;
 
@@ -434,9 +421,6 @@ void app_ctrl_setAimSize(CMD_EXT * pInCmd)
 
     if(pInCmd->CmdType != pIStuts->CmdType)
         pIStuts->CmdType = pInCmd->CmdType;
-
-    if(pIStuts->AimScaleStat != pInCmd->AimScaleStat)
-        pIStuts->AimScaleStat = pInCmd->AimScaleStat;
 
     if (pIStuts->AvtTrkAimSize != pInCmd->AvtTrkAimSize)
     {
@@ -540,8 +524,6 @@ void app_ctrl_poweron(CMD_EXT * pInCmd )
 	 if(msgextInCtrl==NULL)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
-	 if(pInCmd->Firpoweron!= pIStuts->Firpoweron)
-            pIStuts->Firpoweron = pInCmd->Firpoweron;
 
 	return ;	
 }

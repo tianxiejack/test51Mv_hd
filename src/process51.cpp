@@ -43,13 +43,7 @@ CProcess::CProcess()
 	pIStuts->unitAxisY[0]      = VIDEO_IMAGE_HEIGHT_0/2;
 
 	pIStuts->unitAxisX[1]      = VIDEO_IMAGE_WIDTH_1/2;
-	pIStuts->unitAxisY[1]      = VIDEO_IMAGE_HEIGHT_1/2;
-
-	pIStuts->unitAxisXtmp[0] = VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->unitAxisYtmp[0] = VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->unitAxisXtmp[1] = VIDEO_IMAGE_WIDTH_1/2;
-	pIStuts->unitAxisYtmp[1] = VIDEO_IMAGE_WIDTH_1/2;
-	
+	pIStuts->unitAxisY[1]      = VIDEO_IMAGE_HEIGHT_1/2;	
 	
 	pIStuts->unitAimW 	= 	AIM_WIDTH;
 	pIStuts->unitAimH 	= 	AIM_HEIGHT;
@@ -67,7 +61,6 @@ CProcess::CProcess()
 
 	extInCtrl.TrkBomenCtrl=1;
 	pIStuts->changeSensorFlag = 0;
-	pIStuts->unitWorkMode = NORMAL_MODE; // self init check end
 	crossBak.x=extInCtrl.unitAxisX[pIStuts->SensorStat ];
 	crossBak.y=extInCtrl.unitAxisY[pIStuts->SensorStat ];
 	pIStuts->AvtTrkAimSize= AVT_TRK_AIM_SIZE;
@@ -92,7 +85,6 @@ CProcess::CProcess()
 	tvcorx=VIDEO_IMAGE_WIDTH_0 -100;
 	tvcory=VIDEO_IMAGE_HEIGHT_0 -100;
 
-	pIStuts->Firpoweron=2;
 	memset(secBak,0,sizeof(secBak));
 
 	memset(Osdflag,0,sizeof(Osdflag));
@@ -558,15 +550,6 @@ void CProcess::DrawBlob(BlobRect blobRct,  bool bShow /*= true*/)
 		pt2.x=startx;pt2.y=starty+10;
 		line(m_dccv, pt1, pt2, colour, 1, 8, 0 );
 
-		extInCtrl.TempTvCollX=center.x;
-		extInCtrl.TempTvCollY=center.y;
-		if(m_bBlobDetect)
-		{
-			if((extInCtrl.TempTvCollX==0)||(extInCtrl.TempTvCollY==0))
-				;
-			else					
-				;//MSGAPI_AckSnd( AckTvCollErr);
-		}
 	}
 }
 
@@ -2418,8 +2401,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			pInCmd = (CMD_EXT *)prm;
 			pIStuts->ImgZoomStat[0] = pInCmd->ImgZoomStat[0];
 			pIStuts->ImgZoomStat[1] = pInCmd->ImgZoomStat[1];
-			pIStuts->DispZoomMultiple[0] = pInCmd->DispZoomMultiple[0];
-			pIStuts->DispZoomMultiple[1] = pInCmd->DispZoomMultiple[1];
 		}
 
 		DS_Rect lay_rect;
