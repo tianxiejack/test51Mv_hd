@@ -1824,9 +1824,23 @@ void CProcess::OnKeyDwn(unsigned char key)
 	if (key == 'g'|| key == 'G')
 	{
 
+		/**************mmtselect****************/
+		int i = 3;
+		int ImgPixelX = (int)m_mtd[0]->tg[i].cur_x%1920;
+		int ImgPixelY = (int)m_mtd[0]->tg[i].cur_y%1080;
+		
+		pIStuts->AvtTrkStat = eTrk_mode_sectrk;
+		pIStuts->NaimX = ImgPixelX;
+		pIStuts->NaimY = ImgPixelY;
+		//printf("next aimx ,aimy (%d,%d)\n",pIStuts->NaimX,pIStuts->NaimY);
+		app_ctrl_setTrkStat(pIStuts);
 
+		pIStuts->AvtPosXTv = VIDEO_IMAGE_WIDTH_0/2;
+		pIStuts->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
+		app_ctrl_setAxisPos(pIStuts);
+		//printf("enter trk again \n\n");
 	
-		//posmov
+		/***************posmov**************/
 		//pIStuts->AvtMoveX = eTrk_ref_right;
 		//app_ctrl_setAimPos(pIStuts);
 
