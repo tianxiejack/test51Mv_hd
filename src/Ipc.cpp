@@ -131,11 +131,18 @@ void* recv_msg(SENDST *RS422)
 			{
 				pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Disable;
 			}
-			
 			app_ctrl_setMMT(pMsg);
 			MSGAPI_msgsend(mmt);
 			
 			break;
+
+		case mmtselect:
+			memcpy(&Rmmtselect,RS422->param,sizeof(Rmmtselect));
+			imgID1 = Rmmtselect.ImgMmtSelect;	
+			app_ctrl_setMmtSelect(pMsg,imgID1);
+			
+			break;
+			
 		case enh:
 			memcpy(&Renh,RS422->param,sizeof(Renh));
 			imgID1 = Renh.ImgEnhStat;
@@ -154,8 +161,12 @@ void* recv_msg(SENDST *RS422)
 			MSGAPI_msgsend(enh);
 			break;		
 		case trkdoor:	
+			memcpy(&Rtrkdoor,RS422->param,sizeof(Rtrkdoor));
+			imgID1 = Rtrkdoor.AvtTrkAimSize;	
+			pMsg->AvtTrkAimSize = imgID1;
+			app_ctrl_setAimSize(pMsg);
 	
-			inputtmp('K');
+			//inputtmp('K');
 			break;
 			memcpy(&Rtrkdoor,RS422->param,sizeof(Rtrkdoor));
 			imgID1 = Rtrkdoor.TrkBomenCtrl;

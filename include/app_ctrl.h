@@ -8,9 +8,7 @@ extern CMD_EXT *msgextInCtrl;
 void app_ctrl_freezeReset(CMD_EXT * pInCmd);
 void app_ctrl_setReset(CMD_EXT * pInCmd);
 void app_ctrl_setSensor(CMD_EXT * pInCmd);
-void  app_ctrl_getSysData(CMD_EXT * exthandle);
 void app_ctrl_setTrkStat(CMD_EXT * pInCmd);
-void app_ctrl_setMmtSelect(CMD_EXT * pInCmd);
 void app_ctrl_setMMT(CMD_EXT * pInCmd);
 void app_ctrl_setForceCoast(CMD_EXT * pInCmd);
 void app_ctrl_setTrkBomen(CMD_EXT * pInCmd);
@@ -45,9 +43,10 @@ void app_ctrl_ack();
 void app_err_feedbak();
 
 
-/******************set***************/
+/******************get***************/
+void  app_ctrl_getSysData(CMD_EXT * exthandle);
 unsigned char app_ctrl_getSysmode();
-
+void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index);
 
 
 

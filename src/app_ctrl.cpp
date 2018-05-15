@@ -8,6 +8,7 @@ CMD_EXT *msgextInCtrl;
 #define FrColl_Change 1 //0:frcoll v1.00 1:frcoll v1.01     //ver1.01 is using 
 
 static int pristatus=0;
+extern CProcess* plat;
 
 void  app_ctrl_getSysData(CMD_EXT * exthandle)
 {
@@ -200,30 +201,22 @@ void app_ctrl_setSensor(CMD_EXT * pInCmd)
 
 
 
+void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index)
+{	
+	int curx,cury;
+	plat->getMmtTg(index, &curx, &cury);
+	
+	pIStuts->AvtTrkStat = eTrk_mode_sectrk;
+	pIStuts->NaimX = curx;
+	pIStuts->NaimY = cury;
 
+	app_ctrl_setTrkStat(pIStuts);
 
-void app_ctrl_setMmtSelect(CMD_EXT * pInCmd)
-{
-     
-	if(msgextInCtrl==NULL)
-		return ;
-     CMD_EXT *pIStuts = msgextInCtrl;
-
-    if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
-
-    if(pInCmd->MMTTempStat != pIStuts->MMTTempStat)
-	 	pIStuts->MMTTempStat = pInCmd->MMTTempStat;
-
-  //  if (pIStuts->ImgMtdSelect[0] != pInCmd->ImgMtdSelect[0] || pIStuts->ImgMtdSelect[1] != pInCmd->ImgMtdSelect[1])
-    {
-        pIStuts->ImgMtdSelect[0] = pInCmd->ImgMtdSelect[0];
-        pIStuts->ImgMtdSelect[1] = pInCmd->ImgMtdSelect[1];
-        if (pIStuts->ImgMtdSelect[pIStuts->SensorStat])
-            MSGDRIV_send(MSGID_EXT_INPUT_MTD_SELECT, 0);
-    }
+	pIStuts->AvtPosXTv = VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
+	app_ctrl_setAxisPos(pIStuts);
    
-   return ;
+	return ;
 }
 
 
