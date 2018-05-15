@@ -6,7 +6,7 @@
 CMD_EXT *msgextInCtrl;
 #define Coll_Save 0 //   1:quit coll is to save  cross  or  0:using save funtion to cross axis
 #define FrColl_Change 1 //0:frcoll v1.00 1:frcoll v1.01     //ver1.01 is using 
-int iChangeMask = 0;
+
 static int pristatus=0;
 
 void  app_ctrl_getSysData(CMD_EXT * exthandle)
@@ -62,9 +62,39 @@ void app_ctrl_setSysmode(CMD_EXT * pInCmd)
 unsigned char app_ctrl_getSysmode()
 {
 	if(msgextInCtrl==NULL)
-		return ;
+		return 255;
 	return  msgextInCtrl->SysMode;
 }
+
+
+
+void app_ctrl_setAimPos(CMD_EXT * pInCmd)
+{
+	if(msgextInCtrl==NULL)
+		return ;
+	CMD_EXT *pIStuts = msgextInCtrl;
+
+	if (pIStuts->AvtMoveX != pInCmd->AvtMoveX ||pIStuts->AvtMoveY != pInCmd->AvtMoveY){
+	    pIStuts->AvtMoveX = pInCmd->AvtMoveX;
+	    pIStuts->AvtMoveY = pInCmd->AvtMoveY;
+
+	}
+	MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
+	return ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //********************************************
@@ -280,36 +310,7 @@ void app_ctrl_setTrkBomen(CMD_EXT * pInCmd)
 
 
 
-void app_ctrl_setAimPos(CMD_EXT * pInCmd)
-{
-           if(msgextInCtrl==NULL)
-		return ;
-    CMD_EXT *pIStuts = msgextInCtrl;
-	
-    //if(pInCmd->CmdType != pIStuts->CmdType)
-	//pIStuts->CmdType = pInCmd->CmdType;
 
-	
-    if (pIStuts->AvtMoveX != pInCmd->AvtMoveX ||pIStuts->AvtMoveY != pInCmd->AvtMoveY)
-    {
-        pIStuts->AvtMoveX = pInCmd->AvtMoveX;
-        pIStuts->AvtMoveY = pInCmd->AvtMoveY;
-        iChangeMask++;
-    }
-
-    if(iChangeMask % 3 == 0)
-		iChangeMask++;
-
-    /***for **reply*****/		
-    //MSGAPI_AckSnd( AckWaveDoorPos);
-    
-    if((pIStuts->CmdType == 0x07) &&(iChangeMask))
-    {
-         MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
-        iChangeMask = 0;
-    }
-   return ;
-}
 
 
 void app_ctrl_setZoom(CMD_EXT * pInCmd)

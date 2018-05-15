@@ -1822,11 +1822,16 @@ void CProcess::OnKeyDwn(unsigned char key)
 			msgdriv_event(MSGID_EXT_INPUT_PICPCROP, NULL);
 		}
 	if (key == 'g'|| key == 'G')
-		{
-			
-			
-			msgdriv_event(MSGID_EXT_INPUT_COAST, NULL);
-		}
+	{
+
+
+	
+		//posmov
+		//pIStuts->AvtMoveX = eTrk_ref_right;
+		//app_ctrl_setAimPos(pIStuts);
+
+		//msgdriv_event(MSGID_EXT_INPUT_COAST, NULL);
+	}
 	if (key == 'z'|| key == 'Z')
 		{
 			
@@ -2348,19 +2353,16 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 		if(pIStuts->AvtTrkAimSize<0||pIStuts->AvtTrkAimSize>4)
 			pIStuts->AvtTrkAimSize=2;
-
+		printf("####pIStuts->AvtTrkStat = %d \n",pIStuts->AvtTrkStat);
 		if(pIStuts->AvtTrkStat)
 		{
-
 			UTC_RECT_float rc;
 			if(msgId == MSGID_EXT_INPUT_AIMSIZE)
 			{
-				pIStuts->unitAimW = trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
-				pIStuts->unitAimH= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
-
+				pIStuts->unitAimW 	= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
+				pIStuts->unitAimH		= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
 				rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2;
 				rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2;
-
 				rc.width=pIStuts->unitAimW;
 				rc.height=pIStuts->unitAimH;
 
@@ -2377,15 +2379,9 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				
 				rc.width=pIStuts->unitAimW;
 				rc.height=pIStuts->unitAimH;
-				rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2+pIStuts->AvtMoveX;
-				rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2+pIStuts->AvtMoveY;
-				
-
+				rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2 +pIStuts->AvtMoveX;
+				rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2  +pIStuts->AvtMoveY;
 			}
-			//dynamic_config(VP_CFG_TrkEnable, 0);
-			//OSA_waitMsecs(40);
-			//usleep(1);
-			//dynamic_config(VP_CFG_TrkEnable, 1,&rc);
 			m_intervalFrame=1;
 			m_rcAcq=rc;
 			OSA_printf(" %d:%s refine move (%d, %d), wh(%f, %f)  aim(%d,%d) rc(%f,%f)\n", OSA_getCurTimeInMsec(), __func__,
@@ -2654,28 +2650,28 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
     assert(handle != NULL);
     memset(handle->msgTab, 0, sizeof(MSGTAB_Class) * MAX_MSG_NUM);
 //MSGID_EXT_INPUT_MTD_SELECT
-    MSGDRIV_attachMsgFun(handle,    MSGID_SYS_INIT,           				   MSGAPI_init_device,       		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_SENSOR,           	   MSGAPI_inputsensor,       		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_PICPCROP,      		   MSGAPI_croppicp,       		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_TRACK,          		   MSGAPI_inputtrack,     		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENMTD,                       MSGAPI_inpumtd,       		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_MTD_SELECT,     	   MSGAPI_inpumtdSelect,    		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_AIMPOS,          	 MSGAPI_setAimRefine,    		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_AIMSIZE,          	  MSGAPI_setAimSize,    		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENENHAN,           	       MSGAPI_inpuenhance,       	            0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENBDT,           		   MSGAPI_inputbdt,         		    0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENZOOM,           	   MSGAPI_inputzoom,                     0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENFREZZ,           	   MSGAPI_inputfrezz,                      0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_MTD_SELECT,      	   MSGAPI_inputmmtselect,              0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_AXISPOS,     	  	   MSGAPI_inputpositon,                   0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_COAST,             	   MSGAPI_inputcoast,                      0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_FOVSELECT,                MSGAPI_inputfovselect,                 0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_FOVSTAT,                	   MSGAPI_inputfovchange,               0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_SEARCHMOD,              MSGAPI_inputsearchmod,              0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_VIDEOEN,            	   MSGAPI_inputvideotect,                 0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_MMTSHOW,             MSGAPI_mmtshow,                 	     0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_FOVCMD,             MSGAPI_FOVcmd,                 	     0);
-    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_CFGSAVE,             MSGAPI_SaveCfgcmd,                 	     0);	
+    MSGDRIV_attachMsgFun(handle,    MSGID_SYS_INIT,           				MSGAPI_init_device,       		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_SENSOR,           	   	MSGAPI_inputsensor,       		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_PICPCROP,      		MSGAPI_croppicp,       		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_TRACK,          		MSGAPI_inputtrack,     		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENMTD,                   MSGAPI_inpumtd,       		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_MTD_SELECT,     	MSGAPI_inpumtdSelect,    		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_AIMPOS,          	 	MSGAPI_setAimRefine,    		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_AIMSIZE,          	       MSGAPI_setAimSize,    		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENENHAN,           	MSGAPI_inpuenhance,       	            0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENBDT,           		MSGAPI_inputbdt,         		    0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENZOOM,           	MSGAPI_inputzoom,                     0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_ENFREZZ,           	MSGAPI_inputfrezz,                      0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_MTD_SELECT,      	MSGAPI_inputmmtselect,              0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_AXISPOS,     	  	MSGAPI_inputpositon,                   0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_COAST,             	MSGAPI_inputcoast,                      0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_FOVSELECT,             MSGAPI_inputfovselect,                 0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_FOVSTAT,                	MSGAPI_inputfovchange,               0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_SEARCHMOD,            MSGAPI_inputsearchmod,              0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_VIDEOEN,            	MSGAPI_inputvideotect,                 0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_MMTSHOW,             	MSGAPI_mmtshow,                 	     0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_FOVCMD,             	MSGAPI_FOVcmd,                 	     0);
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_CFGSAVE,             	MSGAPI_SaveCfgcmd,                 	     0);	
 
   
     return 0;
@@ -2787,11 +2783,11 @@ void CProcess::MSGAPI_inpuenhance(long lParam )
 	OSA_printf("hello world\n");
 }
 
-void CProcess::MSGAPI_setAimRefine(long lParam          /*=NULL*/)
+void CProcess::MSGAPI_setAimRefine(long lParam)
 {
-
+	printf("####%s \n",__func__);
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
-	//OSA_printf("%s msgextInCtrl->TrkBomenCtrl=%d pIStuts->AvtMoveY=%d\n",__func__,pIStuts->AvtMoveX,pIStuts->AvtMoveY);
+
 	if(pIStuts->AvtMoveX==eTrk_ref_left)
 	{
 		pIStuts->AvtMoveX=-1;
@@ -2808,9 +2804,12 @@ void CProcess::MSGAPI_setAimRefine(long lParam          /*=NULL*/)
 	{
 		pIStuts->AvtMoveY=1;
 	}
+	printf("@@@@@@@@@@pIStuts->AvtMoveX  = %d \n",pIStuts->AvtMoveX);
 	sThis->msgdriv_event(MSGID_EXT_INPUT_AIMPOS,NULL);
 }
-void CProcess::MSGAPI_setAimSize(long lParam          /*=NULL*/)
+
+
+void CProcess::MSGAPI_setAimSize(long lParam)
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	sThis->msgdriv_event(MSGID_EXT_INPUT_AIMSIZE,NULL);
