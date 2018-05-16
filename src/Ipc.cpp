@@ -140,6 +140,10 @@ void* recv_msg(SENDST *RS422)
 			memcpy(&Rmmtselect,RS422->param,sizeof(Rmmtselect));
 			imgID1 = Rmmtselect.ImgMmtSelect;	
 			printf("recv mmtselect : imgID1 : %d\n",imgID1);
+			if(imgID1 == 1)
+				imgID1 =5;
+			else
+				imgID1--;
 			app_ctrl_setMmtSelect(pMsg,imgID1);	
 			pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Disable;
 			app_ctrl_setMMT(pMsg);

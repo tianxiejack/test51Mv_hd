@@ -351,7 +351,94 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bMoveDetect)
 		{
-			//cv::Rect boundRect[6];
+			#if 0
+				IMG_MAT image;
+				image.data_u8 = frame_gray.data;
+				image.width = frame_gray.cols;
+				image.height = frame_gray.rows;
+				image.channels = 1;
+				image.step[0] = image.width;
+				image.dtype = 0;
+				image.size = frame_gray.cols*frame_gray.rows;
+
+				if(moveDetectRect)
+					rectangle( m_display.m_imgOsd[1],
+						Point( preAcpSR.x, preAcpSR.y ),
+						Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
+						cvScalar(0,0,0,0), 1, 8 );
+
+				acqRect.axisX = m_ImageAxisx;
+				acqRect.axisY = m_ImageAxisy;
+
+				if(m_SensorStat == 0){
+					acqRect.rcWin.x = m_ImageAxisx - 50;
+					acqRect.rcWin.y = m_ImageAxisy -50;
+					acqRect.rcWin.width = 100;
+					acqRect.rcWin.height = 100;
+				}
+				else if(m_SensorStat == 1){
+					acqRect.rcWin.x = m_ImageAxisx - 25;
+					acqRect.rcWin.y = m_ImageAxisy -25;
+					acqRect.rcWin.width = 50;
+					acqRect.rcWin.height = 50;
+
+				}
+				//UtcTrkPreAcqSR(m_track,image,acqRect,&preAcpSR);
+				
+				if((acqRect.rcWin.width!=50)&&(acqRect.rcWin.width!=100))
+				{
+					acqRect.rcWin.width=50;
+					acqRect.rcWin.height=50;
+				}
+				if(acqRect.rcWin.x<0)
+				{
+					acqRect.rcWin.x=0;
+					acqRect.axisX=image.width/2;
+					acqRect.axisY=image.height/2;
+				}
+				else if(acqRect.rcWin.x+acqRect.rcWin.width>image.width)
+				{
+					acqRect.rcWin.x=image.width/2-25;
+					acqRect.axisX=image.width/2;
+					acqRect.axisY=image.height/2;
+				}
+				if(acqRect.rcWin.y<0)
+				{
+					acqRect.rcWin.y=0;
+					acqRect.axisX=image.width/2;
+					acqRect.axisY=image.height/2;
+				}
+				else if(acqRect.rcWin.y+acqRect.rcWin.height>image.height)
+				{
+					acqRect.rcWin.y=image.height/2-25;
+					acqRect.axisX=image.width/2;
+					acqRect.axisY=image.height/2;
+				}
+				
+				Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
+				if(Movedetect)
+				{
+					//printf("+++++++++xy(%d,%d),wh(%d,%d)\n",preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);		
+					preAcpSR.x = MoveAcpSR.x*m_display.m_imgOsd[1].cols/frame.cols;
+					preAcpSR.y = MoveAcpSR.y*m_display.m_imgOsd[1].rows/frame.rows;
+					preAcpSR.width = MoveAcpSR.width*m_display.m_imgOsd[1].cols/frame.cols;
+					preAcpSR.height = MoveAcpSR.height*m_display.m_imgOsd[1].rows/frame.rows;
+
+					if(moveDetectRect)
+						rectangle( m_display.m_imgOsd[1],
+							Point( preAcpSR.x, preAcpSR.y ),
+							Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
+							cvScalar(255,0,0,255), 1, 8 );
+
+				}
+#endif
+
+			
+
+
+
+
+			
 			
 
 

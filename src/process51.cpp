@@ -833,7 +833,8 @@ void CProcess::erassdrawmmtnew(TARGETDRAW tg[],bool bShow)
 				Point( startx-1, starty-1 ),
 				Point( endx+1, endy+1),
 				colour, 1, 8);
-			
+			sprintf(numbuf,"%d",primajormmtid+1);
+			putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);	
 		}
 
 		if((tg[i].valid)&&(i!=primajormmtid))
@@ -967,8 +968,8 @@ void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 				Point( endx+1, endy+1),
 				colour, 1, 8);
 
-				//sprintf(numbuf,"%d",majormmtid+1);
-				//putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
+				sprintf(numbuf,"%d",majormmtid+1);
+				putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
 
 			}
 			//OSA_printf("******************the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
@@ -1532,6 +1533,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 					//printf("@@@@@@@@@@extInCtrl.unitTrkStat = %d \n",extInCtrl.unitTrkStat);
 					ipc_settrack(extInCtrl.unitTrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);//unitTrkStat
 					trkmsg.cmd_ID = read_shm_trkpos;
+					//printf("ack the trackerr to mainThr\n");
 					ipc_sendmsg(&trkmsg, IPC_FRIMG_MSG);
 			#endif	
 				
