@@ -1911,6 +1911,7 @@ void CProcess::OnKeyDwn(unsigned char key)
 		}
 		else
 			moveDetectRect = true;
+		OSA_printf("moveDetectRect = %d\n",moveDetectRect);
 	}
 	
 }

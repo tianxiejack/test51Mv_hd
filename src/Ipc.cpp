@@ -148,6 +148,7 @@ void* recv_msg(SENDST *RS422)
 			pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Disable;
 			app_ctrl_setMMT(pMsg);
 			MSGAPI_msgsend(mmtselect);
+			MSGAPI_msgsend(trk);
 			break;
 			
 		case enh:
@@ -290,7 +291,7 @@ int send_msg(SENDST *RS422)
 			break;
 			
 		case mmtselect:
-			RS422->param[0] = pIStuts.AvtTrkStat;
+			RS422->param[0] = pIStuts.MtdState[pIStuts.SensorStat];
 			printf("ack mmtselect  :  %d\n",RS422->param[0]);
 			break;
 			

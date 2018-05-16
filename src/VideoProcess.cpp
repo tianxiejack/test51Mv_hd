@@ -360,6 +360,8 @@ void CVideoProcess::main_proc_func()
 				image.step[0] = image.width;
 				image.dtype = 0;
 				image.size = frame_gray.cols*frame_gray.rows;
+//OSA_printf("preAcpSR.x ,preAcpSR.y :(%d,%d)\n",preAcpSR.x,preAcpSR.y);
+//OSA_printf("preAcpSR.width ,preAcpSR.height :(%d,%d)\n",preAcpSR.width,preAcpSR.height);
 
 				if(moveDetectRect)
 					rectangle( m_display.m_imgOsd[1],
@@ -416,6 +418,7 @@ void CVideoProcess::main_proc_func()
 				}
 				
 				Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
+				printf("Movedetect = %d \n",Movedetect);
 				if(Movedetect)
 				{
 					//printf("+++++++++xy(%d,%d),wh(%d,%d)\n",preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);		
@@ -431,17 +434,26 @@ void CVideoProcess::main_proc_func()
 							cvScalar(255,0,0,255), 1, 8 );
 
 				}
+				if(0)//(m_display.disptimeEnable == 1)
+				{
+					char m_strDisplay1[128];
+					float speedx1,speedy1;
+					UtcGetSceneMV(m_track, &speedx1, &speedy1);
+					
+					putText(m_display.m_imgOsd[1],m_strDisplay1,
+							Point( m_display.m_imgOsd[1].cols-450, 105),
+							FONT_HERSHEY_TRIPLEX,0.8,
+							cvScalar(0,0,0,0), 1
+							);
+					sprintf(m_strDisplay1, "speedxy: (%0.2f,%0.2f)", speedx1,speedy1);
+
+					putText(m_display.m_imgOsd[1],m_strDisplay1,
+							Point( m_display.m_imgOsd[1].cols-450, 105),
+							FONT_HERSHEY_TRIPLEX,0.8,
+							cvScalar(255,255,0,255), 1
+							);
+				}
 #endif
-
-			
-
-
-
-
-			
-			
-
-
 
 		#if __MOVE_DETECT__
 			#if __DETECT_SWITCH_Z__
@@ -505,7 +517,8 @@ CVideoProcess::CVideoProcess()
 	m_searchmod		=0;
 	tvzoomStat		=0;
 	wFileFlag			=0;
-
+	preAcpSR	={0};
+	
 	#if __MOVE_DETECT__
 		#if __DETECT_SWITCH_Z__
 			m_pMovDetector	=NULL;
