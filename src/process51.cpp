@@ -2822,7 +2822,6 @@ void CProcess::MSGAPI_inpuenhance(long lParam )
 
 void CProcess::MSGAPI_setAimRefine(long lParam)
 {
-	printf("####%s \n",__func__);
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 
 	if(pIStuts->AvtMoveX==eTrk_ref_left)
@@ -2841,7 +2840,6 @@ void CProcess::MSGAPI_setAimRefine(long lParam)
 	{
 		pIStuts->AvtMoveY=1;
 	}
-	printf("@@@@@@@@@@pIStuts->AvtMoveX  = %d \n",pIStuts->AvtMoveX);
 	sThis->msgdriv_event(MSGID_EXT_INPUT_AIMPOS,NULL);
 }
 

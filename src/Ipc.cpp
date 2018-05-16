@@ -176,51 +176,46 @@ void* recv_msg(SENDST *RS422)
 				printf("next aimx ,aimy (%d,%d)\n",pMsg->NaimX,pMsg->NaimY);
 				app_ctrl_setTrkStat(pMsg);
 				
-				pMsg->AvtPosXTv = VIDEO_IMAGE_WIDTH_0/2;
-				pMsg->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
+				pMsg->AvtPosXTv = pMsg->unitAxisX[0];
+				pMsg->AvtPosYTv = pMsg->unitAxisY[0];
 				app_ctrl_setAxisPos(pMsg);
+				MSGAPI_msgsend(sectrk);						
 			}			
-			MSGAPI_msgsend(sectrk);						
 			break;
 
 		case sensor:
-			
 			break;
 
-		case pinp:
-
+		case pinp:	
 			break;
 					
 		case trkdoor:	
 			memcpy(&Rtrkdoor,RS422->param,sizeof(Rtrkdoor));
-			imgID1 = Rtrkdoor.AvtTrkAimSize;	
-			pMsg->AvtTrkAimSize = imgID1;
-			//if(pMsg->AvtTrkAimSize )
+			pMsg->AvtTrkAimSize = Rtrkdoor.AvtTrkAimSize;
+			if(pMsg->AvtTrkAimSize > 0x05)
+				pMsg->AvtTrkAimSize = 0x05;
 			app_ctrl_setAimSize(pMsg);	
+			MSGAPI_msgsend(trkdoor);
 			break;	
 			
 		case posmove:	
 			memcpy(&Rposmove,RS422->param,sizeof(Rposmove));
-			imgID1 = Rposmove.AvtMoveX;
-			imgID2 = Rposmove.AvtMoveY;
-		
-			OSA_printf("+++++AvtMoveXY(%d,%d)\n",imgID1,imgID2);
-			pMsg->AvtMoveX = imgID1;
-			pMsg->AvtMoveY = imgID2;
+			pMsg->AvtMoveX = Rposmove.AvtMoveX;
+			pMsg->AvtMoveY = Rposmove.AvtMoveY;
 			app_ctrl_setAimPos(pMsg);
-			MSGAPI_msgsend(posmove);
 			break;	
 
 		case zoom:
-
 			break;
 
 		case autocheck:
-
 			break;
 
 		case axismove:
-
+			memcpy(&Raxismove,RS422->param,sizeof(Raxismove));
+			pMsg->AvtMoveX = Raxismove.AvtMoveX;
+			pMsg->AvtMoveY = Raxismove.AvtMoveY;
+			app_ctrl_setAxisPos(pMsg);
 			break;
 			
 		case exit_img:
@@ -253,23 +248,34 @@ int send_msg(SENDST *RS422)
 	{
 		case trk:
 			RS422->param[0] = pIStuts.AvtTrkStat;
-			break;				
+			break;
+			
 		case mmt:
 			RS422->param[0] = pIStuts.ImgMtdStat[pIStuts.SensorStat];
 			break;
+			
 		case mmtselect:
 			RS422->param[0] = pIStuts.AvtTrkStat;
 			break;
+			
 		case enh:
 			RS422->param[0] = pIStuts.ImgEnhStat[pIStuts.SensorStat];
-			break;	
+			break;
+			
 		case mtd:
 			RS422->param[0] = app_ctrl_getMtdStat();
 			break;
 			
+		case sectrk:
+			RS422->param[0] = pIStuts.AvtTrkStat;
+			break;
+			
 		case trkdoor:
 			RS422->param[1] = pIStuts.AvtTrkAimSize;			
-			break;		
+			break;	
+
+		
+			
 		case posmove:
 			switch(pIStuts.AvtMoveX)
 			{
@@ -301,13 +307,6 @@ int send_msg(SENDST *RS422)
 			}
 			printf("send ++++++++++ AvtMoveXY = (%02x,%02x)  ++++++++++\n",RS422->param[0],RS422->param[1]);				
 			break;
-		case sectrk:
-			if(pIStuts.AvtTrkStat == eTrk_mode_search)
-				RS422->param[0] = 0x03;
-			else
-				RS422->param[0] = 0x01;//pIStuts.AvtTrkStat;
-			printf("send ++++++++++ AvtTrkStat %02x  ++++++++++\n",RS422->param[0]);			
-			break;							
 		case exit_img:					
 			break;
 		default:
