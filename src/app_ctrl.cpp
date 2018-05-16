@@ -42,7 +42,6 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 		pIStuts->NaimX = pInCmd->NaimX;
 		pIStuts->NaimY = pInCmd->NaimY;
 	}
-
 	MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
     }
    return ;
