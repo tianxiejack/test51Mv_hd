@@ -79,7 +79,6 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
 	if (pIStuts->AvtMoveX != pInCmd->AvtMoveX ||pIStuts->AvtMoveY != pInCmd->AvtMoveY){
 	    pIStuts->AvtMoveX = pInCmd->AvtMoveX;
 	    pIStuts->AvtMoveY = pInCmd->AvtMoveY;
-
 	}
 	MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
 	return ;
@@ -94,13 +93,11 @@ void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index)
 	pIStuts->AvtTrkStat = eTrk_mode_sectrk;
 	pIStuts->NaimX = curx;
 	pIStuts->NaimY = cury;
-
 	app_ctrl_setTrkStat(pIStuts);
 
-	pIStuts->AvtPosXTv = VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->AvtPosXTv = pIStuts->unitAxisX[eSen_TV];
+	pIStuts->AvtPosYTv = pIStuts->unitAxisY[eSen_TV];
 	app_ctrl_setAxisPos(pIStuts);
-   
 	return ;
 }
 
@@ -124,23 +121,21 @@ void app_ctrl_setEnhance(CMD_EXT * pInCmd)
 }
 
 
-
 void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
 {
        if(msgextInCtrl==NULL)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
-	int iMoveMask =0;	
-
-	if (pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
+	if(pInCmd->axisMoveStepX  || pInCmd->axisMoveStepY)
+	{
+		pIStuts->axisMoveStepX = pInCmd->axisMoveStepX;
+		pIStuts->axisMoveStepY = pInCmd->axisMoveStepY;
+		MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);	
+	}
+	else if(pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
 	{
 		pIStuts->AvtPosXTv = pInCmd->AvtPosXTv;
 		pIStuts->AvtPosYTv = pInCmd->AvtPosYTv;
-		iMoveMask++;
-	}
-
-	if(iMoveMask)
-	{
 		MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
 	}
 	return ;
@@ -156,6 +151,7 @@ void app_ctrl_setMtdStat(CMD_EXT * pInCmd)
 	if(pIStuts->MtdState[pIStuts->validChId] != pInCmd->MtdState[pIStuts->validChId])
 	{
 		pIStuts->MtdState[pIStuts->validChId] = pInCmd->MtdState[pIStuts->validChId];
+		MSGDRIV_send(MSGID_EXT_MVDETECT, 0);
 	}
 	return ;
 }

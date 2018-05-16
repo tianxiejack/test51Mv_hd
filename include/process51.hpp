@@ -100,6 +100,7 @@ protected:
 	 static void MSGAPI_mmtshow(long lParam );
 	 static void MSGAPI_FOVcmd(long lParam );
 	 static void MSGAPI_SaveCfgcmd(long lParam );
+	 static void MSGAPI_setMtdState(long lParam);
 
 
 private:

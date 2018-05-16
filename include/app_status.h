@@ -167,6 +167,10 @@ typedef struct
 	volatile unsigned int  AvtPixelX;        // for ext designated
 	volatile unsigned int  AvtPixelY;        // for ext designated
 
+	/***** new status *****/
+	volatile int axisMoveStepX;
+	volatile int axisMoveStepY;
+
 	/***** cmd stat part *****/
 	volatile unsigned int  SensorStat;      		// eSenserStat
 	volatile unsigned int  changeSensorFlag;

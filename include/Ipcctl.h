@@ -75,13 +75,13 @@ typedef enum
 }IPC_Class;
 
 typedef enum {
-	IPC_eSen_TV0	= 0x00,
-	IPC_eSen_TV1	= 0x01,
-	IPC_eSen_TV2   = 0x02,
-	IPC_eSen_TV3 	= 0x03,
-	IPC_eSen_FR1   = 0x04,
-	IPC_eSen_Max   = 0x05
-}IPC_eSenserStat;
+        ipc_eSen_TV0 = 0x00,
+        ipc_eSen_TV1 = 0x01,
+        ipc_eSen_TV2 = 0x02,
+        ipc_eSen_TV3 = 0x03,
+        ipc_eSen_FR1 = 0x04,
+        ipc_eSen_Max = 0x05
+}ipc_eSenserStat;
 
 typedef enum img_zoom
 {
@@ -208,9 +208,9 @@ typedef struct{
 
 typedef struct{
     volatile unsigned char unitFaultStat;/*0:FR ok,TV ok; 1:FR ok,TV err; 2:FR err,TV ok; 3:FR err,TV err*/
-    volatile unsigned char ComStat;/*\u6d93\u5a5a\u20ac\u6c2b\u4fca\u9418\u8235\u20ac\u4f8a\u7d1d0\u59dd\uff45\u7236\u951b?\u93c1\u5474\u6bb0*/
-    volatile unsigned char RomdeviceStat;/*\u701b\u6a3a\u504d\u7481\u60e7\ue62c\u9418\u8235\u20ac\u4f8a\u7d300\u59dd\uff45\u7236\u951b?\u93c1\u5474\u6bb0*/
-    volatile unsigned char GPUStat;/*GPU\u9418\u8235\u20ac\u4f8a\u7d300\u59dd\uff45\u7236\u951b?\u93c1\u5474\u6bb0*/
+    volatile unsigned char ComStat;/*主通信状态，0正常，1故障*/
+    volatile unsigned char RomdeviceStat;/*存储设备状态：0正常，1故障*/
+    volatile unsigned char GPUStat;/*GPU状态：0正常，1故障*/
 }CMD_AUTOCHECK;
 
 

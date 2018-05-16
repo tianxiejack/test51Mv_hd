@@ -89,7 +89,8 @@ CProcess::CProcess()
 
 	pIStuts->FrCollimation=2;
 	pIStuts->PicpSensorStatpri=2;
-	
+	pIStuts->axisMoveStepX = 0;
+	pIStuts->axisMoveStepY = 0;
 	tvcorx=VIDEO_IMAGE_WIDTH_0 -100;
 	tvcory=VIDEO_IMAGE_HEIGHT_0 -100;
 
@@ -1745,6 +1746,7 @@ void CProcess::OnMouseRightUp(int x, int y){};
 void CProcess::OnKeyDwn(unsigned char key)
 {
 	CMD_EXT *pIStuts = &extInCtrl;
+	CMD_EXT tmpCmd = {0};
 
 	if(key == 'a' || key == 'A')
 	{
@@ -1793,6 +1795,10 @@ void CProcess::OnKeyDwn(unsigned char key)
 
 	if (key == 'k' || key == 'K')
 	{
+		if(pIStuts->MtdState[pIStuts->SensorStat])
+			pIStuts->MtdState[pIStuts->SensorStat] = eImgAlg_Disable;
+		else
+			pIStuts->MtdState[pIStuts->SensorStat] = eImgAlg_Enable;
 		msgdriv_event(MSGID_EXT_MVDETECT, NULL);
 	}
 
@@ -1830,14 +1836,14 @@ void CProcess::OnKeyDwn(unsigned char key)
 		}
 	if (key == 'g'|| key == 'G')
 	{
-
+		#if 0
 		/**************aimSize**********/
 			pIStuts->AvtTrkAimSize = 0;
 			app_ctrl_setTrkBomen(pIStuts); // bomen show or hide
 			app_ctrl_setAimSize(pIStuts);
 
 		/**************mmtselect****************/
-		#if 0
+	
 		int i = 3;
 		int ImgPixelX = (int)m_mtd[0]->tg[i].cur_x%1920;
 		int ImgPixelY = (int)m_mtd[0]->tg[i].cur_y%1080;
@@ -1854,16 +1860,22 @@ void CProcess::OnKeyDwn(unsigned char key)
 		//printf("enter trk again \n\n");
 		#endif
 		/***************posmov**************/
-		//pIStuts->AvtMoveX = eTrk_ref_right;
-		//app_ctrl_setAimPos(pIStuts);
+		printf("before set AxisPos\n");
+		tmpCmd.axisMoveStepX = 1;
+		tmpCmd.axisMoveStepY = 0;
+		app_ctrl_setAxisPos(&tmpCmd);
 
 		//msgdriv_event(MSGID_EXT_INPUT_COAST, NULL);
 	}
 
 	if (key == 'h'|| key == 'H')
 	{
-		pIStuts->AvtTrkAimSize = 3;
-		app_ctrl_setAimSize(pIStuts);
+		printf("before set AxisPos\n");
+		tmpCmd.axisMoveStepX= eTrk_ref_left;
+		app_ctrl_setAxisPos(&tmpCmd);
+		
+		//pIStuts->AvtTrkAimSize = 3;
+		//app_ctrl_setAimSize(pIStuts);
 	}
 
 
@@ -2660,19 +2672,16 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 	if(msgId == MSGID_EXT_MVDETECT)
 	{	
-		static bool open_close_movedetect = 1;
-		printf("MoveDetect open? = %d\n",open_close_movedetect);
-		if(open_close_movedetect)
+		int Mtdstatus = (pIStuts->MtdState[pIStuts->validChId]&0x01) ;
+		if(Mtdstatus)
 		{
 			dynamic_config(VP_CFG_MvDetect, 1,NULL);
-			open_close_movedetect = 0;
 			tmpCmd.MtdState[pIStuts->SensorStat] = 1;
 			app_ctrl_setMtdStat(&tmpCmd);
 		}
 		else
 		{
 			dynamic_config(VP_CFG_MvDetect, 0,NULL);
-			open_close_movedetect = 1;
 			tmpCmd.MtdState[pIStuts->SensorStat] = 0;
 			app_ctrl_setMtdStat(&tmpCmd);
 		}
@@ -2712,6 +2721,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
     MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_MMTSHOW,             	MSGAPI_mmtshow,                 	     0);
     MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_FOVCMD,             	MSGAPI_FOVcmd,                 	     0);
     MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_CFGSAVE,             	MSGAPI_SaveCfgcmd,                 	     0);	
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_MVDETECT,             		MSGAPI_setMtdState,                 	     0);	
 
   
     return 0;
@@ -2818,6 +2828,11 @@ void CProcess::MSGAPI_inpumtdSelect(long lParam )
 void CProcess::MSGAPI_inpuenhance(long lParam )
 {
 	sThis->msgdriv_event(MSGID_EXT_INPUT_ENENHAN,NULL);
+}
+
+void CProcess::MSGAPI_setMtdState(long lParam )
+{
+	sThis->msgdriv_event(MSGID_EXT_MVDETECT,NULL);
 }
 
 void CProcess::MSGAPI_setAimRefine(long lParam)
@@ -2927,33 +2942,19 @@ void CProcess::MSGAPI_inputpositon(long lParam )
 	{
 		if((pIStuts->AvtPosXTv>=50)&&(pIStuts->AvtPosXTv<=vcapWH[pIStuts->SensorStat][0]-50))
 		{
+			pIStuts->AvtPosXTv += pIStuts->axisMoveStepX;
 			pIStuts->unitAimX = pIStuts->AvtPosXTv;
 			pIStuts->unitAxisX[pIStuts->SensorStat ]=pIStuts->AvtPosXTv;
 			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];
 		}
 		if((pIStuts->AvtPosYTv>=50)&&(pIStuts->AvtPosYTv<=vcapWH[pIStuts->SensorStat][1]-50))
 		{
+			pIStuts->AvtPosYTv += pIStuts->axisMoveStepY;
 			pIStuts->unitAimY = pIStuts->AvtPosYTv;
 			pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYTv;
 			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];
 		}
 	}
-	else if(pIStuts->SensorStat==1)
-	{
-		if((pIStuts->AvtPosXFir>=25)&&(pIStuts->AvtPosXFir<=vcapWH[pIStuts->SensorStat][0]-25))
-		{
-			pIStuts->unitAimX = pIStuts->AvtPosXFir;
-			pIStuts->unitAxisX[pIStuts->SensorStat ]=pIStuts->AvtPosXFir;
-			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];
-		}
-		if((pIStuts->AvtPosYFir>=25)&&(pIStuts->AvtPosYFir<=vcapWH[pIStuts->SensorStat][1]-25))
-		{
-			pIStuts->unitAimY = pIStuts->AvtPosYFir;
-			pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYFir;
-			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];
-		}
-	}
-
 	OSA_printf("%s   THE=unitAimX=%d unitAxisY=%d\n",__func__,pIStuts->unitAxisX[pIStuts->SensorStat ],pIStuts->unitAxisY[pIStuts->SensorStat ]);
 }
 

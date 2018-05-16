@@ -28,7 +28,6 @@ SUBDIRS := \
 src \
 src/OSD_CR \
 src/OSD \
-src/OSA_IPC/src \
 src/OSA_CAP/src \
 src/MSGDRI \
 src/LASERBLOB \

@@ -145,23 +145,32 @@ void* recv_msg(SENDST *RS422)
 			memcpy(&Renh,RS422->param,sizeof(Renh));
 			imgID1 = Renh.ImgEnhStat;	
 			if(imgID1 == 1){
-				pMsg->ImgEnhStat[eSen_TV] = ipc_eImgAlg_Enable;
+				pMsg->ImgEnhStat[pMsg->validChId] = ipc_eImgAlg_Enable;
 			}
 			else if(imgID1 == 0){
-				pMsg->ImgEnhStat[eSen_TV] = ipc_eImgAlg_Disable;
+				pMsg->ImgEnhStat[pMsg->validChId] = ipc_eImgAlg_Disable;
 			}	
 			app_ctrl_setEnhance(pMsg);
 			MSGAPI_msgsend(enh);
 			break;
 
 		case mtd:
-			inputtmp('K');
+			memcpy(&Rmtd,RS422->param,sizeof(Rmtd));
+			imgID1 = Rmtd.ImgMtdStat;	
+
+			if(imgID1 == 1){
+				pMsg->MtdState[pMsg->validChId] = ipc_eImgAlg_Enable;
+			}
+			else if(imgID1 == 0){
+				pMsg->MtdState[pMsg->validChId] = ipc_eImgAlg_Disable;
+			}	
+			app_ctrl_setMtdStat(pMsg);
 			MSGAPI_msgsend(mtd);
 			break;
 
 		case sectrk:
-			memcpy(&Rsectrk,RS422->param,sizeof(Rsectrk));
-			imgID1 = Rsectrk.SecAcqStat ;
+			memcpy(&Rmtd,RS422->param,sizeof(Rmtd));
+			imgID1 = Rmtd.ImgMtdStat ;
 		
 			if(1 == imgID1){
 				pMsg->AvtPosXTv = Rsectrk.ImgPixelX;
@@ -213,8 +222,17 @@ void* recv_msg(SENDST *RS422)
 
 		case axismove:
 			memcpy(&Raxismove,RS422->param,sizeof(Raxismove));
-			pMsg->AvtMoveX = Raxismove.AvtMoveX;
-			pMsg->AvtMoveY = Raxismove.AvtMoveY;
+			imgID1 = Raxismove.AvtMoveX;
+			imgID2 = Raxismove.AvtMoveY;		
+			if(imgID1 == eTrk_ref_left)
+				pMsg->axisMoveStepX = -1;
+			else if(imgID1 == eTrk_ref_right)
+				pMsg->axisMoveStepX = 1;
+			
+			if(imgID2 == eTrk_ref_up)
+				pMsg->axisMoveStepY = -1;
+			else if(imgID2 == eTrk_ref_down)
+				pMsg->axisMoveStepY = 1;
 			app_ctrl_setAxisPos(pMsg);
 			break;
 			
