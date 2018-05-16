@@ -1793,7 +1793,6 @@ void CProcess::OnKeyDwn(unsigned char key)
 
 	if (key == 'k' || key == 'K')
 	{
-		
 		msgdriv_event(MSGID_EXT_MVDETECT, NULL);
 	}
 
@@ -1908,6 +1907,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 	int tempvalue=0;
 	CMD_EXT *pIStuts = &extInCtrl;
 	CMD_EXT *pInCmd = NULL;
+	CMD_EXT tmpCmd = {0};
 	//printf("*************x=%d y=%d\n",pIStuts->unitAxisX[extInCtrl.SensorStat ],pIStuts->unitAxisY[extInCtrl.SensorStat ]);
 	if(msgId == MSGID_EXT_INPUT_SENSOR || msgId == MSGID_EXT_INPUT_ENPICP)
 	{
@@ -2666,11 +2666,15 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		{
 			dynamic_config(VP_CFG_MvDetect, 1,NULL);
 			open_close_movedetect = 0;
+			tmpCmd.MtdState[pIStuts->SensorStat] = 1;
+			app_ctrl_setMtdStat(&tmpCmd);
 		}
 		else
 		{
 			dynamic_config(VP_CFG_MvDetect, 0,NULL);
 			open_close_movedetect = 1;
+			tmpCmd.MtdState[pIStuts->SensorStat] = 0;
+			app_ctrl_setMtdStat(&tmpCmd);
 		}
 	}
 	

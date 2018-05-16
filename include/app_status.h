@@ -17,6 +17,7 @@ typedef enum {
 	eSen_FR    = 0x01,
 	eSen_Max   = 0x02
 }eSenserStat;
+
 typedef enum {
 	ePicp_top_left = 0x00,
 	ePicp_top_right = 0x01,
@@ -118,6 +119,7 @@ typedef struct
 	volatile unsigned int  unitVerNum;      // 1.23=>0x0123
 	volatile unsigned int  unitFaultStat;   // bit0:tv input bit1:fr input bit2:avt21
 	volatile unsigned int  unitFaultStatpri;   // bit0:tv input bit1:fr input bit2:avt21
+	volatile unsigned int  validChId;
 	volatile unsigned char  SysMode; 	// 0 --- init ; 1 ---normal  2---settiing
 	volatile unsigned char  FovCtrl; 
 	volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
@@ -178,6 +180,7 @@ typedef struct
 	volatile unsigned int  ImgVideoTrans[eSen_Max];   // eImgAlgStat
 	volatile unsigned int  ImgPicp[eSen_Max];   	 	// eImgAlgStat
 
+
 	volatile unsigned int  unitMtdValid;    			// 0-disable 1-valid 2-unvalid
 	volatile unsigned int  unitMtdPixelX;
 	volatile unsigned int  unitMtdPixelY;
@@ -185,9 +188,11 @@ typedef struct
 	volatile unsigned int  ImgMtdSelect[eSen_Max];  	// eMMTSelect or range 0-MTD_TARGET_NUM
 
 	volatile unsigned int  	ImgMmtshow[eSen_Max];	
-	volatile unsigned char  	MMTTempStat;		//for ack mmt stat
+	volatile unsigned char  MMTTempStat;		//for ack mmt stat
 	volatile unsigned char 	MtdOffsetXY[20]; 		//mtd xy
 	volatile unsigned char 	Mtdtargetnum; 		//mtd xy
+
+	volatile unsigned char  MtdState[eSen_Max];	//record moving obj detect state of each channel
 
 	/***** cmd osd part *****/
 	volatile unsigned int  DispGrp[eSen_Max];       	// eDispGrade

@@ -21,7 +21,11 @@ void app_ctrl_setAimSize(CMD_EXT * pInCmd);
 void app_ctrl_setTargetPal(CMD_EXT * pInCmd);
 void app_ctrl_setFovCtrl(CMD_EXT * pInCmd);
 void app_ctrl_setSerTrk(CMD_EXT * pInCmd );
+
 void app_ctrl_setSysmode(CMD_EXT * pInCmd);
+unsigned char app_ctrl_getSysmode();
+
+
 void app_ctrl_setSaveCfg(CMD_EXT * pInCmd);
 void app_ctrl_setFovselect(CMD_EXT * pInCmd);
 void app_ctrl_SaveCollXY();
@@ -42,10 +46,10 @@ void app_ctrl_detectvideo();
 void app_ctrl_ack();
 void app_err_feedbak();
 
+void app_ctrl_setMtdStat(CMD_EXT * pInCmd);
+unsigned char app_ctrl_getMtdStat();
 
-/******************get***************/
 void  app_ctrl_getSysData(CMD_EXT * exthandle);
-unsigned char app_ctrl_getSysmode();
 void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index);
 
 

@@ -86,19 +86,121 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
 }
 
 
+void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index)
+{	
+	int curx,cury;
+	getMmtTg(index, &curx, &cury);
+	
+	pIStuts->AvtTrkStat = eTrk_mode_sectrk;
+	pIStuts->NaimX = curx;
+	pIStuts->NaimY = cury;
+
+	app_ctrl_setTrkStat(pIStuts);
+
+	pIStuts->AvtPosXTv = VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
+	app_ctrl_setAxisPos(pIStuts);
+   
+	return ;
+}
+
+
+void app_ctrl_setEnhance(CMD_EXT * pInCmd)
+{
+	if(msgextInCtrl==NULL)
+		return ;
+	CMD_EXT *pIStuts = msgextInCtrl;
+
+	if(pInCmd->ImgEnhStat[pInCmd->SensorStat] != pIStuts->ImgEnhStat[pInCmd->SensorStat])
+	{
+		pIStuts->ImgEnhStat[pInCmd->SensorStat] = pInCmd->ImgEnhStat[pInCmd->SensorStat];
+		if(pIStuts->ImgEnhStat[pInCmd->SensorStat]==0)
+		{
+			pIStuts->ImgEnhStat[pInCmd->SensorStat^1]=0;
+		}
+		MSGDRIV_send(MSGID_EXT_INPUT_ENENHAN, 0);
+	}
+	return ;
+}
 
 
 
+void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
+{
+       if(msgextInCtrl==NULL)
+		return ;
+     	CMD_EXT *pIStuts = msgextInCtrl;
+	int iMoveMask =0;	
+
+	if (pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
+	{
+		pIStuts->AvtPosXTv = pInCmd->AvtPosXTv;
+		pIStuts->AvtPosYTv = pInCmd->AvtPosYTv;
+		iMoveMask++;
+	}
+
+	if(iMoveMask)
+	{
+		MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
+	}
+	return ;
+}
 
 
+void app_ctrl_setMtdStat(CMD_EXT * pInCmd)
+{
+	if(msgextInCtrl==NULL)
+		return ;
+	CMD_EXT *pIStuts = msgextInCtrl;
+
+	if(pIStuts->MtdState[pIStuts->validChId] != pInCmd->MtdState[pIStuts->validChId])
+	{
+		pIStuts->MtdState[pIStuts->validChId] = pInCmd->MtdState[pIStuts->validChId];
+	}
+	return ;
+}
+
+unsigned char app_ctrl_getMtdStat()
+{
+	if(msgextInCtrl==NULL)
+		return 0xff;
+	CMD_EXT *pIStuts = msgextInCtrl;
+
+	return pIStuts->MtdState[pIStuts->validChId];
+}
 
 
+#if 1	//will be revise in next step
+
+void app_ctrl_setMMT(CMD_EXT * pInCmd)
+{
+	if(msgextInCtrl==NULL)
+		return ;
+	CMD_EXT *pIStuts = msgextInCtrl;
+
+	if(pInCmd->MMTTempStat != pIStuts->MMTTempStat)
+		pIStuts->MMTTempStat = pInCmd->MMTTempStat;
+
+	if (pIStuts->ImgMtdStat[0] != pInCmd->ImgMtdStat[0] || pIStuts->ImgMtdStat[1] != pInCmd->ImgMtdStat[1])
+	{     
+		pIStuts->ImgMtdStat[0] = pInCmd->ImgMtdStat[0];
+		pIStuts->ImgMtdStat[1] = pInCmd->ImgMtdStat[1];
+		if(pInCmd->AvtTrkStat == eTrk_mode_acq)
+		{
+		    MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
+		}
+	}
+
+	if(pIStuts->MMTTempStat==3||pIStuts->MMTTempStat==4)
+	{
+		MSGDRIV_send(MSGID_EXT_INPUT_MTD_SELECT, 0);
+	}
+   
+   return ;
+}
 
 
-
-
-
-
+#endif
 //********************************************
 
 void app_ctrl_Sensorchange(CMD_EXT * pInCmd)
@@ -205,55 +307,11 @@ void app_ctrl_setSensor(CMD_EXT * pInCmd)
 
 
 
-void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index)
-{	
-	int curx,cury;
-	getMmtTg(index, &curx, &cury);
-	
-	pIStuts->AvtTrkStat = eTrk_mode_sectrk;
-	pIStuts->NaimX = curx;
-	pIStuts->NaimY = cury;
-
-	app_ctrl_setTrkStat(pIStuts);
-
-	pIStuts->AvtPosXTv = VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
-	app_ctrl_setAxisPos(pIStuts);
-   
-	return ;
-}
 
 
 
-void app_ctrl_setMMT(CMD_EXT * pInCmd)
-{
-	if(msgextInCtrl==NULL)
-		return ;
-	CMD_EXT *pIStuts = msgextInCtrl;
 
-	if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
 
-	if(pInCmd->MMTTempStat != pIStuts->MMTTempStat)
-		pIStuts->MMTTempStat = pInCmd->MMTTempStat;
-
-	if (pIStuts->ImgMtdStat[0] != pInCmd->ImgMtdStat[0] || pIStuts->ImgMtdStat[1] != pInCmd->ImgMtdStat[1])
-	{     
-		pIStuts->ImgMtdStat[0] = pInCmd->ImgMtdStat[0];
-		pIStuts->ImgMtdStat[1] = pInCmd->ImgMtdStat[1];
-		if(pInCmd->AvtTrkStat == eTrk_mode_acq)
-		{
-		    MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
-		}
-	}
-
-	if(pIStuts->MMTTempStat==3||pIStuts->MMTTempStat==4)
-	{
-		MSGDRIV_send(MSGID_EXT_INPUT_MTD_SELECT, 0);
-	}
-   
-   return ;
-}
 
 
 
@@ -661,27 +719,6 @@ if(pInCmd->DispColor[0] !=0x07)
    return ;
 }
 
-void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
-{
-       if(msgextInCtrl==NULL)
-		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
-    int iMoveMask =0;	
-
-    if (pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
-    {
-        pIStuts->AvtPosXTv = pInCmd->AvtPosXTv;
-        pIStuts->AvtPosYTv = pInCmd->AvtPosYTv;
-        iMoveMask++;
-    }
-
-    if(iMoveMask)
-    {
-        MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
-    }
-
-   return ;
-}
 
 void app_ctrl_setTvdispaly(CMD_EXT * pInCmd)
 {
@@ -824,24 +861,6 @@ void app_ctrl_setTvFovCtrl(CMD_EXT * pInCmd)
    return ;
 }
 
-
-void app_ctrl_setEnhance(CMD_EXT * pInCmd)
-{
-	if(msgextInCtrl==NULL)
-		return ;
-	CMD_EXT *pIStuts = msgextInCtrl;
-
-	if(pInCmd->ImgEnhStat[pInCmd->SensorStat] != pIStuts->ImgEnhStat[pInCmd->SensorStat])
-	{
-		pIStuts->ImgEnhStat[pInCmd->SensorStat] = pInCmd->ImgEnhStat[pInCmd->SensorStat];
-		if(pIStuts->ImgEnhStat[pInCmd->SensorStat]==0)
-		{
-			pIStuts->ImgEnhStat[pInCmd->SensorStat^1]=0;
-		}
-		MSGDRIV_send(MSGID_EXT_INPUT_ENENHAN, 0);
-	}
-	return ;
-}
 
 
 void app_ctrl_setPicp(CMD_EXT * pInCmd)
