@@ -1797,11 +1797,13 @@ void CProcess::OnKeyDwn(unsigned char key)
 
 	if (key == 'k' || key == 'K')
 	{
+		
 		if(pIStuts->MtdState[pIStuts->SensorStat])
 			pIStuts->MtdState[pIStuts->SensorStat] = eImgAlg_Disable;
 		else
 			pIStuts->MtdState[pIStuts->SensorStat] = eImgAlg_Enable;
 		msgdriv_event(MSGID_EXT_MVDETECT, NULL);
+		printf("pIStuts->MtdState[pIStuts->SensorStat]  = %d\n",pIStuts->MtdState[pIStuts->SensorStat] );
 	}
 
 	if (key == 'o' || key == 'O')
@@ -1908,6 +1910,11 @@ void CProcess::OnKeyDwn(unsigned char key)
 				Point( preAcpSR.x, preAcpSR.y ),
 				Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
 				cvScalar(0,0,0,0), 1, 8 );
+
+			rectangle( m_dccv,
+				Point( preWarnRect.x, preWarnRect.y ),
+				Point( preWarnRect.x+preWarnRect.width, preWarnRect.y+preWarnRect.height),
+				cvScalar(0,0,0,0), 2, 8 );
 		}
 		else
 			moveDetectRect = true;

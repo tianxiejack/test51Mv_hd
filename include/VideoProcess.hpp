@@ -202,6 +202,7 @@ private:
 protected: //track
 	UTC_RECT_float m_rcTrack, m_rcAcq;
 	UTC_Rect preAcpSR;
+	UTC_Rect preWarnRect;
 	UTC_Rect MoveAcpSR;
 	UTC_Rect TRKMoveAcpSR;
 	BlobRect		    m_blobRect;
