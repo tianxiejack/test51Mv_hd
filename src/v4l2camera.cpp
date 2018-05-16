@@ -18,6 +18,7 @@
 #include "arm_neon.h"
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <malloc.h>
 
 #define INPUT_IMAGE_HEIGHT		(1080)	
 #define INPUT_IMAGE_WIDTH			(1920)	
@@ -392,7 +393,10 @@ void v4l2_camera::init_userp(unsigned int buffer_size)
 {
 	struct v4l2_requestbuffers req;
 	cudaError_t ret = cudaSuccess;
-
+	unsigned int page_size;
+	page_size = getpagesize();
+	buffer_size = (buffer_size + page_size-1)&~(page_size-1);
+	
 	CLEAR(req);
 
 	req.count  = bufferCount;//6;//MAX_CHAN;
@@ -423,7 +427,8 @@ void v4l2_camera::init_userp(unsigned int buffer_size)
 	for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
 		buffers[n_buffers].length = buffer_size;
 		if(memType == MEMORY_NORMAL)
-			buffers[n_buffers].start = malloc(buffer_size);
+			//buffers[n_buffers].start = malloc(buffer_size);
+			buffers[n_buffers].start = memalign(page_size,buffer_size);
 		else // MEMORY_LOCKED
 			ret = cudaHostAlloc(&buffers[n_buffers].start, buffer_size, cudaHostAllocDefault);
 		assert(ret == cudaSuccess);
