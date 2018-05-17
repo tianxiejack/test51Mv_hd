@@ -426,7 +426,7 @@ void app_ctrl_setSerTrk(CMD_EXT * pInCmd )
 	
 
 	if((pInCmd->AxisPosX[pIStuts->SensorStat] != pIStuts->AxisPosX[pIStuts->SensorStat])
-		|| (pInCmd->ImgPixelY[pIStuts->SensorStat] != pIStuts->ImgPixelY[pIStuts->SensorStat]))
+		|| (pInCmd->AxisPosY[pIStuts->SensorStat] != pIStuts->AxisPosY[pIStuts->SensorStat]))
 	{
 		pIStuts->AxisPosX[pIStuts->SensorStat] = pInCmd->AxisPosX[pIStuts->SensorStat];
 		pIStuts->AxisPosY[pIStuts->SensorStat] = pInCmd->AxisPosY[pIStuts->SensorStat];

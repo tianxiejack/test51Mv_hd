@@ -133,10 +133,10 @@ typedef struct
 	
 
 	/***** old status ,remaining tidy*****/	
-	volatile unsigned int  unitVerNum;      // 1.23=>0x0123
-	volatile unsigned int  unitFaultStat;   // bit0:tv input bit1:fr input bit2:avt21
-	volatile unsigned int  unitFaultStatpri;   // bit0:tv input bit1:fr input bit2:avt21
-	volatile unsigned char  SysMode; 	// 0 --- init ; 1 ---normal  2---settiing
+	volatile unsigned int  unitVerNum;      	// 1.23=>0x0123
+	volatile unsigned int  unitFaultStat;   		// bit0:tv input bit1:fr input bit2:avt21
+	volatile unsigned int  unitFaultStatpri;   	// bit0:tv input bit1:fr input bit2:avt21
+	volatile unsigned char  SysMode; 		// 0 --- init ; 1 ---normal  2---settiing
 	volatile unsigned char  FovCtrl; 
 	volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
 	volatile float  unitFovAngle[eSen_Max];
@@ -195,44 +195,12 @@ typedef struct
 	volatile unsigned int  TrkCoastCount;
 	volatile unsigned int  FreezeresetCount;
 
-
 	//may be not useful
-	volatile unsigned int  TvCollimation;   //dianshi zhunzhi
+	volatile unsigned int  TvCollimation;   //dianshi zhunzhi   not understanding
 	volatile unsigned int  FrCollimation;   //rexiang zhunzhi
 	
-	volatile unsigned int  ImgMmtshow[eSen_Max];	//not sure show what
+	volatile unsigned int  	ImgMmtshow[eSen_Max];	//not sure show what
 	volatile unsigned char 	MmtOffsetXY[20]; 		//not sure the func
-
-
-
-	/*******change the code and unused the old variable**********/
-	volatile  int  AvtPosXTv;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtPosYTv;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtPosXFir;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtPosYFir;        		// eTrkRefine (axis or aim)
-	volatile unsigned int  ImgPixelX[eSen_Max];    // may be mean AxisPosX
-	volatile unsigned int  ImgPixelY[eSen_Max];   
-	volatile unsigned char 	CmdType;  // recv cmd id		no used now
-	volatile unsigned int  AvtPixelX;        // for ext designated
-	volatile unsigned int  AvtPixelY;        // for ext designated
-	volatile  int  AvtMoveX;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtMoveY;        		// eTrkRefine (axis or aim)
-	volatile  short  TrkPanev;
-	volatile  short  TrkTitlev;
-	
-	volatile  int  unitAxisX[eSen_Max];     // may be mean to the opticAxisPosX
-	volatile  int  unitAxisY[eSen_Max];     // pixel
-	volatile  int  CollPosXFir;        		// jiaozhou
-	volatile  int  CollPosYFir;        		//
-
-	volatile unsigned int  unitTvCollX;
-	volatile unsigned int  unitTvCollY;
-	volatile unsigned char TargetPal; // fr target pal 
-	volatile unsigned char SecAcqFlag;
-	volatile unsigned char SecAcqStat;
-	volatile unsigned char 	TrkBomenCtrl; // osd Trk Aim
-
-
 	
 } CMD_EXT;
 
