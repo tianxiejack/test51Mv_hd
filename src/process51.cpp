@@ -47,11 +47,10 @@ CProcess::CProcess()
 	// default cmd value
 	CMD_EXT *pIStuts = &extInCtrl;
 
-	pIStuts->unitAxisX[0]      = VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->unitAxisY[0]      = VIDEO_IMAGE_HEIGHT_0/2;
-
-	pIStuts->unitAxisX[1]      = VIDEO_IMAGE_WIDTH_1/2;
-	pIStuts->unitAxisY[1]      = VIDEO_IMAGE_HEIGHT_1/2;	
+	pIStuts->unitAxisX[0]   = VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->unitAxisY[0]   = VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->unitAxisX[1]   = VIDEO_IMAGE_WIDTH_1/2;
+	pIStuts->unitAxisY[1]   = VIDEO_IMAGE_HEIGHT_1/2;
 	
 	pIStuts->unitAimW 	= 	AIM_WIDTH;
 	pIStuts->unitAimH 	= 	AIM_HEIGHT;
@@ -1930,7 +1929,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 	CMD_EXT *pIStuts = &extInCtrl;
 	CMD_EXT *pInCmd = NULL;
 	CMD_EXT tmpCmd = {0};
-	//printf("*************x=%d y=%d\n",pIStuts->unitAxisX[extInCtrl.SensorStat ],pIStuts->unitAxisY[extInCtrl.SensorStat ]);
+	printf("*************x=%d y=%d\n",pIStuts->unitAxisX[extInCtrl.SensorStat ],pIStuts->unitAxisY[extInCtrl.SensorStat ]);
+	printf("*************msgID : %d \n",msgId);
 	if(msgId == MSGID_EXT_INPUT_SENSOR || msgId == MSGID_EXT_INPUT_ENPICP)
 	{
 		if(prm != NULL)
@@ -2966,7 +2966,7 @@ void CProcess::MSGAPI_inputpositon(long lParam )
 				pIStuts->axisMoveStepX = 0;
 			}	
 			pIStuts->unitAimX = pIStuts->AvtPosXTv;
-			pIStuts->unitAxisX[pIStuts->SensorStat ]=pIStuts->AvtPosXTv;
+			//pIStuts->unitAxisX[pIStuts->SensorStat ]=pIStuts->AvtPosXTv;
 			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];			
 		}
 		if((pIStuts->AvtPosYTv>=50)&&(pIStuts->AvtPosYTv<=vcapWH[pIStuts->SensorStat][1]-50))
@@ -2977,7 +2977,7 @@ void CProcess::MSGAPI_inputpositon(long lParam )
 				pIStuts->axisMoveStepY = 0;
 			}
 			pIStuts->unitAimY = pIStuts->AvtPosYTv;
-			pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYTv;
+			//pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYTv;
 			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];
 		}
 	}

@@ -116,24 +116,37 @@ typedef enum Dram_saveMode
 /** universal status **/
 typedef struct
 {
+	/***** new status *****/
+	volatile int axisMoveStepX;
+	volatile int axisMoveStepY;
+	volatile int validChId;
+	volatile int NaimX;	// sectrk aim the next obj that need to be tracked
+	volatile int NaimY;	// sectrk aim the next obj that need to be tracked
+	//volatile int opticAxisPosX[eSen_Max];	//may be same to unitAxisX[eSen_Max]
+	//volatile int opticAxisPosY[eSen_Max];
+	//volatile int AxisPosX[eSen_Max];	//may be same to ImgPixelX[eSen_Max]
+	//volatile int AxisPosY[eSen_Max];
+	volatile int AvtPosXChId[eSen_Max];	//target avt x,y for each channel
+	volatile int AvtPosYChId[eSen_Max];
+
+
+
+	/***** old status ,remaining tidy*****/	
 	volatile unsigned int  unitVerNum;      // 1.23=>0x0123
 	volatile unsigned int  unitFaultStat;   // bit0:tv input bit1:fr input bit2:avt21
 	volatile unsigned int  unitFaultStatpri;   // bit0:tv input bit1:fr input bit2:avt21
-	volatile unsigned int  validChId;
 	volatile unsigned char  SysMode; 	// 0 --- init ; 1 ---normal  2---settiing
 	volatile unsigned char  FovCtrl; 
 	volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
 	volatile float  unitFovAngle[eSen_Max];
 	
-	volatile unsigned int  ImgPixelX[eSen_Max];    // for img trk alg
-	volatile unsigned int  ImgPixelY[eSen_Max];    // for img trk alg
+	volatile unsigned int  ImgPixelX[eSen_Max];    // imgPixel after cap/dis
+	volatile unsigned int  ImgPixelY[eSen_Max];   
 	
 	volatile unsigned int unitTrkStatpri;
 	volatile unsigned int  unitTrkStat;     // acp/trk/assi/lost
 	volatile  int  unitAxisX[eSen_Max];     // pixel
 	volatile  int  unitAxisY[eSen_Max];     // pixel
-	volatile  int  NaimX;	// sectrk aim the next obj that need to be tracked
-	volatile  int  NaimY;	// sectrk aim the next obj that need to be tracked
 	
 	volatile unsigned int  unitAimW;      // aim size
 	volatile unsigned int  unitAimH;      // aim size
@@ -166,10 +179,7 @@ typedef struct
 	volatile  int  CollPosYFir;        		// eTrkRefine (axis or aim)
 	volatile unsigned int  AvtPixelX;        // for ext designated
 	volatile unsigned int  AvtPixelY;        // for ext designated
-
-	/***** new status *****/
-	volatile int axisMoveStepX;
-	volatile int axisMoveStepY;
+	
 
 	/***** cmd stat part *****/
 	volatile unsigned int  SensorStat;      		// eSenserStat

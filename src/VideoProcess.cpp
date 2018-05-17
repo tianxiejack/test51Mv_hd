@@ -353,7 +353,7 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bMoveDetect)
 		{
-				#if 1
+				#if 0
 
 				IMG_MAT image;
 				image.data_u8 = frame_gray.data;
@@ -1295,7 +1295,7 @@ int CVideoProcess::ReAcqTarget()
 			iRet = 0;
 			m_rcTrack = m_rcAcq;
 			m_iTrackLostCnt = 0;
-			OSA_printf("++++++++++++++++++++++++++++\n");
+			OSA_printf("----------------Setting m_intervalFrame----------------\n");
 		}
 	}
 

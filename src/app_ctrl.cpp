@@ -126,14 +126,14 @@ void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
 	unsigned char mask = 0;
-	#if 1
+
 	if(pInCmd->axisMoveStepX != 0  || pInCmd->axisMoveStepY !=0)
 	{
 		pIStuts->axisMoveStepX = pInCmd->axisMoveStepX;
 		pIStuts->axisMoveStepY = pInCmd->axisMoveStepY;
 		mask++;
 	}
-	#endif
+
 	if(pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
 	{
 		pIStuts->AvtPosXTv = pInCmd->AvtPosXTv;
@@ -391,6 +391,7 @@ void app_ctrl_setZoom(CMD_EXT * pInCmd)
 
 void app_ctrl_setFRColl(CMD_EXT * pInCmd)
 {
+//no used
     if(msgextInCtrl==NULL)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
@@ -625,6 +626,7 @@ void app_ctrl_setSaveCfg(CMD_EXT * pInCmd)
 
 void app_ctrl_SaveCollXY()
 { 
+//no used
        if(msgextInCtrl==NULL)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
