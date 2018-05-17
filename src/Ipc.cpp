@@ -186,8 +186,8 @@ void* recv_msg(SENDST *RS422)
 			printf("recv sectrk : imgID1 : %d\n",imgID1);
 	
 			if(1 == imgID1){
-				pMsg->AvtPosXTv = Rsectrk.ImgPixelX;
-				pMsg->AvtPosYTv = Rsectrk.ImgPixelY;
+				pMsg->AvtPosX[eSen_TV] = Rsectrk.ImgPixelX;
+				pMsg->AvtPosY[eSen_TV] = Rsectrk.ImgPixelY;
 				pMsg->AvtTrkStat =eTrk_mode_search;
 				app_ctrl_setAxisPos(pMsg);
 			}
@@ -198,8 +198,8 @@ void* recv_msg(SENDST *RS422)
 				printf("next aimx ,aimy (%d,%d)\n",pMsg->NaimX,pMsg->NaimY);
 				app_ctrl_setTrkStat(pMsg);
 				printf("unitAxisX,unitAxisY (%d,%d)\n",pMsg->unitAxisX[0],pMsg->unitAxisX[1]);
-				pMsg->AvtPosXTv = pMsg->unitAxisX[0];
-				pMsg->AvtPosYTv = pMsg->unitAxisY[0];
+				pMsg->AvtPosX[eSen_TV] = pMsg->unitAxisX[0];
+				pMsg->AvtPosY[eSen_TV] = pMsg->unitAxisY[0];
 				app_ctrl_setAxisPos(pMsg);
 				MSGAPI_msgsend(sectrk);						
 			}			
@@ -244,11 +244,16 @@ void* recv_msg(SENDST *RS422)
 				pMsg->axisMoveStepX = -1;
 			else if(imgID1 == eTrk_ref_right)
 				pMsg->axisMoveStepX = 1;
+			else
+				pMsg->axisMoveStepX = 0;
 			
 			if(imgID2 == eTrk_ref_up)
 				pMsg->axisMoveStepY = -1;
 			else if(imgID2 == eTrk_ref_down)
 				pMsg->axisMoveStepY = 1;
+			else
+				pMsg->axisMoveStepY= 0;
+			
 			app_ctrl_setAxisPos(pMsg);
 			break;
 			

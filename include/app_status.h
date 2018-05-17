@@ -126,9 +126,9 @@ typedef struct
 	//volatile int opticAxisPosY[eSen_Max];
 	//volatile int AxisPosX[eSen_Max];	//may be same to ImgPixelX[eSen_Max]
 	//volatile int AxisPosY[eSen_Max];
-	volatile int AvtPosXChId[eSen_Max];	//target avt x,y for each channel
-	volatile int AvtPosYChId[eSen_Max];
-
+	volatile int AvtPosX[eSen_Max];	//target avt x,y for each channel
+	volatile int AvtPosY[eSen_Max];
+	
 
 
 	/***** old status ,remaining tidy*****/	
@@ -140,12 +140,13 @@ typedef struct
 	volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
 	volatile float  unitFovAngle[eSen_Max];
 	
-	volatile unsigned int  ImgPixelX[eSen_Max];    // imgPixel after cap/dis
+	volatile unsigned int  ImgPixelX[eSen_Max];    // may be mean AxisPosX
 	volatile unsigned int  ImgPixelY[eSen_Max];   
 	
 	volatile unsigned int unitTrkStatpri;
 	volatile unsigned int  unitTrkStat;     // acp/trk/assi/lost
-	volatile  int  unitAxisX[eSen_Max];     // pixel
+	
+	volatile  int  unitAxisX[eSen_Max];     // may be mean to the opticAxisPosX
 	volatile  int  unitAxisY[eSen_Max];     // pixel
 	
 	volatile unsigned int  unitAimW;      // aim size
@@ -171,10 +172,6 @@ typedef struct
 	
 	volatile  int  AvtMoveX;        		// eTrkRefine (axis or aim)
 	volatile  int  AvtMoveY;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtPosXTv;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtPosYTv;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtPosXFir;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtPosYFir;        		// eTrkRefine (axis or aim)
 	volatile  int  CollPosXFir;        		// eTrkRefine (axis or aim)
 	volatile  int  CollPosYFir;        		// eTrkRefine (axis or aim)
 	volatile unsigned int  AvtPixelX;        // for ext designated
@@ -228,6 +225,13 @@ typedef struct
 	volatile unsigned char 	CmdType;  // recv cmd id		no used now
 	volatile unsigned int  TvCollimation;   //dianshi zhunzhi
 	volatile unsigned int  FrCollimation;   //rexiang zhunzhi
+
+	/*******change the code and unused the old variable**********/
+	volatile  int  AvtPosXTv;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtPosYTv;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtPosXFir;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtPosYFir;        		// eTrkRefine (axis or aim)
+
 } CMD_EXT;
 
 typedef struct

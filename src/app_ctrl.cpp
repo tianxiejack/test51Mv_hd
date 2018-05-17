@@ -94,8 +94,8 @@ void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index)
 	pIStuts->NaimY = cury;
 	app_ctrl_setTrkStat(pIStuts);
 
-	pIStuts->AvtPosXTv = pIStuts->unitAxisX[eSen_TV];
-	pIStuts->AvtPosYTv = pIStuts->unitAxisY[eSen_TV];
+	pIStuts->AvtPosX[eSen_TV] = pIStuts->unitAxisX[eSen_TV];
+	pIStuts->AvtPosY[eSen_TV] = pIStuts->unitAxisY[eSen_TV];
 	app_ctrl_setAxisPos(pIStuts);
 	return ;
 }
@@ -126,18 +126,17 @@ void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
 	unsigned char mask = 0;
-
 	if(pInCmd->axisMoveStepX != 0  || pInCmd->axisMoveStepY !=0)
-	{
+	{	
 		pIStuts->axisMoveStepX = pInCmd->axisMoveStepX;
 		pIStuts->axisMoveStepY = pInCmd->axisMoveStepY;
 		mask++;
 	}
 
-	if(pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
+	if(pIStuts->AvtPosX[eSen_TV] != pInCmd->AvtPosX[eSen_TV] || pIStuts->AvtPosY[eSen_TV]!= pInCmd->AvtPosX[eSen_TV])
 	{
-		pIStuts->AvtPosXTv = pInCmd->AvtPosXTv;
-		pIStuts->AvtPosYTv = pInCmd->AvtPosYTv;
+		pIStuts->AvtPosX[eSen_TV] = pInCmd->AvtPosX[eSen_TV];
+		pIStuts->AvtPosY[eSen_TV] = pInCmd->AvtPosY[eSen_TV];
 		mask++;
 	}
 	if(mask)

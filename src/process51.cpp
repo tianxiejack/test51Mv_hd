@@ -75,16 +75,16 @@ CProcess::CProcess()
 	pIStuts->ImgPixelX[0]	=VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->ImgPixelY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
 
-	pIStuts->AvtPosXTv	=VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->AvtPosYTv	=VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->AvtPosX[0]	=VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->AvtPosY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->AvtPosX[1]	=VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->AvtPosY[1]	=VIDEO_IMAGE_HEIGHT_0/2;
+
 
 	pIStuts->FovStat=1;
 
 	pIStuts->ImgPixelX[1]=320;
 	pIStuts->ImgPixelY[1]=256;
-
-	pIStuts->AvtPosXFir=320;
-	pIStuts->AvtPosYFir=256;
 
 	pIStuts->FrCollimation=2;
 	pIStuts->PicpSensorStatpri=2;
@@ -1261,8 +1261,8 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 			DrawCross(startx,starty,frcolor,false);
 			Osdflag[osdindex]=0;
 		}
-		startx=PiexltoWindowsx(extInCtrl.SensorStat?extInCtrl.AvtPosXTv:extInCtrl.AvtPosXFir,1-extInCtrl.SensorStat);
-			starty=PiexltoWindowsy(extInCtrl.SensorStat?extInCtrl.AvtPosYTv:extInCtrl.AvtPosYFir,1-extInCtrl.SensorStat);
+		startx=PiexltoWindowsx(extInCtrl.SensorStat?extInCtrl.AvtPosX[0]:extInCtrl.AvtPosX[1],1-extInCtrl.SensorStat);
+		starty=PiexltoWindowsy(extInCtrl.SensorStat?extInCtrl.AvtPosY[0]:extInCtrl.AvtPosY[1],1-extInCtrl.SensorStat);
 		//printf("pri the startx=%d  starty=%d\n ",startx,starty);
 		switch(extInCtrl.PicpPosStat)
 		{
@@ -1593,8 +1593,8 @@ osdindex++;	//cross aim
 			Osdflag[osdindex]=0;
  		}
 
-		startx=PiexltoWindowsx(extInCtrl.unitAxisX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
-	 	starty=PiexltoWindowsy(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
+		startx=PiexltoWindowsx(extInCtrl.AvtPosX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
+	 	starty=PiexltoWindowsy(extInCtrl.AvtPosY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 		if(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)
 		{
 			DrawCross(startx,starty,frcolor,true);
@@ -1839,29 +1839,6 @@ void CProcess::OnKeyDwn(unsigned char key)
 		}
 	if (key == 'g'|| key == 'G')
 	{
-		#if 0
-		/**************aimSize**********/
-			pIStuts->AvtTrkAimSize = 0;
-			app_ctrl_setTrkBomen(pIStuts); // bomen show or hide
-			app_ctrl_setAimSize(pIStuts);
-
-		/**************mmtselect****************/
-	
-		int i = 3;
-		int ImgPixelX = (int)m_mtd[0]->tg[i].cur_x%1920;
-		int ImgPixelY = (int)m_mtd[0]->tg[i].cur_y%1080;
-		
-		pIStuts->AvtTrkStat = eTrk_mode_sectrk;
-		pIStuts->NaimX = ImgPixelX;
-		pIStuts->NaimY = ImgPixelY;
-		//printf("next aimx ,aimy (%d,%d)\n",pIStuts->NaimX,pIStuts->NaimY);
-		app_ctrl_setTrkStat(pIStuts);
-
-		pIStuts->AvtPosXTv = VIDEO_IMAGE_WIDTH_0/2;
-		pIStuts->AvtPosYTv = VIDEO_IMAGE_HEIGHT_0/2;
-		app_ctrl_setAxisPos(pIStuts);
-		//printf("enter trk again \n\n");
-		#endif
 		/***************posmov**************/
 		printf("before set AxisPos\n");
 		tmpCmd.axisMoveStepX = 1;
@@ -2958,26 +2935,25 @@ void CProcess::MSGAPI_inputpositon(long lParam )
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 	if(pIStuts->SensorStat==0)
 	{
-		if((pIStuts->AvtPosXTv>=50)&&(pIStuts->AvtPosXTv<=vcapWH[pIStuts->SensorStat][0]-50))
+		if((pIStuts->AvtPosX[0]>=50)&&(pIStuts->AvtPosX[0]<=vcapWH[pIStuts->SensorStat][0]-50))
 		{
 			if(pIStuts->axisMoveStepX != 0)
 			{
-				pIStuts->AvtPosXTv += pIStuts->axisMoveStepX;
+				pIStuts->AvtPosX[0] += pIStuts->axisMoveStepX;
 				pIStuts->axisMoveStepX = 0;
 			}	
-			pIStuts->unitAimX = pIStuts->AvtPosXTv;
-			//pIStuts->unitAxisX[pIStuts->SensorStat ]=pIStuts->AvtPosXTv;
+			printf(" pIStuts->AvtPosX[0] = %d \n",pIStuts->AvtPosX[0]);
+			pIStuts->unitAimX = pIStuts->AvtPosX[0];
 			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];			
 		}
-		if((pIStuts->AvtPosYTv>=50)&&(pIStuts->AvtPosYTv<=vcapWH[pIStuts->SensorStat][1]-50))
+		if((pIStuts->AvtPosY[0]>=50)&&(pIStuts->AvtPosY[0]<=vcapWH[pIStuts->SensorStat][1]-50))
 		{
 			if(pIStuts->axisMoveStepY != 0)
 			{
-				pIStuts->AvtPosYTv += pIStuts->axisMoveStepY;
+				pIStuts->AvtPosY[0] += pIStuts->axisMoveStepY;
 				pIStuts->axisMoveStepY = 0;
 			}
-			pIStuts->unitAimY = pIStuts->AvtPosYTv;
-			//pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYTv;
+			pIStuts->unitAimY = pIStuts->AvtPosY[0];
 			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];
 		}
 	}
