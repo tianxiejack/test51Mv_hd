@@ -1176,7 +1176,7 @@ void CProcess::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 		drawdashlinepri(m_dccv,startx,starty,endx,endy,dashlen,dashlen,colour);
 	}
 
-	else if((extInCtrl.SecAcqFlag)&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3))
+	else if(extInCtrl.DispGrp[extInCtrl.SensorStat]<3)
 	{
 		DrawcvDashcross(m_dccv,&lineparm,dashlen,dashlen);
 		startx=PiexltoWindowsxzoom(extInCtrl.AxisPosX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
@@ -1909,7 +1909,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		}
 		
 //sec track sync
-		//if( pIStuts->SecAcqStat=)
 		if(pIStuts->SensorStat==0)
 		{
 			pIStuts->AxisPosX[pIStuts->SensorStat] =PiexltoWindowsx( pIStuts->AxisPosX[pIStuts->SensorStat^1],pIStuts->SensorStat^1);

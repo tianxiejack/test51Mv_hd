@@ -193,8 +193,6 @@ typedef struct
 	
 	//don't know the usage
 	volatile unsigned char 	TrkBomenCtrl; // osd Trk Aim
-	volatile unsigned char SecAcqFlag;
-	volatile unsigned char SecAcqStat;
 	volatile unsigned int  TrkCoastCount;
 	volatile unsigned int  FreezeresetCount;
 
@@ -231,6 +229,9 @@ typedef struct
 	volatile unsigned int  unitTvCollX;
 	volatile unsigned int  unitTvCollY;
 	volatile unsigned char TargetPal; // fr target pal 
+	volatile unsigned char SecAcqFlag;
+	volatile unsigned char SecAcqStat;
+
 
 	
 } CMD_EXT;

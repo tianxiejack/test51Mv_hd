@@ -223,11 +223,7 @@ void app_ctrl_setReset(CMD_EXT * pInCmd)
 			pIStuts->TvCollimation=2;
 			MSGDRIV_send(MSGID_EXT_INPUT_ENBDT, 0);
 		}
-	if( pIStuts->SecAcqFlag==1)
-		{
-		 	  pIStuts->SecAcqFlag = pIStuts->SecAcqStat = 0x00;
 
-		}
 	if(pIStuts->ImgEnhStat[pIStuts->SensorStat] == 0x01)
 		{
 			pIStuts->ImgEnhStat[pIStuts->SensorStat] = 0x00;
@@ -450,9 +446,6 @@ void app_ctrl_setSerTrk(CMD_EXT * pInCmd )
 		pIStuts->AxisPosX[pIStuts->SensorStat] = pInCmd->AxisPosX[pIStuts->SensorStat];
 		pIStuts->AxisPosY[pIStuts->SensorStat] = pInCmd->AxisPosY[pIStuts->SensorStat];
 	}
-
-	if(pInCmd->SecAcqStat != pIStuts->SecAcqStat)
-		pIStuts->SecAcqStat = pInCmd->SecAcqStat;
 	
 	if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
 		pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
