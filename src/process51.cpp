@@ -2411,7 +2411,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 		if(pIStuts->AvtTrkAimSize<0||pIStuts->AvtTrkAimSize>4)
 			pIStuts->AvtTrkAimSize=2;
-		printf("####pIStuts->AvtTrkStat = %d \n",pIStuts->AvtTrkStat);
+		//printf("####pIStuts->AvtTrkStat = %d \n",pIStuts->AvtTrkStat);
 		if(pIStuts->AvtTrkStat)
 		{
 			UTC_RECT_float rc;
@@ -2437,8 +2437,16 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				
 				rc.width=pIStuts->unitAimW;
 				rc.height=pIStuts->unitAimH;
-				rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2 +pIStuts->AvtMoveX;
-				rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2  +pIStuts->AvtMoveY;
+				if(pIStuts->AvtMoveX > 0)
+					rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2 +1;
+				else
+					rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2 -1;
+				if(pIStuts->AvtMoveY> 0)
+					rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2  +1;
+				else
+					rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2  -1;
+				pIStuts->AvtMoveX = 0;
+				pIStuts->AvtMoveY = 0;
 			}
 			m_intervalFrame=1;
 			m_rcAcq=rc;
@@ -2952,14 +2960,22 @@ void CProcess::MSGAPI_inputpositon(long lParam )
 	{
 		if((pIStuts->AvtPosXTv>=50)&&(pIStuts->AvtPosXTv<=vcapWH[pIStuts->SensorStat][0]-50))
 		{
-			pIStuts->AvtPosXTv += pIStuts->axisMoveStepX;
+			if(pIStuts->axisMoveStepX != 0)
+			{
+				pIStuts->AvtPosXTv += pIStuts->axisMoveStepX;
+				pIStuts->axisMoveStepX = 0;
+			}	
 			pIStuts->unitAimX = pIStuts->AvtPosXTv;
 			pIStuts->unitAxisX[pIStuts->SensorStat ]=pIStuts->AvtPosXTv;
-			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];
+			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];			
 		}
 		if((pIStuts->AvtPosYTv>=50)&&(pIStuts->AvtPosYTv<=vcapWH[pIStuts->SensorStat][1]-50))
 		{
-			pIStuts->AvtPosYTv += pIStuts->axisMoveStepY;
+			if(pIStuts->axisMoveStepY != 0)
+			{
+				pIStuts->AvtPosYTv += pIStuts->axisMoveStepY;
+				pIStuts->axisMoveStepY = 0;
+			}
 			pIStuts->unitAimY = pIStuts->AvtPosYTv;
 			pIStuts->unitAxisY[pIStuts->SensorStat ]=pIStuts->AvtPosYTv;
 			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];

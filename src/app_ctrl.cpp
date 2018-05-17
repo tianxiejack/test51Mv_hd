@@ -125,18 +125,24 @@ void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
        if(msgextInCtrl==NULL)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
-	if(pInCmd->axisMoveStepX  || pInCmd->axisMoveStepY)
+	unsigned char mask = 0;
+	#if 1
+	if(pInCmd->axisMoveStepX != 0  || pInCmd->axisMoveStepY !=0)
 	{
 		pIStuts->axisMoveStepX = pInCmd->axisMoveStepX;
 		pIStuts->axisMoveStepY = pInCmd->axisMoveStepY;
-		MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);	
+		mask++;
 	}
-	else if(pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
+	#endif
+	if(pIStuts->AvtPosXTv != pInCmd->AvtPosXTv || pIStuts->AvtPosYTv != pInCmd->AvtPosYTv)
 	{
 		pIStuts->AvtPosXTv = pInCmd->AvtPosXTv;
 		pIStuts->AvtPosYTv = pInCmd->AvtPosYTv;
-		MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
+		mask++;
 	}
+	if(mask)
+		MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);	
+	
 	return ;
 }
 

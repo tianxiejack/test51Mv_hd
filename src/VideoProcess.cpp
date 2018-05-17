@@ -353,7 +353,7 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bMoveDetect)
 		{
-				#if 0
+				#if 1
 
 				IMG_MAT image;
 				image.data_u8 = frame_gray.data;

@@ -181,8 +181,8 @@ void* recv_msg(SENDST *RS422)
 			break;
 
 		case sectrk:
-			memcpy(&Rmtd,RS422->param,sizeof(Rmtd));
-			imgID1 = Rmtd.ImgMtdStat ;
+			memcpy(&Rsectrk,RS422->param,sizeof(Rsectrk));
+			imgID1 = Rsectrk.SecAcqStat;
 			printf("recv sectrk : imgID1 : %d\n",imgID1);
 	
 			if(1 == imgID1){
@@ -197,9 +197,9 @@ void* recv_msg(SENDST *RS422)
 				pMsg->NaimY = Rsectrk.ImgPixelY;
 				printf("next aimx ,aimy (%d,%d)\n",pMsg->NaimX,pMsg->NaimY);
 				app_ctrl_setTrkStat(pMsg);
-				
-				pMsg->AvtPosXTv = pMsg->unitAxisX[0];
-				pMsg->AvtPosYTv = pMsg->unitAxisY[0];
+				//printf("unitAxisX,unitAxisY (%d,%d)\n",pMsg->unitAxisX[0],pMsg->unitAxisX[0]);
+				pMsg->AvtPosXTv = 1920/2;//pMsg->unitAxisX[0];
+				pMsg->AvtPosYTv = 1080/2;//pMsg->unitAxisY[0];
 				app_ctrl_setAxisPos(pMsg);
 				MSGAPI_msgsend(sectrk);						
 			}			

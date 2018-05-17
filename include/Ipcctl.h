@@ -326,12 +326,112 @@ typedef struct{
 }SENDST;
 
 
-typedef struct{
-    unsigned int m_trackstatus;// acq/trk/assi/lost
-     int m_trackpos_x;
-     int m_trackpos_y;
-     unsigned int unitFaultStat;
-}IMGSTATUS;
+/** universal status **/
+typedef struct
+{
+	volatile unsigned int  unitVerNum;      // 1.23=>0x0123
+	volatile unsigned int  unitFaultStat;   // bit0:tv input bit1:fr input bit2:avt21
+	volatile unsigned int  unitFaultStatpri;   // bit0:tv input bit1:fr input bit2:avt21
+	volatile unsigned int  validChId;
+	volatile unsigned char  SysMode; 	// 0 --- init ; 1 ---normal  2---settiing
+	volatile unsigned char  FovCtrl; 
+	volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
+	volatile float  unitFovAngle[ipc_eSen_Max];
+	
+	volatile unsigned int  ImgPixelX[ipc_eSen_Max];    // for img trk alg
+	volatile unsigned int  ImgPixelY[ipc_eSen_Max];    // for img trk alg
+	
+	volatile unsigned int unitTrkStatpri;
+	volatile unsigned int  unitTrkStat;     // acp/trk/assi/lost
+	volatile  int  unitAxisX[ipc_eSen_Max];     // pixel
+	volatile  int  unitAxisY[ipc_eSen_Max];     // pixel
+	volatile  int  NaimX;	// sectrk aim the next obj that need to be tracked
+	volatile  int  NaimY;	// sectrk aim the next obj that need to be tracked
+	
+	volatile unsigned int  unitAimW;      // aim size
+	volatile unsigned int  unitAimH;      // aim size
+	volatile unsigned int  unitAimX;
+	volatile unsigned int  unitAimY;
+	
+	volatile float unitTrkX;    		// for report and osd text 	what
+	volatile float unitTrkY;    		// for report and osd text
+	volatile float unitTrkXtmp;    	// for report and osd text
+	volatile float unitTrkYtmp;    	// for report and osd text
+
+	volatile unsigned int  AvtTrkStat;      		// eTrkMode 
+	volatile unsigned int  AvtTrkAimSize;   	// 0-4
+	volatile unsigned int  AvtCfgSave;      	// eSaveMode
+	volatile unsigned int  AvtTrkCoast;
+	volatile unsigned int  TrkErrFeedback;  	// eTrkMode 
+
+	volatile int  trkerrx;
+	volatile int  trkerry;
+	volatile  short  TrkPanev;
+	volatile  short  TrkTitlev;
+	
+	volatile  int  AvtMoveX;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtMoveY;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtPosXTv;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtPosYTv;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtPosXFir;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtPosYFir;        		// eTrkRefine (axis or aim)
+	volatile  int  CollPosXFir;        		// eTrkRefine (axis or aim)
+	volatile  int  CollPosYFir;        		// eTrkRefine (axis or aim)
+	volatile unsigned int  AvtPixelX;        // for ext designated
+	volatile unsigned int  AvtPixelY;        // for ext designated
+
+	/***** new status *****/
+	volatile int axisMoveStepX;
+	volatile int axisMoveStepY;
+
+	/***** cmd stat part *****/
+	volatile unsigned int  SensorStat;      		// eSenserStat
+	volatile unsigned int  changeSensorFlag;
+	volatile unsigned int  PicpSensorStat;  		// sensor src id range 0~3 or 0xFF no picp sens
+	volatile unsigned int  PicpSensorStatpri; 		// sensor src id range 0~3 or 0xFF no picp sens
+	volatile unsigned int  PicpPosStat;			// ePicpPosStat
+	volatile unsigned int  ImgZoomStat[ipc_eSen_Max];   	// eImgAlgStat	electric
+	volatile unsigned int  ImgEnhStat[ipc_eSen_Max];    	// eImgAlgStat
+	volatile unsigned int  ImgBlobDetect[ipc_eSen_Max];    // eImgAlgStat
+	volatile unsigned int  ImgFrezzStat[ipc_eSen_Max];    	// eImgAlgStat
+	volatile unsigned int  ImgVideoTrans[ipc_eSen_Max];   // eImgAlgStat
+	volatile unsigned int  ImgPicp[ipc_eSen_Max];   	 	// eImgAlgStat
+
+
+	volatile unsigned int  unitMtdValid;    			// 0-disable 1-valid 2-unvalid
+	volatile unsigned int  unitMtdPixelX;
+	volatile unsigned int  unitMtdPixelY;
+	volatile unsigned int  ImgMtdStat[ipc_eSen_Max];    	// eImgAlgStat
+	volatile unsigned int  ImgMtdSelect[ipc_eSen_Max];  	// eMMTSelect or range 0-MTD_TARGET_NUM
+
+	volatile unsigned int  	ImgMmtshow[ipc_eSen_Max];	
+	volatile unsigned char  MMTTempStat;		//for ack mmt stat
+	volatile unsigned char 	MtdOffsetXY[20]; 		//mtd xy
+	volatile unsigned char 	Mtdtargetnum; 		//mtd xy
+
+	volatile unsigned char  MtdState[ipc_eSen_Max];	//record moving obj detect state of each channel
+
+	/***** cmd osd part *****/
+	volatile unsigned int  DispGrp[ipc_eSen_Max];       	// eDispGrade
+	volatile unsigned int  DispColor[ipc_eSen_Max];  	// eOSDColor or eGRPColor
+	
+	//don't know the usage
+	volatile unsigned char 	TrkBomenCtrl; // osd Trk Aim
+	volatile unsigned char SecAcqFlag;
+	volatile unsigned char SecAcqStat;
+	volatile unsigned int  TrkCoastCount;
+	volatile unsigned int  FreezeresetCount;
+	volatile unsigned int  unitTvCollX;
+	volatile unsigned int  unitTvCollY;
+
+	// wait to change or remove
+	volatile unsigned char TargetPal; // fr target pal 
+
+	//may be not useful
+	volatile unsigned char 	CmdType;  // recv cmd id		no used now
+	volatile unsigned int  TvCollimation;   //dianshi zhunzhi
+	volatile unsigned int  FrCollimation;   //rexiang zhunzhi
+} IMGSTATUS;
 
 
 typedef struct out_frame_angle
