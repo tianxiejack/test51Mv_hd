@@ -368,51 +368,6 @@ void app_ctrl_setZoom(CMD_EXT * pInCmd)
 
 void app_ctrl_setFRColl(CMD_EXT * pInCmd)
 {
-//no used
-    if(msgextInCtrl==NULL)
-		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
-    int iMoveMask = 0,iSens = 0,iShow = 0;
-
-    if( pInCmd->opticAxisPosX[pIStuts->SensorStat ] != pIStuts->opticAxisPosX[pIStuts->SensorStat ] || pInCmd->opticAxisPosY[pIStuts->SensorStat ] != pIStuts->opticAxisPosY[pIStuts->SensorStat ])
-    {
-	    if((pInCmd->opticAxisPosX[pIStuts->SensorStat ]>0)&&(pInCmd->opticAxisPosX[pIStuts->SensorStat ]<_IMAGE_WIDTH_))
-	        pIStuts->opticAxisPosX[pIStuts->SensorStat ] = pInCmd->opticAxisPosX[pIStuts->SensorStat ] ;
-	   if((pInCmd->opticAxisPosY[pIStuts->SensorStat ]>0)&&(pInCmd->opticAxisPosY[pIStuts->SensorStat ]<_IMAGE_HEIGHT_))
-	        pIStuts->opticAxisPosY[pIStuts->SensorStat ] = pInCmd->opticAxisPosY[pIStuts->SensorStat ];
-	        iMoveMask++;
-    }
-
-    if(pInCmd->FrCollimation != pIStuts->FrCollimation)
-    {
-        pIStuts->FrCollimation = pInCmd->FrCollimation;
-        iMoveMask++;
-    }
-
-    iSens = pIStuts->SensorStat;
-   
-
-    if( pInCmd->CollPosXFir != pIStuts->CollPosXFir || pInCmd->CollPosYFir != pIStuts->CollPosYFir)
-    {
-        pIStuts->CollPosXFir = pInCmd->CollPosXFir ;
-        pIStuts->CollPosYFir = pInCmd->CollPosYFir;
-        iMoveMask++;
-    }
-
-    if(pInCmd->FrCollimation != pIStuts->FrCollimation)
-    {
-        pIStuts->FrCollimation = pInCmd->FrCollimation;
-        iMoveMask++;
-    }
-
-    iSens = pIStuts->SensorStat;
-
-
-    /***for **reply*****/
-    //MSGAPI_AckSnd( AckFrColl);
-   MSGDRIV_send(MSGID_EXT_INPUT_ENFREZZ, 0);
-
-   return ;
 }
 
 /*******************************************************************************

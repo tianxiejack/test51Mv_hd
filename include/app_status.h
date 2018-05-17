@@ -164,11 +164,7 @@ typedef struct
 	volatile unsigned int  TrkErrFeedback;  	// eTrkMode 
 
 	volatile int  trkerrx;
-	volatile int  trkerry;
-	
-	volatile  int  CollPosXFir;        		// eTrkRefine (axis or aim)
-	volatile  int  CollPosYFir;        		// eTrkRefine (axis or aim)
-	
+	volatile int  trkerry;	
 
 	/***** cmd stat part *****/
 	volatile unsigned int  SensorStat;      		// eSenserStat
@@ -236,6 +232,8 @@ typedef struct
 	
 	volatile  int  unitAxisX[eSen_Max];     // may be mean to the opticAxisPosX
 	volatile  int  unitAxisY[eSen_Max];     // pixel
+	volatile  int  CollPosXFir;        		// jiaozhou
+	volatile  int  CollPosYFir;        		//
 
 
 } CMD_EXT;

@@ -1600,59 +1600,6 @@ osdindex++;	//cross aim
 		crossBak.y=starty;
 	}
 
-osdindex++;
-///jiaozhou
-	{
-		if(extInCtrl.FrCollimation==1)
-		{
-			
-			//CFGID_FIELD_GET(tvcorx ,CFGID_TRACK_TV_AXIX);
-			//CFGID_FIELD_GET(tvcory ,CFGID_TRACK_TV_AXIY);
-			tvcorx=extInCtrl.CollPosXFir;
-			tvcory=extInCtrl.CollPosYFir;
-			//printf("fcorpri*******the frcol is x=%d y=%d\n",tvcorx,tvcory);
-			tvcorx=tvcorx-crossshiftx;
-			tvcory=tvcory-crossshifty;
-			if((tvcorx>vdisWH[0][0]*1/3)||(tvcorx<0))
-			{
-				tvcorx=cvRound(vdisWH[0][0]*1.0/6);
-			}
-			if((tvcory<0)||(tvcory>vdisWH[0][1]*1/3))
-			{
-				tvcory=cvRound(vdisWH[0][1]*1.0/6);
-			}
-
-			startx=tvcorx;
-			starty=tvcory;
-			//startx=PiexltoWindowsx(tvcorx,extInCtrl.SensorStat);
- 			//starty=PiexltoWindowsy(tvcory,extInCtrl.SensorStat);
-
-			//printf("fcor*******the frcol is x=%d y=%d\n",startx,starty);
-			if(Osdflag[osdindex]==1)
-			{
-				DrawCross(freezecrossBak.x,freezecrossBak.y,frcolor,false);
-				Osdflag[osdindex]=0;
-			}
-			DrawCross(startx,starty,frcolor,true);
-			freezecrossBak.x=startx;
-			freezecrossBak.y=starty;
-			
-			Osdflag[osdindex]=1;
-			
-		}
-		else
-		{
-			startx=PiexltoWindowsx(tvcorx,extInCtrl.SensorStat);
- 			starty=PiexltoWindowsy(tvcory,extInCtrl.SensorStat);
-			if(Osdflag[osdindex]==1)
-			{
-				DrawCross(freezecrossBak.x,freezecrossBak.y,frcolor,false);
-				Osdflag[osdindex]=0;
-			}
-		}
-	}
-
-
 	
 #if __MOVE_DETECT__
 #if __DETECT_SWITCH_Z__
