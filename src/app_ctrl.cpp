@@ -832,14 +832,6 @@ void app_ctrl_setPicp(CMD_EXT * pInCmd)
 
 void app_ctrl_setverti(CMD_EXT * pInCmd)
 {
-  if(msgextInCtrl==NULL)
-		return ;
-  CMD_EXT *pIStuts = msgextInCtrl;
-
-  if(pInCmd->TrkPanev != pIStuts->TrkPanev)
-		pIStuts->TrkPanev = pInCmd->TrkPanev;
-   if(pInCmd->TrkTitlev != pIStuts->TrkTitlev)
-		pIStuts->TrkTitlev = pInCmd->TrkTitlev;  
    return ;
 }
 

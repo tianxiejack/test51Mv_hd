@@ -3013,12 +3013,6 @@ void CProcess::MSGAPI_inputfovchange(long lParam )
 
 void CProcess::MSGAPI_inputsearchmod(long lParam )
 {
-
-	CMD_EXT *pIStuts = &sThis->extInCtrl;
-	float panenv=pIStuts->TrkPanev/100.0;
-	float TrkTitlev=pIStuts->TrkTitlev/100.0;
-	
-	// printf("the TrkPanev=%f TrkTitlev=%f\n",pIStuts->TrkPanev/100.0,pIStuts->TrkTitlev/100.0);
 }
 
 

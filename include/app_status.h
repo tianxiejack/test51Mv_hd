@@ -167,8 +167,6 @@ typedef struct
 
 	volatile int  trkerrx;
 	volatile int  trkerry;
-	volatile  short  TrkPanev;
-	volatile  short  TrkTitlev;
 	
 	volatile  int  CollPosXFir;        		// eTrkRefine (axis or aim)
 	volatile  int  CollPosYFir;        		// eTrkRefine (axis or aim)
@@ -235,6 +233,8 @@ typedef struct
 	volatile unsigned int  AvtPixelY;        // for ext designated
 	volatile  int  AvtMoveX;        		// eTrkRefine (axis or aim)
 	volatile  int  AvtMoveY;        		// eTrkRefine (axis or aim)
+	volatile  short  TrkPanev;
+	volatile  short  TrkTitlev;
 
 
 
