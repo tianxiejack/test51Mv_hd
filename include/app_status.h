@@ -132,7 +132,6 @@ typedef struct
 	volatile int AvtPosY[eSen_Max];
 	
 
-
 	/***** old status ,remaining tidy*****/	
 	volatile unsigned int  unitVerNum;      // 1.23=>0x0123
 	volatile unsigned int  unitFaultStat;   // bit0:tv input bit1:fr input bit2:avt21
@@ -186,8 +185,8 @@ typedef struct
 
 	volatile unsigned int  	ImgMmtshow[eSen_Max];	
 	volatile unsigned char   MMTTempStat;		//for ack mmt stat
-	volatile unsigned char 	MtdOffsetXY[20]; 		//mtd xy
-	volatile unsigned char 	Mtdtargetnum; 		//mtd xy
+	volatile unsigned char 	MmtOffsetXY[20]; 		//mtd xy
+	volatile unsigned char 	Mmttargetnum; 		//mtd xy
 
 	volatile unsigned char  MtdState[eSen_Max];	//record moving obj detect state of each channel
 

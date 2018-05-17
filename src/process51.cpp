@@ -601,7 +601,7 @@ void CProcess::erassdrawmmt(TARGET tg[],bool bShow)
 			short tempmmty=0;
 			int tempdata=0;
 			int testid=0;
-			extInCtrl.Mtdtargetnum=0;
+			extInCtrl.Mmttargetnum=0;
 			char numbuf[3];
 			int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
 			unsigned char Alpha = (bShow) ? frcolor : 0;
@@ -682,16 +682,15 @@ void CProcess::drawmmt(TARGET tg[],bool bShow)
 	short tempmmty=0;
 	int tempdata=0;
 	int testid=0;
-	extInCtrl.Mtdtargetnum=0;
+	extInCtrl.Mmttargetnum=0;
 	char numbuf[3];
 	int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
 	unsigned char Alpha = (bShow) ? frcolor : 0;
 	CvScalar colour=GetcvColour(Alpha);
 	
-	//memset(extInCtrl.MtdOffsetXY,0,20);
 	for(i=0;i<20;i++)
 	{
-		extInCtrl.MtdOffsetXY[i]=0;
+		extInCtrl.MmtOffsetXY[i]=0;
 	}
 	for(i=0;i<MAX_TARGET_NUMBER;i++)
 	{
@@ -703,10 +702,10 @@ void CProcess::drawmmt(TARGET tg[],bool bShow)
 		}
 		if(tg[i].valid==1)
 		{
-			extInCtrl.Mtdtargetnum++;
+			extInCtrl.Mmttargetnum++;
 		}
 	}
-	//OSA_printf("the num detect=%d  majormmtid=%d\n",extInCtrl.Mtdtargetnum,majormmtid);
+	//OSA_printf("the num detect=%d  majormmtid=%d\n",extInCtrl.Mmttargetnum,majormmtid);
 	primajormmtid=tempdata=majormmtid;
 	for(i=0;i<MAX_TARGET_NUMBER;i++)
 	{
@@ -742,16 +741,16 @@ void CProcess::drawmmt(TARGET tg[],bool bShow)
 			}
 			//OSA_printf("******************the num  majormmtid=%d x=%d y=%d w=%d h=%d\n",majormmtid,
 			//	result.x,result.y,result.width,result.height);
-			extInCtrl.MtdOffsetXY[j]=tempmmtx&0xff;
-			extInCtrl.MtdOffsetXY[j+1]=(tempmmtx>>8)&0xff;
-			extInCtrl.MtdOffsetXY[j+2]=tempmmty&0xff;
-			extInCtrl.MtdOffsetXY[j+3]=(tempmmty>>8)&0xff;
+			extInCtrl.MmtOffsetXY[j]=tempmmtx&0xff;
+			extInCtrl.MmtOffsetXY[j+1]=(tempmmtx>>8)&0xff;
+			extInCtrl.MmtOffsetXY[j+2]=tempmmty&0xff;
+			extInCtrl.MmtOffsetXY[j+3]=(tempmmty>>8)&0xff;
 			//j++;
 
 			//tempdata=(tempdata+1)%MAX_TARGET_NUMBER;
 				
-			//memcpy(extInCtrl.MtdOffsetXY,tempmmtx,sizeof(tempmmtx));
-			//memcpy(extInCtrl.MtdOffsetXY+2,tempmmty,sizeof(tempmmty));			
+			//memcpy(extInCtrl.MmtOffsetXY,tempmmtx,sizeof(tempmmtx));
+			//memcpy(extInCtrl.MmtOffsetXY+2,tempmmty,sizeof(tempmmty));			
 		}	
 		else if(tg[tempdata].valid)
 		{
@@ -772,10 +771,10 @@ void CProcess::drawmmt(TARGET tg[],bool bShow)
 				putText(frame,numbuf,cvPoint(startx+14,starty+14),CV_FONT_HERSHEY_SIMPLEX,1,colour);
 			}
 
-			extInCtrl.MtdOffsetXY[j+testid*4]=tempmmtx&0xff;
-			extInCtrl.MtdOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
-			extInCtrl.MtdOffsetXY[j+2+testid*4]=tempmmty&0xff;
-			extInCtrl.MtdOffsetXY[j+3+testid*4]=(tempmmty>>8)&0xff;
+			extInCtrl.MmtOffsetXY[j+testid*4]=tempmmtx&0xff;
+			extInCtrl.MmtOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
+			extInCtrl.MmtOffsetXY[j+2+testid*4]=tempmmty&0xff;
+			extInCtrl.MmtOffsetXY[j+3+testid*4]=(tempmmty>>8)&0xff;
 			//j++;
 			
 		}
@@ -805,7 +804,7 @@ void CProcess::erassdrawmmtnew(TARGETDRAW tg[],bool bShow)
 	short tempmmty=0;
 	int tempdata=0;
 	int testid=0;
-	extInCtrl.Mtdtargetnum=0;
+	extInCtrl.Mmttargetnum=0;
 	char numbuf[3];
 	int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
 	unsigned char Alpha = (bShow) ? frcolor : 0;
@@ -866,16 +865,16 @@ void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 	short tempmmty=0;
 	int tempdata=0;
 	int testid=0;
-	extInCtrl.Mtdtargetnum=0;
+	extInCtrl.Mmttargetnum=0;
 	char numbuf[3];
 	int frcolor=extInCtrl.DispColor[extInCtrl.SensorStat];
 	unsigned char Alpha = (bShow) ? frcolor : 0;
 	CvScalar colour=GetcvColour(Alpha);
 	
-	//memset(extInCtrl.MtdOffsetXY,0,20);
+	//memset(extInCtrl.MmtOffsetXY,0,20);
 	for(i=0;i<20;i++)
 	{
-		extInCtrl.MtdOffsetXY[i]=0;
+		extInCtrl.MmtOffsetXY[i]=0;
 	}
 	for(i=0;i<MAX_TARGET_NUMBER;i++)
 	{
@@ -895,7 +894,7 @@ void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 		if(tg[i].valid==1)
 		{
 			//valid mmt num;
-			extInCtrl.Mtdtargetnum++;
+			extInCtrl.Mmttargetnum++;
 		}
 		Mdrawbak[i].valid=0;//reset
 
@@ -972,10 +971,10 @@ void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 			//	result.x,result.y,result.width,result.height);
 			tempmmtx  =PiexltoWindowsx(tempmmtx,extInCtrl.SensorStat);
 			tempmmty  =PiexltoWindowsy(tempmmty,extInCtrl.SensorStat);
-			extInCtrl.MtdOffsetXY[j]=tempmmtx&0xff;
-			extInCtrl.MtdOffsetXY[j+1]=(tempmmtx>>8)&0xff;
-			extInCtrl.MtdOffsetXY[j+2]=tempmmty&0xff;
-			extInCtrl.MtdOffsetXY[j+3]=(tempmmty>>8)&0xff;
+			extInCtrl.MmtOffsetXY[j]=tempmmtx&0xff;
+			extInCtrl.MmtOffsetXY[j+1]=(tempmmtx>>8)&0xff;
+			extInCtrl.MmtOffsetXY[j+2]=tempmmty&0xff;
+			extInCtrl.MmtOffsetXY[j+3]=(tempmmty>>8)&0xff;
 			
 		}
 		
@@ -1035,18 +1034,18 @@ void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 				sprintf(numbuf,"%d",i+1);
 				putText(frame,numbuf,cvPoint(startx,starty-2),CV_FONT_HERSHEY_SIMPLEX,0.8,colour);
 			}
-			//memcpy(extInCtrl.MtdOffsetXY+testid*4,tempmmtx,sizeof(tempmmtx));
-			//memcpy(extInCtrl.MtdOffsetXY+2+testid*4,tempmmty,sizeof(tempmmty));
+			//memcpy(extInCtrl.MmtOffsetXY+testid*4,tempmmtx,sizeof(tempmmtx));
+			//memcpy(extInCtrl.MmtOffsetXY+2+testid*4,tempmmty,sizeof(tempmmty));
 			
-			extInCtrl.MtdOffsetXY[j+testid*4]=tempmmtx&0xff;
-			extInCtrl.MtdOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
-			extInCtrl.MtdOffsetXY[j+2+testid*4]=tempmmty&0xff;
-			extInCtrl.MtdOffsetXY[j+3+testid*4]=(tempmmty>>8)&0xff;
+			extInCtrl.MmtOffsetXY[j+testid*4]=tempmmtx&0xff;
+			extInCtrl.MmtOffsetXY[j+1+testid*4]=(tempmmtx>>8)&0xff;
+			extInCtrl.MmtOffsetXY[j+2+testid*4]=tempmmty&0xff;
+			extInCtrl.MmtOffsetXY[j+3+testid*4]=(tempmmty>>8)&0xff;
 
-			extInCtrl.MtdOffsetXY[j+testid*4]    =PiexltoWindowsx(extInCtrl.MtdOffsetXY[j+testid*4],extInCtrl.SensorStat);
-			extInCtrl.MtdOffsetXY[j+1+testid*4]=PiexltoWindowsx(extInCtrl.MtdOffsetXY[j+1+testid*4],extInCtrl.SensorStat);
-			extInCtrl.MtdOffsetXY[j+2+testid*4]=PiexltoWindowsy(extInCtrl.MtdOffsetXY[j+2+testid*4],extInCtrl.SensorStat);
-			extInCtrl.MtdOffsetXY[j+3+testid*4]=PiexltoWindowsy(extInCtrl.MtdOffsetXY[j+3+testid*4],extInCtrl.SensorStat);
+			extInCtrl.MmtOffsetXY[j+testid*4]    =PiexltoWindowsx(extInCtrl.MmtOffsetXY[j+testid*4],extInCtrl.SensorStat);
+			extInCtrl.MmtOffsetXY[j+1+testid*4]=PiexltoWindowsx(extInCtrl.MmtOffsetXY[j+1+testid*4],extInCtrl.SensorStat);
+			extInCtrl.MmtOffsetXY[j+2+testid*4]=PiexltoWindowsy(extInCtrl.MmtOffsetXY[j+2+testid*4],extInCtrl.SensorStat);
+			extInCtrl.MmtOffsetXY[j+3+testid*4]=PiexltoWindowsy(extInCtrl.MmtOffsetXY[j+3+testid*4],extInCtrl.SensorStat);
 			//j++;
 			
 		}
