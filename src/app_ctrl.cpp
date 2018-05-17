@@ -321,21 +321,6 @@ void app_ctrl_setForceCoast(CMD_EXT * pInCmd)
 
 void app_ctrl_setTrkBomen(CMD_EXT * pInCmd)
 {
-         if(msgextInCtrl==NULL)
-		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
-
-    if(pInCmd->TrkBomenCtrl != 0x01 && pInCmd->TrkBomenCtrl != 0x02)
-    {
-            //MSGAPI_AckSnd(AckWaveDoor);
-            return ;
-    }
-    if(pInCmd->TrkBomenCtrl != pIStuts->TrkBomenCtrl)
-        pIStuts->TrkBomenCtrl = pInCmd->TrkBomenCtrl;
-
-    /***for **reply*****/
-    //MSGAPI_AckSnd(AckWaveDoor);
-   
    return ;
 }
 
@@ -447,9 +432,6 @@ void app_ctrl_setSerTrk(CMD_EXT * pInCmd )
 		pIStuts->AxisPosY[pIStuts->SensorStat] = pInCmd->AxisPosY[pIStuts->SensorStat];
 	}
 	
-	if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
-		pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
-
 	return ;	
 }
 

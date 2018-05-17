@@ -66,7 +66,6 @@ CProcess::CProcess()
 	pIStuts->DispColor[0]=2;
 	pIStuts->DispColor[1]=2;
 
-	extInCtrl.TrkBomenCtrl=1;
 	pIStuts->changeSensorFlag = 0;
 	crossBak.x=extInCtrl.opticAxisPosX[pIStuts->SensorStat ];
 	crossBak.y=extInCtrl.opticAxisPosY[pIStuts->SensorStat ];
@@ -1341,7 +1340,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 			#endif			
 			Osdflag[osdindex]=0;
 		}
-		 if((m_bTrack)&&(extInCtrl.TrkBomenCtrl==1))
+		 if(m_bTrack)
 		 {
 			extInCtrl.TrkXtmp =rcResult.x+rcResult.width/2;
 			extInCtrl.TrkYtmp = rcResult.y+rcResult.height/2;

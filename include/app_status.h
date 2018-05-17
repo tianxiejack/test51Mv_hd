@@ -192,7 +192,6 @@ typedef struct
 	volatile unsigned int  DispColor[eSen_Max];  	// eOSDColor or eGRPColor
 	
 	//don't know the usage
-	volatile unsigned char 	TrkBomenCtrl; // osd Trk Aim
 	volatile unsigned int  TrkCoastCount;
 	volatile unsigned int  FreezeresetCount;
 
@@ -231,6 +230,7 @@ typedef struct
 	volatile unsigned char TargetPal; // fr target pal 
 	volatile unsigned char SecAcqFlag;
 	volatile unsigned char SecAcqStat;
+	volatile unsigned char 	TrkBomenCtrl; // osd Trk Aim
 
 
 	
