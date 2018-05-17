@@ -189,6 +189,7 @@ void* recv_msg(SENDST *RS422)
 				pMsg->AvtPosX[eSen_TV] = Rsectrk.ImgPixelX;
 				pMsg->AvtPosY[eSen_TV] = Rsectrk.ImgPixelY;
 				pMsg->AvtTrkStat =eTrk_mode_search;
+				app_ctrl_setTrkStat(pMsg);
 				app_ctrl_setAxisPos(pMsg);
 			}
 			else if(0 == imgID1){
@@ -225,7 +226,7 @@ void* recv_msg(SENDST *RS422)
 			memcpy(&Rposmove,RS422->param,sizeof(Rposmove));
 			printf("recv posmove : Rposmove.AvtMoveX : %d    Rposmove.AvtMoveY :%d\n",Rposmove.AvtMoveX,Rposmove.AvtMoveY);
 			pMsg->aimRectMoveStepX = Rposmove.AvtMoveX;
-			pMsg->aimRectMoveStepY= Rposmove.AvtMoveY;
+			pMsg->aimRectMoveStepY = Rposmove.AvtMoveY;
 			app_ctrl_setAimPos(pMsg);
 			break;	
 

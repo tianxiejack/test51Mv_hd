@@ -30,18 +30,18 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 	if(msgextInCtrl==NULL)
 		return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
-	
-    if ((pInCmd->AvtTrkStat != pIStuts->AvtTrkStat) || pIStuts->AvtTrkStat == eTrk_mode_sectrk)
-    {
-        pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
-	 if((pIStuts->AvtTrkStat==eTrk_mode_search)||(pIStuts->AvtTrkStat==eTrk_mode_sectrk))
+
+	if (pInCmd->AvtTrkStat != pIStuts->AvtTrkStat)
 	{
-		pIStuts->NaimX = pInCmd->NaimX;
-		pIStuts->NaimY = pInCmd->NaimY;
+		pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
+		if(pIStuts->AvtTrkStat==eTrk_mode_sectrk)
+		{
+			pIStuts->NaimX = pInCmd->NaimX;
+			pIStuts->NaimY = pInCmd->NaimY;
+		}
+		MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
 	}
-	MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
-    }
-   return ;
+	return ;
 }
 
 
@@ -167,7 +167,6 @@ unsigned char app_ctrl_getMtdStat()
 }
 
 
-#if 1	//will be revise in next step
 
 void app_ctrl_setMMT(CMD_EXT * pInCmd)
 {
@@ -181,7 +180,7 @@ void app_ctrl_setMMT(CMD_EXT * pInCmd)
 	if (pIStuts->MmtStat[0] != pInCmd->MmtStat[0])
 	{     
 		pIStuts->MmtStat[0] = pInCmd->MmtStat[0];
-		if((pInCmd->AvtTrkStat == eTrk_mode_acq&&pIStuts->MmtStat[0]) || !pIStuts->MmtStat[0])
+		if(pInCmd->AvtTrkStat != eTrk_mode_target)
 		{
 		    MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
 		}
@@ -190,7 +189,7 @@ void app_ctrl_setMMT(CMD_EXT * pInCmd)
 }
 
 
-#endif
+
 //********************************************
 
 void app_ctrl_Sensorchange(CMD_EXT * pInCmd)

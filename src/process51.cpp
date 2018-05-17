@@ -1567,14 +1567,14 @@ osdindex++;
 			Osdflag[osdindex]=1;
 		}
 	}
-osdindex++;
+osdindex++; //dash little cross
 	{
 		if(Osdflag[osdindex]==1)
 			{
 				DrawdashCross(0,0,frcolor,false);
 				Osdflag[osdindex]=0;
 			}
-		DrawdashCross(0,0,frcolor,true);
+	//	DrawdashCross(0,0,frcolor,true);
 		
 	}
 osdindex++;	//cross aim
@@ -1591,8 +1591,17 @@ osdindex++;	//cross aim
 	 	starty=PiexltoWindowsy(extInCtrl.AvtPosY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 		if(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3)
 		{
-			DrawCross(startx,starty,frcolor,true);
-			Osdflag[osdindex]=1;
+			if(extInCtrl.AvtTrkStat == eTrk_mode_acq)
+			{
+				DrawCross(startx,starty,frcolor,true);
+				Osdflag[osdindex]=1;
+			}
+			else if( extInCtrl.AvtTrkStat == eTrk_mode_search)
+			{
+				frcolor = 3;
+				DrawCross(startx,starty,frcolor,true);
+				Osdflag[osdindex]=1;
+			}
 		}
 		crossBak.x=startx;
 		crossBak.y=starty;
