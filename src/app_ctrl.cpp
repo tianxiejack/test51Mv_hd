@@ -36,8 +36,8 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
         pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
 	 if((pIStuts->AvtTrkStat==eTrk_mode_search)||(pIStuts->AvtTrkStat==eTrk_mode_sectrk))
 	{
-		pIStuts->AvtPixelX = pInCmd->ImgPixelX[pIStuts->SensorStat] ;
-		pIStuts->AvtPixelY = pInCmd->ImgPixelY[pIStuts->SensorStat] ;
+		pIStuts->AvtPixelX = pInCmd->AxisPosX[pIStuts->SensorStat] ;
+		pIStuts->AvtPixelY = pInCmd->AxisPosY[pIStuts->SensorStat] ;
 
 		pIStuts->NaimX = pInCmd->NaimX;
 		pIStuts->NaimY = pInCmd->NaimY;
@@ -550,11 +550,11 @@ void app_ctrl_setSerTrk(CMD_EXT * pInCmd )
 
 	
 
-	if((pInCmd->ImgPixelX[pIStuts->SensorStat] != pIStuts->ImgPixelX[pIStuts->SensorStat])
+	if((pInCmd->AxisPosX[pIStuts->SensorStat] != pIStuts->AxisPosX[pIStuts->SensorStat])
 		|| (pInCmd->ImgPixelY[pIStuts->SensorStat] != pIStuts->ImgPixelY[pIStuts->SensorStat]))
 	{
-		pIStuts->ImgPixelX[pIStuts->SensorStat] = pInCmd->ImgPixelX[pIStuts->SensorStat];
-		pIStuts->ImgPixelY[pIStuts->SensorStat] = pInCmd->ImgPixelY[pIStuts->SensorStat];
+		pIStuts->AxisPosX[pIStuts->SensorStat] = pInCmd->AxisPosX[pIStuts->SensorStat];
+		pIStuts->AxisPosY[pIStuts->SensorStat] = pInCmd->AxisPosY[pIStuts->SensorStat];
 	}
 
 	if(pInCmd->SecAcqStat != pIStuts->SecAcqStat)

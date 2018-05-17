@@ -72,8 +72,8 @@ CProcess::CProcess()
 	crossBak.y=extInCtrl.unitAxisY[pIStuts->SensorStat ];
 	pIStuts->AvtTrkAimSize= AVT_TRK_AIM_SIZE;
 
-	pIStuts->ImgPixelX[0]	=VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->ImgPixelY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->AxisPosX[0]	=VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->AxisPosX[0]	=VIDEO_IMAGE_HEIGHT_0/2;
 
 	pIStuts->AvtPosX[0]	=VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->AvtPosY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
@@ -82,9 +82,6 @@ CProcess::CProcess()
 
 
 	pIStuts->FovStat=1;
-
-	pIStuts->ImgPixelX[1]=320;
-	pIStuts->ImgPixelY[1]=256;
 
 	pIStuts->FrCollimation=2;
 	pIStuts->PicpSensorStatpri=2;
@@ -1152,11 +1149,11 @@ void CProcess::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 	unsigned char colour = (bShow) ?fcolour : 0;
 	Line_Param_fb lineparm;
 
-	startx=WindowstoPiexlx(extInCtrl.ImgPixelX[extInCtrl.SensorStat],extInCtrl.SensorStat);
-	starty=WindowstoPiexly(extInCtrl.ImgPixelY[extInCtrl.SensorStat],extInCtrl.SensorStat);
+	startx=WindowstoPiexlx(extInCtrl.AxisPosX[extInCtrl.SensorStat],extInCtrl.SensorStat);
+	starty=WindowstoPiexly(extInCtrl.AxisPosY[extInCtrl.SensorStat],extInCtrl.SensorStat);
 	
-	lineparm.x=startx;//extInCtrl.ImgPixelX;
-	lineparm.y=starty;//extInCtrl.ImgPixelY;
+	lineparm.x=startx;
+	lineparm.y=starty;
 	lineparm.width=50;
 	lineparm.height=50;
 	lineparm.frcolor=colour;
@@ -1182,12 +1179,11 @@ void CProcess::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 
 	else if((extInCtrl.SecAcqFlag)&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3))
 	{
-		//printf("ImgPixelX=%d,ImgPixelY=%d  extInCtrl.DispGrp[extInCtrl.SensorStat]=%d \n",extInCtrl.ImgPixelX,extInCtrl.ImgPixelY,extInCtrl.DispGrp[extInCtrl.SensorStat]);
 		DrawcvDashcross(m_dccv,&lineparm,dashlen,dashlen);
 		startx=PiexltoWindowsxzoom(extInCtrl.unitAxisX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 		starty=PiexltoWindowsyzoom(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
-		endx=lineparm.x;//PiexltoWindowsx(extInCtrl.ImgPixelX[extInCtrl.SensorStat],extInCtrl.SensorStat);
-		endy=lineparm.y;//PiexltoWindowsy(extInCtrl.ImgPixelY[extInCtrl.SensorStat],extInCtrl.SensorStat);
+		endx=lineparm.x;
+		endy=lineparm.y;
 		
 		drawdashlinepri(m_dccv,startx,starty,endx,endy,dashlen,dashlen,colour);
 
@@ -1975,13 +1971,13 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		//if( pIStuts->SecAcqStat=)
 		if(pIStuts->SensorStat==0)
 		{
-			pIStuts->ImgPixelX[pIStuts->SensorStat] =PiexltoWindowsx( pIStuts->ImgPixelX[pIStuts->SensorStat^1],pIStuts->SensorStat^1);
-			pIStuts->ImgPixelY[pIStuts->SensorStat] =PiexltoWindowsy( pIStuts->ImgPixelY[pIStuts->SensorStat^1],pIStuts->SensorStat^1);
+			pIStuts->AxisPosX[pIStuts->SensorStat] =PiexltoWindowsx( pIStuts->AxisPosX[pIStuts->SensorStat^1],pIStuts->SensorStat^1);
+			pIStuts->AxisPosY[pIStuts->SensorStat] =PiexltoWindowsy( pIStuts->AxisPosY[pIStuts->SensorStat^1],pIStuts->SensorStat^1);
 		}
 		else
 		{
-			pIStuts->ImgPixelX[pIStuts->SensorStat] =WindowstoPiexlx( pIStuts->ImgPixelX[pIStuts->SensorStat^1],pIStuts->SensorStat);
-			pIStuts->ImgPixelY[pIStuts->SensorStat] =WindowstoPiexly( pIStuts->ImgPixelY[pIStuts->SensorStat^1],pIStuts->SensorStat);
+			pIStuts->AxisPosX[pIStuts->SensorStat] =WindowstoPiexlx( pIStuts->AxisPosX[pIStuts->SensorStat^1],pIStuts->SensorStat);
+			pIStuts->AxisPosY[pIStuts->SensorStat] =WindowstoPiexly( pIStuts->AxisPosY[pIStuts->SensorStat^1],pIStuts->SensorStat);
 		}
 
 //sensor 1 rect
@@ -2139,8 +2135,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 					   procStr[pIStuts->AvtTrkStat]);
 
 			pIStuts->AvtTrkStat = eTrk_mode_sectrk;
-			pIStuts->unitAimX = pIStuts->ImgPixelX[extInCtrl.SensorStat];
-			pIStuts->unitAimY = pIStuts->ImgPixelY[extInCtrl.SensorStat] ;
+			pIStuts->unitAimX = pIStuts->AxisPosX[extInCtrl.SensorStat];
+			pIStuts->unitAimY = pIStuts->AxisPosY[extInCtrl.SensorStat] ;
 		}
 		else if (pIStuts->AvtTrkStat == eTrk_mode_search)
 		{
@@ -2148,8 +2144,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 					   procStr[pIStuts->AvtTrkStat]);
 
 		   pIStuts->AvtTrkStat = eTrk_mode_search;
-		   pIStuts->unitAimX = pIStuts->ImgPixelX[extInCtrl.SensorStat];
-		   pIStuts->unitAimY = pIStuts->ImgPixelY[extInCtrl.SensorStat] ;
+		   pIStuts->unitAimX = pIStuts->AxisPosX[extInCtrl.SensorStat];
+		   pIStuts->unitAimY = pIStuts->AxisPosY[extInCtrl.SensorStat] ;
 		}
 		else if (pIStuts->AvtTrkStat == eTrk_mode_mtd)
 		{

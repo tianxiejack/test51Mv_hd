@@ -124,8 +124,8 @@ typedef struct
 	volatile int NaimY;	// sectrk aim the next obj that need to be tracked
 	//volatile int opticAxisPosX[eSen_Max];	//may be same to unitAxisX[eSen_Max]
 	//volatile int opticAxisPosY[eSen_Max];
-	//volatile int AxisPosX[eSen_Max];	//may be same to ImgPixelX[eSen_Max]
-	//volatile int AxisPosY[eSen_Max];
+	volatile int AxisPosX[eSen_Max];	
+	volatile int AxisPosY[eSen_Max];
 	volatile int AvtPosX[eSen_Max];	//target avt x,y for each channel
 	volatile int AvtPosY[eSen_Max];
 	
@@ -140,8 +140,6 @@ typedef struct
 	volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
 	volatile float  unitFovAngle[eSen_Max];
 	
-	volatile unsigned int  ImgPixelX[eSen_Max];    // may be mean AxisPosX
-	volatile unsigned int  ImgPixelY[eSen_Max];   
 	
 	volatile unsigned int unitTrkStatpri;
 	volatile unsigned int  unitTrkStat;     // acp/trk/assi/lost
@@ -231,6 +229,9 @@ typedef struct
 	volatile  int  AvtPosYTv;        		// eTrkRefine (axis or aim)
 	volatile  int  AvtPosXFir;        		// eTrkRefine (axis or aim)
 	volatile  int  AvtPosYFir;        		// eTrkRefine (axis or aim)
+	volatile unsigned int  ImgPixelX[eSen_Max];    // may be mean AxisPosX
+	volatile unsigned int  ImgPixelY[eSen_Max];   
+
 
 } CMD_EXT;
 
