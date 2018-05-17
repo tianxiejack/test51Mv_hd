@@ -416,31 +416,6 @@ void app_ctrl_setAimSize(CMD_EXT * pInCmd)
 	return ;
 }
 
-
-void app_ctrl_setTargetPal(CMD_EXT * pInCmd)
-{
-    if(msgextInCtrl==NULL)
-		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
-
-    if(pInCmd->TargetPal != 0x01 &&
-                 pInCmd->TargetPal != 0x02)
-    {
-        //MSGAPI_AckSnd( AckTarPal);
-        return ;
-    }
-    
-   if(pInCmd->TargetPal != pIStuts->TargetPal)
-   	    pIStuts->TargetPal = pInCmd->TargetPal;
-   
-   /***for **reply*****/
-   //MSGAPI_AckSnd( AckTarPal);
-   
-   return ;
-}
-
-
-
 void app_ctrl_setFovCtrl(CMD_EXT * pInCmd)
 {
       if(msgextInCtrl==NULL)
@@ -541,11 +516,7 @@ void app_ctrl_SaveCollXY()
 
     if(pIStuts->TvCollimation == 0x01)
     {
-        pIStuts->aimRectMoveStepX = pIStuts->unitTvCollX;
-        pIStuts->aimRectMoveStepY= pIStuts->unitTvCollY;
-
         pIStuts->AvtCfgSave = eSave_Enable;
-
         //printf("save cfg\n");
         MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
         MSGDRIV_send(MSGID_EXT_INPUT_CFGSAVE, 0);

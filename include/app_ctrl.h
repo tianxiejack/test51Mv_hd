@@ -18,7 +18,6 @@ void app_ctrl_setFRColl(CMD_EXT * pInCmd);
 void app_ctrl_setTvColl(CMD_EXT * pInCmd);
 
 void app_ctrl_setAimSize(CMD_EXT * pInCmd);
-void app_ctrl_setTargetPal(CMD_EXT * pInCmd);
 void app_ctrl_setFovCtrl(CMD_EXT * pInCmd);
 void app_ctrl_setSerTrk(CMD_EXT * pInCmd );
 

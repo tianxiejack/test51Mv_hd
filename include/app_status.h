@@ -169,21 +169,21 @@ typedef struct
 	volatile unsigned int  PicpSensorStat;  		
 	volatile unsigned int  PicpSensorStatpri; 		
 	volatile unsigned int  PicpPosStat;			
-	volatile unsigned int  ImgZoomStat[eSen_Max];   	// eImgAlgStat	electric
-	volatile unsigned int  ImgEnhStat[eSen_Max];    	// eImgAlgStat
-	volatile unsigned int  ImgBlobDetect[eSen_Max];    // eImgAlgStat
-	volatile unsigned int  ImgFrezzStat[eSen_Max];    	// eImgAlgStat
-	volatile unsigned int  ImgVideoTrans[eSen_Max];   // eImgAlgStat
-	volatile unsigned int  ImgPicp[eSen_Max];   	 	// eImgAlgStat
+	volatile unsigned int  ImgZoomStat[eSen_Max];   	
+	volatile unsigned int  ImgEnhStat[eSen_Max];    	
+	volatile unsigned int  ImgBlobDetect[eSen_Max];    
+	volatile unsigned int  ImgFrezzStat[eSen_Max];    	
+	volatile unsigned int  ImgVideoTrans[eSen_Max]; 
+	volatile unsigned int  ImgPicp[eSen_Max];   	
 
-	volatile unsigned int  MmtValid;    			// 0-disable 1-valid 2-unvalid
+	volatile unsigned int  MmtValid;    			
 	volatile unsigned int  MmtPixelX;
 	volatile unsigned int  MmtPixelY;
-	volatile unsigned int  MmtStat[eSen_Max];    	// eImgAlgStat
-	volatile unsigned int  MmtSelect[eSen_Max];  	// eMMTSelect or range 0-MTD_TARGET_NUM
+	volatile unsigned int  MmtStat[eSen_Max];    	
+	volatile unsigned int  MmtSelect[eSen_Max];
 
-	volatile unsigned char   MMTTempStat;			//for ack mmt stat
-	volatile unsigned char 	Mmttargetnum; 			
+	volatile unsigned char  MMTTempStat;		//ack mmt stat
+	volatile unsigned char  Mmttargetnum; 			
 
 	volatile unsigned char  MtdState[eSen_Max];	//record moving obj detect state of each channel
 
@@ -197,11 +197,7 @@ typedef struct
 	volatile unsigned char SecAcqStat;
 	volatile unsigned int  TrkCoastCount;
 	volatile unsigned int  FreezeresetCount;
-	volatile unsigned int  unitTvCollX;
-	volatile unsigned int  unitTvCollY;
 
-	// wait to change or remove
-	volatile unsigned char TargetPal; // fr target pal 
 
 	//may be not useful
 	volatile unsigned int  TvCollimation;   //dianshi zhunzhi
@@ -232,7 +228,11 @@ typedef struct
 	volatile  int  CollPosXFir;        		// jiaozhou
 	volatile  int  CollPosYFir;        		//
 
+	volatile unsigned int  unitTvCollX;
+	volatile unsigned int  unitTvCollY;
+	volatile unsigned char TargetPal; // fr target pal 
 
+	
 } CMD_EXT;
 
 typedef struct
