@@ -176,17 +176,14 @@ typedef struct
 	volatile unsigned int  ImgVideoTrans[eSen_Max];   // eImgAlgStat
 	volatile unsigned int  ImgPicp[eSen_Max];   	 	// eImgAlgStat
 
+	volatile unsigned int  MmtValid;    			// 0-disable 1-valid 2-unvalid
+	volatile unsigned int  MmtPixelX;
+	volatile unsigned int  MmtPixelY;
+	volatile unsigned int  MmtStat[eSen_Max];    	// eImgAlgStat
+	volatile unsigned int  MmtSelect[eSen_Max];  	// eMMTSelect or range 0-MTD_TARGET_NUM
 
-	volatile unsigned int  unitMtdValid;    			// 0-disable 1-valid 2-unvalid
-	volatile unsigned int  unitMtdPixelX;
-	volatile unsigned int  unitMtdPixelY;
-	volatile unsigned int  ImgMtdStat[eSen_Max];    	// eImgAlgStat
-	volatile unsigned int  ImgMtdSelect[eSen_Max];  	// eMMTSelect or range 0-MTD_TARGET_NUM
-
-	volatile unsigned int  	ImgMmtshow[eSen_Max];	
-	volatile unsigned char   MMTTempStat;		//for ack mmt stat
-	volatile unsigned char 	MmtOffsetXY[20]; 		//mtd xy
-	volatile unsigned char 	Mmttargetnum; 		//mtd xy
+	volatile unsigned char   MMTTempStat;			//for ack mmt stat
+	volatile unsigned char 	Mmttargetnum; 			
 
 	volatile unsigned char  MtdState[eSen_Max];	//record moving obj detect state of each channel
 
@@ -209,6 +206,9 @@ typedef struct
 	//may be not useful
 	volatile unsigned int  TvCollimation;   //dianshi zhunzhi
 	volatile unsigned int  FrCollimation;   //rexiang zhunzhi
+	
+	volatile unsigned int  ImgMmtshow[eSen_Max];	//not sure show what
+	volatile unsigned char 	MmtOffsetXY[20]; 		//not sure the func
 
 
 

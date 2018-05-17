@@ -622,9 +622,9 @@ void CProcess::erassdrawmmt(TARGET tg[],bool bShow)
 							tempmmty=result.y = ((int)tg[primajormmtid].cur_y ) % _IMAGE_HEIGHT_;
 
 
-							extInCtrl.unitMtdPixelX=result.x;
-							extInCtrl.unitMtdPixelY=result.y;
-							extInCtrl.unitMtdValid=1;
+							extInCtrl.MmtPixelX=result.x;
+							extInCtrl.MmtPixelY=result.y;
+							extInCtrl.MmtValid=1;
 							result.x = result.x - result.width/2;
 							result.y = result.y - result.height/2;
 
@@ -718,9 +718,9 @@ void CProcess::drawmmt(TARGET tg[],bool bShow)
 			tempmmty=result.y = ((int)tg[majormmtid].cur_y ) % _IMAGE_HEIGHT_;
 
 
-			extInCtrl.unitMtdPixelX=result.x;
-			extInCtrl.unitMtdPixelY=result.y;
-			extInCtrl.unitMtdValid=1;
+			extInCtrl.MmtPixelX=result.x;
+			extInCtrl.MmtPixelY=result.y;
+			extInCtrl.MmtValid=1;
 			
 			//OSA_printf("the num  majormmtid=%d\n",majormmtid);
 			result.x = result.x - result.width/2;
@@ -929,9 +929,9 @@ void CProcess::drawmmtnew(TARGET tg[],bool bShow)
 
 			
 			//mmt track target set
-			extInCtrl.unitMtdPixelX=result.x;
-			extInCtrl.unitMtdPixelY=result.y;
-			extInCtrl.unitMtdValid=1;
+			extInCtrl.MmtPixelX=result.x;
+			extInCtrl.MmtPixelY=result.y;
+			extInCtrl.MmtValid=1;
 
 			
 		
@@ -1720,10 +1720,10 @@ void CProcess::OnKeyDwn(unsigned char key)
 	if(key == 'd'|| key == 'D')
 	{
 	
-		if(pIStuts->ImgMtdStat[pIStuts->SensorStat])
-			pIStuts->ImgMtdStat[pIStuts->SensorStat] = eImgAlg_Disable;
+		if(pIStuts->MmtStat[pIStuts->SensorStat])
+			pIStuts->MmtStat[pIStuts->SensorStat] = eImgAlg_Disable;
 		else
-			pIStuts->ImgMtdStat[pIStuts->SensorStat] = eImgAlg_Enable;
+			pIStuts->MmtStat[pIStuts->SensorStat] = eImgAlg_Enable;
 		msgdriv_event(MSGID_EXT_INPUT_ENMTD, NULL);
 	}
 
@@ -2098,24 +2098,24 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			//zoom for mtdTrk change xy 
 			 if(pIStuts->FovCtrl==5&&pIStuts->SensorStat==0)
 		 	{
-		 		pIStuts->unitMtdPixelX=pIStuts->unitMtdPixelX-320;
-				pIStuts->unitMtdPixelX=2*pIStuts->unitMtdPixelX;
+		 		pIStuts->MmtPixelX=pIStuts->MmtPixelX-320;
+				pIStuts->MmtPixelX=2*pIStuts->MmtPixelX;
 
-				pIStuts->unitMtdPixelY=pIStuts->unitMtdPixelY-256;
-				pIStuts->unitMtdPixelY=2*pIStuts->unitMtdPixelY;
+				pIStuts->MmtPixelY=pIStuts->MmtPixelY-256;
+				pIStuts->MmtPixelY=2*pIStuts->MmtPixelY;
 				
-				pIStuts->unitAimX=pIStuts->unitMtdPixelX;
-				pIStuts->unitAimY=pIStuts->unitMtdPixelY;
+				pIStuts->unitAimX=pIStuts->MmtPixelX;
+				pIStuts->unitAimY=pIStuts->MmtPixelY;
 
 		 	}else{
 			
-				pIStuts->unitAimX=pIStuts->unitMtdPixelX;
-				pIStuts->unitAimY=pIStuts->unitMtdPixelY;
+				pIStuts->unitAimX=pIStuts->MmtPixelX;
+				pIStuts->unitAimY=pIStuts->MmtPixelY;
 		 	}
 
-			if(pIStuts->unitMtdValid)
+			if(pIStuts->MmtValid)
 			{
-				tempvalue=pIStuts->unitMtdPixelX;
+				tempvalue=pIStuts->MmtPixelX;
 				
 				if(tempvalue<0)
 					{
@@ -2126,7 +2126,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 						pIStuts->unitAimX=tempvalue;
 
 					}
-				tempvalue=pIStuts->unitMtdPixelY ;
+				tempvalue=pIStuts->MmtPixelY ;
 				//- pIStuts->unitAimH/2;
 				if(tempvalue<0)
 					{
@@ -2139,7 +2139,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 					}
 				
 				OSA_printf(" %d:%s set track to x =%f y=%f  mtdx=%d mtdy=%d  w=%d  h=%d\n", OSA_getCurTimeInMsec(), __func__,
-						pIStuts->unitAimX,pIStuts->unitAimY, pIStuts->unitMtdPixelX,pIStuts->unitMtdPixelY,pIStuts->unitAimW/2,pIStuts->unitAimH/2);
+						pIStuts->unitAimX,pIStuts->unitAimY, pIStuts->MmtPixelX,pIStuts->MmtPixelY,pIStuts->unitAimW/2,pIStuts->unitAimH/2);
 			}
 			else
 			{
@@ -2228,11 +2228,11 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		if(prm != NULL)
 		{
 			pInCmd = (CMD_EXT *)prm;
-			pIStuts->ImgMtdStat[0] = pInCmd->ImgMtdStat[0];
-			pIStuts->ImgMtdStat[1] = pInCmd->ImgMtdStat[1];
+			pIStuts->MmtStat[0] = pInCmd->MmtStat[0];
+			pIStuts->MmtStat[1] = pInCmd->MmtStat[1];
 		}
 
-		int MTDStatus = (pIStuts->ImgMtdStat[pIStuts->SensorStat]&0x01) ;
+		int MTDStatus = (pIStuts->MmtStat[pIStuts->SensorStat]&0x01) ;
 
 //		OSA_printf(" %d:%s set mtd enMask %x\n", OSA_getCurTimeInMsec(),__func__,m_mtd_ctrl.un_mtd.enMask);
 
@@ -2846,12 +2846,12 @@ void CProcess::MSGAPI_inputfrezz(long lParam )
 void CProcess::MSGAPI_inputmmtselect(long lParam )
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
-	if(pIStuts->ImgMtdSelect[pIStuts->SensorStat]  ==eMMT_Next)
+	if(pIStuts->MmtSelect[pIStuts->SensorStat]  ==eMMT_Next)
 		majormmtid=(majormmtid+1)%MAX_TARGET_NUMBER;
-	else if(pIStuts->ImgMtdSelect[pIStuts->SensorStat]  ==  eMMT_Prev)
-		{
-			majormmtid=(majormmtid-1+MAX_TARGET_NUMBER)%MAX_TARGET_NUMBER;
-		}
+	else if(pIStuts->MmtSelect[pIStuts->SensorStat]  ==  eMMT_Prev)
+	{
+		majormmtid=(majormmtid-1+MAX_TARGET_NUMBER)%MAX_TARGET_NUMBER;
+	}
 	OSA_printf("%s\n",__func__);
 }
 

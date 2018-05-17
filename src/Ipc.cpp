@@ -126,11 +126,11 @@ void* recv_msg(SENDST *RS422)
 
 			if(imgID1 == 0x01)
 			{
-				pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Enable;	
+				pMsg->MmtStat[pMsg->SensorStat] = eImgAlg_Enable;	
 			}
 			else if(imgID1 == 0x00)
 			{
-				pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Disable;
+				pMsg->MmtStat[pMsg->SensorStat] = eImgAlg_Disable;
 			}
 			app_ctrl_setMMT(pMsg);
 			MSGAPI_msgsend(mmt);			
@@ -145,7 +145,7 @@ void* recv_msg(SENDST *RS422)
 			else
 				imgID1--;
 			app_ctrl_setMmtSelect(pMsg,imgID1);	
-			pMsg->ImgMtdStat[pMsg->SensorStat] = eImgAlg_Disable;
+			pMsg->MmtStat[pMsg->SensorStat] = eImgAlg_Disable;
 			app_ctrl_setMMT(pMsg);
 			MSGAPI_msgsend(mmt);
 			MSGAPI_msgsend(trk);
@@ -291,13 +291,11 @@ int send_msg(SENDST *RS422)
 			break;
 			
 		case mmt:
-			RS422->param[0] = pIStuts.ImgMtdStat[pIStuts.SensorStat];
+			RS422->param[0] = pIStuts.MmtStat[pIStuts.SensorStat];
 			printf("ack mmt  :  %d\n",RS422->param[0]);
 			break;
 			
 		case mmtselect:
-			//RS422->param[0] = pIStuts.ImgMtdStat[pIStuts.SensorStat];
-			//printf("ack mmtselect  :  %d\n",RS422->param[0]);
 			break;
 			
 		case enh:

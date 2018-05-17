@@ -178,10 +178,10 @@ void app_ctrl_setMMT(CMD_EXT * pInCmd)
 	if(pInCmd->MMTTempStat != pIStuts->MMTTempStat)
 		pIStuts->MMTTempStat = pInCmd->MMTTempStat;
 
-	if (pIStuts->ImgMtdStat[0] != pInCmd->ImgMtdStat[0])
+	if (pIStuts->MmtStat[0] != pInCmd->MmtStat[0])
 	{     
-		pIStuts->ImgMtdStat[0] = pInCmd->ImgMtdStat[0];
-		if((pInCmd->AvtTrkStat == eTrk_mode_acq&&pIStuts->ImgMtdStat[0]) || !pIStuts->ImgMtdStat[0])
+		pIStuts->MmtStat[0] = pInCmd->MmtStat[0];
+		if((pInCmd->AvtTrkStat == eTrk_mode_acq&&pIStuts->MmtStat[0]) || !pIStuts->MmtStat[0])
 		{
 		    MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
 		}
@@ -213,9 +213,9 @@ void app_ctrl_setReset(CMD_EXT * pInCmd)
 			pIStuts->AvtTrkStat = eTrk_mode_acq;
 			 MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
 		}
-	if(pIStuts->ImgMtdStat[pIStuts->SensorStat] != eImgAlg_Disable)
+	if(pIStuts->MmtStat[pIStuts->SensorStat] != eImgAlg_Disable)
 		{
-			pIStuts->ImgMtdStat[pIStuts->SensorStat] = eImgAlg_Disable;
+			pIStuts->MmtStat[pIStuts->SensorStat] = eImgAlg_Disable;
 			  MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
 		}
 	if(pIStuts->TvCollimation==1)
