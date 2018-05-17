@@ -119,6 +119,8 @@ typedef struct
 	/***** new status *****/
 	volatile int axisMoveStepX;
 	volatile int axisMoveStepY;
+	volatile int aimRectMoveStepX;
+	volatile int aimRectMoveStepY;
 	volatile int validChId;
 	volatile int NaimX;	// sectrk aim the next obj that need to be tracked
 	volatile int NaimY;	// sectrk aim the next obj that need to be tracked
@@ -168,8 +170,6 @@ typedef struct
 	volatile  short  TrkPanev;
 	volatile  short  TrkTitlev;
 	
-	volatile  int  AvtMoveX;        		// eTrkRefine (axis or aim)
-	volatile  int  AvtMoveY;        		// eTrkRefine (axis or aim)
 	volatile  int  CollPosXFir;        		// eTrkRefine (axis or aim)
 	volatile  int  CollPosYFir;        		// eTrkRefine (axis or aim)
 	
@@ -233,6 +233,8 @@ typedef struct
 	volatile unsigned char 	CmdType;  // recv cmd id		no used now
 	volatile unsigned int  AvtPixelX;        // for ext designated
 	volatile unsigned int  AvtPixelY;        // for ext designated
+	volatile  int  AvtMoveX;        		// eTrkRefine (axis or aim)
+	volatile  int  AvtMoveY;        		// eTrkRefine (axis or aim)
 
 
 

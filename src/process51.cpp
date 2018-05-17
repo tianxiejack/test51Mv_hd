@@ -2378,8 +2378,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		{
 			pInCmd = (CMD_EXT *)prm;
 			pIStuts->AvtTrkAimSize = pInCmd->AvtTrkAimSize;
-			pIStuts->AvtMoveX = pInCmd->AvtMoveX;
-			pIStuts->AvtMoveY = pInCmd->AvtMoveY;
+			pIStuts->aimRectMoveStepX = pInCmd->aimRectMoveStepX;
+			pIStuts->aimRectMoveStepY= pInCmd->aimRectMoveStepY;
 		}
 
 		if(pIStuts->AvtTrkAimSize<0||pIStuts->AvtTrkAimSize>4)
@@ -2410,21 +2410,21 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				
 				rc.width=pIStuts->unitAimW;
 				rc.height=pIStuts->unitAimH;
-				if(pIStuts->AvtMoveX > 0)
+				if(pIStuts->aimRectMoveStepX > 0)
 					rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2 +1;
 				else
 					rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2 -1;
-				if(pIStuts->AvtMoveY> 0)
+				if(pIStuts->aimRectMoveStepY> 0)
 					rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2  +1;
 				else
 					rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2  -1;
-				pIStuts->AvtMoveX = 0;
-				pIStuts->AvtMoveY = 0;
+				pIStuts->aimRectMoveStepX = 0;
+				pIStuts->aimRectMoveStepY= 0;
 			}
 			m_intervalFrame=1;
 			m_rcAcq=rc;
 			OSA_printf(" %d:%s refine move (%d, %d), wh(%f, %f)  aim(%d,%d) rc(%f,%f)\n", OSA_getCurTimeInMsec(), __func__,
-						pIStuts->AvtMoveX, pIStuts->AvtMoveY, 
+						pIStuts->aimRectMoveStepX, pIStuts->aimRectMoveStepY, 
 						rc.width, rc.height,pIStuts->unitAimX,pIStuts->unitAimY,rc.x,rc.y);
 		}
 
@@ -2830,21 +2830,21 @@ void CProcess::MSGAPI_setAimRefine(long lParam)
 {
 	CMD_EXT *pIStuts = &sThis->extInCtrl;
 
-	if(pIStuts->AvtMoveX==eTrk_ref_left)
+	if(pIStuts->aimRectMoveStepX==eTrk_ref_left)
 	{
-		pIStuts->AvtMoveX=-1;
+		pIStuts->aimRectMoveStepX=-1;
 	}
-	else if(pIStuts->AvtMoveX==eTrk_ref_right)
+	else if(pIStuts->aimRectMoveStepX==eTrk_ref_right)
 	{
-		pIStuts->AvtMoveX=1;
+		pIStuts->aimRectMoveStepX=1;
 	}
-	if(pIStuts->AvtMoveY==eTrk_ref_up)
+	if(pIStuts->aimRectMoveStepY==eTrk_ref_up)
 	{
-		pIStuts->AvtMoveY=-1;
+		pIStuts->aimRectMoveStepY=-1;
 	}
-	else if(pIStuts->AvtMoveY==eTrk_ref_down)
+	else if(pIStuts->aimRectMoveStepY==eTrk_ref_down)
 	{
-		pIStuts->AvtMoveY=1;
+		pIStuts->aimRectMoveStepY=1;
 	}
 	sThis->msgdriv_event(MSGID_EXT_INPUT_AIMPOS,NULL);
 }

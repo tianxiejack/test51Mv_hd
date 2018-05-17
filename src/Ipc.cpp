@@ -224,8 +224,8 @@ void* recv_msg(SENDST *RS422)
 		case posmove:	
 			memcpy(&Rposmove,RS422->param,sizeof(Rposmove));
 			printf("recv posmove : Rposmove.AvtMoveX : %d    Rposmove.AvtMoveY :%d\n",Rposmove.AvtMoveX,Rposmove.AvtMoveY);
-			pMsg->AvtMoveX = Rposmove.AvtMoveX;
-			pMsg->AvtMoveY = Rposmove.AvtMoveY;
+			pMsg->aimRectMoveStepX = Rposmove.AvtMoveX;
+			pMsg->aimRectMoveStepY= Rposmove.AvtMoveY;
 			app_ctrl_setAimPos(pMsg);
 			break;	
 
@@ -323,7 +323,7 @@ int send_msg(SENDST *RS422)
 		
 			
 		case posmove:
-			switch(pIStuts.AvtMoveX)
+			switch(pIStuts.aimRectMoveStepX)
 			{
 				case 0:
 					RS422->param[0] = 0;
@@ -337,7 +337,7 @@ int send_msg(SENDST *RS422)
 				default:
 					break;		
 			}
-			switch(pIStuts.AvtMoveY)
+			switch(pIStuts.aimRectMoveStepY)
 			{
 				case 0:
 					RS422->param[1] = 0;

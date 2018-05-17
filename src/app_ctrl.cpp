@@ -72,9 +72,9 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
 		return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
 
-	if (pIStuts->AvtMoveX != pInCmd->AvtMoveX ||pIStuts->AvtMoveY != pInCmd->AvtMoveY){
-	    pIStuts->AvtMoveX = pInCmd->AvtMoveX;
-	    pIStuts->AvtMoveY = pInCmd->AvtMoveY;
+	if (pIStuts->aimRectMoveStepX != pInCmd->aimRectMoveStepX ||pIStuts->aimRectMoveStepY!= pInCmd->aimRectMoveStepY){
+	    pIStuts->aimRectMoveStepX = pInCmd->aimRectMoveStepX;
+	    pIStuts->aimRectMoveStepY= pInCmd->aimRectMoveStepY;
 	}
 	MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
 	return ;
@@ -278,7 +278,6 @@ void app_ctrl_setSensor(CMD_EXT * pInCmd)
     {
     	pIStuts->changeSensorFlag = 1;
         pIStuts->SensorStat = pInCmd->SensorStat;
-        //pIStuts->AvtMoveX = pIStuts->AvtMoveY = 0; //switch sensor axisxy clean
         //for  reply
         //MSGAPI_AckSnd(AckSensor);
 	 app_ctrl_Sensorchange(pInCmd);
@@ -398,7 +397,6 @@ void app_ctrl_setFRColl(CMD_EXT * pInCmd)
         pIStuts->CollPosXFir = pInCmd->CollPosXFir ;
         pIStuts->CollPosYFir = pInCmd->CollPosYFir;
         iMoveMask++;
-	OSA_printf("the  fir coll AvtPixelX=%d AvtPixelY=%d\n",pIStuts->CollPosXFir,pIStuts->CollPosYFir);
     }
 
     if(pInCmd->FrCollimation != pIStuts->FrCollimation)
@@ -588,8 +586,8 @@ void app_ctrl_SaveCollXY()
 
     if(pIStuts->TvCollimation == 0x01)
     {
-        pIStuts->AvtMoveX = pIStuts->unitTvCollX;
-        pIStuts->AvtMoveY = pIStuts->unitTvCollY;
+        pIStuts->aimRectMoveStepX = pIStuts->unitTvCollX;
+        pIStuts->aimRectMoveStepY= pIStuts->unitTvCollY;
 
         pIStuts->AvtCfgSave = eSave_Enable;
 
@@ -601,10 +599,7 @@ void app_ctrl_SaveCollXY()
     else if(pIStuts->FrCollimation == 0x01)
     {
 #if (!FrColl_Change)
-        pIStuts->AvtMoveX = pIStuts->AvtPixelX;
-        pIStuts->AvtMoveY = pIStuts->AvtPixelY;
 #endif      
-        //OSA_printf("x:%d ****y:%d****\n",pIStuts->AvtMoveX,pIStuts->AvtMoveY);
         pIStuts->AvtCfgSave = eSave_Enable;
 
        // MSGDRIV_send(MSGID_EXT_INPUT_AXISPOS, 0);
