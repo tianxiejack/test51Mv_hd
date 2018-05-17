@@ -1343,26 +1343,26 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 		}
 		 if((m_bTrack)&&(extInCtrl.TrkBomenCtrl==1))
 		 {
-			extInCtrl.unitTrkXtmp =rcResult.x+rcResult.width/2;
-			extInCtrl.unitTrkYtmp = rcResult.y+rcResult.height/2;
+			extInCtrl.TrkXtmp =rcResult.x+rcResult.width/2;
+			extInCtrl.uTrkYtmp = rcResult.y+rcResult.height/2;
 			coastRectx = extInCtrl.AxisPosX[0];
 			coastRecty = extInCtrl.AxisPosY[0];
 			if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
 			{
-				if(extInCtrl.unitTrkXtmp>=vdisWH[0][0]/2)
-					extInCtrl.unitTrkXtmp = (extInCtrl.unitTrkXtmp-vdisWH[0][0]/2)*2+vdisWH[0][0]/2 ;
-				else if(extInCtrl.unitTrkXtmp<vdisWH[0][0]/2)
-					extInCtrl.unitTrkXtmp = vdisWH[0][0]/2 -(vdisWH[0][0]/2 - extInCtrl.unitTrkXtmp)*2 ;
+				if(extInCtrl.TrkXtmp>=vdisWH[0][0]/2)
+					extInCtrl.TrkXtmp = (extInCtrl.TrkXtmp-vdisWH[0][0]/2)*2+vdisWH[0][0]/2 ;
+				else if(extInCtrl.TrkXtmp<vdisWH[0][0]/2)
+					extInCtrl.TrkXtmp = vdisWH[0][0]/2 -(vdisWH[0][0]/2 - extInCtrl.TrkXtmp)*2 ;
 
-				if(extInCtrl.unitTrkYtmp>=vdisWH[0][1]/2)
-					extInCtrl.unitTrkYtmp = (extInCtrl.unitTrkYtmp-vdisWH[0][1]/2)*2+vdisWH[0][1]/2;
-				else if(extInCtrl.unitTrkYtmp<vdisWH[0][1]/2)
-					extInCtrl.unitTrkYtmp = vdisWH[0][1]/2 -(vdisWH[0][1]/2 - extInCtrl.unitTrkYtmp)*2;
+				if(extInCtrl.TrkYtmp>=vdisWH[0][1]/2)
+					extInCtrl.TrkYtmp = (extInCtrl.TrkYtmp-vdisWH[0][1]/2)*2+vdisWH[0][1]/2;
+				else if(extInCtrl.TrkYtmp<vdisWH[0][1]/2)
+					extInCtrl.TrkYtmp = vdisWH[0][1]/2 -(vdisWH[0][1]/2 - extInCtrl.TrkYtmp)*2;
 
-				startx=PiexltoWindowsxzoom_TrkRect(extInCtrl.unitTrkXtmp-aimw,extInCtrl.SensorStat);			
-				starty=PiexltoWindowsyzoom_TrkRect(extInCtrl.unitTrkYtmp-aimh ,extInCtrl.SensorStat);
-				endx=PiexltoWindowsxzoom_TrkRect(extInCtrl.unitTrkXtmp+aimw,extInCtrl.SensorStat);
-				endy=PiexltoWindowsyzoom_TrkRect(extInCtrl.unitTrkYtmp+aimh ,extInCtrl.SensorStat);
+				startx=PiexltoWindowsxzoom_TrkRect(extInCtrl.TrkXtmp-aimw,extInCtrl.SensorStat);			
+				starty=PiexltoWindowsyzoom_TrkRect(extInCtrl.TrkYtmp-aimh ,extInCtrl.SensorStat);
+				endx=PiexltoWindowsxzoom_TrkRect(extInCtrl.TrkXtmp+aimw,extInCtrl.SensorStat);
+				endy=PiexltoWindowsyzoom_TrkRect(extInCtrl.TrkYtmp+aimh ,extInCtrl.SensorStat);
 			}
 			else
 			{
@@ -1476,23 +1476,23 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 			}
 		 	 if((extInCtrl.TrkStat == 1)||(extInCtrl.TrkStat == 2))
 		 	 {
-				extInCtrl.unitTrkX =rcResult.x+rcResult.width/2;
-				extInCtrl.unitTrkY = rcResult.y+rcResult.height/2;
+				extInCtrl.TrkX =rcResult.x+rcResult.width/2;
+				extInCtrl.TrkY = rcResult.y+rcResult.height/2;
 				if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0){
-					if(extInCtrl.unitTrkX>=vdisWH[0][0]/2)
-						extInCtrl.unitTrkX = (extInCtrl.unitTrkX-vdisWH[0][0]/2)*2+vdisWH[0][0]/2 ;
-					else if(extInCtrl.unitTrkX<vdisWH[0][0]/2)
-						extInCtrl.unitTrkX = vdisWH[0][0]/2 -(vdisWH[0][0]/2 - extInCtrl.unitTrkX)*2 ;
+					if(extInCtrl.TrkX>=vdisWH[0][0]/2)
+						extInCtrl.TrkX = (extInCtrl.TrkX-vdisWH[0][0]/2)*2+vdisWH[0][0]/2 ;
+					else if(extInCtrl.TrkX<vdisWH[0][0]/2)
+						extInCtrl.TrkX = vdisWH[0][0]/2 -(vdisWH[0][0]/2 - extInCtrl.TrkX)*2 ;
 
-					if(extInCtrl.unitTrkY>=vdisWH[0][1]/2)
-						extInCtrl.unitTrkY = (extInCtrl.unitTrkY-vdisWH[0][1]/2)*2+vdisWH[0][1]/2;
-					else if(extInCtrl.unitTrkY<vdisWH[0][1]/2)
-						extInCtrl.unitTrkY = vdisWH[0][1]/2 -(vdisWH[0][1]/2 - extInCtrl.unitTrkY)*2;
+					if(extInCtrl.TrkY>=vdisWH[0][1]/2)
+						extInCtrl.TrkY = (extInCtrl.TrkY-vdisWH[0][1]/2)*2+vdisWH[0][1]/2;
+					else if(extInCtrl.TrkY<vdisWH[0][1]/2)
+						extInCtrl.TrkY = vdisWH[0][1]/2 -(vdisWH[0][1]/2 - extInCtrl.TrkY)*2;
 				}
 				
-				//OSA_printf("transferbefore ********* trkxy(%f,%f)\n",extInCtrl.unitTrkX,extInCtrl.unitTrkY);
-				extInCtrl.trkerrx=(PiexltoWindowsxf(extInCtrl.unitTrkX ,extInCtrl.SensorStat));//*10;
-				extInCtrl.trkerry=(PiexltoWindowsyf(extInCtrl.unitTrkY ,extInCtrl.SensorStat));//*10;
+				//OSA_printf("transferbefore ********* trkxy(%f,%f)\n",extInCtrl.TrkX,extInCtrl.TrkY);
+				extInCtrl.trkerrx=(PiexltoWindowsxf(extInCtrl.TrkX ,extInCtrl.SensorStat));//*10;
+				extInCtrl.trkerry=(PiexltoWindowsyf(extInCtrl.TrkY ,extInCtrl.SensorStat));//*10;
 				//OSA_printf("transferafter ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
 				
 				if(0)//(extInCtrl.unitTrkStat == 2)

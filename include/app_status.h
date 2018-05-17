@@ -150,10 +150,10 @@ typedef struct
 	volatile int  unitAimX;
 	volatile int  unitAimY;
 	
-	volatile float unitTrkX;    		// for report and osd text 	what
-	volatile float unitTrkY;    		// for report and osd text
-	volatile float unitTrkXtmp;    	// for report and osd text
-	volatile float unitTrkYtmp;    	// for report and osd text
+	volatile float TrkX;    		// for report and osd text 	what
+	volatile float TrkY;    		// for report and osd text
+	volatile float TrkXtmp;    	// for report and osd text
+	volatile float TrkYtmp;    	// for report and osd text
 
 	volatile unsigned int  AvtTrkStat;      		// eTrkMode 
 	volatile unsigned int  AvtTrkAimSize;   	// 0-4
