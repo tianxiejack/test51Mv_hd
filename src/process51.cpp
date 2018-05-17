@@ -79,7 +79,7 @@ CProcess::CProcess()
 	pIStuts->AvtPosY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
 	pIStuts->AvtPosX[1]	=VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->AvtPosY[1]	=VIDEO_IMAGE_HEIGHT_0/2;
-
+	pIStuts->PicpPosStat = 0;
 
 	pIStuts->FovStat=1;
 
@@ -1250,16 +1250,17 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 
 	osdindex=0;	//picp cross
 	{
-		startx=crosspicpBak.x;//PiexltoWindowsx(crossBak.x,extInCtrl.SensorStat);
-		starty=crosspicpBak.y;//PiexltoWindowsy(crossBak.y,extInCtrl.SensorStat);
+		startx=crosspicpBak.x;
+		starty=crosspicpBak.y;
 		if(Osdflag[osdindex]==1)
 		{
 			DrawCross(startx,starty,frcolor,false);
 			Osdflag[osdindex]=0;
 		}
-		startx=PiexltoWindowsx(extInCtrl.SensorStat?extInCtrl.AvtPosX[0]:extInCtrl.AvtPosX[1],1-extInCtrl.SensorStat);
-		starty=PiexltoWindowsy(extInCtrl.SensorStat?extInCtrl.AvtPosY[0]:extInCtrl.AvtPosY[1],1-extInCtrl.SensorStat);
-		//printf("pri the startx=%d  starty=%d\n ",startx,starty);
+		//printf("extInCtrl.AvtPosX[0] = %d\n",extInCtrl.AvtPosX[0]);
+		startx=PiexltoWindowsx(extInCtrl.SensorStat?extInCtrl.AvtPosX[0]:extInCtrl.AvtPosX[1],extInCtrl.SensorStat);
+		starty=PiexltoWindowsy(extInCtrl.SensorStat?extInCtrl.AvtPosY[0]:extInCtrl.AvtPosY[1],extInCtrl.SensorStat);
+		extInCtrl.PicpPosStat = 0;
 		switch(extInCtrl.PicpPosStat)
 		{
 			case 0:
@@ -1299,7 +1300,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 		{
 			starty=0;
 		}
-		if(((extInCtrl.PicpSensorStat==1)||(extInCtrl.PicpSensorStat==0))&&(extInCtrl.FrCollimation!=1)&&	(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3))
+		if(((extInCtrl.PicpSensorStat==1)||(extInCtrl.PicpSensorStat==0))&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<=3))
 		{
 			DrawCross(startx,starty,frcolor,true);
 			//printf("picp***********lat the startx=%d  starty=%d\n ",startx,starty);
@@ -1344,7 +1345,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 		 if((m_bTrack)&&(extInCtrl.TrkBomenCtrl==1))
 		 {
 			extInCtrl.TrkXtmp =rcResult.x+rcResult.width/2;
-			extInCtrl.uTrkYtmp = rcResult.y+rcResult.height/2;
+			extInCtrl.TrkYtmp = rcResult.y+rcResult.height/2;
 			coastRectx = extInCtrl.AxisPosX[0];
 			coastRecty = extInCtrl.AxisPosY[0];
 			if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
@@ -1776,7 +1777,7 @@ void CProcess::OnKeyDwn(unsigned char key)
 	if (key == 'p'|| key == 'P')
 		{
 			
-			pIStuts->PicpPosStat=(pIStuts->PicpPosStat+1)%4;
+			//pIStuts->PicpPosStat=(pIStuts->PicpPosStat+1)%4;
 			msgdriv_event(MSGID_EXT_INPUT_PICPCROP, NULL);
 		}
 	if (key == 'g'|| key == 'G')
@@ -1873,13 +1874,10 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		if(pIStuts->PicpSensorStat==0||pIStuts->PicpSensorStat==1)
 		{
 			if(pIStuts->SensorStat==0)
-			{
 				pIStuts->PicpSensorStat=0;
-			}
 			else
-			{
 				pIStuts->PicpSensorStat=1;
-			}
+
 			if(pIStuts->ImgPicp[pIStuts->SensorStat]==1||pIStuts->ImgPicp[pIStuts->SensorStat^1]==1)
 			{
 				pIStuts->PicpSensorStatpri=pIStuts->PicpSensorStat;
@@ -1946,7 +1944,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		lay_rect=rendpos[pIStuts->PicpPosStat];
 		m_ImageAxisx=pIStuts->AxisPosX[extInCtrl.SensorStat ];
 		m_ImageAxisy=pIStuts->AxisPosY[extInCtrl.SensorStat ];
-
+		//printf("m_ImageAxisx,m_ImageAxisy = (%d,%d) \n",m_ImageAxisx,m_ImageAxisy);
 		//OSA_printf("%s: lay_rect: %d, %d,  %d x %d\n", __func__, lay_rect.x, lay_rect.y, lay_rect.w, lay_rect.h);
 		
 		
@@ -2696,7 +2694,7 @@ void CProcess::MSGAPI_croppicp(long lParam )
 	}
 	else if(pIStuts->ImgPicp[pIStuts->SensorStat]==0x03)
 	{
-		pIStuts->PicpPosStat=(pIStuts->PicpPosStat+1)%4;
+		//pIStuts->PicpPosStat=(pIStuts->PicpPosStat+1)%4;
 		sThis->msgdriv_event(MSGID_EXT_INPUT_PICPCROP,NULL);
 	}
 

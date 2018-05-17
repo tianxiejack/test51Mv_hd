@@ -204,7 +204,7 @@ ENUMDEF "(2) Config #2" =  2
     FIELD       16  5 " SWMS LAYOUT                "  16  1  6 INTEGER  [0,3]
     FIELD       16  6 " LAYOUT PRM UPDATE          "  16  1  7 INTEGER  [0,1]   
     FIELD       16  7 " PICTURE IN PICTURE CHAN    "  16  1  8 INTEGER  [0,1]
-    FIELD       16  8 " PICTURE IN PICTURE POSTION "  16  1  9 INTEGER  [0,3]   
+    FIELD       16  8 " PICTURE IN PICTURE POSTION "  16  1  9 INTEGER  [0,0]   
     FIELD       16  9 " PICTURE IN PICTURE WIDTH   "  16  1 10 INTEGER [0,1920]
     FIELD       16 10 " PICTURE IN PICTURE HEIGHT  "  16  1 11 INTEGER [0,1080]
 ;===============================================================================

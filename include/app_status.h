@@ -165,11 +165,11 @@ typedef struct
 	volatile int  trkerry;	
 
 	/***** cmd stat part *****/
-	volatile unsigned int  SensorStat;      		// eSenserStat
+	volatile unsigned int  SensorStat;      		
 	volatile unsigned int  changeSensorFlag;
-	volatile unsigned int  PicpSensorStat;  		// sensor src id range 0~3 or 0xFF no picp sens
-	volatile unsigned int  PicpSensorStatpri; 		// sensor src id range 0~3 or 0xFF no picp sens
-	volatile unsigned int  PicpPosStat;			// ePicpPosStat
+	volatile unsigned int  PicpSensorStat;  		
+	volatile unsigned int  PicpSensorStatpri; 		
+	volatile unsigned int  PicpPosStat;			
 	volatile unsigned int  ImgZoomStat[eSen_Max];   	// eImgAlgStat	electric
 	volatile unsigned int  ImgEnhStat[eSen_Max];    	// eImgAlgStat
 	volatile unsigned int  ImgBlobDetect[eSen_Max];    // eImgAlgStat
@@ -185,7 +185,7 @@ typedef struct
 	volatile unsigned int  ImgMtdSelect[eSen_Max];  	// eMMTSelect or range 0-MTD_TARGET_NUM
 
 	volatile unsigned int  	ImgMmtshow[eSen_Max];	
-	volatile unsigned char  MMTTempStat;		//for ack mmt stat
+	volatile unsigned char   MMTTempStat;		//for ack mmt stat
 	volatile unsigned char 	MtdOffsetXY[20]; 		//mtd xy
 	volatile unsigned char 	Mtdtargetnum; 		//mtd xy
 

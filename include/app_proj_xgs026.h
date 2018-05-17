@@ -218,7 +218,7 @@ typedef struct  _SysInfo_
     char SysStat;
 }SysInfo_t;
 
-static int vcapWH[2/*eSen_Max*/][2] = {{1920, 1080}, {640, 512}};
+static int vcapWH[2][2] = {{1920, 1080}, {640, 512}};
 
 static int vdisWH[2][2] = {{1920, 1080}, {320, 256}};		// main and picp
 

@@ -3,7 +3,7 @@
 
 
 #define APP_FORMWARE       			 "/mnt/gyro/gyro_main.out"
-#define SCRIPT_FILE         			 "/config/default.txt"
+#define SCRIPT_FILE         				 "/config/default.txt"
 #define SYSCONFIG_FILE0     			 "/config/config_0.txt"
 #define SYSCONFIG_FILE1     			 "/config/config_1.txt"
 #define SYSCONFIG_FILE2     			 "/config/config_2.txt"
