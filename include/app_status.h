@@ -149,10 +149,10 @@ typedef struct
 	volatile  int  unitAxisX[eSen_Max];     // may be mean to the opticAxisPosX
 	volatile  int  unitAxisY[eSen_Max];     // pixel
 	
-	volatile unsigned int  unitAimW;      // aim size
-	volatile unsigned int  unitAimH;      // aim size
-	volatile unsigned int  unitAimX;
-	volatile unsigned int  unitAimY;
+	volatile int  unitAimW;      // aim size
+	volatile int  unitAimH;      // aim size
+	volatile int  unitAimX;
+	volatile int  unitAimY;
 	
 	volatile float unitTrkX;    		// for report and osd text 	what
 	volatile float unitTrkY;    		// for report and osd text

@@ -2176,7 +2176,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			if(pIStuts->unitMtdValid)
 			{
 				tempvalue=pIStuts->unitMtdPixelX;
-					//- pIStuts->unitAimW/2;
 				
 				if(tempvalue<0)
 					{
@@ -2410,16 +2409,9 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				
 				rc.width=pIStuts->unitAimW;
 				rc.height=pIStuts->unitAimH;
-				if(pIStuts->aimRectMoveStepX > 0)
-					rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2 +1;
-				else
-					rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2 -1;
-				if(pIStuts->aimRectMoveStepY> 0)
-					rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2  +1;
-				else
-					rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2  -1;
-				pIStuts->aimRectMoveStepX = 0;
-				pIStuts->aimRectMoveStepY= 0;
+				
+				rc.x = pIStuts->unitAimX-pIStuts->unitAimW/2 + pIStuts->aimRectMoveStepX;
+				rc.y = pIStuts->unitAimY-pIStuts->unitAimH/2  + pIStuts->aimRectMoveStepY;
 			}
 			m_intervalFrame=1;
 			m_rcAcq=rc;
