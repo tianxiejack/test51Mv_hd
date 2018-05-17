@@ -122,8 +122,8 @@ typedef struct
 	volatile int validChId;
 	volatile int NaimX;	// sectrk aim the next obj that need to be tracked
 	volatile int NaimY;	// sectrk aim the next obj that need to be tracked
-	//volatile int opticAxisPosX[eSen_Max];	//may be same to unitAxisX[eSen_Max]
-	//volatile int opticAxisPosY[eSen_Max];
+	volatile int opticAxisPosX[eSen_Max];	//may be same to unitAxisX[eSen_Max]
+	volatile int opticAxisPosY[eSen_Max];
 	volatile int AxisPosX[eSen_Max];	
 	volatile int AxisPosY[eSen_Max];
 	volatile int AvtPosX[eSen_Max];	//target avt x,y for each channel
@@ -172,8 +172,6 @@ typedef struct
 	volatile  int  AvtMoveY;        		// eTrkRefine (axis or aim)
 	volatile  int  CollPosXFir;        		// eTrkRefine (axis or aim)
 	volatile  int  CollPosYFir;        		// eTrkRefine (axis or aim)
-	volatile unsigned int  AvtPixelX;        // for ext designated
-	volatile unsigned int  AvtPixelY;        // for ext designated
 	
 
 	/***** cmd stat part *****/
@@ -220,9 +218,10 @@ typedef struct
 	volatile unsigned char TargetPal; // fr target pal 
 
 	//may be not useful
-	volatile unsigned char 	CmdType;  // recv cmd id		no used now
 	volatile unsigned int  TvCollimation;   //dianshi zhunzhi
 	volatile unsigned int  FrCollimation;   //rexiang zhunzhi
+
+
 
 	/*******change the code and unused the old variable**********/
 	volatile  int  AvtPosXTv;        		// eTrkRefine (axis or aim)
@@ -231,6 +230,10 @@ typedef struct
 	volatile  int  AvtPosYFir;        		// eTrkRefine (axis or aim)
 	volatile unsigned int  ImgPixelX[eSen_Max];    // may be mean AxisPosX
 	volatile unsigned int  ImgPixelY[eSen_Max];   
+	volatile unsigned char 	CmdType;  // recv cmd id		no used now
+	volatile unsigned int  AvtPixelX;        // for ext designated
+	volatile unsigned int  AvtPixelY;        // for ext designated
+
 
 
 } CMD_EXT;

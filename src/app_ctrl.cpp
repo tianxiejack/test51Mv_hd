@@ -36,9 +36,6 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
         pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
 	 if((pIStuts->AvtTrkStat==eTrk_mode_search)||(pIStuts->AvtTrkStat==eTrk_mode_sectrk))
 	{
-		pIStuts->AvtPixelX = pInCmd->AxisPosX[pIStuts->SensorStat] ;
-		pIStuts->AvtPixelY = pInCmd->AxisPosY[pIStuts->SensorStat] ;
-
 		pIStuts->NaimX = pInCmd->NaimX;
 		pIStuts->NaimY = pInCmd->NaimY;
 	}
@@ -276,9 +273,6 @@ void app_ctrl_setSensor(CMD_EXT * pInCmd)
 		return ;
 
     CMD_EXT *pIStuts = msgextInCtrl;
-
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
     
     if (pIStuts->SensorStat != pInCmd->SensorStat)
     {
@@ -336,9 +330,6 @@ void app_ctrl_setTrkBomen(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
 
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
-
     if(pInCmd->TrkBomenCtrl != 0x01 && pInCmd->TrkBomenCtrl != 0x02)
     {
             //MSGAPI_AckSnd(AckWaveDoor);
@@ -363,12 +354,6 @@ void app_ctrl_setZoom(CMD_EXT * pInCmd)
             if(msgextInCtrl==NULL)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
-/*
-    if(pIStuts->SensorStat != eSen_TV_Stat)
-          return ;
-  */  
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
            
     // (pIStuts->ImgZoomStat[0] != pInCmd->ImgZoomStat[0] || pIStuts->ImgZoomStat[1] != pInCmd->ImgZoomStat[1])
     {
@@ -377,12 +362,6 @@ void app_ctrl_setZoom(CMD_EXT * pInCmd)
         MSGDRIV_send(MSGID_EXT_INPUT_ENZOOM, 0);
     }
 
-    /***for **reply*****/
-    if(pIStuts->CmdType == CmdZoom)
-    	;//MSGAPI_AckSnd(AckZoom);
-    else if(pIStuts->CmdType == CmdSmallest)
-	;//MSGAPI_AckSnd(AckSmallest);
-		
    return ;
 }
 
@@ -395,10 +374,6 @@ void app_ctrl_setFRColl(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
     int iMoveMask = 0,iSens = 0,iShow = 0;
-
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
-
 
     if( pInCmd->unitAxisX[pIStuts->SensorStat ] != pIStuts->unitAxisX[pIStuts->SensorStat ] || pInCmd->unitAxisY[pIStuts->SensorStat ] != pIStuts->unitAxisY[pIStuts->SensorStat ])
     {
@@ -458,9 +433,6 @@ void app_ctrl_setTvColl(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
 
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
-
     if(pInCmd->TvCollimation != pIStuts->TvCollimation)
     {
         pIStuts->TvCollimation = pInCmd->TvCollimation ;
@@ -498,9 +470,6 @@ void app_ctrl_setTargetPal(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
 
-    if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
-    
     if(pInCmd->TargetPal != 0x01 &&
                  pInCmd->TargetPal != 0x02)
     {
@@ -525,9 +494,6 @@ void app_ctrl_setFovCtrl(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
     float fDiffMask = 0.0;
-
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
 
     if(pIStuts->FovCtrl != pInCmd->FovCtrl)
     {
@@ -562,12 +528,6 @@ void app_ctrl_setSerTrk(CMD_EXT * pInCmd )
 	
 	if(pInCmd->SecAcqFlag != pIStuts->SecAcqFlag)
 		pIStuts->SecAcqFlag = pInCmd->SecAcqFlag;
-
-    	if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
-
-	if(pIStuts->CmdType == CmdSerTrk)
-	    ;//MSGAPI_AckSnd( AckSerTrk);
 
 	return ;	
 }
@@ -604,10 +564,6 @@ void app_ctrl_setSaveCfg(CMD_EXT * pInCmd)
      if(msgextInCtrl==NULL)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
-
-
-    if(pInCmd->CmdType != pIStuts->CmdType)
-        pIStuts->CmdType = pInCmd->CmdType;
 	
     //if (pIStuts->AvtCfgSave != pInCmd->AvtCfgSave)
     {
@@ -665,10 +621,6 @@ void app_ctrl_setDispGrade(CMD_EXT * pInCmd)
 		return ;
      	CMD_EXT *pIStuts = msgextInCtrl;
 
-    if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
-	  
-
     if (pIStuts->DispGrp[0] != pInCmd->DispGrp[0] 
                         || pIStuts->DispGrp[1] != pInCmd->DispGrp[1])
     {
@@ -691,9 +643,6 @@ void app_ctrl_setDispColor(CMD_EXT * pInCmd )
   if(msgextInCtrl==NULL)
 	return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
-
-	if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
 	  
 if(pInCmd->DispColor[0] !=0x07)
 {
@@ -863,9 +812,6 @@ void app_ctrl_setPicp(CMD_EXT * pInCmd)
   if(msgextInCtrl==NULL)
 		return ;
   CMD_EXT *pIStuts = msgextInCtrl;
-
-  if(pInCmd->CmdType != pIStuts->CmdType)
-		pIStuts->CmdType = pInCmd->CmdType;
 	
      if((pInCmd->ImgPicp[pInCmd->SensorStat] != pIStuts->ImgPicp[pInCmd->SensorStat])&&pInCmd->FrCollimation!=1)
      {
