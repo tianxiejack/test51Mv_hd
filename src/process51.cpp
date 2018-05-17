@@ -1451,7 +1451,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 		 
 		 if(m_bTrack)
 		 {
-		 	extInCtrl.unitTrkStat=m_iTrackStat;
+		 	extInCtrl.TrkStat=m_iTrackStat;
 			if(m_iTrackStat == 1)
 			{
 				rememflag=false;
@@ -1466,15 +1466,15 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 				
 				if((OSA_getCurTimeInMsec()-rememtime)>5000)
 				{							
-					extInCtrl.unitTrkStat=3;	
+					extInCtrl.TrkStat=3;	
 				}
 				else
 				{
 					//printf("rcResult.xy =(%f,%f)   wh=(%f,%f)\n",rcResult.x,rcResult.y,rcResult.width,rcResult.height);
-					extInCtrl.unitTrkStat=2;
+					extInCtrl.TrkStat=2;
 				}
 			}
-		 	 if((extInCtrl.unitTrkStat == 1)||(extInCtrl.unitTrkStat == 2))
+		 	 if((extInCtrl.TrkStat == 1)||(extInCtrl.TrkStat == 2))
 		 	 {
 				extInCtrl.unitTrkX =rcResult.x+rcResult.width/2;
 				extInCtrl.unitTrkY = rcResult.y+rcResult.height/2;
@@ -1508,14 +1508,14 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 			 else
 			 	extInCtrl.TrkErrFeedback = 0;
 			 
-			if(extInCtrl.unitTrkStat!=extInCtrl.unitTrkStatpri)
+			if(extInCtrl.TrkStat!=extInCtrl.TrkStatpri)
 			{
-				extInCtrl.unitTrkStatpri=extInCtrl.unitTrkStat;
+				extInCtrl.TrkStatpri=extInCtrl.TrkStat;
 				//MSGAPI_AckSnd( AckTrkType);
 			}
 
 			#if __IPC__
-					if(extInCtrl.unitTrkStat != 3)
+					if(extInCtrl.TrkStat != 3)
 					{
 						extInCtrl.trkerrx = extInCtrl.trkerrx - VIDEO_IMAGE_WIDTH_0/2;
 						extInCtrl.trkerry = extInCtrl.trkerry - VIDEO_IMAGE_HEIGHT_0/2;
@@ -1525,8 +1525,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 						extInCtrl.trkerrx = 0;
 						extInCtrl.trkerry = 0;
 					}
-					//printf("@@@@@@@@@@extInCtrl.unitTrkStat = %d \n",extInCtrl.unitTrkStat);
-					ipc_settrack(extInCtrl.unitTrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);//unitTrkStat
+					ipc_settrack(extInCtrl.TrkStat, extInCtrl.trkerrx, extInCtrl.trkerry);
 					trkmsg.cmd_ID = read_shm_trkpos;
 					//printf("ack the trackerr to mainThr\n");
 					ipc_sendmsg(&trkmsg, IPC_FRIMG_MSG);

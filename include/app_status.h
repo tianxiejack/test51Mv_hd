@@ -142,11 +142,9 @@ typedef struct
 	volatile unsigned char  FovStat;       /* 1 byte ext-input fov:0 Large fov ,1 midle fov,2 small fov,3 electric x2 fov */
 	volatile float  unitFovAngle[eSen_Max];
 	
-	
-	volatile unsigned int unitTrkStatpri;
-	volatile unsigned int  unitTrkStat;     // acp/trk/assi/lost
+	volatile unsigned int TrkStatpri;
+	volatile unsigned int TrkStat;     // acp/trk/assi/lost
 
-	
 	volatile int  unitAimW;      // aim size
 	volatile int  unitAimH;      // aim size
 	volatile int  unitAimX;
