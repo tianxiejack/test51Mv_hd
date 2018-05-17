@@ -47,10 +47,10 @@ CProcess::CProcess()
 	// default cmd value
 	CMD_EXT *pIStuts = &extInCtrl;
 
-	pIStuts->unitAxisX[0]   = VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->unitAxisY[0]   = VIDEO_IMAGE_HEIGHT_0/2;
-	pIStuts->unitAxisX[1]   = VIDEO_IMAGE_WIDTH_1/2;
-	pIStuts->unitAxisY[1]   = VIDEO_IMAGE_HEIGHT_1/2;
+	pIStuts->opticAxisPosX[0]   = VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->opticAxisPosY[0]   = VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->opticAxisPosX[1]   = VIDEO_IMAGE_WIDTH_1/2;
+	pIStuts->opticAxisPosY[1]   = VIDEO_IMAGE_HEIGHT_1/2;
 	
 	pIStuts->unitAimW 	= 	AIM_WIDTH;
 	pIStuts->unitAimH 	= 	AIM_HEIGHT;
@@ -68,12 +68,12 @@ CProcess::CProcess()
 
 	extInCtrl.TrkBomenCtrl=1;
 	pIStuts->changeSensorFlag = 0;
-	crossBak.x=extInCtrl.unitAxisX[pIStuts->SensorStat ];
-	crossBak.y=extInCtrl.unitAxisY[pIStuts->SensorStat ];
+	crossBak.x=extInCtrl.opticAxisPosX[pIStuts->SensorStat ];
+	crossBak.y=extInCtrl.opticAxisPosY[pIStuts->SensorStat ];
 	pIStuts->AvtTrkAimSize= AVT_TRK_AIM_SIZE;
 
 	pIStuts->AxisPosX[0]	=VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->AxisPosX[0]	=VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->AxisPosY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
 
 	pIStuts->AvtPosX[0]	=VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->AvtPosY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
@@ -1180,8 +1180,8 @@ void CProcess::DrawdashCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 	else if((extInCtrl.SecAcqFlag)&&(extInCtrl.DispGrp[extInCtrl.SensorStat]<3))
 	{
 		DrawcvDashcross(m_dccv,&lineparm,dashlen,dashlen);
-		startx=PiexltoWindowsxzoom(extInCtrl.unitAxisX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
-		starty=PiexltoWindowsyzoom(extInCtrl.unitAxisY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
+		startx=PiexltoWindowsxzoom(extInCtrl.AxisPosX[extInCtrl.SensorStat ],extInCtrl.SensorStat);
+		starty=PiexltoWindowsyzoom(extInCtrl.AxisPosY[extInCtrl.SensorStat ],extInCtrl.SensorStat);
 		endx=lineparm.x;
 		endy=lineparm.y;
 		
@@ -1345,8 +1345,8 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 		 {
 			extInCtrl.unitTrkXtmp =rcResult.x+rcResult.width/2;
 			extInCtrl.unitTrkYtmp = rcResult.y+rcResult.height/2;
-			coastRectx = extInCtrl.unitAxisX[0];
-			coastRecty = extInCtrl.unitAxisY[0];
+			coastRectx = extInCtrl.AxisPosX[0];
+			coastRecty = extInCtrl.AxisPosY[0];
 			if(extInCtrl.FovCtrl==5&&extInCtrl.SensorStat==0)
 			{
 				if(extInCtrl.unitTrkXtmp>=vdisWH[0][0]/2)
@@ -1407,10 +1407,10 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 					endy=PiexltoWindowsyzoom_TrkRect(coastRecty+aimh ,extInCtrl.SensorStat);
 
 				}else{
-					startx=PiexltoWindowsxzoom(extInCtrl.unitAxisX[extInCtrl.SensorStat]-aimw/2,extInCtrl.SensorStat);			
-					starty=PiexltoWindowsyzoom(extInCtrl.unitAxisY[extInCtrl.SensorStat]-aimh/2 ,extInCtrl.SensorStat);
-					endx=PiexltoWindowsxzoom(extInCtrl.unitAxisX[extInCtrl.SensorStat]+aimw/2,extInCtrl.SensorStat);
-					endy=PiexltoWindowsyzoom(extInCtrl.unitAxisY[extInCtrl.SensorStat]+aimh/2 ,extInCtrl.SensorStat);
+					startx=PiexltoWindowsxzoom(extInCtrl.AxisPosX[extInCtrl.SensorStat]-aimw/2,extInCtrl.SensorStat);			
+					starty=PiexltoWindowsyzoom(extInCtrl.AxisPosY[extInCtrl.SensorStat]-aimh/2 ,extInCtrl.SensorStat);
+					endx=PiexltoWindowsxzoom(extInCtrl.AxisPosX[extInCtrl.SensorStat]+aimw/2,extInCtrl.SensorStat);
+					endy=PiexltoWindowsyzoom(extInCtrl.AxisPosY[extInCtrl.SensorStat]+aimh/2 ,extInCtrl.SensorStat);
 					}
 				if(bDraw != 0){
 					DrawdashRect(startx,starty,endx,endy,frcolor);	// track lost DashRect				
@@ -1902,8 +1902,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 	CMD_EXT *pIStuts = &extInCtrl;
 	CMD_EXT *pInCmd = NULL;
 	CMD_EXT tmpCmd = {0};
-	printf("*************x=%d y=%d\n",pIStuts->unitAxisX[extInCtrl.SensorStat ],pIStuts->unitAxisY[extInCtrl.SensorStat ]);
-	printf("*************msgID : %d \n",msgId);
 	if(msgId == MSGID_EXT_INPUT_SENSOR || msgId == MSGID_EXT_INPUT_ENPICP)
 	{
 		if(prm != NULL)
@@ -1914,8 +1912,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		}
 		int itmp;
 		//chage acq;
-		m_rcAcq.x=pIStuts->unitAxisX[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
-		m_rcAcq.y=pIStuts->unitAxisY[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
+		m_rcAcq.x=pIStuts->opticAxisPosX[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
+		m_rcAcq.y=pIStuts->opticAxisPosY[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
 		m_rcAcq.width=trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
 		m_rcAcq.height=trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
 
@@ -1988,7 +1986,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		lay_rect.h = vdisWH[0][1]/6;
 		lay_rect.x = crossBak.x - lay_rect.w/2;//vdisWH[0][0]/2-lay_rect.w/2;
 		lay_rect.y = crossBak.y - lay_rect.h/2;//vdisWH[0][1]/2-lay_rect.h/2;
-		//pIStuts->unitAxisX[extInCtrl.SensorStat]
 	#endif
 		if(pIStuts->PicpSensorStat==1)
 		{
@@ -2001,8 +1998,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 //picp position
 		lay_rect=rendpos[pIStuts->PicpPosStat];
-		m_ImageAxisx=pIStuts->unitAxisX[extInCtrl.SensorStat ];
-		m_ImageAxisy=pIStuts->unitAxisY[extInCtrl.SensorStat ];
+		m_ImageAxisx=pIStuts->AxisPosX[extInCtrl.SensorStat ];
+		m_ImageAxisy=pIStuts->AxisPosY[extInCtrl.SensorStat ];
 
 		//OSA_printf("%s: lay_rect: %d, %d,  %d x %d\n", __func__, lay_rect.x, lay_rect.y, lay_rect.w, lay_rect.h);
 		
@@ -2110,7 +2107,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			if(DrawMoveDetect)
 				pIStuts->unitAimX =  random.x+random.w/2;
 			else
-				pIStuts->unitAimX = pIStuts->unitAxisX[extInCtrl.SensorStat ] ;//- pIStuts->unitAimW/2;
+				pIStuts->unitAimX = pIStuts->AxisPosX[extInCtrl.SensorStat ] ;//- pIStuts->unitAimW/2;
 			if(pIStuts->unitAimX<0)
 			{
 				pIStuts->unitAimX=0;
@@ -2118,7 +2115,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			if(DrawMoveDetect)
 				pIStuts->unitAimY = random.y+random.h/2;
 			else
-				pIStuts->unitAimY = pIStuts->unitAxisY[extInCtrl.SensorStat ];// - pIStuts->unitAimH/2;
+				pIStuts->unitAimY = pIStuts->AxisPosY[extInCtrl.SensorStat ];// - pIStuts->unitAimH/2;
 
 			if(pIStuts->unitAimY<0)
 			{
@@ -2203,8 +2200,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			}
 			else
 			{
-				pIStuts->unitAimX = pIStuts->unitAxisX[extInCtrl.SensorStat ] - pIStuts->unitAimW/2;
-				pIStuts->unitAimY = pIStuts->unitAxisY[extInCtrl.SensorStat ] - pIStuts->unitAimH/2;
+				pIStuts->unitAimX = pIStuts->opticAxisPosX[extInCtrl.SensorStat ] - pIStuts->unitAimW/2;
+				pIStuts->unitAimY = pIStuts->opticAxisPosY[extInCtrl.SensorStat ] - pIStuts->unitAimH/2;
 			}
 			//pIStuts->unitTrkProc = eTrk_proc_target;
 
@@ -2258,8 +2255,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			{
 				printf("pIStuts->unitAimX = %d   ,  pIStuts->unitAimY = %d \n",pIStuts->NaimX,pIStuts->NaimY);
 				if(pIStuts->AvtTrkStat == eTrk_mode_sectrk){
-					pIStuts->unitAimX = pIStuts->NaimX;//pIStuts->unitAxisX[eSen_TV];
-					pIStuts->unitAimY = pIStuts->NaimY;//pIStuts->unitAxisY[eSen_TV];
+					pIStuts->unitAimX = pIStuts->NaimX;
+					pIStuts->unitAimY = pIStuts->NaimY;
 				}
 				rc.x=pIStuts->unitAimX-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
 				rc.y=pIStuts->unitAimY-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
@@ -2280,7 +2277,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		}
 	//	printf("the rc.x=%d rc.y=%d ,unitAimX=%d  unitAimY=%d \n",rc.x,rc.y,pIStuts->unitAimX,pIStuts->unitAimY);
 	//	printf("w=%d h=%d\n",pIStuts->unitAimW,pIStuts->unitAimH);
-	//	printf("*************x=%d y=%d\n",pIStuts->unitAxisX[extInCtrl.SensorStat ],pIStuts->unitAxisY[extInCtrl.SensorStat ]);
 		
  	}
 
@@ -2932,7 +2928,7 @@ void CProcess::MSGAPI_inputpositon(long lParam )
 			}	
 			printf(" pIStuts->AvtPosX[0] = %d \n",pIStuts->AvtPosX[0]);
 			pIStuts->unitAimX = pIStuts->AvtPosX[0];
-			sThis->m_ImageAxisx=pIStuts->unitAxisX[pIStuts->SensorStat ];			
+			sThis->m_ImageAxisx=pIStuts->AxisPosX[pIStuts->SensorStat ];			
 		}
 		if((pIStuts->AvtPosY[0]>=50)&&(pIStuts->AvtPosY[0]<=vcapWH[pIStuts->SensorStat][1]-50))
 		{
@@ -2942,10 +2938,10 @@ void CProcess::MSGAPI_inputpositon(long lParam )
 				pIStuts->axisMoveStepY = 0;
 			}
 			pIStuts->unitAimY = pIStuts->AvtPosY[0];
-			sThis->m_ImageAxisy=pIStuts->unitAxisY[pIStuts->SensorStat ];
+			sThis->m_ImageAxisy=pIStuts->AxisPosY[pIStuts->SensorStat ];
 		}
 	}
-	OSA_printf("%s   THE=unitAimX=%d unitAxisY=%d\n",__func__,pIStuts->unitAxisX[pIStuts->SensorStat ],pIStuts->unitAxisY[pIStuts->SensorStat ]);
+	OSA_printf("%s   THE=unitAimX=%d unitAxisY=%d\n",__func__,pIStuts->opticAxisPosX[pIStuts->SensorStat ],pIStuts->opticAxisPosY[pIStuts->SensorStat ]);
 }
 
 void CProcess::MSGAPI_inputcoast(long lParam )

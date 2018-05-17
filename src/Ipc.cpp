@@ -197,9 +197,9 @@ void* recv_msg(SENDST *RS422)
 				pMsg->NaimY = Rsectrk.ImgPixelY;
 				printf("next aimx ,aimy (%d,%d)\n",pMsg->NaimX,pMsg->NaimY);
 				app_ctrl_setTrkStat(pMsg);
-				printf("unitAxisX,unitAxisY (%d,%d)\n",pMsg->unitAxisX[0],pMsg->unitAxisX[1]);
-				pMsg->AvtPosX[eSen_TV] = pMsg->unitAxisX[0];
-				pMsg->AvtPosY[eSen_TV] = pMsg->unitAxisY[0];
+				printf("opticAxisPosX,opticAxisPosY (%d,%d)\n",pMsg->opticAxisPosX[0],pMsg->opticAxisPosY[0]);
+				pMsg->AvtPosX[eSen_TV] = pMsg->opticAxisPosX[0];
+				pMsg->AvtPosY[eSen_TV] = pMsg->opticAxisPosY[0];
 				app_ctrl_setAxisPos(pMsg);
 				MSGAPI_msgsend(sectrk);						
 			}			

@@ -91,8 +91,8 @@ void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index)
 	pIStuts->NaimY = cury;
 	app_ctrl_setTrkStat(pIStuts);
 
-	pIStuts->AvtPosX[eSen_TV] = pIStuts->unitAxisX[eSen_TV];
-	pIStuts->AvtPosY[eSen_TV] = pIStuts->unitAxisY[eSen_TV];
+	pIStuts->AvtPosX[eSen_TV] = pIStuts->opticAxisPosX[eSen_TV];
+	pIStuts->AvtPosY[eSen_TV] = pIStuts->opticAxisPosY[eSen_TV];
 	app_ctrl_setAxisPos(pIStuts);
 	return ;
 }
@@ -198,8 +198,8 @@ void app_ctrl_Sensorchange(CMD_EXT * pInCmd)
 	if(msgextInCtrl==NULL)
 		return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
-	pIStuts->unitAimX=pIStuts->unitAxisX[pIStuts->SensorStat];
-	pIStuts->unitAimY=pIStuts->unitAxisY[pIStuts->SensorStat];
+	pIStuts->unitAimX=pIStuts->opticAxisPosX[pIStuts->SensorStat];
+	pIStuts->unitAimY=pIStuts->opticAxisPosY[pIStuts->SensorStat];
 }
 
 void app_ctrl_setReset(CMD_EXT * pInCmd)
@@ -281,7 +281,7 @@ void app_ctrl_setSensor(CMD_EXT * pInCmd)
         //for  reply
         //MSGAPI_AckSnd(AckSensor);
 	 app_ctrl_Sensorchange(pInCmd);
-	 OSA_printf("the sensorstat=%d  x=%d y=%d\n",pIStuts->SensorStat,pIStuts->unitAxisX[pIStuts->SensorStat ],pIStuts->unitAxisY[pIStuts->SensorStat ]);
+	 OSA_printf("the sensorstat=%d  x=%d y=%d\n",pIStuts->SensorStat,pIStuts->opticAxisPosX[pIStuts->SensorStat ],pIStuts->opticAxisPosY[pIStuts->SensorStat ]);
         MSGDRIV_send(MSGID_EXT_INPUT_SENSOR, 0);
     }
     else
@@ -374,12 +374,12 @@ void app_ctrl_setFRColl(CMD_EXT * pInCmd)
      	CMD_EXT *pIStuts = msgextInCtrl;
     int iMoveMask = 0,iSens = 0,iShow = 0;
 
-    if( pInCmd->unitAxisX[pIStuts->SensorStat ] != pIStuts->unitAxisX[pIStuts->SensorStat ] || pInCmd->unitAxisY[pIStuts->SensorStat ] != pIStuts->unitAxisY[pIStuts->SensorStat ])
+    if( pInCmd->opticAxisPosX[pIStuts->SensorStat ] != pIStuts->opticAxisPosX[pIStuts->SensorStat ] || pInCmd->opticAxisPosY[pIStuts->SensorStat ] != pIStuts->opticAxisPosY[pIStuts->SensorStat ])
     {
-	    if((pInCmd->unitAxisX[pIStuts->SensorStat ]>0)&&(pInCmd->unitAxisX[pIStuts->SensorStat ]<_IMAGE_WIDTH_))
-	        pIStuts->unitAxisX[pIStuts->SensorStat ] = pInCmd->unitAxisX[pIStuts->SensorStat ] ;
-	   if((pInCmd->unitAxisY[pIStuts->SensorStat ]>0)&&(pInCmd->unitAxisY[pIStuts->SensorStat ]<_IMAGE_HEIGHT_))
-	        pIStuts->unitAxisY[pIStuts->SensorStat ] = pInCmd->unitAxisY[pIStuts->SensorStat ];
+	    if((pInCmd->opticAxisPosX[pIStuts->SensorStat ]>0)&&(pInCmd->opticAxisPosX[pIStuts->SensorStat ]<_IMAGE_WIDTH_))
+	        pIStuts->opticAxisPosX[pIStuts->SensorStat ] = pInCmd->opticAxisPosX[pIStuts->SensorStat ] ;
+	   if((pInCmd->opticAxisPosY[pIStuts->SensorStat ]>0)&&(pInCmd->opticAxisPosY[pIStuts->SensorStat ]<_IMAGE_HEIGHT_))
+	        pIStuts->opticAxisPosY[pIStuts->SensorStat ] = pInCmd->opticAxisPosY[pIStuts->SensorStat ];
 	        iMoveMask++;
     }
 

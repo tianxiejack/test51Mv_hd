@@ -145,9 +145,7 @@ typedef struct
 	
 	volatile unsigned int unitTrkStatpri;
 	volatile unsigned int  unitTrkStat;     // acp/trk/assi/lost
-	
-	volatile  int  unitAxisX[eSen_Max];     // may be mean to the opticAxisPosX
-	volatile  int  unitAxisY[eSen_Max];     // pixel
+
 	
 	volatile int  unitAimW;      // aim size
 	volatile int  unitAimH;      // aim size
@@ -235,7 +233,9 @@ typedef struct
 	volatile  int  AvtMoveY;        		// eTrkRefine (axis or aim)
 	volatile  short  TrkPanev;
 	volatile  short  TrkTitlev;
-
+	
+	volatile  int  unitAxisX[eSen_Max];     // may be mean to the opticAxisPosX
+	volatile  int  unitAxisY[eSen_Max];     // pixel
 
 
 } CMD_EXT;
