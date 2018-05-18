@@ -1011,14 +1011,14 @@ Int32 APP_set_graphic_parms_fb( Int32 blkId, Int32 fieldId,Multich_graphic *pMul
     Text_Param_fb * textLinkParam = NULL;
 
     int disMask[eSen_Max];
-    disMask[eSen_TV] = gDXD_info.sysConfig[CFGID_RTS_TV_SEN_GRAPH];
-    disMask[eSen_FR] = gDXD_info.sysConfig[CFGID_RTS_FR_SEN_GRAPH];
+    disMask[0] = gDXD_info.sysConfig[CFGID_RTS_TV_SEN_GRAPH];
+    disMask[1] = gDXD_info.sysConfig[CFGID_RTS_FR_SEN_GRAPH];
 
     int osdlevel[eSen_Max],i = 0;
-    osdlevel[eSen_TV] = gDXD_info.sysConfig[CFGID_OC25_TV_OSD_LEVEL]  % 5;
-    osdlevel[eSen_FR] = gDXD_info.sysConfig[CFGID_OC25_FR_OSD_LEVEL]  % 5;
+    osdlevel[0] = gDXD_info.sysConfig[CFGID_OC25_TV_OSD_LEVEL]  % 5;
+    osdlevel[1] = gDXD_info.sysConfig[CFGID_OC25_FR_OSD_LEVEL]  % 5;
 
-    OSA_assert( sensors_id == eSen_TV || sensors_id == eSen_FR);
+    OSA_assert( sensors_id == 0 || sensors_id == 1);
     //OSA_assert( windows_id < WINID_MAX / 2);
     OSA_assert( graph_id   >= grpx_ObjId_Cross && graph_id <= grpx_ObjId_Text);
 
@@ -1115,7 +1115,7 @@ Int32 APP_get_colour( int sensorid)
 	// int configId   = CFGID_BUILD(blkId, fieldId);
 	// int sensors_id = GET_SENSORS_ID(gDXD_info.sysConfig[configId]);
 	int configId ;
-	if(sensorid==eSen_TV)
+	if(sensorid==0)
 		configId=CFGID_RTS_TV_SEN_COLOR;
 	else
 		configId=CFGID_RTS_FR_SEN_COLOR;
@@ -1174,14 +1174,14 @@ Int32 APP_set_graphic_parms_line_fb( Int32 blkId, Int32 fieldId,Multich_graphic 
     Line_Param_fb * lineLinkParam = NULL;
 
     int disMask[eSen_Max];
-    disMask[eSen_TV] = gDXD_info.sysConfig[CFGID_RTS_TV_SEN_GRAPH];
-    disMask[eSen_FR] = gDXD_info.sysConfig[CFGID_RTS_FR_SEN_GRAPH];
+    disMask[0] = gDXD_info.sysConfig[CFGID_RTS_TV_SEN_GRAPH];
+    disMask[1] = gDXD_info.sysConfig[CFGID_RTS_FR_SEN_GRAPH];
 	
     int osdlevel[eSen_Max],i = 0;
-    osdlevel[eSen_TV] = gDXD_info.sysConfig[CFGID_OC25_TV_OSD_LEVEL]  % 5;
-    osdlevel[eSen_FR] = gDXD_info.sysConfig[CFGID_OC25_FR_OSD_LEVEL]  % 5;
+    osdlevel[0] = gDXD_info.sysConfig[CFGID_OC25_TV_OSD_LEVEL]  % 5;
+    osdlevel[1] = gDXD_info.sysConfig[CFGID_OC25_FR_OSD_LEVEL]  % 5;
 
-    OSA_assert( sensors_id == eSen_TV || sensors_id == eSen_FR);
+    OSA_assert( sensors_id == 0 || sensors_id == 1);
     OSA_assert( windows_id < WINID_MAX / 2);
     OSA_assert( graph_id   >= grpx_ObjId_Cross && graph_id <= grpx_objId_Vert_Menu);
 

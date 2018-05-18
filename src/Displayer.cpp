@@ -19,6 +19,7 @@
 
 #include "cuda_mem.cpp"
 #include "app_status.h"
+#include "configable.h"
 
 #define HISTEN 0
 #define CLAHEH 1
@@ -49,7 +50,7 @@ static GLfloat m_glvVertsDefault[8] = {-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.
 static GLfloat m_glvTexCoordsDefault[8] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
 CDisplayer::CDisplayer()
-:m_mainWinWidth(_IMAGE_WIDTH_),m_mainWinHeight(1024),m_renderCount(0),
+:m_mainWinWidth(VIDEO_IMAGE_WIDTH_0),m_mainWinHeight(VIDEO_IMAGE_HEIGHT_0),m_renderCount(0),
 m_bRun(false),m_bFullScreen(false),m_bOsd(false),
  m_glProgram(0), m_bUpdateVertex(false)
 {
@@ -185,8 +186,8 @@ int CDisplayer::initRender(bool bInitBind)
 		m_renders[chId].video_chId = -1;
 		m_renders[chId].displayrect.x = 0;
 		m_renders[chId].displayrect.y = 0;
-		m_renders[chId].displayrect.w = _IMAGE_WIDTH_/2;
-		m_renders[chId].displayrect.h =  _IMAGE_HEIGHT_/2;
+		m_renders[chId].displayrect.w = VIDEO_IMAGE_WIDTH_0/2;
+		m_renders[chId].displayrect.h =  VIDEO_IMAGE_HEIGHT_0/2;
 
 		m_renders[chId].bFreeze=0;
 	}
@@ -753,7 +754,7 @@ void CDisplayer::gl_init()
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);//GL_NEAREST);//GL_NEAREST_MIPMAP_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);//GL_CLAMP);//GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);//GL_CLAMP);//GL_CLAMP_TO_EDGE);
-		glTexImage2D(GL_TEXTURE_2D, 0,3, _IMAGE_WIDTH_, _IMAGE_HEIGHT_, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0,3, VIDEO_IMAGE_WIDTH_0, VIDEO_IMAGE_HEIGHT_0, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, NULL);
 	}
 	glGenBuffers(DS_DC_CNT, buffId_osd);
 	glGenTextures(DS_DC_CNT, textureId_osd); 

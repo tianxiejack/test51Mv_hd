@@ -370,12 +370,12 @@ int APP_text_genContext(int chId, int winId, char * str, int strBufLen, Int16 *t
             short Pan_ang,Til_ang;
             unsigned int laser_dist = gDXD_info.sysConfig[CFGID_OC25_TAR_RNG];
 
-            if (chId == eSen_TV)
+            if (chId == 0)
             {
                 Pan_ang = (short)gDXD_info.sysConfig[CFGID_RTS_TV_SEN_PAN_ANG];
                 Til_ang = (short)gDXD_info.sysConfig[CFGID_RTS_TV_SEN_TIL_ANG];
             }
-            else if (chId == eSen_FR)
+            else if (chId == 1)
             {
                 Pan_ang  = (short)gDXD_info.sysConfig[CFGID_RTS_FR_SEN_PAN_ANG];
                 Til_ang = (short)gDXD_info.sysConfig[CFGID_RTS_FR_SEN_TIL_ANG];

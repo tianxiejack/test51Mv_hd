@@ -221,8 +221,8 @@ private:
 
 	cudaEvent_t	m_startEvent, m_stopEvent;
 };
-#define picwidhttv _IMAGE_WIDTH_
-#define picheightttv _IMAGE_HEIGHT_
+#define picwidhttv VIDEO_IMAGE_WIDTH_0
+#define picheightttv VIDEO_IMAGE_HEIGHT_0
 
 #define picwidhtfir 640
 #define picheightfir 512

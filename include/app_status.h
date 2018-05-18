@@ -13,9 +13,12 @@ extern "C" {
 #endif
 
 typedef enum {
-	eSen_TV	= 0x00,
-	eSen_FR    = 0x01,
-	eSen_Max   = 0x02
+	eSen_CH0	= 0x00,
+	eSen_CH1   ,
+	eSen_CH2   ,
+	eSen_CH3   ,
+	eSen_CH4   ,
+	eSen_Max   
 }eSenserStat;
 
 typedef enum {
@@ -130,6 +133,8 @@ typedef struct
 	volatile int AxisPosY[eSen_Max];
 	volatile int AvtPosX[eSen_Max];	//target avt x,y for each channel
 	volatile int AvtPosY[eSen_Max];
+	volatile int AAxisPosX[eSen_Max];	
+	volatile int AAxisPosY[eSen_Max];
 	
 
 	/***** old status ,remaining tidy*****/	
@@ -281,8 +286,6 @@ typedef struct
 
 #define 	TVBIGFOV 			(2400)
 #define 	FIRBIGFOV 			(40)
-#define 	_IMAGE_WIDTH_ 	1920
-#define 	_IMAGE_HEIGHT_ 	1080
 
 #ifdef __cplusplus
 }
