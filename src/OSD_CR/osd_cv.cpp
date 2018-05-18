@@ -102,7 +102,7 @@ void drawdashlinepri(Mat frame,int startx,int starty,int endx,int endy,int linel
 	 // float len=sqrt((endy-starty)*(endy-starty)+(endx-startx)*(endx-startx));
 	 int len=abs(endy-starty)+abs(endx-startx);
   	  double nCount=len/totallength;// 
-  	  CvScalar colour=GetcvColour(colour1);//Getcvcolour(extInCtrl.DispColor[extInCtrl.SensorStat]);
+  	  CvScalar colour=GetcvColour(colour1);
   	  totallengthx=abs(endx-startx)*1.0/nCount;
   	  totallengthy=abs(endy-starty)*1.0/nCount;
   	  

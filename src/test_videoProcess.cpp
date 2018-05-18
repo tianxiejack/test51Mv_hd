@@ -5,19 +5,21 @@
 #include "process51.hpp"
 #include "dx_main.h"
 #include "Ipc.hpp"
+#include "msgDriv.h"
 
 using namespace std;
 using namespace cv;
 
 int main(int argc, char **argv)
 {
+	MSGDRIV_create();
+#ifdef __IPC__
+	Ipc_pthread_start();
+#endif
 	CProcess proc;
 	App_dxmain();
 	proc.creat();
 	proc.init();
-#ifdef __IPC__
-	Ipc_pthread_start();
-#endif
 	proc.run();
 	glutMainLoop();
 	proc.destroy();

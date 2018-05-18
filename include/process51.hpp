@@ -44,7 +44,7 @@ public:
 	void OnMouseRightUp(int x, int y);
 	void OnKeyDwn(unsigned char key);
 	
-	CMD_EXT extInCtrl;
+	CMD_EXT* extInCtrl;
 	
 	
 	static CProcess *sThis;

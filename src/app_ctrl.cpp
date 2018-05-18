@@ -36,9 +36,10 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 		pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
 		if(pIStuts->AvtTrkStat==eTrk_mode_sectrk)
 		{
-			pIStuts->NaimX = pInCmd->NaimX;
-			pIStuts->NaimY = pInCmd->NaimY;
+			pIStuts->AvtPosX[0] = pInCmd->AvtPosX[0];
+			pIStuts->AvtPosY[0] = pInCmd->AvtPosY[0];
 		}
+	printf("enter track stat --AxisPosX,AxisPosY:%d,%d\n",pIStuts->AxisPosX[0],pIStuts->AxisPosY[0]);
 		MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
 	}
 	return ;
@@ -72,11 +73,17 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
 		return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
 
-	if (pIStuts->aimRectMoveStepX != pInCmd->aimRectMoveStepX ||pIStuts->aimRectMoveStepY!= pInCmd->aimRectMoveStepY){
-	    pIStuts->aimRectMoveStepX = pInCmd->aimRectMoveStepX;
-	    pIStuts->aimRectMoveStepY= pInCmd->aimRectMoveStepY;
+	if (pIStuts->aimRectMoveStepX != pInCmd->aimRectMoveStepX ||pIStuts->aimRectMoveStepY!= pInCmd->aimRectMoveStepY)
+	{
+		pIStuts->aimRectMoveStepX = pInCmd->aimRectMoveStepX;
+		pIStuts->aimRectMoveStepY = pInCmd->aimRectMoveStepY;
+		MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
 	}
-	MSGDRIV_send(MSGID_EXT_INPUT_AIMPOS, 0);
+	else if(pIStuts->AvtPosX[0]!= pInCmd->AvtPosX[0] ||pIStuts->AvtPosY[0]!= pInCmd->AvtPosY[0] )
+	{
+		pIStuts->AvtPosX[0] = pInCmd->AvtPosX[0];
+		pIStuts->AvtPosY[0] = pInCmd->AvtPosY[0];		
+	}
 	return ;
 }
 
@@ -87,8 +94,8 @@ void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index)
 	getMmtTg(index, &curx, &cury);
 	
 	pIStuts->AvtTrkStat = eTrk_mode_sectrk;
-	pIStuts->NaimX = curx;
-	pIStuts->NaimY = cury;
+	pIStuts->AvtPosX[0] = curx;
+	pIStuts->AvtPosY[0] = cury;
 	app_ctrl_setTrkStat(pIStuts);
 
 	pIStuts->AxisPosX[0] = pIStuts->opticAxisPosX[0];
@@ -133,7 +140,7 @@ void app_ctrl_setAxisPos(CMD_EXT * pInCmd)
 	if(pIStuts->AxisPosX[0] != pInCmd->AxisPosX[0] || pIStuts->AxisPosY[0]!= pInCmd->AxisPosY[0])
 	{
 		pIStuts->AxisPosX[0] = pInCmd->AxisPosX[0];
-		pIStuts->AxisPosX[0] = pInCmd->AxisPosY[0];
+		pIStuts->AxisPosY[0] = pInCmd->AxisPosY[0];
 		mask++;
 	}
 	if(mask)

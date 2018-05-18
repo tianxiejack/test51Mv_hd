@@ -102,7 +102,6 @@ void* recv_msg(SENDST *RS422)
 	pMsg = &inCtrl;
 	memset(pMsg,0,sizeof(CMD_EXT));
 	app_ctrl_getSysData(pMsg);
-	printf("cmdID : %d \n",cmdID);
 	switch(cmdID)
 	{	
 		case trk:	
@@ -113,9 +112,14 @@ void* recv_msg(SENDST *RS422)
 				pMsg->AvtTrkStat =eTrk_mode_target;
 			else
 				pMsg->AvtTrkStat = eTrk_mode_acq;
-			
 			app_ctrl_setTrkStat(pMsg); 
-			MSGAPI_msgsend(trk);			
+			MSGAPI_msgsend(trk);
+			if(pMsg->AvtTrkStat == eTrk_mode_acq)
+			{
+				pMsg->AvtPosX[0] = pMsg->AxisPosX[0];
+				pMsg->AvtPosY[0] = pMsg->AxisPosY[0];
+				app_ctrl_setAimPos(pMsg);
+			}
 			break;
 			
 		case mmt:
@@ -193,9 +197,9 @@ void* recv_msg(SENDST *RS422)
 			}
 			else if(0 == imgID1){
 				pMsg->AvtTrkStat = eTrk_mode_sectrk;
-				pMsg->NaimX = Rsectrk.ImgPixelX;
-				pMsg->NaimY = Rsectrk.ImgPixelY;
-				printf("next aimx ,aimy (%d,%d)\n",pMsg->NaimX,pMsg->NaimY);
+				pMsg->AvtPosX[0] = Rsectrk.ImgPixelX;
+				pMsg->AvtPosY[0] = Rsectrk.ImgPixelY;
+				printf("next aimx ,aimy (%d,%d)\n",pMsg->AvtPosX[0],pMsg->AvtPosY[0]);
 				app_ctrl_setTrkStat(pMsg);
 				printf("opticAxisPosX,opticAxisPosY (%d,%d)\n",pMsg->opticAxisPosX[0],pMsg->opticAxisPosY[0]);
 				pMsg->AxisPosX[0] = pMsg->opticAxisPosX[0];
@@ -384,7 +388,6 @@ void Ipc_pthread_start(void)
 {
 	Ipc_init();
 	Ipc_create(shm_rdwr);
-	CMD_EXT* p = (CMD_EXT*)ipc_getimgstatus_p;
 
 	initmessage();
 	OSA_thrCreate(&thrHandleDataIn_recv,

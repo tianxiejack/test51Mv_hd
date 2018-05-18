@@ -125,16 +125,12 @@ typedef struct
 	volatile int aimRectMoveStepX;
 	volatile int aimRectMoveStepY;
 	volatile int validChId;
-	volatile int NaimX;	// sectrk aim the next obj that need to be tracked
-	volatile int NaimY;	// sectrk aim the next obj that need to be tracked
 	volatile int opticAxisPosX[eSen_Max];	//may be same to unitAxisX[eSen_Max]
 	volatile int opticAxisPosY[eSen_Max];
 	volatile int AxisPosX[eSen_Max];	
 	volatile int AxisPosY[eSen_Max];
 	volatile int AvtPosX[eSen_Max];	//target avt x,y for each channel
 	volatile int AvtPosY[eSen_Max];
-	volatile int AAxisPosX[eSen_Max];	
-	volatile int AAxisPosY[eSen_Max];
 	
 
 	/***** old status ,remaining tidy*****/	
@@ -149,9 +145,9 @@ typedef struct
 	volatile unsigned int TrkStatpri;
 	volatile unsigned int TrkStat;     // acp/trk/assi/lost
 
-	volatile int  unitAimW;      // aim size
-	volatile int  unitAimH;      // aim size
-	volatile int  unitAimX;
+	volatile int  unitAimW;      	// aim size
+	volatile int  unitAimH;      	// aim size
+	volatile int  unitAimX;	   	// track aimRect x ,mean to the avtPosX
 	volatile int  unitAimY;
 	
 	volatile float TrkX;    		// for report and osd text 	what
