@@ -11,6 +11,7 @@
 #include "configable.h"
 
 #include "MvDetect.hpp"
+#include "app_ctrl.h"
 
 using namespace vmath;
 
@@ -76,6 +77,7 @@ void CVideoProcess::main_proc_func()
 	static bool Movedetect=false;
 	Point pt1,pt2,erspt1,erspt2,erspt3,erspt4;
 	static UTC_ACQ_param acqRect;
+	CMD_EXT tmpCmd={0};
 
 #if 1
 	
@@ -353,7 +355,7 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bMoveDetect)
 		{
-				#if 0
+			#if 1
 
 				IMG_MAT image;
 				image.data_u8 = frame_gray.data;
@@ -389,7 +391,7 @@ void CVideoProcess::main_proc_func()
 				//OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,acqRect.rcWin.width,acqRect.rcWin.height);
 				memcpy(&preWarnRect,&acqRect.rcWin,sizeof(UTC_Rect));
 				
-				if(moveDetectRect)
+				if(1)//(moveDetectRect)
 					rectangle( m_display.m_imgOsd[1],
 							Point( preWarnRect.x, preWarnRect.y ),
 							Point( preWarnRect.x+preWarnRect.width, preWarnRect.y+preWarnRect.height),
@@ -399,22 +401,36 @@ void CVideoProcess::main_proc_func()
 				Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
 				if(Movedetect)
 				{
-					printf("+++++++++xy(%d,%d),wh(%d,%d)\n",preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);
-					
+					printf("%s,line:%d		xy(%d,%d),wh(%d,%d)\n",__func__,__LINE__,
+						preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);	
 					preAcpSR.x = MoveAcpSR.x*m_display.m_imgOsd[1].cols/frame.cols;
 					preAcpSR.y = MoveAcpSR.y*m_display.m_imgOsd[1].rows/frame.rows;
 					preAcpSR.width = MoveAcpSR.width*m_display.m_imgOsd[1].cols/frame.cols;
 					preAcpSR.height = MoveAcpSR.height*m_display.m_imgOsd[1].rows/frame.rows;
 
-					if(moveDetectRect)
+					if(0)//(moveDetectRect)
 						rectangle( m_display.m_imgOsd[1],
 							Point( preAcpSR.x, preAcpSR.y ),
 							Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
 							cvScalar(255,0,0,255), 1, 8 );
-
+	
+				
+					tmpCmd.AvtTrkStat = eTrk_mode_sectrk;
+					tmpCmd.AvtPosX[0] = preAcpSR.x + preAcpSR.width/2;
+					tmpCmd.AvtPosY[0] = preAcpSR.y + preAcpSR.height/2;
+					app_ctrl_setTrkStat(&tmpCmd);		
+					tmpCmd.MtdState[0] = 0;
+					app_ctrl_setMtdStat(&tmpCmd);	
+					rectangle( m_display.m_imgOsd[1],
+							Point( preWarnRect.x, preWarnRect.y ),
+							Point( preWarnRect.x+preWarnRect.width, preWarnRect.y+preWarnRect.height),
+							cvScalar(0,0,0,0), 2, 8 );
+										
 				}
-				if(m_display.disptimeEnable == 1){
+				
 				#if 0
+				if(m_display.disptimeEnable == 1){
+				
 					UtcGetSceneMV(m_track, &speedx1, &speedy1);
 					
 					putText(m_display.m_imgOsd[1],m_strDisplay1,
@@ -429,8 +445,9 @@ void CVideoProcess::main_proc_func()
 							FONT_HERSHEY_TRIPLEX,0.8,
 							cvScalar(255,255,0,255), 1
 							);
-				#endif
+			
 				}
+				#endif
 #endif
 
 		#if __MOVE_DETECT__

@@ -2057,8 +2057,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		int iSens = (pIStuts->SensorStat+1)%eSen_Max;
 		 if (pIStuts->AvtTrkStat == eTrk_mode_sectrk)
 		{
-			OSA_printf(" %d:%s set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
-					   procStr[pIStuts->AvtTrkStat]);
+			OSA_printf(" %d:%s line:%d set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
+					   __LINE__,procStr[pIStuts->AvtTrkStat]);
 
 			pIStuts->AvtTrkStat = eTrk_mode_sectrk;
 			pIStuts->unitAimX = pIStuts->AvtPosX[extInCtrl->SensorStat];
@@ -2066,8 +2066,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		}
 		else if (pIStuts->AvtTrkStat == eTrk_mode_search)
 		{
-			OSA_printf(" %d:%s set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
-					   procStr[pIStuts->AvtTrkStat]);
+			OSA_printf(" %d:%s line:%d set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
+					   __LINE__,procStr[pIStuts->AvtTrkStat]);
 
 		   pIStuts->AvtTrkStat = eTrk_mode_search;
 		   pIStuts->unitAimX = pIStuts->AvtPosX[extInCtrl->SensorStat];
@@ -2075,8 +2075,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		}
 		else if (pIStuts->AvtTrkStat == eTrk_mode_mtd)
 		{
-			OSA_printf(" %d:%s set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
-					   procStr[pIStuts->AvtTrkStat]);
+			OSA_printf(" %d:%s line:%d set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
+					   __LINE__,procStr[pIStuts->AvtTrkStat]);
 
 
 			pIStuts->AvtTrkStat = eTrk_mode_target;
@@ -2137,8 +2137,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			//return ;
 		}
 
-		OSA_printf(" %d:%s 111set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
-					   procStr[pIStuts->AvtTrkStat]);
+		OSA_printf(" %d:%s line:%d set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
+					   __LINE__,procStr[pIStuts->AvtTrkStat]);
 		UTC_RECT_float rc;
 		if((pIStuts->FovCtrl==5)&&(pIStuts->SensorStat==0))
 		{
@@ -2182,7 +2182,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			}
 			else
 			{
-				printf("pIStuts->unitAimX = %d   ,  pIStuts->unitAimY = %d \n",pIStuts->AvtPosX[0],pIStuts->AvtPosY[0]);
+				printf("%s,line:%d   aimx,aimy=(%d,%d)\n",__func__,__LINE__,pIStuts->AvtPosX[0],pIStuts->AvtPosY[0]);
 				if(pIStuts->AvtTrkStat == eTrk_mode_sectrk){
 					pIStuts->unitAimX = pIStuts->AvtPosX[0];
 					pIStuts->unitAimY = pIStuts->AvtPosY[0];
@@ -2194,15 +2194,14 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			}
 		}
 			
-		OSA_printf("rc. xy(%f,%f),wh(%f,%f)\n",rc.x,rc.y,rc.width,rc.height);
+		OSA_printf("%s,line:%d   rc. xy(%f,%f),wh(%f,%f)\n",__func__,__LINE__,rc.x,rc.y,rc.width,rc.height);
 		dynamic_config(VP_CFG_TrkEnable, 1,&rc);
 		if(pIStuts->AvtTrkStat == eTrk_mode_sectrk)
 		{
 			m_intervalFrame=2;
 			m_rcAcq=rc;
 			pIStuts->AvtTrkStat = eTrk_mode_target;
-			
-			OSA_printf("***********************set sec track\n ");	
+			OSA_printf("%s  line:%d		set sec track\n ",__func__,__LINE__);	
 		}
 	//	printf("the rc.x=%d rc.y=%d ,unitAimX=%d  unitAimY=%d \n",rc.x,rc.y,pIStuts->unitAimX,pIStuts->unitAimY);
 	//	printf("w=%d h=%d\n",pIStuts->unitAimW,pIStuts->unitAimH);

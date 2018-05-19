@@ -39,7 +39,6 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 			pIStuts->AvtPosX[0] = pInCmd->AvtPosX[0];
 			pIStuts->AvtPosY[0] = pInCmd->AvtPosY[0];
 		}
-	printf("enter track stat --AxisPosX,AxisPosY:%d,%d\n",pIStuts->AxisPosX[0],pIStuts->AxisPosY[0]);
 		MSGDRIV_send(MSGID_EXT_INPUT_TRACK, 0);
 	}
 	return ;
