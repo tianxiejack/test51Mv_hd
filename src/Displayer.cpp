@@ -69,6 +69,9 @@ m_bRun(false),m_bFullScreen(false),m_bOsd(false),
 	tv_pribuffid=-1;
 	fir_pribuffid=-1;
 	freezeonece=0;
+
+	frameCount = 0;
+	frameRate = 0.0;
 }
 
 CDisplayer::~CDisplayer()
@@ -1138,7 +1141,7 @@ void CDisplayer::gl_textureLoad(void)
 						FONT_HERSHEY_TRIPLEX,0.8,
 						cvScalar(0,0,0,0), 1
 						);
-				sprintf(dispstrDisplay, "disp time = %0.3f", time);
+				sprintf(dispstrDisplay, "disp time = %0.3fFPS", 1000.0/time);
 
 				putText(m_imgOsd[1],dispstrDisplay,
 						Point(m_imgOsd[1].cols-350, 80),
@@ -1151,7 +1154,7 @@ void CDisplayer::gl_textureLoad(void)
 						FONT_HERSHEY_TRIPLEX,0.8,
 						cvScalar(0,0,0,0), 1
 						);
-				sprintf(capstrDisplay, "cap time = %0.3f", capTime);
+				sprintf(capstrDisplay, "cap time = %0.3fFPS", 1000.0/capTime);
 
 				putText(m_imgOsd[1],capstrDisplay,
 						Point(m_imgOsd[1].cols-350, 55),
@@ -1225,6 +1228,10 @@ void CDisplayer::gl_textureLoad(void)
 						//cudaMemcpy(dev_pbo, m_img_novideo.data, byteCount, cudaMemcpyDeviceToDevice);
 						cudaMemcpy(x11disbuffer, m_img_novideo.data,byteCount, cudaMemcpyDeviceToHost);
 					}
+
+
+
+
 					#endif
 					//m_initPrm.timerInterval=16;
 					//OSA_printf("chId = %d, enhance: time = %f sec \n", chId, ( (getTickCount() - enhancetime)/getTickFrequency()) );
@@ -1415,7 +1422,7 @@ void CDisplayer::gl_display(void)
 	
 	glutSwapBuffers();
 	glutPostRedisplay();
-
+	GetFPS();
 	//if(dismodchanagcount>=6000)//for change mod
 	
 	//glFinish();
@@ -1589,3 +1596,21 @@ GLuint CDisplayer::gltLoadShaderPairWithAttributes(const char *szVertexProg, con
 	// All done, return our ready to use shader program
 	return hReturn;  
 }   
+
+
+void CDisplayer::GetFPS()
+{
+	#define FR_SAMPLES 10
+	static struct timeval last={0,0};
+	struct timeval now;
+	float delta;
+	if ((++frameCount) >= FR_SAMPLES) {
+		gettimeofday(&now, NULL);
+		delta= (now.tv_sec - last.tv_sec +(now.tv_usec - last.tv_usec)/1000000.0);
+		last = now;
+		setFrameRate(FR_SAMPLES / delta);
+		setFrameCount(0);
+	}
+}
+
+

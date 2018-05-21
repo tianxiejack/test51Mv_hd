@@ -338,7 +338,6 @@ else
 	bool FontFind = 0;
 	int add=0;
 
-
 	fontWidth 	= 	OSDUTIL_FONT_FLR_DEFAULT_WIDTH_0814;
 	fontHeight 	= 	OSDUTIL_FONT_FLR_DEFAULT_HEIGHT_0814;
 	fontData      =	FONT_LIBRARY_0814;
@@ -1289,7 +1288,7 @@ void Draw_graph_osd(Mat frame, void *tParam,void *lParam)
 {
 	Text_Param_fb * textParam = (Text_Param_fb *)tParam;
 	Line_Param_fb * lineParam = (Line_Param_fb *)lParam;
-	
+
 	switch(textParam->objType)
 	{
 		case grpx_ObjId_Cross:

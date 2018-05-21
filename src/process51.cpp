@@ -404,7 +404,7 @@ bool CProcess::OnPreProcess(int chId, Mat &frame)
 int onece=0;
 void CProcess::process_osd(void *pPrm)
 {
-	return ;//!! ! no used
+	//return ;//!! ! no used
 	int devId=0;
 	Mat frame=sThis->m_dc;
 	CMD_EXT *pIStuts = sThis->extInCtrl;
@@ -427,11 +427,6 @@ void CProcess::process_osd(void *pPrm)
 		{
 			memcpy(textParampri,textParam,sizeof(Text_Param_fb));
 			onece++;
-		}
-
-		if(winId==WINID_TV_FOV_CHOOSE_1/2)
-		{
-			//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
 		}
 
 		if(!textParam->enableWin)
@@ -478,12 +473,10 @@ void CProcess::process_osd1()
 		//printf("textParam->enableWin=%d  objType=%d valid=%d\n",textParam->enableWin,textParam->objType,textParam->text_valid);
 		if(!textParam->enableWin)
 			continue;
-		EraseDraw_graph_osd(frame,textParam,textParampri);
 
-		if(lineParam->objType == grpx_ObjId_Cross)
-		;//Draw_graph_osd(frame,textParam,lineParam);
+		//EraseDraw_graph_osd(frame,textParam,textParampri);
+		//	Draw_graph_osd(frame,textParam,lineParam);
 		
-		//sThis->updata_osd[0]=true;		
 		memcpy(textParampri,textParam,sizeof(Text_Param_fb));
 	}
 
@@ -1223,10 +1216,12 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 	if((countnofresh ) >= 5)
 	{
 		countnofresh=0;
-		OSA_mutexLock(&osd_mutex);
-		process_osd1();
-		OSA_mutexUnlock(&osd_mutex);
+		//OSA_mutexLock(&osd_mutex);
+		
+		//OSA_mutexUnlock(&osd_mutex);
 	}
+	process_osd1();
+	
 	countnofresh++;
 
 	osdindex=0;	//picp cross
@@ -1508,6 +1503,32 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 					trkmsg.cmd_ID = read_shm_trkpos;
 					//printf("ack the trackerr to mainThr\n");
 					ipc_sendmsg(&trkmsg, IPC_FRIMG_MSG);
+
+				if(m_display.disptimeEnable == 1){
+				//test zhou qi  time
+				int64 disptime = 0;
+				disptime = getTickCount();
+				double curtime = (disptime/getTickFrequency())*1000;
+				static double pretime = 0.0;
+				double time = curtime - pretime;
+				pretime = curtime;
+
+				if(m_display.disptimeEnable == 1)
+				{
+					putText(m_display.m_imgOsd[1],trkFPSDisplay,
+							Point( m_display.m_imgOsd[1].cols-350, 25),
+							FONT_HERSHEY_TRIPLEX,0.8,
+							cvScalar(0,0,0,0), 1
+							);
+					sprintf(trkFPSDisplay, "trkerr time = %0.3fFPS", 1000.0/time);
+					putText(m_display.m_imgOsd[1],trkFPSDisplay,
+							Point(m_display.m_imgOsd[1].cols-350, 25),
+							FONT_HERSHEY_TRIPLEX,0.8,
+							cvScalar(255,255,0,255), 1
+							);
+				}
+
+			}
 			#endif	
 				
 		 }
@@ -1592,7 +1613,6 @@ osdindex++;	//cross aim
 #if __DETECT_SWITCH_Z__
 	osdindex++;
 	{
-		
 		if(Osdflag[osdindex]==1)
 		{
 			detect_num = detect_bak.size();
@@ -1614,8 +1634,7 @@ osdindex++;	//cross aim
 					random.x = detect_vect[i].targetRect.x;
 					random.y = detect_vect[i].targetRect.y;
 					random.h = detect_vect[i].targetRect.height;
-					random.w =detect_vect[i].targetRect.width;	
-					
+					random.w =detect_vect[i].targetRect.width;			
 				}
 			}		
 			detect_bak = detect_vect;

@@ -220,6 +220,18 @@ private:
 	cudaStream_t m_cuStream[DS_CUSTREAM_CNT];
 
 	cudaEvent_t	m_startEvent, m_stopEvent;
+
+
+public:
+	float frameRate ;
+	int frameCount;
+	void setFrameRate(float rate)	{ frameRate  = rate;	}; 
+	void setFrameCount(int count)	{ frameCount = count;	};
+	float getFrameRate()			{return frameRate;	};
+	void GetFPS();
+	
+
+	
 };
 #define picwidhttv VIDEO_IMAGE_WIDTH_0
 #define picheightttv VIDEO_IMAGE_HEIGHT_0

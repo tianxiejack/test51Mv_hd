@@ -30,7 +30,6 @@ static int count=0;
 int ScalerLarge,ScalerMid,ScalerSmall;
 
 
-
 int CVideoProcess::MAIN_threadCreate(void)
 {
 	int iRet = OSA_SOK;
@@ -282,7 +281,8 @@ void CVideoProcess::main_proc_func()
 				}
 			}
 
-			if(m_display.disptimeEnable == 1){
+			if(0)//(m_display.disptimeEnable == 1)
+			{
 				putText(m_display.m_imgOsd[1],m_strDisplay,
 						Point( m_display.m_imgOsd[1].cols-450, 30),
 						FONT_HERSHEY_TRIPLEX,0.8,
@@ -1638,4 +1638,7 @@ void CVideoProcess::NotifyFunc(void *context, int chId)
 }
 #endif
 #endif
+
+
+
 

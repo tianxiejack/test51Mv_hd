@@ -24,7 +24,7 @@ class CProcess : public CVideoProcess
 	int Fovpri[2];
 	DS_Rectmmt Mmtpos[5];
 	DS_Rect random;
-	
+	char trkFPSDisplay[128];
 public:
 	CProcess();
 	~CProcess();
