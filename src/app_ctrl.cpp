@@ -696,32 +696,19 @@ void app_ctrl_setTvFovCtrl(CMD_EXT * pInCmd)
 }
 
 
-
 void app_ctrl_setPicp(CMD_EXT * pInCmd)
 {
-  if(msgextInCtrl==NULL)
+	if(msgextInCtrl==NULL)
 		return ;
-  CMD_EXT *pIStuts = msgextInCtrl;
-	
-     if((pInCmd->ImgPicp[pInCmd->SensorStat] != pIStuts->ImgPicp[pInCmd->SensorStat])&&pInCmd->FrCollimation!=1)
-     {
-	 	pIStuts->ImgPicp[pInCmd->SensorStat] = pInCmd->ImgPicp[pInCmd->SensorStat];
-		
+	CMD_EXT *pIStuts = msgextInCtrl;
+
+	if(pIStuts->PicpSensorStat != pInCmd->PicpSensorStat)
+	{
+		pIStuts->PicpSensorStat = pInCmd->PicpSensorStat;
 		MSGDRIV_send(MSGID_EXT_INPUT_PICPCROP, 0);
-		//MSGAPI_AckSnd(AckPicp);
-		OSA_printf("[%d]  %s  ",__LINE__,__func__);
-     }
-     else if(pInCmd->ImgPicp[pInCmd->SensorStat]==3)
-	 	{
-			MSGDRIV_send(MSGID_EXT_INPUT_PICPCROP, 0);
-			//MSGAPI_AckSnd(AckPicp);
-			OSA_printf("[%d]  %s  ",__LINE__,__func__);
-	 	}
-	else
-		{
-			//MSGAPI_AckSnd(AckPicp);
-		}
-   return ;
+	}
+
+	return ;
 }
 
 

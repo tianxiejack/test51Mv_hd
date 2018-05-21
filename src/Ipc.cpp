@@ -215,8 +215,12 @@ void* recv_msg(SENDST *RS422)
 		case pinp:	
 			memcpy(&Rpinp,RS422->param,sizeof(Rpinp));
 			printf("recv pinp : Rpinp.Rpinp : %d\n",Rpinp.ImgPicp);
-			
+			if(Rpinp.ImgPicp == 1)
+				pMsg->PicpSensorStat = 0x1;
+			else 
+				pMsg->PicpSensorStat = 0xff;
 		
+			app_ctrl_setPicp(pMsg);
 			break;
 					
 		case trkdoor:	

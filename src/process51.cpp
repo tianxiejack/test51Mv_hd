@@ -2704,28 +2704,7 @@ void CProcess::MSGAPI_picp(long lParam )
 
 void CProcess::MSGAPI_croppicp(long lParam )
 {
-	CMD_EXT *pIStuts = sThis->extInCtrl;
-	if(pIStuts->ImgPicp[pIStuts->SensorStat]==0x04)
-	{
-		return ;
-	}
-
-	if(pIStuts->ImgPicp[pIStuts->SensorStat]==0x01)
-	{
-		pIStuts->PicpSensorStatpri=pIStuts->PicpSensorStat = (pIStuts->SensorStat+1) % (eSen_Max);
-		sThis->msgdriv_event(MSGID_EXT_INPUT_ENPICP, NULL);
-	}
-	else if(pIStuts->ImgPicp[pIStuts->SensorStat]==0x02)
-	{
-	      pIStuts->PicpSensorStatpri=pIStuts->PicpSensorStat =8;
-	      sThis->msgdriv_event(MSGID_EXT_INPUT_ENPICP, NULL);
-	}
-	else if(pIStuts->ImgPicp[pIStuts->SensorStat]==0x03)
-	{
-		//pIStuts->PicpPosStat=(pIStuts->PicpPosStat+1)%4;
-		sThis->msgdriv_event(MSGID_EXT_INPUT_PICPCROP,NULL);
-	}
-
+	sThis->msgdriv_event(MSGID_EXT_INPUT_PICPCROP,NULL);
 }
 
 void CProcess::MSGAPI_inputtrack(long lParam )
