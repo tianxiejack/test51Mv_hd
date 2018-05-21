@@ -1807,14 +1807,6 @@ void CProcess::OnKeyDwn(unsigned char key)
 		//app_ctrl_setAimSize(pIStuts);
 	}
 
-
-	if (key == 'z'|| key == 'Z')
-		{
-			
-			pIStuts->ImgZoomStat[0]=(pIStuts->ImgZoomStat[0]+1)%2;
-			pIStuts->ImgZoomStat[1]=(pIStuts->ImgZoomStat[1]+1)%2;
-			msgdriv_event(MSGID_EXT_INPUT_ENZOOM, NULL);
-		}
 	if(key == 'w'|| key == 'W')
 		{
 			if(pIStuts->ImgMmtshow[pIStuts->SensorStat])
@@ -1845,6 +1837,16 @@ void CProcess::OnKeyDwn(unsigned char key)
 			moveDetectRect = true;
 		OSA_printf("moveDetectRect = %d\n",moveDetectRect);
 	}
+
+	
+	if (key == 'z'|| key == 'Z')
+	{
+		
+		pIStuts->ImgZoomStat[0]=(pIStuts->ImgZoomStat[0]+1)%2;
+		pIStuts->ImgZoomStat[1]=(pIStuts->ImgZoomStat[1]+1)%2;
+		msgdriv_event(MSGID_EXT_INPUT_ENZOOM, NULL);
+	}
+
 	
 }
 
@@ -2384,15 +2386,35 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		if(pIStuts->SensorStat==0)//tv
 		{
 			memset(&lay_rect, 0, sizeof(DS_Rect));
-			if(pIStuts->ImgZoomStat[0])
+			if(pIStuts->ImgZoomStat[0] == 2)
 			{
 				lay_rect.w = vdisWH[0][0]/2;
 				lay_rect.h = vdisWH[0][1]/2;
 				lay_rect.x = vdisWH[0][0]/4;
 				lay_rect.y = vdisWH[0][1]/4;
-				OSA_printf("MSGID_EXT_INPUT_ENZOOM*********tv  w=%d h=%d x=%d y=%d\n",
-					lay_rect.w,lay_rect.h,lay_rect.x,lay_rect.y);
 			}
+			else if(pIStuts->ImgZoomStat[0] == 4)
+			{
+				lay_rect.w = vdisWH[0][0]/4;
+				lay_rect.h = vdisWH[0][1]/4;
+				lay_rect.x = vdisWH[0][0]/2 - lay_rect.w/2;
+				lay_rect.y = vdisWH[0][1]/2 - lay_rect.h/2;
+			}
+			else if(pIStuts->ImgZoomStat[0] == 8)
+			{
+				lay_rect.w = vdisWH[0][0]/8;
+				lay_rect.h = vdisWH[0][1]/8;
+				lay_rect.x = vdisWH[0][0]/2 - lay_rect.w/2;
+				lay_rect.y = vdisWH[0][1]/2 - lay_rect.h/2;
+			}
+			else
+			{
+				lay_rect.w = vdisWH[0][0];
+				lay_rect.h = vdisWH[0][1];
+				lay_rect.x = 0;
+				lay_rect.y = 0;
+			}
+				
 			
 			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
 			memset(&lay_rect, 0, sizeof(DS_Rect));
@@ -2414,7 +2436,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				lay_rect.h = vcapWH[0][1]/6;
 				lay_rect.x = vcapWH[0][0]/2-lay_rect.w/2;
 				lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
-				OSA_printf("MSGID_EXT_INPUT_ENZOOM*********tv  w=%d h=%d x=%d y=%d\n",lay_rect.w,lay_rect.h,lay_rect.x,lay_rect.y);
 			}
 			else 
 			{

@@ -213,6 +213,10 @@ void* recv_msg(SENDST *RS422)
 			break;
 
 		case pinp:	
+			memcpy(&Rpinp,RS422->param,sizeof(Rpinp));
+			printf("recv pinp : Rpinp.Rpinp : %d\n",Rpinp.ImgPicp);
+			
+		
 			break;
 					
 		case trkdoor:	
@@ -234,6 +238,10 @@ void* recv_msg(SENDST *RS422)
 			break;	
 
 		case zoom:
+			memcpy(&Rzoom,RS422->param,sizeof(Rzoom));
+			printf("recv zoom : Rzoom.ImgZoomStat : %d\n",Rzoom.ImgZoomStat);
+			pMsg->ImgZoomStat[0] = Rzoom.ImgZoomStat;
+			app_ctrl_setZoom(pMsg);
 			break;
 
 		case autocheck:

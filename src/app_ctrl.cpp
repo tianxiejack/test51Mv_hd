@@ -336,16 +336,15 @@ void app_ctrl_setTrkBomen(CMD_EXT * pInCmd)
 
 void app_ctrl_setZoom(CMD_EXT * pInCmd)
 {
-            if(msgextInCtrl==NULL)
+	if(msgextInCtrl==NULL)
 		return ;
-     	CMD_EXT *pIStuts = msgextInCtrl;
+	CMD_EXT *pIStuts = msgextInCtrl;
            
-    // (pIStuts->ImgZoomStat[0] != pInCmd->ImgZoomStat[0] || pIStuts->ImgZoomStat[1] != pInCmd->ImgZoomStat[1])
-    {
-        pIStuts->ImgZoomStat[0] = pInCmd->ImgZoomStat[0];
-        pIStuts->ImgZoomStat[1] = pInCmd->ImgZoomStat[0];
-        MSGDRIV_send(MSGID_EXT_INPUT_ENZOOM, 0);
-    }
+	if(pIStuts->ImgZoomStat[0] != pInCmd->ImgZoomStat[0])
+	{
+		pIStuts->ImgZoomStat[0] = pInCmd->ImgZoomStat[0];
+		MSGDRIV_send(MSGID_EXT_INPUT_ENZOOM, 0);
+	}
 
    return ;
 }
