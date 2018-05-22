@@ -112,14 +112,18 @@ void* recv_msg(SENDST *RS422)
 				pMsg->AvtTrkStat =eTrk_mode_target;
 			else
 				pMsg->AvtTrkStat = eTrk_mode_acq;
-			app_ctrl_setTrkStat(pMsg); 
-			MSGAPI_msgsend(trk);
+			
 			if(pMsg->AvtTrkStat == eTrk_mode_acq)
 			{
+				pMsg->AxisPosX[0] = pMsg->opticAxisPosX[0];
+				pMsg->AxisPosY[0] = pMsg->opticAxisPosY[0];
 				pMsg->AvtPosX[0] = pMsg->AxisPosX[0];
 				pMsg->AvtPosY[0] = pMsg->AxisPosY[0];
 				app_ctrl_setAimPos(pMsg);
+				app_ctrl_setAxisPos(pMsg);
 			}
+			app_ctrl_setTrkStat(pMsg); 
+			MSGAPI_msgsend(trk);
 			break;
 			
 		case mmt:
@@ -186,27 +190,28 @@ void* recv_msg(SENDST *RS422)
 		case sectrk:
 			memcpy(&Rsectrk,RS422->param,sizeof(Rsectrk));
 			imgID1 = Rsectrk.SecAcqStat;
-			printf("recv sectrk : imgID1 : %d\n",imgID1);
-	
-			if(1 == imgID1){
-				pMsg->AxisPosX[0] = Rsectrk.ImgPixelX;
-				pMsg->AxisPosY[0] = Rsectrk.ImgPixelY;
-				pMsg->AvtTrkStat =eTrk_mode_search;
-				app_ctrl_setTrkStat(pMsg);
-				app_ctrl_setAxisPos(pMsg);
+			if(pMsg->AvtTrkStat != eTrk_mode_acq)
+			{
+				if(1 == imgID1){
+					pMsg->AxisPosX[0] = Rsectrk.ImgPixelX;
+					pMsg->AxisPosY[0] = Rsectrk.ImgPixelY;
+					pMsg->AvtTrkStat =eTrk_mode_search;
+					app_ctrl_setTrkStat(pMsg);
+					app_ctrl_setAxisPos(pMsg);
+				}
+				else if(0 == imgID1){
+					pMsg->AvtTrkStat = eTrk_mode_sectrk;
+					pMsg->AvtPosX[0] = Rsectrk.ImgPixelX;
+					pMsg->AvtPosY[0] = Rsectrk.ImgPixelY;
+					printf("next aimx ,aimy (%d,%d)\n",pMsg->AvtPosX[0],pMsg->AvtPosY[0]);
+					app_ctrl_setTrkStat(pMsg);
+					printf("opticAxisPosX,opticAxisPosY (%d,%d)\n",pMsg->opticAxisPosX[0],pMsg->opticAxisPosY[0]);
+					pMsg->AxisPosX[0] = pMsg->opticAxisPosX[0];
+					pMsg->AxisPosY[0] = pMsg->opticAxisPosY[0];
+					app_ctrl_setAxisPos(pMsg);
+					MSGAPI_msgsend(sectrk);						
+				}			
 			}
-			else if(0 == imgID1){
-				pMsg->AvtTrkStat = eTrk_mode_sectrk;
-				pMsg->AvtPosX[0] = Rsectrk.ImgPixelX;
-				pMsg->AvtPosY[0] = Rsectrk.ImgPixelY;
-				printf("next aimx ,aimy (%d,%d)\n",pMsg->AvtPosX[0],pMsg->AvtPosY[0]);
-				app_ctrl_setTrkStat(pMsg);
-				printf("opticAxisPosX,opticAxisPosY (%d,%d)\n",pMsg->opticAxisPosX[0],pMsg->opticAxisPosY[0]);
-				pMsg->AxisPosX[0] = pMsg->opticAxisPosX[0];
-				pMsg->AxisPosY[0] = pMsg->opticAxisPosY[0];
-				app_ctrl_setAxisPos(pMsg);
-				MSGAPI_msgsend(sectrk);						
-			}			
 			break;
 
 		case sensor:

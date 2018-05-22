@@ -79,7 +79,7 @@ CProcess::CProcess()
 	pIStuts->AxisPosX[1]	=VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->AxisPosY[1]	=VIDEO_IMAGE_HEIGHT_0/2;
 	pIStuts->PicpPosStat = 0;
-
+	pIStuts->validChId = 0;
 	pIStuts->FovStat=1;
 
 	pIStuts->FrCollimation=2;
@@ -90,7 +90,6 @@ CProcess::CProcess()
 	tvcory=VIDEO_IMAGE_HEIGHT_0 -100;
 
 	memset(secBak,0,sizeof(secBak));
-
 	memset(Osdflag,0,sizeof(Osdflag));
 	
 	Mmtsendtime=0;
@@ -2046,13 +2045,12 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		}
 
 		char procStr[][10] = {"ACQ", "TARGET", "MTD", "SECTRK", "SEARCH", "ROAM", "SCENE", "IMGTRK"};
-
+		UTC_RECT_float rc;
 		if (pIStuts->AvtTrkStat == eTrk_mode_acq)
 		{
 			OSA_printf(" %d:%s set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
 					   procStr[pIStuts->AvtTrkStat]);
 
-			//pIStuts->AvtTrkAimSize = 2;
 			dynamic_config(VP_CFG_TrkEnable, 0);
 		
 			if(DrawMoveDetect)
@@ -2072,6 +2070,12 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			{
 				pIStuts->unitAimY=0;
 			}
+			
+			rc.x=pIStuts->unitAimX-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
+			rc.y=pIStuts->unitAimY-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
+			rc.width= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
+			rc.height= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
+			dynamic_config(VP_CFG_TrkEnable, 0,&rc);
 			return ;
 		}
 
@@ -2081,7 +2085,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			OSA_printf(" %d:%s line:%d set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
 					   __LINE__,procStr[pIStuts->AvtTrkStat]);
 
-			pIStuts->AvtTrkStat = eTrk_mode_sectrk;
+			//pIStuts->AvtTrkStat = eTrk_mode_sectrk;
 			pIStuts->unitAimX = pIStuts->AvtPosX[extInCtrl->SensorStat];
 			pIStuts->unitAimY = pIStuts->AvtPosY[extInCtrl->SensorStat] ;
 		}
@@ -2090,12 +2094,18 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			OSA_printf(" %d:%s line:%d set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
 					   __LINE__,procStr[pIStuts->AvtTrkStat]);
 
-		   pIStuts->AvtTrkStat = eTrk_mode_search;
-		   pIStuts->unitAimX = pIStuts->AvtPosX[extInCtrl->SensorStat];
-		   pIStuts->unitAimY = pIStuts->AvtPosY[extInCtrl->SensorStat] ;
+		  	//pIStuts->AvtTrkStat = eTrk_mode_search;
+		 	pIStuts->unitAimX = pIStuts->AvtPosX[extInCtrl->SensorStat];
+		   	pIStuts->unitAimY = pIStuts->AvtPosY[extInCtrl->SensorStat] ;
 		}
 		else if (pIStuts->AvtTrkStat == eTrk_mode_mtd)
 		{
+			pIStuts->unitAimX = pIStuts->AvtPosX[extInCtrl->SensorStat];
+		   	pIStuts->unitAimY = pIStuts->AvtPosY[extInCtrl->SensorStat] ;
+			dynamic_config(VP_CFG_TrkEnable, 0,NULL);
+			return ;
+
+			
 			OSA_printf(" %d:%s line:%d set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
 					   __LINE__,procStr[pIStuts->AvtTrkStat]);
 
@@ -2160,7 +2170,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 		OSA_printf(" %d:%s line:%d set track to [%s]\n", OSA_getCurTimeInMsec(), __func__,
 					   __LINE__,procStr[pIStuts->AvtTrkStat]);
-		UTC_RECT_float rc;
+		
 		if((pIStuts->FovCtrl==5)&&(pIStuts->SensorStat==0))
 		{
 			if(TrkAim43 == true)
@@ -2761,6 +2771,15 @@ void CProcess::MSGAPI_inpuenhance(long lParam )
 
 void CProcess::MSGAPI_setMtdState(long lParam )
 {
+	CMD_EXT *pIStuts = sThis->extInCtrl;
+	if(pIStuts->MtdState[pIStuts->validChId] == 0)
+	{
+		rectangle( sThis->m_display.m_imgOsd[1],
+			Point( sThis->preWarnRect.x, sThis->preWarnRect.y ),
+			Point( sThis->preWarnRect.x+sThis->preWarnRect.width, sThis->preWarnRect.y+sThis->preWarnRect.height),
+			cvScalar(0,0,0,0), 2, 8 );
+	}
+
 	sThis->msgdriv_event(MSGID_EXT_MVDETECT,NULL);
 }
 

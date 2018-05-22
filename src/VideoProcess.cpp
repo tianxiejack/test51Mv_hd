@@ -783,7 +783,6 @@ int CVideoProcess::configEnhFromFile()
 
 					sprintf(calib_x, "enhparm_%d", 1);
 					Enhparm= (float)fr[calib_x];
-					//printf("*@@@@@@****************************************************tst=%d\n",Enhmod);
 
 					sprintf(calib_x, "mmtdparm_%d", 2);
 					DetectGapparm= (int)fr[calib_x];

@@ -14,7 +14,7 @@ cfg_avt_11: 10        #UtcSetMvPixel2(obj, moveX2)
 cfg_avt_12: 10        #UtcSetMvPixel2(obj, moveY2)
 cfg_avt_13: 500       #UtcSetSegPixelThred(obj, segPixelX)
 cfg_avt_14: 400       #UtcSetSegPixelThred(obj, segPixelY)
-cfg_avt_15: 0         #algOsdRect Enable
+cfg_avt_15: 1         #algOsdRect Enable
 cfg_avt_16: 384       #UtcSetSalientScaler(obj, ScalerLarge)
 cfg_avt_17: 192       #UtcSetSalientScaler(obj, ScalerMid)
 cfg_avt_18: 128       #UtcSetSalientScaler(obj, ScalerSmall)

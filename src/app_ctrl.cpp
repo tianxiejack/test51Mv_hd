@@ -34,7 +34,11 @@ void app_ctrl_setTrkStat(CMD_EXT * pInCmd)
 	if (pInCmd->AvtTrkStat != pIStuts->AvtTrkStat)
 	{
 		pIStuts->AvtTrkStat = pInCmd->AvtTrkStat;
-		if(pIStuts->AvtTrkStat==eTrk_mode_sectrk)
+		if(pIStuts->AvtTrkStat == eTrk_mode_search)
+		{
+			return ;
+		}	
+		else if(pIStuts->AvtTrkStat==eTrk_mode_sectrk)
 		{
 			pIStuts->AvtPosX[0] = pInCmd->AvtPosX[0];
 			pIStuts->AvtPosY[0] = pInCmd->AvtPosY[0];
