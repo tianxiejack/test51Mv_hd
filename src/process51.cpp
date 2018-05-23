@@ -348,18 +348,7 @@ int  CProcess::PiexltoWindowsyzoom_TrkRect(int y,int channel)
 }
 void CProcess::OnCreate()
 {
-	osdgraph_init(process_osd);
 	MSGAPI_initial();
-
-	CMD_EXT *pIStuts = extInCtrl;
-
-	if(pIStuts->DispColor[0]<0||pIStuts->DispColor[0]>6)
-		pIStuts->DispColor[0]=2;
-
-	if(pIStuts->PicpPosStat<0||pIStuts->PicpPosStat>3)
-		pIStuts->PicpPosStat=0;
-
-
 };
 void CProcess::OnDestroy(){};
 void CProcess::OnInit()
@@ -1882,13 +1871,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			else
 				pIStuts->PicpSensorStat=1;
 
-			if(pIStuts->ImgPicp[pIStuts->SensorStat]==1||pIStuts->ImgPicp[pIStuts->SensorStat^1]==1)
-			{
-				pIStuts->PicpSensorStatpri=pIStuts->PicpSensorStat;
-				pIStuts->ImgPicp[pIStuts->SensorStat^1]=0;
-				pIStuts->ImgPicp[pIStuts->SensorStat]=1;
-				OSA_printf("the picp sensorstatpir=%d\n",pIStuts->PicpSensorStatpri);
-			}		
+			pIStuts->PicpSensorStatpri=pIStuts->PicpSensorStat;
 		}
 #endif
 
@@ -2711,7 +2694,8 @@ void CProcess::MSGAPI_picp(long lParam )
 
 void CProcess::MSGAPI_croppicp(long lParam )
 {
-	sThis->msgdriv_event(MSGID_EXT_INPUT_PICPCROP,NULL);
+	//sThis->msgdriv_event(MSGID_EXT_INPUT_PICPCROP,NULL);
+	sThis->msgdriv_event(MSGID_EXT_INPUT_ENPICP,NULL);
 }
 
 void CProcess::MSGAPI_inputtrack(long lParam )

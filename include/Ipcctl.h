@@ -393,7 +393,7 @@ typedef struct
 	volatile unsigned int  ImgBlobDetect[ipc_eSen_Max];    
 	volatile unsigned int  ImgFrezzStat[ipc_eSen_Max];    	
 	volatile unsigned int  ImgVideoTrans[ipc_eSen_Max]; 
-	volatile unsigned int  ImgPicp[ipc_eSen_Max];   	
+	volatile unsigned int  ImgPicp[ipc_eSen_Max];   		
 
 	volatile unsigned int  MmtValid;    			
 	volatile unsigned int  MmtPixelX;

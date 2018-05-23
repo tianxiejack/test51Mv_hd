@@ -238,11 +238,6 @@ void app_ctrl_setReset(CMD_EXT * pInCmd)
 			pIStuts->ImgEnhStat[pIStuts->SensorStat] = 0x00;
 			MSGDRIV_send(MSGID_EXT_INPUT_ENENHAN, 0);
 		}
-	if(pIStuts->ImgPicp[pIStuts->SensorStat] == 0x01)
-		{
-			pIStuts->ImgPicp[pIStuts->SensorStat] = 0x02;
-			MSGDRIV_send(MSGID_EXT_INPUT_PICPCROP, 0);
-		}
 	if(pIStuts->FrCollimation==0x01)
 		{
 			pIStuts->FrCollimation=0x02;

@@ -216,15 +216,16 @@ void* recv_msg(SENDST *RS422)
 
 		case sensor:
 			break;
-
+		
 		case pinp:	
 			memcpy(&Rpinp,RS422->param,sizeof(Rpinp));
-			printf("recv pinp : Rpinp.Rpinp : %d\n",Rpinp.ImgPicp);
+			printf("recv pinp : Rpinp.ImgPicp : %d\n",Rpinp.ImgPicp);
 			if(Rpinp.ImgPicp == 1)
 				pMsg->PicpSensorStat = 0x1;
 			else 
 				pMsg->PicpSensorStat = 0xff;
-		
+
+			pMsg->ImgPicp[pMsg->validChId] = Rpinp.PicpZoomStat;	
 			app_ctrl_setPicp(pMsg);
 			break;
 					
