@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 	Ipc_pthread_start();
 #endif
 	CProcess proc;
-	App_dxmain();
+	//App_dxmain();
 	proc.creat();
 	proc.init();
 	proc.run();

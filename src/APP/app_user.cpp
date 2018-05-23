@@ -441,16 +441,16 @@ static Int32 APP_onTimer( Int32 timerId )
 
 	if(timerId == GRPX_SHOW_TIMER)
 	{
-		APP_graphic_timer_alarm();
+		//APP_graphic_timer_alarm();
 	}
 
 	if(timerId == ALG_TRACK_TIMER)
 	{
-		APP_tracker_timer_alarm();
+		//APP_tracker_timer_alarm();
 	}
 	if(timerId == ALG_TRACK_TIMER_ERRFEEDBACK)
 	{
-		APP_Err_feedback_timer_alarm();
+		//APP_Err_feedback_timer_alarm();
 	}
 	
     return OSA_SOK;

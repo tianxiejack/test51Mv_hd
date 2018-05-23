@@ -353,12 +353,9 @@ void CProcess::OnCreate()
 
 	CMD_EXT *pIStuts = extInCtrl;
 
-	CFGID_FIELD_GET(pIStuts->DispColor[0] ,CFGID_RTS_TV_SEN_COLOR);
-	CFGID_FIELD_GET(pIStuts->DispColor[1] ,CFGID_RTS_FR_SEN_COLOR);
 	if(pIStuts->DispColor[0]<0||pIStuts->DispColor[0]>6)
 		pIStuts->DispColor[0]=2;
 
-	CFGID_FIELD_GET(pIStuts->PicpPosStat,CFGID_SENSOR_TV_PICP_POS);
 	if(pIStuts->PicpPosStat<0||pIStuts->PicpPosStat>3)
 		pIStuts->PicpPosStat=0;
 
