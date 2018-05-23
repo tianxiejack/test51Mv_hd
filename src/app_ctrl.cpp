@@ -261,43 +261,24 @@ void app_ctrl_freezeReset(CMD_EXT * pInCmd)
 			//MSGAPI_AckSnd( AckPeroidChek);
 		}
 	//printf("*************************\n");
-
-
 }
+
 
 void app_ctrl_setSensor(CMD_EXT * pInCmd)
 {
-  
-  
 	if(msgextInCtrl==NULL)
 		return ;
 
-    CMD_EXT *pIStuts = msgextInCtrl;
-    
-    if (pIStuts->SensorStat != pInCmd->SensorStat)
-    {
-    	pIStuts->changeSensorFlag = 1;
-        pIStuts->SensorStat = pInCmd->SensorStat;
-        //for  reply
-        //MSGAPI_AckSnd(AckSensor);
-	 app_ctrl_Sensorchange(pInCmd);
-	 OSA_printf("the sensorstat=%d  x=%d y=%d\n",pIStuts->SensorStat,pIStuts->opticAxisPosX[pIStuts->SensorStat ],pIStuts->opticAxisPosY[pIStuts->SensorStat ]);
-        MSGDRIV_send(MSGID_EXT_INPUT_SENSOR, 0);
-    }
-    else
-           ;// MSGAPI_AckSnd(AckSensor);
-
-   return ;
+	CMD_EXT *pIStuts = msgextInCtrl;
+	if (pIStuts->SensorStat != pInCmd->SensorStat)
+	{
+		pIStuts->changeSensorFlag = 1;
+		pIStuts->SensorStat = pInCmd->SensorStat;
+		app_ctrl_Sensorchange(pInCmd);
+		MSGDRIV_send(MSGID_EXT_INPUT_SENSOR, 0);
+	}
+	return ;
 }
-
-
-
-
-
-
-
-
-
 
 
 

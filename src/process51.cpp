@@ -1181,14 +1181,16 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 	static int coastCnt = 1;
 	static int bDraw = 0;
 
+
 	static int changesensorCnt = 0;
 
 	if(extInCtrl->changeSensorFlag == 1)
 		++changesensorCnt;
 	if(changesensorCnt == 3){
-		//extInCtrl->changeSewasnsorFlag =  0; //don't know
+		extInCtrl->changeSensorFlag =  0; 
 		changesensorCnt = 0;
 	}
+	
 	
 	if(((++coastCnt)%10) == 0)
 	{

@@ -215,6 +215,10 @@ void* recv_msg(SENDST *RS422)
 			break;
 
 		case sensor:
+			memcpy(&Rsensor,RS422->param,sizeof(Rsensor));
+			printf("recv Rsensor: %d\n",Rsensor.SensorStat);
+			pMsg->SensorStat = Rsensor.SensorStat;	
+			app_ctrl_setSensor(pMsg);
 			break;
 		
 		case pinp:	
