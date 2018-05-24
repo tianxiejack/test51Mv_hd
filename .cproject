@@ -29,6 +29,7 @@
 								<option id="nvcc.compiler.pic.1905144482" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.include.paths.1316048354" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/lib/aarch64-linux-gnu/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="../src/OSA_IPC/inc"/>
 									<listOptionValue builtIn="false" value="/usr/include/opencv"/>
 									<listOptionValue builtIn="false" value="/usr/include/opencv2"/>
@@ -53,6 +54,9 @@
 							<tool id="nvcc.linker.base.1381538446" name="NVCC Linker" superClass="nvcc.linker.base">
 								<option id="nvcc.linker.option.libs.302965794" name="Libraries (-l)" superClass="nvcc.linker.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="opencv_highgui"/>
+									<listOptionValue builtIn="false" value="freetype"/>
+									<listOptionValue builtIn="false" value="detect"/>
+									<listOptionValue builtIn="false" value="ipc"/>
 									<listOptionValue builtIn="false" value="enh"/>
 									<listOptionValue builtIn="false" value="dft"/>
 									<listOptionValue builtIn="false" value="MovDetectLib"/>
@@ -130,6 +134,7 @@
 								<option id="nvcc.compiler.pic.1215709558" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.include.paths.1310531962" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/lib/aarch64-linux-gnu/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="../src/OSA_IPC/inc"/>
 									<listOptionValue builtIn="false" value="/usr/include/opencv"/>
 									<listOptionValue builtIn="false" value="/usr/include/opencv2"/>
@@ -154,8 +159,12 @@
 							<tool id="nvcc.linker.base.1204973646" name="NVCC Linker" superClass="nvcc.linker.base">
 								<option id="nvcc.linker.option.libs.1767236211" name="Libraries (-l)" superClass="nvcc.linker.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="opencv_highgui"/>
+									<listOptionValue builtIn="false" value="freetype"/>
+									<listOptionValue builtIn="false" value="detect"/>
 									<listOptionValue builtIn="false" value="MovDetectLib"/>
+									<listOptionValue builtIn="false" value="GLU"/>
 									<listOptionValue builtIn="false" value="opencv_legacy"/>
+									<listOptionValue builtIn="false" value="ipc"/>
 									<listOptionValue builtIn="false" value="opencv_video"/>
 									<listOptionValue builtIn="false" value="opencv_core"/>
 									<listOptionValue builtIn="false" value="opencv_imgproc"/>

@@ -5,6 +5,7 @@
 #include "app_status.h"
 #include "app_ctrl.h"
 #include "configable.h"
+#include "osd_text.hpp"
 
 #define DATAIN_TSK_PRI              (2)
 #define DATAIN_TSK_STACK_SIZE       (0)
@@ -105,6 +106,13 @@ void* recv_msg(SENDST *RS422)
 	switch(cmdID)
 	{	
 		case trk:	
+			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
+			imgID1 = Rtrk.AvtTrkStat;
+			if(imgID1 == 0x1)
+				OSDdrawText();
+			else
+				;
+			break;
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;
 			printf("recv TRK : imgID1 : %d\n",imgID1);
@@ -215,6 +223,7 @@ void* recv_msg(SENDST *RS422)
 			break;
 
 		case sensor:
+			break;
 			memcpy(&Rsensor,RS422->param,sizeof(Rsensor));
 			printf("recv Rsensor: %d\n",Rsensor.SensorStat);
 			pMsg->SensorStat = Rsensor.SensorStat;	

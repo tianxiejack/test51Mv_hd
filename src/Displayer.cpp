@@ -21,6 +21,7 @@
 #include "app_status.h"
 #include "configable.h"
 
+#include "osd_text.hpp"
 #define HISTEN 0
 #define CLAHEH 1
 #define DARKEN 0
@@ -230,15 +231,10 @@ void CDisplayer::uninitRender()
 void CDisplayer::_display(void)
 {
 	static unsigned int count = 0;
-	#if 0
-	if((count & 1) == 1)
-		gThis->gl_display();
-	else 
-		gThis->gl_textureLoad();
-	#else
-		gThis->gl_textureLoad();
-		gThis->gl_display();
-	#endif
+
+	gThis->gl_textureLoad();
+	gThis->gl_display();
+	
 	count ++;
 }
 
@@ -674,10 +670,8 @@ int CDisplayer::setFullScreen(bool bFull)
 	if(bFull)
 		glutFullScreen();
 	else
-	{
-	}
+		;
 	m_bFullScreen = bFull;
-
 	return 0;
 }
 void CDisplayer::reDisplay(void)
@@ -691,8 +685,6 @@ void CDisplayer::UpDateOsd(int idc)
 		return;
 
 	updata_osd[idc] = true;
-	//unsigned int byteCount = m_imgOsd[idc].cols*m_imgOsd[idc].rows*m_imgOsd[idc].channels()*sizeof(unsigned char);
-	//cudaMemcpy(dev_pbo_osd[idc], m_imgOsd[idc].data, byteCount, cudaMemcpyHostToDevice);
 }
 
 /***********************************************************************/
@@ -705,20 +697,13 @@ int CDisplayer::gl_create()
 {
 	char *argv[1] = {glName};
 	int argc = 1;
-   // GLUT init
-    glutInit(&argc, argv);  
-	//Double, Use glutSwapBuffers() to show
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
-   // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	//Single, Use glFlush() to show
-	//glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB );
+    	glutInit(&argc, argv);  
+    	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
 
-	// Blue background
 	glClearColor(0.0f, 0.0f, 0.01f, 0.0f );
 
 	cudaEventCreate(&m_startEvent);
 	cudaEventCreate(&m_stopEvent);
-
 	return 0;
 }
 void CDisplayer::gl_destroy()
@@ -783,35 +768,12 @@ void CDisplayer::gl_init()
 	
 	x11disbuffer=(unsigned char *)malloc(1920*1080*4);
 
-	//glGenTextures(1, &textureId_pbo);
-	//glBindTexture(GL_TEXTURE_2D, textureId_pbo);
-	//assert(glIsTexture(textureId_pbo));
-	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	//m_imgOsd = cv::Mat(1024, 1280, CV_8UC4, cv::Scalar(0,0,0,0));
-	/*rectangle( m_imgOsd,
-	Point( 600, 200 ),
-	Point( 700, 560), 
-	cvScalar(0,0,255,255), 2, 8 );
-	imshow("dd",m_imgOsd);
-	waitKey(5);*/
-
 	for(i=0; i<DS_CHAN_MAX; i++){
 		memcpy(m_glmat44fTrans[i], m_glmat44fTransDefault, sizeof(m_glmat44fTransDefault));
 	}
 
-	//glGenBuffers(1, pixBuffObjs);
-	//glBindBuffer(GL_PIXEL_PACK_BUFFER, pixBuffObjs[0]);
-	//glBufferData(GL_PIXEL_PACK_BUFFER,
-	//	m_mainWinWidth*m_mainWinHeight*4,
-	//	NULL, GL_DYNAMIC_COPY);
-	//glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-
-	//glEnable(GL_LINE_SMOOTH);
-	//glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 	glClear(GL_COLOR_BUFFER_BIT);
+	OSDCreatText();
 }
 
 void CDisplayer::gl_uninit()
@@ -833,62 +795,28 @@ void CDisplayer::gl_uninit()
 
 void* CDisplayer::displayerload(void *pPrm)
 {
-	//OSA_SemHndl *sem=(OSA_SemHndl *)pPrm;
-	
-//	if(sem==NULL)
-//		return NULL;
-	int i=0;
-	
+	int i=0;	
 	while(1)
-		{
-			
-			OSA_semWait(&(gThis->tskdisSemmain),OSA_TIMEOUT_FOREVER);
-#if 0
-			i=1;
-			if(!gThis->updata_osd[i])
-			{
-				size_t size=gThis->m_imgOsd[i].cols*gThis->m_imgOsd[i].rows*gThis->m_imgOsd[i].channels();
-				cudaMemcpy(gThis->osd_cuda_mem[i],gThis->m_imgOsd[i].data, size, cudaMemcpyHostToDevice);
-				gThis->updata_osd[i]=true;
-			}
-			i=0;
-			if((gThis->cuda_osd[i])&&(!gThis->updata_osd[i]))
-				{
-					size_t size=gThis->m_imgOsd[i].cols*gThis->m_imgOsd[i].rows*gThis->m_imgOsd[i].channels();
-					cudaMemcpy(gThis->osd_cuda_mem[i],gThis->m_imgOsd[i].data, size, cudaMemcpyHostToDevice);
-					gThis->updata_osd[i]=true;
-					gThis->cuda_osd[i]=false;
-				}
+	{
 		
-#else
-			i=1;
-			if(!gThis->updata_osd[i])
-			{
-				//printf("osd update+++++++++++++++++++++++++++++++++++\n");
-				unsigned int  size=gThis->m_imgOsd[i].cols*gThis->m_imgOsd[i].rows*gThis->m_imgOsd[i].channels();
-				memcpy(gThis->m_disOsd[i].data,gThis->m_imgOsd[i].data,size);
-				gThis->updata_osd[i]=true;
-				}
+		OSA_semWait(&(gThis->tskdisSemmain),OSA_TIMEOUT_FOREVER);
 
-
-
-#endif
-			
-
-
+		i=1;
+		if(!gThis->updata_osd[i])
+		{
+			//printf("osd update+++++++++++++++++++++++++++++++++++\n");
+			unsigned int  size=gThis->m_imgOsd[i].cols*gThis->m_imgOsd[i].rows*gThis->m_imgOsd[i].channels();
+			memcpy(gThis->m_disOsd[i].data,gThis->m_imgOsd[i].data,size);
+			gThis->updata_osd[i]=true;
 		}
-	
-
+	}
 }
+
+
 void CDisplayer::gl_Loadinit()
 {
-
-	int status=0;
-
-#if 1
-	
+	int status=0;	
        status = OSA_semCreate(&tskdisSemmain, 1, 0);
-	
        OSA_assert(status == OSA_SOK);
 
        status = OSA_thrCreate(
@@ -898,13 +826,7 @@ void CDisplayer::gl_Loadinit()
                  0,
              NULL
              );
-  OSA_assert(status == OSA_SOK);
-
-  #endif
-
- // 
-
-
+  	OSA_assert(status == OSA_SOK);
 }
 
 
@@ -997,7 +919,7 @@ static unsigned int tvclearbuffer=1;
 static unsigned int firclearbuffer=1;
 void CDisplayer::gl_textureLoad(void)
 {
-	
+		
 	int winId, chId;
 	unsigned int mask = 0;
 	float elapsedTime;
@@ -1282,7 +1204,7 @@ void CDisplayer::gl_textureLoad(void)
 				updata_osd[i] = false;
 			}			
 		}
-		
+
 	}
 
 	
@@ -1317,7 +1239,6 @@ void CDisplayer::gl_display(void)
 {	
 	int winId, chId;
 	unsigned int mask = 0;
-
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(m_glProgram);
 	
@@ -1365,26 +1286,7 @@ void CDisplayer::gl_display(void)
 	
 		//OSA_mutexUnlock(&m_mutex);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-#if 0
-		if(winId<2)
-			{
-				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		
-		//glDisable(GL_MULTISAMPLE);
-		//glDisable(GL_BLEND);
-			}
 
-		else
-			{
-				
-				if(m_renders[winId].videodect)
-					{
-						glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-					}
-
-			}
-#endif
 	}
 
 	if(m_bOsd)
@@ -1409,14 +1311,15 @@ void CDisplayer::gl_display(void)
 			glViewport(0, 0, m_mainWinWidth, m_mainWinHeight);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		}
-		//glEnable(GL_MULTISAMPLE);
-	
-		//glDisable(GL_MULTISAMPLE);
+		
 		glDisable(GL_BLEND);
+
+		//OSDdrawText();
 	}
 
 	glUseProgram(0);
 	//disp_fps();
+	
 
 	//glValidateProgram(m_glProgram);
 	
