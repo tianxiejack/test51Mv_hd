@@ -408,8 +408,11 @@ static void * ipc_dataSend(Void * prm)
 
 void Ipc_pthread_start(void)
 {
+	int shm_perm[IPC_MAX];
+	shm_perm[IPC_SHA] = shm_rdwr;
+	shm_perm[IPC_OSD_SHA] = shm_rdonly;
 	Ipc_init();
-	Ipc_create(shm_rdwr);
+	Ipc_create(shm_perm);
 
 	initmessage();
 	OSA_thrCreate(&thrHandleDataIn_recv,
