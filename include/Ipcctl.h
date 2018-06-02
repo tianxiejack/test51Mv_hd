@@ -1,17 +1,11 @@
 #ifndef __IPCCTL_H_
 #define __IPCCTL_H_
 
-#if 0
-#define _PATH0_ "/trackmsg0"
-#define _PATH1_ "/trackmsg1"
-#define _PATH2_ "/trackmsg2"
-#define _PATH3_ "/trackmsg3"
-#else
 #define _PATH0_ "/"
 #define _PATH1_ "/"
 #define _PATH2_ "/"
 #define _PATH3_ "/"
-#endif
+#define _PATH4_ "/"
 
 #define SHMEMSTATUSSIZE 200
 #define SHMEMFRAMESIZE 10485760
@@ -68,7 +62,8 @@ typedef enum
 {
     IPC_TOIMG_MSG,  		// SERVER TO CLIENT
     IPC_FRIMG_MSG,		// CLIENT TO SERCER
-    IPC_SHA,		
+    IPC_SHA,
+    IPC_OSD_SHA,
     IPC_SEM,
     IPC_MAX
 }IPC_MTYPE;
@@ -215,9 +210,9 @@ typedef struct{
 
 typedef struct{
     volatile unsigned char unitFaultStat;/*0:FR ok,TV ok; 1:FR ok,TV err; 2:FR err,TV ok; 3:FR err,TV err*/
-    volatile unsigned char ComStat;/*\u4e3b\u901a\u4fe1\u72b6\u6001\uff0c0\u6b63\u5e38\uff0c1\u6545\u969c*/
-    volatile unsigned char RomdeviceStat;/*\u5b58\u50a8\u8bbe\u5907\u72b6\u6001\uff1a0\u6b63\u5e38\uff0c1\u6545\u969c*/
-    volatile unsigned char GPUStat;/*GPU\u72b6\u6001\uff1a0\u6b63\u5e38\uff0c1\u6545\u969c*/
+    volatile unsigned char ComStat;/*主通信状态，0正常，1故障*/
+    volatile unsigned char RomdeviceStat;/*存储设备状态：0正常，1故障*/
+    volatile unsigned char GPUStat;/*GPU状态：0正常，1故障*/
 }CMD_AUTOCHECK;
 
 
@@ -393,7 +388,7 @@ typedef struct
 	volatile unsigned int  ImgBlobDetect[ipc_eSen_Max];    
 	volatile unsigned int  ImgFrezzStat[ipc_eSen_Max];    	
 	volatile unsigned int  ImgVideoTrans[ipc_eSen_Max]; 
-	volatile unsigned int  ImgPicp[ipc_eSen_Max];   		
+	volatile unsigned int  ImgPicp[ipc_eSen_Max];   	
 
 	volatile unsigned int  MmtValid;    			
 	volatile unsigned int  MmtPixelX;
@@ -423,7 +418,43 @@ typedef struct
 	
 } IMGSTATUS;
 
-
+typedef struct {
+	int MAIN_Sensor;	//13--0
+	int Timedisp_9;
+	bool OSD_text_show;
+	int OSD_text_color;
+	int OSD_text_alpha;
+	int OSD_text_font;
+	int OSD_text_size;
+	bool OSD_draw_show;
+	int OSD_draw_color;
+	int CROSS_AXIS_WIDTH;
+	int CROSS_AXIS_HEIGHT;
+	int Picp_CROSS_AXIS_WIDTH;
+	int Picp_CROSS_AXIS_HEIGHT;
+	int ch0_acqRect_width;
+	int ch1_acqRect_width;
+	int ch2_acqRect_width;	//13--15
+	int ch3_acqRect_width;	// 14 -- 0
+	int ch4_acqRect_width;
+	int ch5_acqRect_width;
+	int ch0_acqRect_height;
+	int ch1_acqRect_height;
+	int ch2_acqRect_height;
+	int ch3_acqRect_height;
+	int ch4_acqRect_height;
+	int ch5_acqRect_height;
+	int bomen1_width;
+	int bomen2_width;
+	int bomen3_width;
+	int bomen4_width;
+	int bomen5_width;
+	int bomen1_height;
+	int bomen2_height;	// 14 -- 15
+	int bomen3_height;	// 15 -- 0
+	int bomen4_height;
+	int bomen5_height;
+}OSDSTATUS;
 
 typedef struct out_frame_angle
 {
@@ -490,12 +521,13 @@ void* recv_msg(SENDST *RS422);
 int send_msg(SENDST *RS422);
 int  send_msgpth(SENDST * RS422);
 void Ipc_init();
-void Ipc_create(int shm_perm);
+void Ipc_create(int *shm_perm);
 void Ipc_uninit();
 void  ipc_status_P();
 void  ipc_status_V();
 IMGSTATUS *ipc_getimgstatus_p();
 IMGSTATUS ipc_getimgstatus();
+OSDSTATUS *ipc_getosdstatus_p();
 
 
 #endif
