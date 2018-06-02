@@ -943,8 +943,6 @@ void CDisplayer::gl_textureLoad(void)
 	tstartBK = tstart;
 	cudaEventRecord(m_startEvent, 0);
 
-	
-
 	for(winId=0; winId<m_renderCount; winId++)
 	{
 		chId = m_renders[winId].video_chId;
@@ -957,10 +955,10 @@ void CDisplayer::gl_textureLoad(void)
 		dism_img[chId]=m_img[chId];
 
 		if(dism_img[chId].cols <=0 || dism_img[chId].rows <=0 || dism_img[chId].channels() == 0)
-			{
-				//printf("[chId =%d  winId=%d] w=%d h=%d c=%d\n",chId,winId,m_img[chId].cols,m_img[chId].rows,m_img[chId].channels());
-				continue;
-			}
+		{
+			//printf("[chId =%d  winId=%d] w=%d h=%d c=%d\n",chId,winId,m_img[chId].cols,m_img[chId].rows,m_img[chId].channels());
+			continue;
+		}
 
 		if(!((mask >> chId)&1))
 		{
@@ -1050,8 +1048,6 @@ void CDisplayer::gl_textureLoad(void)
 					dism_img[chId].data=(unsigned char *)tskSendBuffir.bufInfo[fir_pribuffid].virtAddr;
 				}
 			
-
-
 			if(disptimeEnable == 1){
 				//test zhou qi  time
 				int64 disptime = 0;

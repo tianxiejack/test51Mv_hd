@@ -12,6 +12,7 @@
 #include "Ipcctl.h"
 #include "osd_cv.h"
 
+OSD_Param gConfig_Osd_param = {0};
 
 CProcess * CProcess::sThis = NULL;
 static bool DrawMoveDetect = 0;
@@ -54,15 +55,13 @@ CProcess::CProcess()
 	
 	pIStuts->unitAimW 	= 	AIM_WIDTH;
 	pIStuts->unitAimH 	= 	AIM_HEIGHT;
-	pIStuts->unitAimX		=	VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->unitAimY		=	VIDEO_IMAGE_HEIGHT_0/2;
-	pIStuts->SensorStat     = 	0;
+	pIStuts->unitAimX	=	VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->unitAimY	=	VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->SensorStat     = 	gConfig_Osd_param.MAIN_Sensor;//0
 	pIStuts->PicpSensorStatpri	=	pIStuts->PicpSensorStat = 0xFF;
 
 	pIStuts->DispGrp[0] = 1;//(eDisp_show_rect | eDisp_show_text/* | eDisp_show_dbg*/);
 	pIStuts->DispGrp[1] = 1;// (eDisp_show_rect | eDisp_show_text/* | eDisp_show_dbg*/);
-
-
 	pIStuts->DispColor[0]=2;
 	pIStuts->DispColor[1]=2;
 
@@ -78,6 +77,7 @@ CProcess::CProcess()
 	pIStuts->AxisPosY[0]	=VIDEO_IMAGE_HEIGHT_0/2;
 	pIStuts->AxisPosX[1]	=VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->AxisPosY[1]	=VIDEO_IMAGE_HEIGHT_0/2;
+	
 	pIStuts->PicpPosStat = 0;
 	pIStuts->validChId = 0;
 	pIStuts->FovStat=1;
@@ -114,6 +114,9 @@ CProcess::CProcess()
 	rendpos[3].w=vdisWH[0][0]/3;
 	rendpos[3].h=vdisWH[0][1]/3;
 
+	initAcqRect();
+	m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
+	
 	msgextInCtrl = extInCtrl;
 	sThis = this;
 	plat = this;
@@ -2983,5 +2986,22 @@ void CProcess::MSGAPI_SaveCfgcmd(long lParam )
 {
 	sThis->msgdriv_event(MSGID_EXT_INPUT_CFGSAVE,NULL);
 }	
+
+void CProcess::initAcqRect()
+{	
+	CMD_EXT *pIStuts = extInCtrl;
+	pIStuts->AcqRectW[0] = gConfig_Osd_param.ch0_acqRect_width;
+	pIStuts->AcqRectW[1] = gConfig_Osd_param.ch1_acqRect_width;
+	pIStuts->AcqRectW[2] = gConfig_Osd_param.ch2_acqRect_width;
+	pIStuts->AcqRectW[3] = gConfig_Osd_param.ch3_acqRect_width;
+	pIStuts->AcqRectW[4] = gConfig_Osd_param.ch4_acqRect_width;
+	pIStuts->AcqRectH[0] = gConfig_Osd_param.ch0_acqRect_height;
+	pIStuts->AcqRectH[1] = gConfig_Osd_param.ch1_acqRect_height;
+	pIStuts->AcqRectH[2] = gConfig_Osd_param.ch2_acqRect_height;
+	pIStuts->AcqRectH[3] = gConfig_Osd_param.ch3_acqRect_height;
+	pIStuts->AcqRectH[4] = gConfig_Osd_param.ch4_acqRect_height;
+	return ;
+}
+
 
 

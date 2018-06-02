@@ -6,16 +6,25 @@
 #include "dx_main.h"
 #include "Ipc.hpp"
 #include "msgDriv.h"
+#include <sys/time.h>
 
 using namespace std;
 using namespace cv;
 
+static bool startEnable = 1;
 int main(int argc, char **argv)
 {
+	struct timeval tv;
+	tv.tv_sec = 0;
+	tv.tv_usec = 50000;
 	MSGDRIV_create();
 #ifdef __IPC__
 	Ipc_pthread_start();
 #endif
+	while(0 == startEnable)
+	{
+		select( 0, NULL, NULL, NULL, &tv );
+	};
 	CProcess proc;
 	//App_dxmain();
 	proc.creat();

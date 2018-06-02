@@ -20,7 +20,43 @@
 #define AVT_TRK_AIM_SIZE			2
 
 
-
+typedef struct {
+	int MAIN_Sensor;	//13--0
+	int Timedisp_9;
+	bool OSD_text_show;
+	int OSD_text_color;
+	int OSD_text_alpha;
+	int OSD_text_font;
+	int OSD_text_size;
+	bool OSD_draw_show;
+	int OSD_draw_color;
+	int CROSS_AXIS_WIDTH;
+	int CROSS_AXIS_HEIGHT;
+	int Picp_CROSS_AXIS_WIDTH;
+	int Picp_CROSS_AXIS_HEIGHT;
+	int ch0_acqRect_width;
+	int ch1_acqRect_width;
+	int ch2_acqRect_width;	//13--15
+	int ch3_acqRect_width;	// 14 -- 0
+	int ch4_acqRect_width;
+	int ch5_acqRect_width;
+	int ch0_acqRect_height;
+	int ch1_acqRect_height;
+	int ch2_acqRect_height;
+	int ch3_acqRect_height;
+	int ch4_acqRect_height;
+	int ch5_acqRect_height;
+	int bomen1_width;
+	int bomen2_width;
+	int bomen3_width;
+	int bomen4_width;
+	int bomen5_width;
+	int bomen1_height;
+	int bomen2_height;	// 14 -- 15
+	int bomen3_height;	// 15 -- 0
+	int bomen4_height;
+	int bomen5_height;
+}OSD_Param;
 
 
 #endif

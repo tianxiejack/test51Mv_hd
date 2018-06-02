@@ -132,6 +132,16 @@ typedef struct
 	volatile int AvtPosX[eSen_Max];	//target avt x,y for each channel
 	volatile int AvtPosY[eSen_Max];
 	
+	volatile int AcqRectW[eSen_Max];
+	volatile int AcqRectH[eSen_Max];
+	volatile int crossAxisWidth[eSen_Max];
+	volatile int crossAxisHeight[eSen_Max];
+	volatile int picpCrossAxisWidth[eSen_Max];
+	volatile int picpCrossAxisHeight[eSen_Max];
+	volatile bool osdTextShow;
+	volatile bool osdDrawShow;
+	
+	
 
 	/***** old status ,remaining tidy*****/	
 	volatile unsigned int  unitVerNum;      	// 1.23=>0x0123

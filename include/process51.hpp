@@ -136,6 +136,7 @@ private:
 
 	void	DrawRect(Mat frame,cv::Rect rec,int frcolor);
 
+	void initAcqRect();
 
 	
 };
