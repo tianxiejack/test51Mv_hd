@@ -413,6 +413,7 @@ void Ipc_pthread_start(void)
 	int shm_perm[IPC_MAX];
 	shm_perm[IPC_SHA] = shm_rdwr;
 	shm_perm[IPC_OSD_SHA] = shm_rdonly;
+	shm_perm[IPC_UTCTRK_SHA] = shm_rdonly;	
 	Ipc_init();
 	Ipc_create(shm_perm);
 

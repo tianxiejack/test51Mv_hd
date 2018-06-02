@@ -6,6 +6,7 @@
 #define _PATH2_ "/"
 #define _PATH3_ "/"
 #define _PATH4_ "/"
+#define _PATH5_ "/"
 
 #define SHMEMSTATUSSIZE 200
 #define SHMEMFRAMESIZE 10485760
@@ -29,6 +30,7 @@ typedef enum
     mmtselect,/*11*/
     axismove,/*12*/
     read_shm_trkpos,/*13*/
+    read_shm_config,
     exit_img,
     invalid
 }CMD_ID;
@@ -64,6 +66,7 @@ typedef enum
     IPC_FRIMG_MSG,		// CLIENT TO SERCER
     IPC_SHA,
     IPC_OSD_SHA,
+    IPC_UTCTRK_SHA,
     IPC_SEM,
     IPC_MAX
 }IPC_MTYPE;
@@ -210,9 +213,9 @@ typedef struct{
 
 typedef struct{
     volatile unsigned char unitFaultStat;/*0:FR ok,TV ok; 1:FR ok,TV err; 2:FR err,TV ok; 3:FR err,TV err*/
-    volatile unsigned char ComStat;/*主通信状态，0正常，1故障*/
-    volatile unsigned char RomdeviceStat;/*存储设备状态：0正常，1故障*/
-    volatile unsigned char GPUStat;/*GPU状态：0正常，1故障*/
+    volatile unsigned char ComStat;/*\u4e3b\u901a\u4fe1\u72b6\u6001\uff0c0\u6b63\u5e38\uff0c1\u6545\u969c*/
+    volatile unsigned char RomdeviceStat;/*\u5b58\u50a8\u8bbe\u5907\u72b6\u6001\uff1a0\u6b63\u5e38\uff0c1\u6545\u969c*/
+    volatile unsigned char GPUStat;/*GPU\u72b6\u6001\uff1a0\u6b63\u5e38\uff0c1\u6545\u969c*/
 }CMD_AUTOCHECK;
 
 
@@ -456,6 +459,72 @@ typedef struct {
 	int bomen5_height;
 }OSDSTATUS;
 
+typedef struct {
+	float occlusion_thred;//9--0
+	float retry_acq_thred;
+	float up_factor;
+	int res_distance;
+	int res_area;
+	int gapframe;
+	bool enhEnable;
+	float cliplimit;
+	bool dictEnable;
+	int moveX;
+	int moveY;
+	int moveX2;
+	int moveY2;
+	int segPixelX;
+	int segPixelY;
+	bool  algOsdRect_Enable;  //9--15
+	
+	int	ScalerLarge;//10--0
+	int	ScalerMid; 
+	int	ScalerSmall;
+	int	Scatter;
+	float	ratio;
+	bool	FilterEnable;
+	bool	BigSecEnable;
+	int	SalientThred;
+	bool	ScalerEnable;
+	bool	DynamicRatioEnable;
+	int	acqSize_width;
+	int	acqSize_height;
+	bool	TrkAim43_Enable;
+	bool	SceneMVEnable;
+	bool	BackTrackEnable;
+	int	bAveTrkPos; //10--15
+
+	float	fTau; //11--0
+	int	buildFrms;
+	int	LostFrmThred;
+	float	histMvThred;
+	int	detectFrms;
+	int	stillFrms;
+	float	stillThred;
+	bool	bKalmanFilter;
+	float	xMVThred;
+	float	yMVThred;
+	float	xStillThred;
+	float	yStillThred;
+	float	slopeThred;
+	float	kalmanHistThred;
+	float	kalmanCoefQ;
+	float	kalmanCoefR; //11--15
+
+	int Enhmod_0; //12--0
+	float Enhparm_1;
+	int Mmtdparm_2;
+	int Mmtdparm_3;
+	int Mmtdparm_4;
+	int Mmtdparm_5;
+	int Mmtdparm_6;
+	float Mmtdparm_7;
+	int Mmtdparm_8; //12--8
+
+}UTCTRKSTATUS;
+
+
+
 typedef struct out_frame_angle
 {
     volatile unsigned char out_frame_angle_a[3];
@@ -528,6 +597,8 @@ void  ipc_status_V();
 IMGSTATUS *ipc_getimgstatus_p();
 IMGSTATUS ipc_getimgstatus();
 OSDSTATUS *ipc_getosdstatus_p();
+UTCTRKSTATUS *ipc_getutstatus_p();
 
 
 #endif
+
