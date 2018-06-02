@@ -35,6 +35,7 @@ GLint Uniform_tex_osd = -1;
 GLint Uniform_tex_pbo = -1;
 GLint Uniform_osd_enable = -1;
 GLint Uniform_mattrans = -1;
+GLint Uniform_font_color = -1;
 static GLfloat m_glmat44fTransDefault[16] ={
 	1.0f, 0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f, 0.0f,
@@ -47,6 +48,9 @@ static GLfloat m_glmat44fTransDefault2[16] ={
 	0.0f, 0.0f, 1.0f, 0.0f,
 	0.0f, 0.0f, 0.0f, 1.0f
 };
+
+GLfloat _fontColor[4] = {1.0,1.0,1.0,	1.0};
+
 static GLfloat m_glvVertsDefault[8] = {-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
 static GLfloat m_glvTexCoordsDefault[8] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
@@ -717,6 +721,7 @@ void CDisplayer::gl_destroy()
 #define TEXTURE_ROTATE (0)
 #define ATTRIB_VERTEX 3
 #define ATTRIB_TEXTURE 4
+
 void CDisplayer::gl_init()
 {
 	int i;
@@ -729,8 +734,9 @@ void CDisplayer::gl_init()
 
 	m_glProgram = gltLoadShaderPairWithAttributes("Shader.vsh", "Shader.fsh", 2, 
 		ATTRIB_VERTEX, "vVertex", ATTRIB_TEXTURE, "vTexCoords");
-	//m_glProgram = gltLoadShaderPairWithAttributes("Shader.vsh", "Shader.fsh", 0);
 
+	m_fontProgram = gltLoadShaderPairWithAttributes("fontShader.vp", "fontShader.fp", 0);
+	
 	glGenBuffers(DS_CHAN_MAX, buffId_input);
 	glGenTextures(DS_CHAN_MAX, textureId_input);
 	
@@ -1239,7 +1245,7 @@ void CDisplayer::gl_display(void)
 {	
 	int winId, chId;
 	unsigned int mask = 0;
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(m_glProgram);
 	
 	Uniform_tex_in = glGetUniformLocation(m_glProgram, "tex_in");
@@ -1247,8 +1253,7 @@ void CDisplayer::gl_display(void)
 	//Uniform_tex_pbo = glGetUniformLocation(m_glProgram, "tex_pbo");
 	//Uniform_osd_enable = glGetUniformLocation(m_glProgram, "bOsd");
 	Uniform_mattrans = glGetUniformLocation(m_glProgram, "mTrans");
-
-
+	Uniform_font_color = glGetUniformLocation(m_fontProgram,"fontColor");
 	for(winId=0; winId<m_renderCount; winId++)
 	{
 		
@@ -1312,11 +1317,15 @@ void CDisplayer::gl_display(void)
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		}
 		
+		chinese_osd(600,200,L"第一次的封装显示",255,0,0,255,VIDEO_IMAGE_WIDTH_0,VIDEO_IMAGE_HEIGHT_0);
+		
+		
+		
 		glDisable(GL_BLEND);
 
-		//OSDdrawText();
+		
 	}
-
+	
 	glUseProgram(0);
 	//disp_fps();
 	
@@ -1514,6 +1523,18 @@ void CDisplayer::GetFPS()
 		setFrameRate(FR_SAMPLES / delta);
 		setFrameCount(0);
 	}
+}
+
+void CDisplayer::chinese_osd(int x,int y,wchar_t* text,unsigned char r,unsigned char g,unsigned char b,unsigned char a,int win_width,int win_height)
+{
+	glUseProgram(m_fontProgram);
+	_fontColor[0] = (float)r/float(255);
+	_fontColor[1] = (float)g/float(255);
+	_fontColor[2] = (float)b/float(255);
+	_fontColor[3] = (float)a/float(255);
+	glUniform4fv(Uniform_font_color,1,_fontColor);
+	OSDdrawText(x,y,text,win_width,win_height);
+	glUseProgram(0);
 }
 
 

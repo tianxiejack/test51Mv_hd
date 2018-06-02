@@ -9,7 +9,7 @@ uniform mat4 mTrans;
 void main(void)
 {
 	vec4  vColor;
-	vec4 vTex44;
+	vec4  vTex44;
 	vec2  texCoords;
 
 	texCoords = (vVaryingPostion+1.0)*0.5;

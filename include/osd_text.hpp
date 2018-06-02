@@ -9,8 +9,7 @@
 #define OSD_TEXT_HPP_
 
 void OSDCreatText();
-void OSDdrawText();
-
+void OSDdrawText(int x,int y,wchar_t* text,int win_width,int win_height);
 
 
 #endif /* OSD_TEXT_HPP_ */

@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <GL/glut.h>
+//#include <GL/glut.h>
 #include "freetype.hpp"
 
 FreeTypeFont*	_font;
@@ -15,14 +15,13 @@ FreeTypeFont*	_font;
 void OSDCreatText()
 {
 	_font   =   new FreeTypeFont();
-	_font->create("simsun.ttc",16,512,512);
+	_font->create("simsun.ttc",40,512,512);
 }
 
-void OSDdrawText()
+void OSDdrawText(int x,int y,wchar_t* text,int win_width,int win_height)
 {
-	_font->begin(100,100);
-	_font->drawText(0,0,0,Rgba(0,125,255,100),L"怎么搞啊",0,0,0);
-	//_font->drawText(900,800,0,Rgba(255,255,255),L"一二三四五",0,0,0);
+	_font->begin(win_width,win_height);
+	_font->drawText(x,y,0,Rgba(255,255,255,255),text,0,0,0);
 	_font->end();
 	return ;
 }

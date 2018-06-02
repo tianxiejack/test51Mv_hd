@@ -186,6 +186,7 @@ protected:
 
 protected:
 	GLint	m_glProgram;
+	GLint	m_fontProgram;
 	GLfloat m_glvVerts[DS_RENDER_MAX][8];
 	GLfloat m_glvTexCoords[DS_RENDER_MAX][8];
 	bool m_bUpdateVertex;
@@ -229,7 +230,8 @@ public:
 	void setFrameCount(int count)	{ frameCount = count;	};
 	float getFrameRate()			{return frameRate;	};
 	void GetFPS();
-	
+	void chinese_osd(int x,int y,wchar_t* text,unsigned char r,unsigned char g,unsigned char b,unsigned char a,int win_width,int win_height);
+
 
 	
 };

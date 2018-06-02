@@ -1,7 +1,12 @@
 
+
+#include <glew.h>
+#include <glut.h>
+#include <freeglut_ext.h>
 #include "CELLMath.hpp"
 #include "freetype/ftglyph.h"
 #include <wchar.h>
+
 
 #include FT_GLYPH_H
 #include FT_TRUETYPE_TABLES_H
@@ -131,13 +136,13 @@ public:
     {
          glMatrixMode(GL_PROJECTION);
          glLoadIdentity();
-     //  glOrtho(0,width,height,0,1,-100);
+      glOrtho(0,width,height,0,1,-100);
         glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
+        glLoadIdentity();
   //      glDisable(GL_LIGHTING);
- //      glDisable(GL_DEPTH_TEST);
-       glEnable(GL_TEXTURE_2D);
-      glEnable(GL_BLEND);
+       glDisable(GL_DEPTH_TEST);
+      glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBindTexture(GL_TEXTURE_2D,_sysFontTexture);
 
@@ -146,7 +151,7 @@ public:
 
     void end()
     {
-    //    glDisable(GL_BLEND);
+       glDisable(GL_BLEND);
    // 	 glEnable(GL_DEPTH_TEST);
    //     glEnable(GL_LIGHTING);
         glBindTexture(GL_TEXTURE_2D,0);
@@ -423,6 +428,7 @@ public:
             vertex[index + 0].u       =   ch.x0/texWidth;
             vertex[index + 0].v       =   ch.y0/texHeight;
             vertex[index + 0].color   =   color;
+			
             /**
             *   第二个点
             */
@@ -476,22 +482,24 @@ public:
             vSize.y =   tmax<float>(h + offsetY,vSize.y);
 
         }
-
+	 
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
-        {
+
+	
+		
             glVertexPointer(3,GL_FLOAT,         sizeof(FontVertex),     vertex);
             glTexCoordPointer(2,GL_FLOAT,       sizeof(FontVertex),     &vertex[0].u);
             glColorPointer(4,GL_UNSIGNED_BYTE,  sizeof(FontVertex),     &vertex[0].color);
-	//glViewport(0, 580, 500, 500);
-	glViewport(800, 0, 500, 500);
-	
+		 
             glDrawArrays(GL_TRIANGLES,0,index);
-        }
+        
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
+
+
         /**
         *   向外输出顶点数据.
         */

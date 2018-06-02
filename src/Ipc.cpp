@@ -108,13 +108,6 @@ void* recv_msg(SENDST *RS422)
 		case trk:	
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;
-			if(imgID1 == 0x1)
-				OSDdrawText();
-			else
-				;
-			break;
-			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
-			imgID1 = Rtrk.AvtTrkStat;
 			printf("recv TRK : imgID1 : %d\n",imgID1);
 			if(imgID1 == 0x1)
 				pMsg->AvtTrkStat =eTrk_mode_target;
