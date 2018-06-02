@@ -46,16 +46,18 @@ typedef struct {
 	int ch3_acqRect_height;
 	int ch4_acqRect_height;
 	int ch5_acqRect_height;
-	int bomen1_width;
-	int bomen2_width;
-	int bomen3_width;
-	int bomen4_width;
-	int bomen5_width;
-	int bomen1_height;
-	int bomen2_height;	// 14 -- 15
-	int bomen3_height;	// 15 -- 0
-	int bomen4_height;
-	int bomen5_height;
+	int ch0_aim_width;
+	int ch1_aim_width;
+	int ch2_aim_width;
+	int ch3_aim_width;
+	int ch4_aim_width;
+	int ch5_aim_width;
+	int ch0_aim_height;
+	int ch1_aim_height;	
+	int ch2_aim_height;
+	int ch3_aim_height;
+	int ch4_aim_height;
+	int ch5_aim_height;
 }OSD_Param;
 
 

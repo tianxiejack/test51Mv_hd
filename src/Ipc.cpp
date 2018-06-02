@@ -105,6 +105,9 @@ void* recv_msg(SENDST *RS422)
 	app_ctrl_getSysData(pMsg);
 	switch(cmdID)
 	{	
+		case read_shm_config:
+			startEnable = 1;
+			break;
 		case trk:	
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;

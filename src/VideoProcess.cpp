@@ -1120,7 +1120,7 @@ int CVideoProcess::Algconfig()
 	
 //avtrack
 #if __TRACK__
-	configAvtFromFile();
+	//configAvtFromFile();
 #endif
 
 }
@@ -1133,7 +1133,7 @@ int CVideoProcess::run()
 	#if __TRACK__
 	m_track = CreateUtcTrk();
 	#endif
-	Algconfig();
+	//Algconfig();
 	for(int i=0; i<MAX_CHAN; i++){
 		m_mtd[i] = (target_t *)malloc(sizeof(target_t));
 		if(m_mtd[i] != NULL)

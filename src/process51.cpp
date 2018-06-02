@@ -57,7 +57,7 @@ CProcess::CProcess()
 	pIStuts->unitAimH 	= 	AIM_HEIGHT;
 	pIStuts->unitAimX	=	VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->unitAimY	=	VIDEO_IMAGE_HEIGHT_0/2;
-	pIStuts->SensorStat     = 	gConfig_Osd_param.MAIN_Sensor;//0
+	//pIStuts->SensorStat    = 	gConfig_Osd_param.MAIN_Sensor;//0
 	pIStuts->PicpSensorStatpri	=	pIStuts->PicpSensorStat = 0xFF;
 
 	pIStuts->DispGrp[0] = 1;//(eDisp_show_rect | eDisp_show_text/* | eDisp_show_dbg*/);
@@ -114,9 +114,6 @@ CProcess::CProcess()
 	rendpos[3].w=vdisWH[0][0]/3;
 	rendpos[3].h=vdisWH[0][1]/3;
 
-	initAcqRect();
-	m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
-	
 	msgextInCtrl = extInCtrl;
 	sThis = this;
 	plat = this;
@@ -390,43 +387,6 @@ bool CProcess::OnPreProcess(int chId, Mat &frame)
 
 
 int onece=0;
-void CProcess::process_osd(void *pPrm)
-{
-	//return ;//!! ! no used
-	int devId=0;
-	Mat frame=sThis->m_dc;
-	CMD_EXT *pIStuts = sThis->extInCtrl;
-	int winId;
-	Text_Param_fb * textParam = NULL;
-	Line_Param_fb * lineParam = NULL;
-	Text_Param_fb * textParampri = NULL;
-	Line_Param_fb * lineParampri = NULL;
-
-	if(sThis->m_display.m_bOsd == false)
-		return ;
-
-	for(winId = 0; winId < grpxChWinPrms.chParam[devId].numWindows; winId++)
-	{
-		textParam = &grpxChWinPrms.chParam[devId].winPrms[winId];
-		textParampri = &grpxChWinPrms.chParam[devId].winPrms_pri[winId];
-		lineParam = (Line_Param_fb *)&grpxChWinPrms.chParam[devId].winPrms[winId];
-		lineParampri = (Line_Param_fb *)&grpxChWinPrms.chParam[devId].winPrms_pri[winId];
-		if(onece<ALG_LINK_GRPX_MAX_WINDOWS)
-		{
-			memcpy(textParampri,textParam,sizeof(Text_Param_fb));
-			onece++;
-		}
-
-		if(!textParam->enableWin)
-			continue;
-		EraseDraw_graph_osd(frame,textParam,textParampri);
-		Draw_graph_osd(frame,textParam,lineParam);	
-		//sThis->updata_osd[0]=true;
-		memcpy(textParampri,textParam,sizeof(Text_Param_fb));
-	}
-	waitKey(1);
-	sThis->m_display.UpDateOsd(0);
-}
 
 void CProcess::process_osd1()
 {
@@ -3003,5 +2963,55 @@ void CProcess::initAcqRect()
 	return ;
 }
 
+void CProcess::initAimRect()
+{
+	CMD_EXT *pIStuts = extInCtrl;
+	
+	
+	return ;
+}
 
+void CProcess::updateConfigOsdParm()
+{
+	CMD_EXT *pIStuts = extInCtrl;
 
+	pIStuts->SensorStat 			= gConfig_Osd_param.MAIN_Sensor;
+	pIStuts->osdTextShow 		= gConfig_Osd_param.OSD_text_show;
+	pIStuts->osdTextColor 		= gConfig_Osd_param.OSD_text_color;
+	pIStuts->osdTextAlpha		= gConfig_Osd_param.OSD_text_alpha;
+	pIStuts->osdTextFont			= gConfig_Osd_param.OSD_text_font;
+	pIStuts->osdTextSize			= gConfig_Osd_param.OSD_text_size;
+	pIStuts->osdDrawColor 		= gConfig_Osd_param.OSD_draw_color;
+	pIStuts->crossAxisWidth 		= gConfig_Osd_param.CROSS_AXIS_WIDTH;
+	pIStuts->crossAxisheght		= gConfig_Osd_param.CROSS_AXIS_HEIGHT;
+	pIStuts->picpCrossAxisWidth	= gConfig_Osd_param.Picp_CROSS_AXIS_WIDTH;
+	pIStuts->picpCrossAxisHeight	= gConfig_Osd_param.Picp_CROSS_AXIS_HEIGHT;
+	pIStuts->AcqRectW[0] 		= gConfig_Osd_param.ch0_acqRect_width;
+	pIStuts->AcqRectW[1] 		= gConfig_Osd_param.ch1_acqRect_width;
+	pIStuts->AcqRectW[2] 		= gConfig_Osd_param.ch2_acqRect_width;
+	pIStuts->AcqRectW[3] 		= gConfig_Osd_param.ch3_acqRect_width;
+	pIStuts->AcqRectW[4] 		= gConfig_Osd_param.ch4_acqRect_width;
+	pIStuts->AcqRectW[5] 		= gConfig_Osd_param.ch5_acqRect_width;
+	pIStuts->AcqRectH[0] 			= gConfig_Osd_param.ch0_acqRect_height;
+	pIStuts->AcqRectH[1] 			= gConfig_Osd_param.ch1_acqRect_height;
+	pIStuts->AcqRectH[2] 			= gConfig_Osd_param.ch2_acqRect_height;
+	pIStuts->AcqRectH[3] 			= gConfig_Osd_param.ch3_acqRect_height;
+	pIStuts->AcqRectH[4] 			= gConfig_Osd_param.ch4_acqRect_height;
+	pIStuts->AcqRectH[5] 			= gConfig_Osd_param.ch5_acqRect_height;
+
+	pIStuts->AimW[0] 			= gConfig_Osd_param.ch0_aim_width;
+	pIStuts->AimW[1] 			= gConfig_Osd_param.ch1_aim_width;
+	pIStuts->AimW[2] 			= gConfig_Osd_param.ch2_aim_width;
+	pIStuts->AimW[3] 			= gConfig_Osd_param.ch3_aim_width;
+	pIStuts->AimW[4] 			= gConfig_Osd_param.ch4_aim_width;
+	pIStuts->AimW[5] 			= gConfig_Osd_param.ch5_aim_width;
+	pIStuts->AimH[0] 			= gConfig_Osd_param.ch0_aim_height;
+	pIStuts->AimH[1] 			= gConfig_Osd_param.ch1_aim_height;
+	pIStuts->AimH[2] 			= gConfig_Osd_param.ch2_aim_height;
+	pIStuts->AimH[3] 			= gConfig_Osd_param.ch3_aim_height;
+	pIStuts->AimH[4] 			= gConfig_Osd_param.ch4_aim_height;
+	pIStuts->AimH[5] 			= gConfig_Osd_param.ch5_aim_height;
+
+	pThis->m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
+	return;
+}

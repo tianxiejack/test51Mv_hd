@@ -134,14 +134,19 @@ typedef struct
 	
 	volatile int AcqRectW[eSen_Max];
 	volatile int AcqRectH[eSen_Max];
-	volatile int crossAxisWidth[eSen_Max];
-	volatile int crossAxisHeight[eSen_Max];
-	volatile int picpCrossAxisWidth[eSen_Max];
-	volatile int picpCrossAxisHeight[eSen_Max];
+	volatile int AimW[eSen_Max];
+	volatile int AimH[eSen_Max];
+	volatile int crossAxisWidth;
+	volatile int crossAxisHeight;
+	volatile int picpCrossAxisWidth;
+	volatile int picpCrossAxisHeight;
 	volatile bool osdTextShow;
 	volatile bool osdDrawShow;
-	
-	
+	volatile int osdTextColor;
+	volatile int osdTextAlpha;
+	volatile int osdTextFont;
+	volatile int osdTextSize;
+	volatile int osdDrawColor;
 
 	/***** old status ,remaining tidy*****/	
 	volatile unsigned int  unitVerNum;      	// 1.23=>0x0123

@@ -115,7 +115,6 @@ private:
 	void process_status(void);
 
 	void osd_init(void);
-	static void process_osd(void* pPrm);
 	void process_osd1();
 	void DrawLine(Mat frame, int startx, int starty, int endx, int endy, int width, UInt32 colorRGBA);
 	void DrawHLine(Mat frame, int startx, int starty, int width, int len, UInt32 colorRGBA);
@@ -137,8 +136,9 @@ private:
 	void	DrawRect(Mat frame,cv::Rect rec,int frcolor);
 
 	void initAcqRect();
+	void initAimRect();
+	void updateConfigOsdParm();
 
-	
 };
 
 
