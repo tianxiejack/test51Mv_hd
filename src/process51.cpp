@@ -55,8 +55,8 @@ CProcess::CProcess()
 	
 	pIStuts->unitAimW 	= 	AIM_WIDTH;
 	pIStuts->unitAimH 	= 	AIM_HEIGHT;
-	pIStuts->unitAimX	=	VIDEO_IMAGE_WIDTH_0/2;
-	pIStuts->unitAimY	=	VIDEO_IMAGE_HEIGHT_0/2;
+	pIStuts->unitAimX		=	VIDEO_IMAGE_WIDTH_0/2;
+	pIStuts->unitAimY		=	VIDEO_IMAGE_HEIGHT_0/2;
 	//pIStuts->SensorStat    = 	gConfig_Osd_param.MAIN_Sensor;//0
 	pIStuts->PicpSensorStatpri	=	pIStuts->PicpSensorStat = 0xFF;
 
@@ -163,8 +163,6 @@ int  CProcess::WindowstoPiexly(int y,int channel)
 int  CProcess::PiexltoWindowsx(int x,int channel)
 {
 	 int ret=0;
-	 int aimw= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][0];
-	 int aimh= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][1];
 	 ret= cvRound(x*1.0/vcapWH[channel][0]*vdisWH[0][0]);
 	 if(ret<0)
  	 {
@@ -185,8 +183,6 @@ int  CProcess::PiexltoWindowsx(int x,int channel)
 int  CProcess::PiexltoWindowsy(int y,int channel)
 {
 	 int ret=0;
-	 int aimw= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][0];
-	 int aimh= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][1];
 	 ret= cvRound(y*1.0/vcapWH[channel][1]*vdisWH[0][1]);
 
 	 if(ret<0)
@@ -200,7 +196,7 @@ int  CProcess::PiexltoWindowsy(int y,int channel)
 
 	  if(extInCtrl->ImgMmtshow[extInCtrl->SensorStat])
  	  {
-		ret =ret*2/3;//-vdisWH[0][1]/6;
+		ret =ret*2/3;
  	  }
 	
 	return  ret;
@@ -243,8 +239,6 @@ float  CProcess::PiexltoWindowsyf(float y,int channel)
 int  CProcess::PiexltoWindowsxzoom(int x,int channel)
 {
 	int ret=0;
-	 int aimw= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][0];
-	 int aimh= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][1];
 	 ret= cvRound(x*1.0/vcapWH[channel][0]*vdisWH[0][0]);
 	 if(ret<0)
  	{
@@ -257,7 +251,7 @@ int  CProcess::PiexltoWindowsxzoom(int x,int channel)
 
 	if(extInCtrl->ImgMmtshow[extInCtrl->SensorStat])
  	{
-		ret =ret*2/3;//-vdisWH[0][0]/6;
+		ret =ret*2/3;
  	}
 
 	if(extInCtrl->FovCtrl==5&&extInCtrl->SensorStat==0)
@@ -271,32 +265,27 @@ int  CProcess::PiexltoWindowsxzoom(int x,int channel)
 int  CProcess::PiexltoWindowsyzoom(int y,int channel)
 {
 	 int ret=0;
-	 int aimw= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][0];
-	 int aimh= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][1];
 	 ret= cvRound(y*1.0/vcapWH[channel][1]*vdisWH[0][1]);
 
 	  if(ret<0)
-	 	{
-			ret=0;
-	 	}
+ 	{
+		ret=0;
+ 	}
 	 else if(ret>=vdisWH[0][1])
-	 	{
-			ret=vdisWH[0][1];
-	 	}
+ 	{
+		ret=vdisWH[0][1];
+ 	}
 
 	  if(extInCtrl->ImgMmtshow[extInCtrl->SensorStat])
-	 	{
-			ret =ret*2/3;//-vdisWH[0][1]/6;
-
-	 	}
+ 	{
+		ret =ret*2/3;
+ 	}
 
 	 if(extInCtrl->FovCtrl==5&&extInCtrl->SensorStat==0)
-	 	{
-	 		ret=ret-256;
-			ret=2*ret;
-	 		;
-			//ret=ret*2;
-	 	}
+ 	{
+ 		ret=ret-256;
+		ret=2*ret;
+ 	}
 	return  ret;
 }
 
@@ -1245,8 +1234,8 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 		 trackinfo_obj->trackrect=m_rcTrack;
 		 trackinfo_obj->TrkStat = extInCtrl->AvtTrkStat;
 		 m_SensorStat = extInCtrl->SensorStat;
-		 int aimw= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][0];
-		 int aimh= trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][1];
+		 int aimw= extInCtrl->AimW[extInCtrl->SensorStat];//trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][0];
+		 int aimh=  extInCtrl->AimW[extInCtrl->SensorStat];//trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][1];
 		 if((extInCtrl->FovCtrl==5)&&(extInCtrl->SensorStat==0))
 		{
 			aimw=aimw/2;
@@ -1817,13 +1806,14 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		}
 		int itmp;
 		//chage acq;
-		m_rcAcq.x=pIStuts->opticAxisPosX[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
-		m_rcAcq.y=pIStuts->opticAxisPosY[pIStuts->SensorStat]-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
-		m_rcAcq.width=trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
-		m_rcAcq.height=trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
+		m_rcAcq.width		=	pIStuts->AimW[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
+		m_rcAcq.height	=	pIStuts->AimH[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
 
-		OSA_printf("recv   the rctrack x=%f y=%f w=%f h=%f  sensor=%d picpsensor=%d\n",m_rcAcq.x,m_rcAcq.y,m_rcAcq.width,m_rcAcq.height,pIStuts->SensorStat
-			,pIStuts->PicpSensorStat);
+		m_rcAcq.x=pIStuts->opticAxisPosX[pIStuts->SensorStat]-m_rcAcq.width/2;
+		m_rcAcq.y=pIStuts->opticAxisPosY[pIStuts->SensorStat]-m_rcAcq.height/2;
+
+		OSA_printf("recv   the rctrack x=%f y=%f w=%f h=%f  sensor=%d picpsensor=%d\n",m_rcAcq.x,m_rcAcq.y,
+			m_rcAcq.width,m_rcAcq.height,pIStuts->SensorStat,pIStuts->PicpSensorStat);
 		
 		itmp = pIStuts->SensorStat;
 		dynamic_config(VP_CFG_MainChId, itmp, NULL);
@@ -1849,9 +1839,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			int ENHStatus=0;
 			if(pIStuts->ImgEnhStat[pIStuts->SensorStat] ==0x00)
 			{
-				
-				ENHStatus=pIStuts->ImgEnhStat[pIStuts->SensorStat]=pIStuts->ImgEnhStat[pIStuts->SensorStat^1];
-				
+				ENHStatus=pIStuts->ImgEnhStat[pIStuts->SensorStat]=pIStuts->ImgEnhStat[pIStuts->SensorStat^1];		
 				OSA_printf("the enhstaus=%d  pIStuts->SensorStat=%d\n",ENHStatus,pIStuts->SensorStat);
 				dynamic_config(CDisplayer::DS_CFG_EnhEnable, pIStuts->SensorStat, &ENHStatus);
 			}
@@ -2163,10 +2151,10 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 					pIStuts->unitAimX = pIStuts->AvtPosX[0];
 					pIStuts->unitAimY = pIStuts->AvtPosY[0];
 				}
-				rc.x=pIStuts->unitAimX-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
-				rc.y=pIStuts->unitAimY-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
-				rc.width= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
-				rc.height= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
+				rc.width= pIStuts->AimW[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
+				rc.height=pIStuts->AimW[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
+				rc.x=pIStuts->unitAimX-rc.width/2;
+				rc.y=pIStuts->unitAimY-rc.height/2;
 			}
 		}
 			
@@ -2290,23 +2278,24 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			UTC_RECT_float rc;
 			if(msgId == MSGID_EXT_INPUT_AIMSIZE)
 			{
-				pIStuts->unitAimW 	= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
-				pIStuts->unitAimH		= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
-				rc.x=pIStuts->unitAimX-pIStuts->unitAimW/2;
-				rc.y=pIStuts->unitAimY-pIStuts->unitAimH/2;
+				pIStuts->unitAimW 	= pIStuts->AimW[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
+				pIStuts->unitAimH		= pIStuts->AimH[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
+				rc.x	=	pIStuts->unitAimX-pIStuts->unitAimW/2;
+				rc.y	=	pIStuts->unitAimY-pIStuts->unitAimH/2;
 				rc.width=pIStuts->unitAimW;
 				rc.height=pIStuts->unitAimH;
-
 				//OSA_printf("***xy = (%f,%f)  WH(%f,%f)\n",rc.x,rc.y,rc.width,rc.height);
 			}
 			else
 			{
 				moveStat = true;
 				//printf("----- XY(%d,%d),WH(%d,%d)\n",pIStuts->unitAimX,pIStuts->unitAimY,pIStuts->unitAimW,pIStuts->unitAimH);
+				/*
 				if(pIStuts->unitAimW > trkWinWH[pIStuts->SensorStat][4][0])
 					pIStuts->unitAimW = trkWinWH[pIStuts->SensorStat][4][0];
 				if(pIStuts->unitAimH > trkWinWH[pIStuts->SensorStat][4][1])
 					pIStuts->unitAimH = trkWinWH[pIStuts->SensorStat][4][1];
+				*/
 				printf("111W,H : (%d,%d)\n",pIStuts->unitAimW,pIStuts->unitAimH);
 				rc.width=pIStuts->unitAimW;
 				rc.height=pIStuts->unitAimH;
@@ -2976,22 +2965,22 @@ void CProcess::updateConfigOsdParm()
 	CMD_EXT *pIStuts = extInCtrl;
 
 	pIStuts->SensorStat 			= gConfig_Osd_param.MAIN_Sensor;
-	pIStuts->osdTextShow 		= gConfig_Osd_param.OSD_text_show;
-	pIStuts->osdTextColor 		= gConfig_Osd_param.OSD_text_color;
-	pIStuts->osdTextAlpha		= gConfig_Osd_param.OSD_text_alpha;
+	pIStuts->osdTextShow 			= gConfig_Osd_param.OSD_text_show;
+	pIStuts->osdTextColor 			= gConfig_Osd_param.OSD_text_color;
+	pIStuts->osdTextAlpha			= gConfig_Osd_param.OSD_text_alpha;
 	pIStuts->osdTextFont			= gConfig_Osd_param.OSD_text_font;
 	pIStuts->osdTextSize			= gConfig_Osd_param.OSD_text_size;
 	pIStuts->osdDrawColor 		= gConfig_Osd_param.OSD_draw_color;
 	pIStuts->crossAxisWidth 		= gConfig_Osd_param.CROSS_AXIS_WIDTH;
-	pIStuts->crossAxisheght		= gConfig_Osd_param.CROSS_AXIS_HEIGHT;
+	pIStuts->crossAxisHeight		= gConfig_Osd_param.CROSS_AXIS_HEIGHT;
 	pIStuts->picpCrossAxisWidth	= gConfig_Osd_param.Picp_CROSS_AXIS_WIDTH;
 	pIStuts->picpCrossAxisHeight	= gConfig_Osd_param.Picp_CROSS_AXIS_HEIGHT;
-	pIStuts->AcqRectW[0] 		= gConfig_Osd_param.ch0_acqRect_width;
-	pIStuts->AcqRectW[1] 		= gConfig_Osd_param.ch1_acqRect_width;
-	pIStuts->AcqRectW[2] 		= gConfig_Osd_param.ch2_acqRect_width;
-	pIStuts->AcqRectW[3] 		= gConfig_Osd_param.ch3_acqRect_width;
-	pIStuts->AcqRectW[4] 		= gConfig_Osd_param.ch4_acqRect_width;
-	pIStuts->AcqRectW[5] 		= gConfig_Osd_param.ch5_acqRect_width;
+	pIStuts->AcqRectW[0] 			= gConfig_Osd_param.ch0_acqRect_width;
+	pIStuts->AcqRectW[1] 			= gConfig_Osd_param.ch1_acqRect_width;
+	pIStuts->AcqRectW[2] 			= gConfig_Osd_param.ch2_acqRect_width;
+	pIStuts->AcqRectW[3] 			= gConfig_Osd_param.ch3_acqRect_width;
+	pIStuts->AcqRectW[4] 			= gConfig_Osd_param.ch4_acqRect_width;
+	pIStuts->AcqRectW[5] 			= gConfig_Osd_param.ch5_acqRect_width;
 	pIStuts->AcqRectH[0] 			= gConfig_Osd_param.ch0_acqRect_height;
 	pIStuts->AcqRectH[1] 			= gConfig_Osd_param.ch1_acqRect_height;
 	pIStuts->AcqRectH[2] 			= gConfig_Osd_param.ch2_acqRect_height;
@@ -3005,13 +2994,13 @@ void CProcess::updateConfigOsdParm()
 	pIStuts->AimW[3] 			= gConfig_Osd_param.ch3_aim_width;
 	pIStuts->AimW[4] 			= gConfig_Osd_param.ch4_aim_width;
 	pIStuts->AimW[5] 			= gConfig_Osd_param.ch5_aim_width;
-	pIStuts->AimH[0] 			= gConfig_Osd_param.ch0_aim_height;
-	pIStuts->AimH[1] 			= gConfig_Osd_param.ch1_aim_height;
-	pIStuts->AimH[2] 			= gConfig_Osd_param.ch2_aim_height;
-	pIStuts->AimH[3] 			= gConfig_Osd_param.ch3_aim_height;
-	pIStuts->AimH[4] 			= gConfig_Osd_param.ch4_aim_height;
-	pIStuts->AimH[5] 			= gConfig_Osd_param.ch5_aim_height;
+	pIStuts->AimH[0] 				= gConfig_Osd_param.ch0_aim_height;
+	pIStuts->AimH[1] 				= gConfig_Osd_param.ch1_aim_height;
+	pIStuts->AimH[2] 				= gConfig_Osd_param.ch2_aim_height;
+	pIStuts->AimH[3] 				= gConfig_Osd_param.ch3_aim_height;
+	pIStuts->AimH[4] 				= gConfig_Osd_param.ch4_aim_height;
+	pIStuts->AimH[5] 				= gConfig_Osd_param.ch5_aim_height;
 
-	pThis->m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
+	m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
 	return;
 }

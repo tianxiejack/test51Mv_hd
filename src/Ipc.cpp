@@ -11,6 +11,7 @@
 #define DATAIN_TSK_STACK_SIZE       (0)
 #define SDK_MEM_MALLOC(size)                                            OSA_memAlloc(size)
 
+extern  bool startEnable;
 int ipc_loop = 1;
 
 extern void inputtmp(unsigned char cmdid);
