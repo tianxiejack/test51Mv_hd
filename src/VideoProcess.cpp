@@ -281,7 +281,7 @@ void CVideoProcess::main_proc_func()
 				}
 			}
 
-			if(0)//(m_display.disptimeEnable == 1)
+			if(m_display.disptimeEnable == 1)
 			{
 				putText(m_display.m_imgOsd[1],m_strDisplay,
 						Point( m_display.m_imgOsd[1].cols-450, 30),
@@ -502,7 +502,8 @@ CVideoProcess::CVideoProcess()
 	nextDetect = FALSE;
 	lastFrameBox=0;
 	moveStat = FALSE;
-
+	m_acqRectW			= 	60;
+	m_acqRectH			= 	60;
 	m_ImageAxisx		=	VIDEO_IMAGE_WIDTH_0/2; //trkrefine after lost
 	m_ImageAxisy		=	VIDEO_IMAGE_HEIGHT_0/2;//trkrefine after lost
 	m_intervalFrame 			= 0;
@@ -714,10 +715,10 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 		if(pPrm == NULL)
 		{			
 			UTC_RECT_float rc;
-			rc.x = m_ImageAxisx - 30;
-			rc.y = m_ImageAxisy - 30;
-			rc.width 	= 60;
-			rc.height 	= 60;
+			rc.width 	= m_acqRectW;
+			rc.height 	= m_acqRectH;
+			rc.x 		= m_ImageAxisx - rc.width/2;
+			rc.y 		= m_ImageAxisy - rc.height/2;
 			m_rcTrack = rc;
 			m_rcAcq 	  = rc;
 		}

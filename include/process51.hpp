@@ -12,6 +12,7 @@ class CProcess : public CVideoProcess
 	TARGETDRAW Mdrawbak[MAX_TARGET_NUMBER];
 	BlobRect blob_rectBak;
 	Osd_cvPoint crossBak;
+	cv::Rect acqRectBak;
 	Osd_cvPoint freezecrossBak;
 	Osd_cvPoint crosspicpBak;
 	Osd_cvPoint rectfovBak[2];
@@ -131,6 +132,7 @@ private:
 	int draw_circle_display(Mat frame);
 
 	void	DrawRect(Mat frame,cv::Rect rec,int frcolor);
+	void DrawAcqRect(cv::Mat frame,cv::Rect rec,int frcolor,bool bshow);
 
 	void initAcqRect();
 	void initAimRect();

@@ -499,6 +499,72 @@ void CProcess::DrawCross(int x,int y,int fcolour ,bool bShow /*= true*/)
 	Drawcvcrossaim(m_dccv,&lineparm);
 }
 
+void CProcess::DrawAcqRect(cv::Mat frame,cv::Rect rec,int frcolor,bool bshow)
+{
+	unsigned char color = (bshow)?frcolor:0;
+	int leftBottomx 	= rec.x;
+	int leftBottomy 	= rec.y;
+	int leftTopx 		= leftBottomx ;
+	int leftTopy 		= leftBottomy - rec.height;
+	int rightTopx 	= leftBottomx + rec.width;
+	int rightTopy 		= leftTopy;
+	int rightBottomx 	= rightTopx;
+	int rightBottomy 	= leftBottomy;
+
+	int cornorx = rec.width/4;
+	int cornory = rec.height/4;
+	
+	Osd_cvPoint start;
+	Osd_cvPoint end;
+
+	//leftBottom
+	start.x 	= leftBottomx;
+	start.y 	= leftBottomy;
+	end.x	= leftBottomx + cornorx;
+	end.y 	= leftBottomy;
+	DrawcvLine(frame,&start,&end,frcolor,1);
+	start.x 	= leftBottomx;
+	start.y 	= leftBottomy;
+	end.x	= leftBottomx;
+	end.y 	= leftBottomy - cornory;
+	DrawcvLine(frame,&start,&end,frcolor,1);	
+	//leftTop
+	start.x 	= leftTopx;
+	start.y 	= leftTopy;
+	end.x	= leftTopx + cornorx;
+	end.y 	= leftTopy;
+	DrawcvLine(frame,&start,&end,frcolor,1);
+	start.x 	= leftTopx;
+	start.y 	= leftTopy;
+	end.x	= leftTopx;
+	end.y 	= leftTopy + cornory;
+	DrawcvLine(frame,&start,&end,frcolor,1);	
+	//rightTop
+	start.x 	= rightTopx;
+	start.y 	= rightTopy;
+	end.x	= rightTopx - cornorx;
+	end.y 	= rightTopy;
+	DrawcvLine(frame,&start,&end,frcolor,1);
+	start.x 	= rightTopx;
+	start.y 	= rightTopy;
+	end.x	= rightTopx;
+	end.y 	= rightTopy + cornory;
+	DrawcvLine(frame,&start,&end,frcolor,1);
+	//rightBottom
+	start.x 	= rightBottomx;
+	start.y 	= rightBottomy;
+	end.x	= rightBottomx - cornorx;
+	end.y 	= rightBottomy;
+	DrawcvLine(frame,&start,&end,frcolor,1);
+	start.x 	= rightBottomx;
+	start.y 	= rightBottomy;
+	end.x	= rightBottomx;
+	end.y 	= rightBottomy - cornory;
+	DrawcvLine(frame,&start,&end,frcolor,1);	
+
+	return ;
+}
+
 void CProcess::DrawRect(Mat frame,cv::Rect rec,int frcolor)
 {
 	int x = rec.x,y = rec.y;
@@ -1128,7 +1194,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 	int crossshifty=cvRound(vdisWH[0][1]/3);
 	int detect_num = 0,i;
 	int coastRectx,coastRecty;
-	
+	cv::Rect recIn;
 	static int coastCnt = 1;
 	static int bDraw = 0;
 
@@ -1544,6 +1610,31 @@ osdindex++;	//cross aim
 		}
 		crossBak.x=startx;
 		crossBak.y=starty;
+	}
+
+osdindex++;	//acqRect
+	{
+	 	if(Osdflag[osdindex]==1){
+			recIn = acqRectBak;
+			DrawAcqRect(m_dccv,recIn,frcolor,false);
+			Osdflag[osdindex]=0;
+ 		}
+		if(extInCtrl->AvtTrkStat == eTrk_mode_acq){
+			recIn.x  = PiexltoWindowsx(extInCtrl->AxisPosX[extInCtrl->SensorStat],extInCtrl->SensorStat);
+	 		recIn.y  = PiexltoWindowsy(extInCtrl->AxisPosY[extInCtrl->SensorStat],extInCtrl->SensorStat);
+			recIn.width  = 300;//extInCtrl->AcqRectW[extInCtrl->SensorStat];
+			recIn.height = 300;//extInCtrl->AcqRectH[extInCtrl->SensorStat]; 
+			if(recIn.width%2 == 1)
+				recIn.width++;
+			if(recIn.height%2 == 1)
+				recIn.height++;
+			recIn.x = recIn.x  - recIn.width/2;
+			recIn.y = recIn.y  + recIn.height/2;
+			DrawAcqRect(m_dccv,recIn,frcolor,true);
+			Osdflag[osdindex]=1;
+
+			acqRectBak = recIn;
+		}
 	}
 
 	
@@ -3000,5 +3091,8 @@ void CProcess::updateConfigOsdParm()
 	pIStuts->AimH[5] 				= gConfig_Osd_param.ch5_aim_height;
 
 	m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
+
+	m_acqRectW = pIStuts->AimW[pIStuts->SensorStat];
+	m_acqRectH = pIStuts->AimH[pIStuts->SensorStat];
 	return;
 }

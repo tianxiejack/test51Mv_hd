@@ -89,6 +89,8 @@ public:
 	int m_ImageAxisx;		//trkrefine after lost
 	int m_ImageAxisy;		
 	int m_SensorStat;
+	int m_acqRectW;
+	int m_acqRectH;
 
 public :
 
