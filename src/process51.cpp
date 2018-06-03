@@ -1185,7 +1185,7 @@ void CProcess::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
 bool CProcess::OnProcess(int chId, Mat &frame)
 {
 	//track
-	int frcolor=extInCtrl->DispColor[extInCtrl->SensorStat];
+	int frcolor= extInCtrl->osdDrawColor;//extInCtrl->DispColor[extInCtrl->SensorStat];
 	int startx=0;
 	int starty=0;
 	int endx=0;
@@ -3063,6 +3063,7 @@ void CProcess::updateConfigOsdParm()
 
 	pIStuts->SensorStatBegin 		= gConfig_Osd_param.MAIN_Sensor;
 	pIStuts->osdTextShow 			= gConfig_Osd_param.OSD_text_show;
+	pIStuts->osdDrawShow 		= gConfig_Osd_param.OSD_draw_show;	
 	pIStuts->osdTextColor 			= gConfig_Osd_param.OSD_text_color;
 	pIStuts->osdTextAlpha			= gConfig_Osd_param.OSD_text_alpha;
 	pIStuts->osdTextFont			= gConfig_Osd_param.OSD_text_font;
@@ -3103,7 +3104,9 @@ void CProcess::updateConfigOsdParm()
 	m_acqRectH = pIStuts->AimH[pIStuts->SensorStat];
 	
 	m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
-	m_display.m_bOsd = pIStuts->osdTextShow;
+	m_display.m_bOsd = pIStuts->osdDrawShow;
+	
+	
 
 	return;
 }
