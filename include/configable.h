@@ -61,4 +61,69 @@ typedef struct {
 }OSD_Param;
 
 
+typedef struct {
+	float occlusion_thred;//9--0
+	float retry_acq_thred;
+	float up_factor;
+	int res_distance;
+	int res_area;
+	int gapframe;
+	bool enhEnable;
+	float cliplimit;
+	bool dictEnable;
+	int moveX;
+	int moveY;
+	int moveX2;
+	int moveY2;
+	int segPixelX;
+	int segPixelY;
+	bool  algOsdRect_Enable;  //9--15
+	
+	int	ScalerLarge;//10--0
+	int	ScalerMid; 
+	int	ScalerSmall;
+	int	Scatter;
+	float	ratio;
+	bool	FilterEnable;
+	bool	BigSecEnable;
+	int	SalientThred;
+	bool	ScalerEnable;
+	bool	DynamicRatioEnable;
+	int	acqSize_width;
+	int	acqSize_height;
+	bool	TrkAim43_Enable;
+	bool	SceneMVEnable;
+	bool	BackTrackEnable;
+	int	bAveTrkPos; //10--15
+
+	float	fTau; //11--0
+	int	buildFrms;
+	int	LostFrmThred;
+	float	histMvThred;
+	int	detectFrms;
+	int	stillFrms;
+	float	stillThred;
+	bool	bKalmanFilter;
+	float	xMVThred;
+	float	yMVThred;
+	float	xStillThred;
+	float	yStillThred;
+	float	slopeThred;
+	float	kalmanHistThred;
+	float	kalmanCoefQ;
+	float	kalmanCoefR; //11--15
+
+	int Enhmod_0; //12--0
+	float Enhparm_1;
+	int Mmtdparm_2;
+	int Mmtdparm_3;
+	int Mmtdparm_4;
+	int Mmtdparm_5;
+	int Mmtdparm_6;
+	float Mmtdparm_7;
+	int Mmtdparm_8; //12--8
+
+}UTC_Trk_Param;
+
+
 #endif

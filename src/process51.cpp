@@ -13,6 +13,7 @@
 
 
 OSD_Param gConfig_Osd_param = {0};
+UTC_Trk_Param gConfig_Alg_param = {0};
 
 CProcess * CProcess::sThis = NULL;
 static bool DrawMoveDetect = 0;
@@ -3109,4 +3110,318 @@ void CProcess::updateConfigOsdParm()
 	
 
 	return;
+}
+
+
+void CProcess::updateAlgParm()
+{
+	UTC_DYN_PARAM dynamicParam;
+	if(gConfig_Alg_param.occlusion_thred > 0)
+		dynamicParam.occlusion_thred = gConfig_Alg_param.occlusion_thred;
+	else
+		dynamicParam.occlusion_thred = 0.28;
+	
+	if(gConfig_Alg_param.retry_acq_thred> 0)
+		dynamicParam.retry_acq_thred = gConfig_Alg_param.retry_acq_thred;
+	else
+		dynamicParam.retry_acq_thred = 0.38;
+	
+	UtcSetDynParam(m_track, dynamicParam);
+	float up_factor;
+	if(gConfig_Alg_param.up_factor > 0)
+		up_factor = gConfig_Alg_param.up_factor;
+	else
+		up_factor = 0.0125;
+	
+	UtcSetUpFactor(m_track, up_factor);
+	TRK_SECH_RESTRAINT resTraint;
+	if(gConfig_Alg_param.res_distance > 0)
+		resTraint.res_distance = gConfig_Alg_param.res_distance;
+	else
+		resTraint.res_distance = 80;
+	
+	if(gConfig_Alg_param.res_area> 0)
+		resTraint.res_area = gConfig_Alg_param.res_area;
+	else
+		resTraint.res_area = 5000;
+	//printf("UtcSetRestraint: distance=%d area=%d \n", resTraint.res_distance, resTraint.res_area);
+	UtcSetRestraint(m_track, resTraint);
+
+	int gapframe;
+	if(gConfig_Alg_param.gapframe> 0)
+		gapframe = gConfig_Alg_param.gapframe;
+	else
+		gapframe = 10;
+	UtcSetIntervalFrame(m_track, gapframe);
+
+    bool enhEnable;
+	if(gConfig_Alg_param.enhEnable> -1)
+		enhEnable = gConfig_Alg_param.enhEnable;
+	else
+		enhEnable = 1;
+	UtcSetEnhance(m_track, enhEnable);
+
+	float cliplimit;
+	if(gConfig_Alg_param.cliplimit> 0)
+		cliplimit = gConfig_Alg_param.cliplimit;
+	else
+		cliplimit = 4.0;
+	UtcSetEnhfClip(m_track, cliplimit);	
+
+	bool dictEnable;
+
+	dictEnable = gConfig_Alg_param.dictEnable;
+
+	UtcSetPredict(m_track, dictEnable);
+	
+	int moveX,moveY;
+	if(gConfig_Alg_param.moveX > 0)
+		moveX = gConfig_Alg_param.moveX;
+	else
+		moveX = 20;
+
+	if(gConfig_Alg_param.moveY>0)
+		moveY = gConfig_Alg_param.moveY;
+	else
+		moveY = 10;
+	UtcSetMvPixel(m_track,moveX,moveY);
+
+	int moveX2,moveY2;
+	if(gConfig_Alg_param.moveX2 > 0)
+		moveX2 = gConfig_Alg_param.moveX2;
+	else
+		moveX2 = 30;
+
+	if(gConfig_Alg_param.moveY2 > 0)
+		moveY2 = gConfig_Alg_param.moveY2;
+	else
+		moveY2 = 20;
+
+	UtcSetMvPixel2(m_track,moveX2,moveY2);
+
+
+	int segPixelX,segPixelY;
+
+	if(gConfig_Alg_param.segPixelX > 0)
+		segPixelX = gConfig_Alg_param.segPixelX;
+	else
+		segPixelX = 600;
+	if(gConfig_Alg_param.segPixelY > 0)
+		segPixelY = gConfig_Alg_param.segPixelY;
+	else
+		segPixelY = 450;
+	UtcSetSegPixelThred(m_track,segPixelX,segPixelY);
+
+	if(gConfig_Alg_param.algOsdRect_Enable == 1)
+		algOsdRect = true;
+	else
+		algOsdRect = false;
+
+	if(gConfig_Alg_param.ScalerLarge > 0)
+		ScalerLarge = gConfig_Alg_param.ScalerLarge;
+	else
+		ScalerLarge = 256;
+	if(gConfig_Alg_param.ScalerMid > 0)
+		ScalerMid = gConfig_Alg_param.ScalerMid;
+	else
+		ScalerMid = 128;
+	if(gConfig_Alg_param.ScalerSmall >0)
+		ScalerSmall = gConfig_Alg_param.ScalerSmall;
+	else
+		ScalerSmall = 64;
+	UtcSetSalientScaler(m_track, ScalerLarge, ScalerMid, ScalerSmall);
+
+	int Scatter;
+	if(gConfig_Alg_param.Scatter > 0)
+		Scatter = gConfig_Alg_param.Scatter;
+	else
+		Scatter = 10;
+	UtcSetSalientScatter(m_track, Scatter);
+
+	float ratio;
+	if(gConfig_Alg_param.ratio >0.1)
+		ratio = gConfig_Alg_param.ratio;
+	else
+		ratio = 1.0;
+	UtcSetSRAcqRatio(m_track, ratio);
+
+	bool FilterEnable;
+
+	FilterEnable = gConfig_Alg_param.FilterEnable;
+	UtcSetBlurFilter(m_track,FilterEnable);
+
+	bool BigSecEnable;
+	BigSecEnable = gConfig_Alg_param.BigSecEnable;
+	UtcSetBigSearch(m_track, BigSecEnable);
+
+	int SalientThred;
+	if(gConfig_Alg_param.SalientThred > 0)
+		SalientThred = gConfig_Alg_param.SalientThred;
+	else
+		SalientThred = 40;
+	UtcSetSalientThred(m_track,SalientThred);
+
+	bool ScalerEnable;
+	ScalerEnable = gConfig_Alg_param.ScalerEnable;
+	UtcSetMultScaler(m_track, ScalerEnable);
+
+	bool DynamicRatioEnable;
+	DynamicRatioEnable = ScalerEnable = gConfig_Alg_param.DynamicRatioEnable;
+	UtcSetDynamicRatio(m_track, DynamicRatioEnable);
+
+
+	UTC_SIZE acqSize;
+	if(gConfig_Alg_param.acqSize_width > 0)	
+		acqSize.width = gConfig_Alg_param.acqSize_width;
+	else
+		acqSize.width = 8;
+	if(gConfig_Alg_param.acqSize_height > 0)
+		acqSize.height = gConfig_Alg_param.acqSize_height;
+	else
+		acqSize.height = 8;
+	UtcSetSRMinAcqSize(m_track,acqSize);
+
+	if(gConfig_Alg_param.TrkAim43_Enable == 1)
+		TrkAim43 = true;
+	else
+		TrkAim43 = false;
+
+	bool SceneMVEnable;
+	SceneMVEnable = gConfig_Alg_param.SceneMVEnable;
+	UtcSetSceneMV(m_track, SceneMVEnable);
+
+	bool BackTrackEnable;
+	BackTrackEnable = gConfig_Alg_param.BackTrackEnable;
+	UtcSetBackTrack(m_track, BackTrackEnable);
+
+	bool  bAveTrkPos;
+	bAveTrkPos = gConfig_Alg_param.bAveTrkPos;
+	UtcSetAveTrkPos(m_track, bAveTrkPos);
+
+
+	float fTau;
+	if(gConfig_Alg_param.fTau > 0.01)
+		fTau = gConfig_Alg_param.fTau;
+	else
+		fTau = 0.5
+	UtcSetDetectftau(m_track, fTau);
+
+	int  buildFrms;
+	if(gConfig_Alg_param.buildFrms > 0)
+		buildFrms = gConfig_Alg_param.buildFrms;
+	else
+		buildFrms = 500;
+	UtcSetDetectBuildFrms(m_track, buildFrms);
+	
+	int  LostFrmThred;
+	if(gConfig_Alg_param.LostFrmThred > 0)
+		LostFrmThred = gConfig_Alg_param.LostFrmThred;
+	else
+		LostFrmThred = 30;
+	UtcSetLostFrmThred(m_track, LostFrmThred);
+
+	float  histMvThred;
+	if(gConfig_Alg_param.histMvThred > 0.01)
+		histMvThred = gConfig_Alg_param.histMvThred;
+	else
+		histMvThred = 1.0
+	UtcSetHistMVThred(m_track, histMvThred);
+
+	int  detectFrms;
+	if(gConfig_Alg_param.detectFrms > 0)
+		detectFrms = gConfig_Alg_param.detectFrms;
+	else
+		detectFrms = 30;
+	UtcSetDetectFrmsThred(m_track, detectFrms);
+
+	int  stillFrms;
+	if(gConfig_Alg_param.stillFrms > 0)
+		stillFrms = gConfig_Alg_param.stillFrms;
+	else
+		stillFrms = 50;
+	UtcSetStillFrmsThred(m_track, stillFrms);
+
+	float  stillThred;
+	if(gConfig_Alg_param.stillThred> 0.01)
+		stillThred = gConfig_Alg_param.stillThred;
+	else
+		stillThred = 0.1;
+	UtcSetStillPixThred(m_track, stillThred);
+
+
+	bool  bKalmanFilter;
+	bKalmanFilter = gConfig_Alg_param.bKalmanFilter;
+	UtcSetKalmanFilter(m_track, bKalmanFilter);
+
+	float xMVThred, yMVThred;
+	if(gConfig_Alg_param.xMVThred> 0.01)
+		xMVThred = gConfig_Alg_param.xMVThred;
+	else
+		xMVThred = 3.0;
+	if(gConfig_Alg_param.yMVThred> 0.01)
+		yMVThred = gConfig_Alg_param.yMVThred;
+	else
+		yMVThred = 2.0;
+	UtcSetKFMVThred(m_track, xMVThred, yMVThred);
+
+	float xStillThred, yStillThred;
+	if(gConfig_Alg_param.xStillThred> 0.01)
+		xStillThred = gConfig_Alg_param.xStillThred;
+	else
+		xStillThred = 0.5;
+	if(gConfig_Alg_param.yStillThred> 0.01)
+		yStillThred= gConfig_Alg_param.yStillThred;
+	else
+		yStillThred = 0.3;
+	UtcSetKFStillThred(m_track, xStillThred, yStillThred);
+
+	float slopeThred;
+	if(gConfig_Alg_param.slopeThred> 0.01)
+		slopeThred = gConfig_Alg_param.slopeThred;
+	else
+		slopeThred = 0.08;
+	UtcSetKFSlopeThred(m_track, slopeThred);
+
+	float kalmanHistThred;
+	if(gConfig_Alg_param.kalmanHistThred> 0.01)
+		kalmanHistThred = gConfig_Alg_param.kalmanHistThred;
+	else
+		kalmanHistThred = 2.5;
+	UtcSetKFHistThred(m_track, kalmanHistThred);
+
+	float kalmanCoefQ, kalmanCoefR;
+	if(gConfig_Alg_param.kalmanCoefQ> 0.00001)
+		kalmanCoefQ = gConfig_Alg_param.kalmanCoefQ;
+	else
+		kalmanCoefQ = 0.00001;
+	if(gConfig_Alg_param.kalmanCoefR> 0.00001)
+		kalmanCoefR = gConfig_Alg_param.kalmanCoefR;
+	else
+		kalmanCoefR = 0.0025;
+	UtcSetKFCoefQR(m_track, kalmanCoefQ, kalmanCoefR);
+
+	bool  bSceneMVRecord;
+	bSceneMVRecord = gConfig_Alg_param.SceneMVEnable;
+	
+	if(bSceneMVRecord == true)
+		wFileFlag = true;
+	
+	UtcSetSceneMVRecord(m_track, bSceneMVRecord);
+
+	
+	//OSA_printf("stillFrms = %d,stillThred=%f\n",stillFrms,stillThred);
+	
+	//if(cfg_blk_val[36] > 0)
+		UtcSetRoiMaxWidth(m_track, 400);
+
+	UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
+#endif
+	return 0;
+
+}
+	else
+		return -1;
+
+	
+	return 0;
 }

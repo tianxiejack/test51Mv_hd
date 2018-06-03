@@ -139,6 +139,7 @@ private:
 	void initAcqRect();
 	void initAimRect();
 	void updateConfigOsdParm();
+	void updateAlgParm();
 
 };
 
