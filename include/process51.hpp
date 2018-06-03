@@ -4,7 +4,7 @@
 
 #include "VideoProcess.hpp"
 #include "osd_graph.h"
-#include"osd_cv.h"
+#include "osd_cv.h"
 class CProcess : public CVideoProcess
 {
 	UTC_RECT_float rcTrackBak,resultTrackBak;
@@ -12,9 +12,11 @@ class CProcess : public CVideoProcess
 	TARGETDRAW Mdrawbak[MAX_TARGET_NUMBER];
 	BlobRect blob_rectBak;
 	Osd_cvPoint crossBak;
+	Osd_cvPoint crossWHBak;
 	cv::Rect acqRectBak;
 	Osd_cvPoint freezecrossBak;
 	Osd_cvPoint crosspicpBak;
+	Osd_cvPoint crosspicpWHBak;
 	Osd_cvPoint rectfovBak[2];
 	Osd_cvPoint secBak[2];
 	DS_Rect rendpos[4];
@@ -56,7 +58,7 @@ protected:
 	void msgdriv_event(MSG_PROC_ID msgId, void *prm);
 	void osd_mtd_show(TARGET tg[], bool bShow = true);
 	void DrawBlob(BlobRect blobRct, bool bShow = true);
-	void DrawCross(int x,int y,int fcolour , bool bShow = true);
+	void DrawCross(cv::Rect rec,int fcolour ,bool bShow /*= true*/);
 	void drawmmt(TARGET tg[], bool bShow = true);
 	void drawmmtnew(TARGET tg[], bool bShow = true);
 	void erassdrawmmt(TARGET tg[], bool bShow = true);

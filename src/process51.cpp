@@ -10,7 +10,7 @@
 #include "app_status.h"
 #include "configable.h"
 #include "Ipcctl.h"
-#include "osd_cv.h"
+
 
 OSD_Param gConfig_Osd_param = {0};
 
@@ -486,15 +486,15 @@ void CProcess::DrawBlob(BlobRect blobRct,  bool bShow /*= true*/)
 }
 
 
-void CProcess::DrawCross(int x,int y,int fcolour ,bool bShow /*= true*/)
+void CProcess::DrawCross(cv::Rect rec,int fcolour ,bool bShow /*= true*/)
 {
 	
 	unsigned char colour = (bShow) ?fcolour : 0;
 	Line_Param_fb lineparm;
-	lineparm.x		=	x;
-	lineparm.y		=	y;
-	lineparm.width	=	AXIS_WIDTH_FOV0;
-	lineparm.height	=	AXIS_HEIGHT_FOV0;
+	lineparm.x		=	rec.x;
+	lineparm.y		=	rec.y;
+	lineparm.width	=	rec.width;
+	lineparm.height	=	rec.height;
 	lineparm.frcolor	=	colour;
 	Drawcvcrossaim(m_dccv,&lineparm);
 }
@@ -1230,65 +1230,64 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 
 	osdindex=0;	//picp cross
 	{
-		startx=crosspicpBak.x;
-		starty=crosspicpBak.y;
 		if(Osdflag[osdindex]==1)
 		{
-			DrawCross(startx,starty,frcolor,false);
+			recIn.x=crosspicpBak.x;
+			recIn.y=crosspicpBak.y;
+			recIn.width = crosspicpWHBak.x;
+			recIn.height = crosspicpWHBak.y;
+			DrawCross(recIn,frcolor,false);
 			Osdflag[osdindex]=0;
-		}
-
-		startx=PiexltoWindowsx(extInCtrl->SensorStat?extInCtrl->AxisPosX[0]:extInCtrl->AxisPosX[1],extInCtrl->SensorStat);
-		starty=PiexltoWindowsy(extInCtrl->SensorStat?extInCtrl->AxisPosY[0]:extInCtrl->AxisPosY[1],extInCtrl->SensorStat);
-		extInCtrl->PicpPosStat = 0;
-		switch(extInCtrl->PicpPosStat)
-		{
-			case 0:
-				startx+=crossshiftx;
-				starty-=crossshifty;
-				break;
-			case 1:
-				startx+=crossshiftx;
-				starty+=crossshifty;
-				break;
-			case 2:
-				startx-=crossshiftx;
-				starty+=crossshifty;
-				break;
-			case 3:
-				startx-=crossshiftx;
-				starty-=crossshifty;
-				break;
-
-			default:
-				break;
-		}
-		
-		if(startx<0)
-		{
-			startx=0;
-		}
-		else if(startx>vdisWH[0][0])
-		{
-			startx=0;
-		}
-		if(starty<0)
-		{
-			starty=0;
-		}
-		else if(starty>vdisWH[0][0])
-		{
-			starty=0;
 		}
 		if(((extInCtrl->PicpSensorStat==1)||(extInCtrl->PicpSensorStat==0))&&(extInCtrl->DispGrp[extInCtrl->SensorStat]<=3))
 		{
-			DrawCross(startx,starty,frcolor,true);
+			recIn.x=PiexltoWindowsx(extInCtrl->SensorStat?extInCtrl->AxisPosX[0]:extInCtrl->AxisPosX[1],extInCtrl->SensorStat);
+			recIn.y=PiexltoWindowsy(extInCtrl->SensorStat?extInCtrl->AxisPosY[0]:extInCtrl->AxisPosY[1],extInCtrl->SensorStat);
+			recIn.width = extInCtrl->picpCrossAxisWidth;
+			recIn.height = extInCtrl->picpCrossAxisHeight;
+			extInCtrl->PicpPosStat = 0;
+			switch(extInCtrl->PicpPosStat)
+			{
+				case 0:
+					startx+=crossshiftx;
+					starty-=crossshifty;
+					break;
+				case 1:
+					startx+=crossshiftx;
+					starty+=crossshifty;
+					break;
+				case 2:
+					startx-=crossshiftx;
+					starty+=crossshifty;
+					break;
+				case 3:
+					startx-=crossshiftx;
+					starty-=crossshifty;
+					break;
+
+				default:
+					break;
+			}
+			
+			if(startx<0)
+				startx=0;
+			else if(startx>vdisWH[0][0])
+				startx=0;
+			if(starty<0)
+				starty=0;
+			else if(starty>vdisWH[0][0])
+				starty=0;
+			
+			DrawCross(recIn,frcolor,true);
 			//printf("picp***********lat the startx=%d  starty=%d\n ",startx,starty);
 			Osdflag[osdindex]=1;
-		}
-		crosspicpBak.x=startx;
-		crosspicpBak.y=starty;
 
+			crosspicpBak.x=recIn.x;
+			crosspicpBak.y=recIn.y;
+			crosspicpWHBak.x = recIn.width;
+			crosspicpWHBak.y = recIn.height;
+
+		}
 	}
 #if __TRACK__
 	osdindex++;
@@ -1584,32 +1583,41 @@ osdindex++; //dash little cross
 	}
 osdindex++;	//cross aim
 	{
-		startx=crossBak.x;
-	 	starty=crossBak.y;
 	 	if(Osdflag[osdindex]==1)
 		{
-			DrawCross(startx,starty,frcolor,false);
+			recIn.x=crossBak.x;
+	 		recIn.y=crossBak.y;
+			recIn.width = crossWHBak.x;
+			recIn.height = crossWHBak.y;
+			DrawCross(recIn,frcolor,false);
 			Osdflag[osdindex]=0;
  		}
 
-		startx=PiexltoWindowsx(extInCtrl->AxisPosX[extInCtrl->SensorStat],extInCtrl->SensorStat);
-	 	starty=PiexltoWindowsy(extInCtrl->AxisPosY[extInCtrl->SensorStat],extInCtrl->SensorStat);
 		if(extInCtrl->DispGrp[extInCtrl->SensorStat]<=3)
 		{
+			startx=PiexltoWindowsx(extInCtrl->AxisPosX[extInCtrl->SensorStat],extInCtrl->SensorStat);
+	 		starty=PiexltoWindowsy(extInCtrl->AxisPosY[extInCtrl->SensorStat],extInCtrl->SensorStat);
+
+			recIn.x = startx;
+			recIn.y = starty;
+			recIn.width = extInCtrl->crossAxisWidth;
+			recIn.height = extInCtrl->crossAxisHeight;
 			if(extInCtrl->AvtTrkStat == eTrk_mode_acq)
 			{
-				DrawCross(startx,starty,frcolor,true);
+				DrawCross(recIn,frcolor,true);
 				Osdflag[osdindex]=1;
 			}
 			else if(extInCtrl->AvtTrkStat == eTrk_mode_search)
 			{
 				frcolor = 3;
-				DrawCross(startx,starty,frcolor,true);
+				DrawCross(recIn,frcolor,true);
 				Osdflag[osdindex]=1;
 			}
+			crossBak.x=startx;
+			crossBak.y=starty;
+			crossWHBak.x = recIn.width;
+			crossWHBak.y = recIn.height;
 		}
-		crossBak.x=startx;
-		crossBak.y=starty;
 	}
 
 osdindex++;	//acqRect
