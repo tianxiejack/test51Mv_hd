@@ -57,14 +57,9 @@ CProcess::CProcess()
 	pIStuts->unitAimH 	= 	AIM_HEIGHT;
 	pIStuts->unitAimX		=	VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->unitAimY		=	VIDEO_IMAGE_HEIGHT_0/2;
-	//pIStuts->SensorStat    = 	gConfig_Osd_param.MAIN_Sensor;//0
+	pIStuts->SensorStat 	= pIStuts->SensorStatBegin;
 	pIStuts->PicpSensorStatpri	=	pIStuts->PicpSensorStat = 0xFF;
-
-	pIStuts->DispGrp[0] = 1;//(eDisp_show_rect | eDisp_show_text/* | eDisp_show_dbg*/);
-	pIStuts->DispGrp[1] = 1;// (eDisp_show_rect | eDisp_show_text/* | eDisp_show_dbg*/);
-	pIStuts->DispColor[0]=2;
-	pIStuts->DispColor[1]=2;
-
+	
 	pIStuts->changeSensorFlag = 0;
 	crossBak.x = pIStuts->opticAxisPosX[pIStuts->SensorStat ];
 	crossBak.y = pIStuts->opticAxisPosY[pIStuts->SensorStat ];
@@ -79,15 +74,13 @@ CProcess::CProcess()
 	pIStuts->AxisPosY[1]	=VIDEO_IMAGE_HEIGHT_0/2;
 	
 	pIStuts->PicpPosStat = 0;
-	pIStuts->validChId = 0;
+	pIStuts->validChId = pIStuts->SensorStatBegin;
 	pIStuts->FovStat=1;
 
 	pIStuts->FrCollimation=2;
 	pIStuts->PicpSensorStatpri=2;
 	pIStuts->axisMoveStepX = 0;
 	pIStuts->axisMoveStepY = 0;
-	tvcorx=VIDEO_IMAGE_WIDTH_0 -100;
-	tvcory=VIDEO_IMAGE_HEIGHT_0 -100;
 
 	memset(secBak,0,sizeof(secBak));
 	memset(Osdflag,0,sizeof(Osdflag));
@@ -117,6 +110,12 @@ CProcess::CProcess()
 	msgextInCtrl = extInCtrl;
 	sThis = this;
 	plat = this;
+
+	pIStuts->DispGrp[0] = 1;
+	pIStuts->DispGrp[1] = 1;
+	pIStuts->DispColor[0]=2;
+	pIStuts->DispColor[1]=2;
+	
 }
 
 CProcess::~CProcess()
@@ -2003,11 +2002,10 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			{
 				pIStuts->unitAimY=0;
 			}
-			
-			rc.x=pIStuts->unitAimX-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]/2;
-			rc.y=pIStuts->unitAimY-trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]/2;
-			rc.width= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
-			rc.height= trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
+			rc.width	= pIStuts->AimW[pIStuts->SensorStat];
+			rc.height	= pIStuts->AimH[pIStuts->SensorStat];
+			rc.x=pIStuts->unitAimX-rc.width/2;
+			rc.y=pIStuts->unitAimY-rc.height/2;
 			dynamic_config(VP_CFG_TrkEnable, 0,&rc);
 			return ;
 		}
@@ -2964,7 +2962,7 @@ void CProcess::updateConfigOsdParm()
 {
 	CMD_EXT *pIStuts = extInCtrl;
 
-	pIStuts->SensorStat 			= gConfig_Osd_param.MAIN_Sensor;
+	pIStuts->SensorStatBegin 		= gConfig_Osd_param.MAIN_Sensor;
 	pIStuts->osdTextShow 			= gConfig_Osd_param.OSD_text_show;
 	pIStuts->osdTextColor 			= gConfig_Osd_param.OSD_text_color;
 	pIStuts->osdTextAlpha			= gConfig_Osd_param.OSD_text_alpha;

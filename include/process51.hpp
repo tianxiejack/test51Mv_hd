@@ -109,9 +109,6 @@ private:
 	UInt32 m_castTm;
 	//Multich_graphic grpxChWinPrms;
 
-	int tvcorx;
-	int tvcory;
-
 	void process_status(void);
 
 	void osd_init(void);

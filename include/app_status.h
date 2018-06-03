@@ -180,6 +180,7 @@ typedef struct
 	volatile int  trkerry;	
 
 	/***** cmd stat part *****/
+	volatile unsigned int SensorStatBegin;
 	volatile unsigned int  SensorStat;      		
 	volatile unsigned int  changeSensorFlag;
 	volatile unsigned int  PicpSensorStat;  		
