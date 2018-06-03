@@ -3090,9 +3090,12 @@ void CProcess::updateConfigOsdParm()
 	pIStuts->AimH[4] 				= gConfig_Osd_param.ch4_aim_height;
 	pIStuts->AimH[5] 				= gConfig_Osd_param.ch5_aim_height;
 
-	m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
 
 	m_acqRectW = pIStuts->AimW[pIStuts->SensorStat];
 	m_acqRectH = pIStuts->AimH[pIStuts->SensorStat];
+	
+	m_display.disptimeEnable = gConfig_Osd_param.Timedisp_9;
+	m_display.m_bOsd = pIStuts->osdTextShow;
+
 	return;
 }
