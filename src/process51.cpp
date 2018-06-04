@@ -14,7 +14,7 @@
 
 OSD_Param gConfig_Osd_param = {0};
 UTC_Trk_Param gConfig_Alg_param = {0};
-
+extern int ScalerLarge,ScalerMid,ScalerSmall;
 CProcess * CProcess::sThis = NULL;
 static bool DrawMoveDetect = 0;
 CProcess* plat = NULL;
@@ -1186,7 +1186,7 @@ void CProcess::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
 bool CProcess::OnProcess(int chId, Mat &frame)
 {
 	//track
-	int frcolor= extInCtrl->osdDrawColor;//extInCtrl->DispColor[extInCtrl->SensorStat];
+	int frcolor= 2;//extInCtrl->osdDrawColor;//extInCtrl->DispColor[extInCtrl->SensorStat];
 	int startx=0;
 	int starty=0;
 	int endx=0;
@@ -1598,11 +1598,10 @@ osdindex++;	//cross aim
 		{
 			startx=PiexltoWindowsx(extInCtrl->AxisPosX[extInCtrl->SensorStat],extInCtrl->SensorStat);
 	 		starty=PiexltoWindowsy(extInCtrl->AxisPosY[extInCtrl->SensorStat],extInCtrl->SensorStat);
-
 			recIn.x = startx;
 			recIn.y = starty;
-			recIn.width = extInCtrl->crossAxisWidth;
-			recIn.height = extInCtrl->crossAxisHeight;
+			recIn.width = 200;//extInCtrl->crossAxisWidth;
+			recIn.height = 200;//extInCtrl->crossAxisHeight;
 			if(extInCtrl->AvtTrkStat == eTrk_mode_acq)
 			{
 				DrawCross(recIn,frcolor,true);
@@ -3303,7 +3302,7 @@ void CProcess::updateAlgParm()
 	if(gConfig_Alg_param.fTau > 0.01)
 		fTau = gConfig_Alg_param.fTau;
 	else
-		fTau = 0.5
+		fTau = 0.5;
 	UtcSetDetectftau(m_track, fTau);
 
 	int  buildFrms;
@@ -3324,7 +3323,7 @@ void CProcess::updateAlgParm()
 	if(gConfig_Alg_param.histMvThred > 0.01)
 		histMvThred = gConfig_Alg_param.histMvThred;
 	else
-		histMvThred = 1.0
+		histMvThred = 1.0;
 	UtcSetHistMVThred(m_track, histMvThred);
 
 	int  detectFrms;
@@ -3407,21 +3406,10 @@ void CProcess::updateAlgParm()
 		wFileFlag = true;
 	
 	UtcSetSceneMVRecord(m_track, bSceneMVRecord);
-
 	
-	//OSA_printf("stillFrms = %d,stillThred=%f\n",stillFrms,stillThred);
-	
-	//if(cfg_blk_val[36] > 0)
-		UtcSetRoiMaxWidth(m_track, 400);
+	UtcSetRoiMaxWidth(m_track, 400);
 
 	UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
-#endif
-	return 0;
 
-}
-	else
-		return -1;
-
-	
-	return 0;
+	return ;
 }

@@ -1312,14 +1312,9 @@ void CDisplayer::gl_display(void)
 			glViewport(0, 0, m_mainWinWidth, m_mainWinHeight);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		}
-		
-		//chinese_osd(600,200,L"第一次的封装显示",255,0,0,255,VIDEO_IMAGE_WIDTH_0,VIDEO_IMAGE_HEIGHT_0);
-		
-		
-		
 		glDisable(GL_BLEND);
+		//chinese_osd(600,200,L"第一次的封装显示",255,0,0,255,VIDEO_IMAGE_WIDTH_0,VIDEO_IMAGE_HEIGHT_0);	
 
-		
 	}
 	
 	glUseProgram(0);
