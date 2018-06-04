@@ -352,6 +352,21 @@ typedef struct
 	volatile int AvtPosX[ipc_eSen_Max];	//target avt x,y for each channel
 	volatile int AvtPosY[ipc_eSen_Max];
 	
+	volatile int AcqRectW[ipc_eSen_Max];
+	volatile int AcqRectH[ipc_eSen_Max];
+	volatile int AimW[ipc_eSen_Max];
+	volatile int AimH[ipc_eSen_Max];
+	volatile int crossAxisWidth;
+	volatile int crossAxisHeight;
+	volatile int picpCrossAxisWidth;
+	volatile int picpCrossAxisHeight;
+	volatile bool osdTextShow;
+	volatile bool osdDrawShow;
+	volatile int osdTextColor;
+	volatile int osdTextAlpha;
+	volatile int osdTextFont;
+	volatile int osdTextSize;
+	volatile int osdDrawColor;
 
 	/***** old status ,remaining tidy*****/	
 	volatile unsigned int  unitVerNum;      	// 1.23=>0x0123
@@ -365,9 +380,9 @@ typedef struct
 	volatile unsigned int TrkStatpri;
 	volatile unsigned int TrkStat;     // acp/trk/assi/lost
 
-	volatile int  unitAimW;      // aim size
-	volatile int  unitAimH;      // aim size
-	volatile int  unitAimX;
+	volatile int  unitAimW;      	// aim size
+	volatile int  unitAimH;      	// aim size
+	volatile int  unitAimX;	   	// track aimRect x ,mean to the avtPosX
 	volatile int  unitAimY;
 	
 	volatile float TrkX;    		// for report and osd text 	what
@@ -385,6 +400,7 @@ typedef struct
 	volatile int  trkerry;	
 
 	/***** cmd stat part *****/
+	volatile unsigned int SensorStatBegin;
 	volatile unsigned int  SensorStat;      		
 	volatile unsigned int  changeSensorFlag;
 	volatile unsigned int  PicpSensorStat;  		

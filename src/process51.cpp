@@ -1191,7 +1191,7 @@ void CProcess::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
 bool CProcess::OnProcess(int chId, Mat &frame)
 {
 	//track
-//	printf("%s , avtstatus = %d \n",extInCtrl->AvtTrkStat);
+printf("avtstatus = %d \n",extInCtrl->AvtTrkStat);
 	int frcolor= extInCtrl->osdDrawColor;//extInCtrl->DispColor[extInCtrl->SensorStat];
 	int startx=0;
 	int starty=0;
