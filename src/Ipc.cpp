@@ -108,6 +108,8 @@ void* recv_msg(SENDST *RS422)
 	memset(pMsg,0,sizeof(CMD_EXT));
 	if(startEnable)
 		app_ctrl_getSysData(pMsg);
+	
+	printf("cmdID : %d \n",cmdID);
 	switch(cmdID)
 	{	
 	

@@ -47,8 +47,9 @@ CProcess::CProcess()
 	rememtime=0;
 	// default cmd value
 	extInCtrl = (CMD_EXT*)ipc_getimgstatus_p();
+	memset(extInCtrl,0,sizeof(CMD_EXT));
 	CMD_EXT *pIStuts = extInCtrl;
-
+	
 	pIStuts->opticAxisPosX[0]   = VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->opticAxisPosY[0]   = VIDEO_IMAGE_HEIGHT_0/2;
 	pIStuts->opticAxisPosX[1]   = VIDEO_IMAGE_WIDTH_1/2;
@@ -111,6 +112,8 @@ CProcess::CProcess()
 	msgextInCtrl = extInCtrl;
 	sThis = this;
 	plat = this;
+
+	update_param_osd();
 
 	pIStuts->DispGrp[0] = 1;
 	pIStuts->DispGrp[1] = 1;
@@ -345,7 +348,10 @@ void CProcess::OnInit()
 	extInCtrl->SysMode = 1;
 }
 void CProcess::OnConfig(){};
-void CProcess::OnRun(){};
+void CProcess::OnRun()
+{
+	update_param_alg();
+};
 void CProcess::OnStop(){};
 void CProcess::Ontimer(){
 
@@ -1602,6 +1608,7 @@ osdindex++;	//cross aim
 			recIn.y = starty;
 			recIn.width = extInCtrl->crossAxisWidth;
 			recIn.height= extInCtrl->crossAxisHeight;
+
 			if(extInCtrl->AvtTrkStat == eTrk_mode_acq)
 			{
 				DrawCross(recIn,frcolor,true);
