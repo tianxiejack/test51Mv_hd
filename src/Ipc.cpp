@@ -131,7 +131,6 @@ void* recv_msg(SENDST *RS422)
 			}
 			break;
 
-
 		case read_shm_utctrk:
 			{
 				UTCTRKSTATUS *utctmp = ipc_getutstatus_p();

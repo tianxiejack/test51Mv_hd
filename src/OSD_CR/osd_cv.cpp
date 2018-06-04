@@ -281,7 +281,6 @@ void Drawcvcrossaim(Mat frame,Line_Param_fb *lineparm)
 {
 
 	int centx, centy, width;
-	int crossw=width;
 	Point pt1,pt2,center;
 	if(lineparm==NULL)
 		return ;
@@ -289,7 +288,8 @@ void Drawcvcrossaim(Mat frame,Line_Param_fb *lineparm)
 	int sep=10;
 	Osd_cvPoint start;
 	Osd_cvPoint end;
-	
+
+	// right
 	start.x=lineparm->x+sep;
 	start.y=lineparm->y;
 	end.x=lineparm->x+lineparm->width/2;
@@ -302,6 +302,7 @@ void Drawcvcrossaim(Mat frame,Line_Param_fb *lineparm)
 	end.y=lineparm->y+1;
 	DrawcvLine(frame,&start,&end,lineparm->frcolor,1);
 
+	// left
 	start.x=lineparm->x-lineparm->width/2;
 	start.y=lineparm->y;
 	end.x=lineparm->x-sep;
@@ -314,30 +315,30 @@ void Drawcvcrossaim(Mat frame,Line_Param_fb *lineparm)
 	end.y=lineparm->y+1;
 	DrawcvLine(frame,&start,&end,lineparm->frcolor,1);
 
-
-
+	//up
 	start.x=lineparm->x;
-	start.y=lineparm->y-lineparm->width/2;
+	start.y=lineparm->y-lineparm->height/2;
 	end.x=lineparm->x;
 	end.y=lineparm->y-sep;
 	DrawcvLine(frame,&start,&end,lineparm->frcolor,1);
 	
 	start.x=lineparm->x+1;
-	start.y=lineparm->y-lineparm->width/2;
+	start.y=lineparm->y-lineparm->height/2;
 	end.x=lineparm->x+1;
 	end.y=lineparm->y-sep;
 	DrawcvLine(frame,&start,&end,lineparm->frcolor,1);
 
+	//down
 	start.x=lineparm->x;
 	start.y=lineparm->y+sep;
 	end.x=lineparm->x;
-	end.y=lineparm->y+lineparm->width/2;
+	end.y=lineparm->y+lineparm->height/2;
 	DrawcvLine(frame,&start,&end,lineparm->frcolor,1);
 	
 	start.x=lineparm->x+1;
 	start.y=lineparm->y+sep;
 	end.x=lineparm->x+1;
-	end.y=lineparm->y+lineparm->width/2;
+	end.y=lineparm->y+lineparm->height/2;
 	DrawcvLine(frame,&start,&end,lineparm->frcolor,1);
 
 	//point
@@ -352,8 +353,10 @@ void Drawcvcrossaim(Mat frame,Line_Param_fb *lineparm)
 	end.x=lineparm->x;
 	end.y=lineparm->y+1;
 	DrawcvLine(frame,&start,&end,lineparm->frcolor,1);
-
+	
 }
+
+
 void drawcvrect(Mat frame,int x,int y,int width,int height,int frcolor)
 {
 	

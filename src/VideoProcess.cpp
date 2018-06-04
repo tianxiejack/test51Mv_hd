@@ -1384,69 +1384,6 @@ int CVideoProcess::process_frame(int chId, Mat frame)
 	}
 
 	#endif
-
-#if 0
-	Mat frame_gray, frame_tmp;
-	//step1:  track process
-	if(m_bTrack && chId == m_curChId){
-		UTC_RECT_float rc;
-		//rc.x = (int)(m_mousex*frame.cols/m_display.m_mainWinWidth) - 20;
-		//rc.y = (int)(m_mousey*frame.rows/m_display.m_mainWinHeight) - 15;
-		rc.x = (int)(frame.cols/2) - 40;
-		rc.y = (int)(frame.rows/2) - 30;
-		rc.width = 80;
-		rc.height = 60;
-		tstart = getTickCount();
-
-		if(channel == 2){
-//			tstart = getTickCount();
-
-			frame_gray = Mat(frame.rows, frame.cols, CV_8UC1, m_grayMem[0]);
-//			extractYUYV2Gray2(frame, frame_gray);
-			cutColor(frame, frame_gray, CV_YUV2GRAY_YUYV);
-
-			OSA_printf("chId = %d, YUV2GRAY: time = %f sec \n", chId, ( (getTickCount() - tstart)/getTickFrequency()) );
-		}else if(channel == 1){
-			frame_gray = frame;
-		}
-		m_iTrackStat = process_track(m_iTrackStat, frame_gray, frame, rc);
-		OSA_printf("ALL-Trk: time = %f sec \n", ( (getTickCount() - tstart)/getTickFrequency()) );
-	}
-	else if(m_bMtd && chId == m_curChId)
-	{
-		tstart = getTickCount();
-
-		if(channel == 2){
-//			tstart = getTickCount();
-//			frame_tmp = Mat(frame.rows, frame.cols, CV_8UC1, m_grayMem[0]);
-			frame_gray = Mat(frame.rows, frame.cols, CV_8UC1);//, m_grayMem[0]);
-
-//			extractYUYV2Gray2(frame, frame_gray);
-			cutColor(frame, frame_gray, CV_YUV2GRAY_YUYV);
-//			memcpy(frame_gray.data, frame_tmp.data, frame.rows*frame.cols*sizeof(unsigned char));
-
-			OSA_printf("chId = %d, YUV2GRAY: time = %f sec \n", chId, ( (getTickCount() - tstart)/getTickFrequency()) );
-		}else if(channel == 1){
-			frame_gray = frame;
-		}
-		if(m_mtd[chId]->state == 0)
-		{
-			if(OpenTarget(m_mtd[chId], frame.cols, frame.rows) != -1)
-			{
-				m_mtd[chId]->state = 1;
-				printf(" %d:%s chId %d start mtd\n", OSA_getCurTimeInMsec(),__func__, chId);
-			}
-		}
-		process_mtd(m_mtd[chId], frame_gray, frame);
-		OSA_printf("ALL-MTD: time = %f sec \n", ( (getTickCount() - tstart)/getTickFrequency()) );
-	}
-
-	if(!OnProcess(chId, frame)){
-		OSA_mutexUnlock(&m_mutex);
-		return 0;
-	}
-
-#endif
 		
 	//OSA_printf("chid =%d  m_curChId=%d m_curSubChId=%d\n", chId,m_curChId,m_curSubChId);
 	if(chId == m_curChId || chId == m_curSubChId)
