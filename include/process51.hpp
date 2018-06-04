@@ -28,6 +28,7 @@ class CProcess : public CVideoProcess
 	DS_Rectmmt Mmtpos[5];
 	DS_Rect random;
 	char trkFPSDisplay[128];
+	Osd_cvPoint debugBak;
 public:
 	CProcess();
 	~CProcess();

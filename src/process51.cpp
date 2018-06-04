@@ -1191,6 +1191,7 @@ void CProcess::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
 bool CProcess::OnProcess(int chId, Mat &frame)
 {
 	//track
+//	printf("%s , avtstatus = %d \n",extInCtrl->AvtTrkStat);
 	int frcolor= extInCtrl->osdDrawColor;//extInCtrl->DispColor[extInCtrl->SensorStat];
 	int startx=0;
 	int starty=0;
@@ -1586,10 +1587,10 @@ osdindex++; //dash little cross
 	//	DrawdashCross(0,0,frcolor,true);
 		
 	}
+
 osdindex++;	//cross aim
 	{
-	 	if(Osdflag[osdindex]==1)
-		{
+	 	if(Osdflag[osdindex]==1){
 			recIn.x=crossBak.x;
 	 		recIn.y=crossBak.y;
 			recIn.width = crossWHBak.x;
@@ -1603,10 +1604,11 @@ osdindex++;	//cross aim
 			recIn.x=PiexltoWindowsx(extInCtrl->AxisPosX[extInCtrl->SensorStat],extInCtrl->SensorStat);
 	 		recIn.y=PiexltoWindowsy(extInCtrl->AxisPosY[extInCtrl->SensorStat],extInCtrl->SensorStat);
 			recIn.width = extInCtrl->crossAxisWidth;
-			recIn.height= extInCtrl->crossAxisHeight;
-printf("draw   width,height(%d,%d)\n", extInCtrl->crossAxisWidth,extInCtrl->crossAxisHeight);
-printf("@@@@@@@@axis width = %d \n",gConfig_Osd_param.CROSS_AXIS_WIDTH);
-
+			recIn.height= extInCtrl->crossAxisHeight;		
+			crossBak.x = recIn.x;
+			crossBak.y = recIn.y;
+			crossWHBak.x = recIn.width;
+			crossWHBak.y = recIn.height;
 
 			if(extInCtrl->AvtTrkStat == eTrk_mode_acq)
 			{
@@ -1619,10 +1621,7 @@ printf("@@@@@@@@axis width = %d \n",gConfig_Osd_param.CROSS_AXIS_WIDTH);
 				DrawCross(recIn,frcolor,true);
 				Osdflag[osdindex]=1;
 			}
-			crossBak.x = startx;
-			crossBak.y = starty;
-			crossWHBak.x = recIn.width;
-			crossWHBak.y = recIn.height;
+
 		}
 	}
 
