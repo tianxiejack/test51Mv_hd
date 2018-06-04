@@ -3422,6 +3422,59 @@ void CProcess::update_param_alg()
 
 	UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
 
+
+
+	//enh
+	if(gConfig_Alg_param.Enhmod_0 > 4)
+		m_display.enhancemod = gConfig_Alg_param.Enhmod_0;
+	else
+		m_display.enhancemod = 1;
+	
+	if((gConfig_Alg_param.Enhparm_1>0.0)&&(gConfig_Alg_param.Enhparm_1<5.0))
+		m_display.enhanceparam=gConfig_Alg_param.Enhparm_1;
+	else
+		m_display.enhanceparam=3.5;
+
+	//mmt
+	if((gConfig_Alg_param.Mmtdparm_2<0) || (gConfig_Alg_param.Mmtdparm_2>15))
+		DetectGapparm = 10;
+	else
+		DetectGapparm = 3;
+	m_MMTDObj.SetSRDetectGap(DetectGapparm);
+
+	if(gConfig_Alg_param.Mmtdparm_3 > 0)
+		MinArea = gConfig_Alg_param.Mmtdparm_3;
+	else
+		MinArea = 80;
+	if(gConfig_Alg_param.Mmtdparm_4 > 0)
+		MaxArea = gConfig_Alg_param.Mmtdparm_4;
+	else
+		MaxArea = 3600;
+
+	m_MMTDObj.SetConRegMinMaxArea(MinArea, MaxArea);
+
+	if(gConfig_Alg_param.Mmtdparm_5 > 0)
+		stillPixel = gConfig_Alg_param.Mmtdparm_5;
+	else
+		stillPixel = 6;
+	if(gConfig_Alg_param.Mmtdparm_6 > 0)
+		movePixel = gConfig_Alg_param.Mmtdparm_6;
+	else
+		movePixel = 16;
+	m_MMTDObj.SetMoveThred(stillPixel, movePixel);
+
+	if(gConfig_Alg_param.Mmtdparm_7 > 0.001)
+		lapScaler = gConfig_Alg_param.Mmtdparm_7;
+	else
+		lapScaler = 1.25;
+	m_MMTDObj.SetLapScaler(lapScaler);
+
+	if(gConfig_Alg_param.Mmtdparm_8 > 0)
+		lumThred = gConfig_Alg_param.Mmtdparm_8;
+	else
+		lumThred = 50;
+	m_MMTDObj.SetSRLumThred(lumThred);
+	
 	return ;
 }
 
