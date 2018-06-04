@@ -105,6 +105,10 @@ protected:
 	 static void MSGAPI_SaveCfgcmd(long lParam );
 	 static void MSGAPI_setMtdState(long lParam);
 
+	 static void MSGAPI_update_osd(long IParam);
+	 static void MSGAPI_update_alg(long IParam);
+	 static void MSGAPI_update_camera(long IParam);
+	 
 
 private:
 	ACK_EXT extOutAck;
@@ -138,9 +142,11 @@ private:
 
 	void initAcqRect();
 	void initAimRect();
-	void updateConfigOsdParm();
-	void updateAlgParm();
 
+public:
+	void update_param_alg();
+	void update_param_osd();
+	
 };
 
 

@@ -31,6 +31,9 @@ typedef enum
     axismove,/*12*/
     read_shm_trkpos,/*13*/
     read_shm_config,
+    read_shm_osd,
+    read_shm_utctrk,
+    read_shm_camera,
     exit_img,
     invalid
 }CMD_ID;
@@ -447,16 +450,18 @@ typedef struct {
 	int ch3_acqRect_height;
 	int ch4_acqRect_height;
 	int ch5_acqRect_height;
-	int bomen1_width;
-	int bomen2_width;
-	int bomen3_width;
-	int bomen4_width;
-	int bomen5_width;
-	int bomen1_height;
-	int bomen2_height;	// 14 -- 15
-	int bomen3_height;	// 15 -- 0
-	int bomen4_height;
-	int bomen5_height;
+	int ch0_aim_width;
+	int ch1_aim_width;
+	int ch2_aim_width;
+	int ch3_aim_width;
+	int ch4_aim_width;
+	int ch5_aim_width;
+	int ch0_aim_height;
+	int ch1_aim_height;	
+	int ch2_aim_height;
+	int ch3_aim_height;
+	int ch4_aim_height;
+	int ch5_aim_height;
 }OSDSTATUS;
 
 typedef struct {
@@ -601,4 +606,3 @@ UTCTRKSTATUS *ipc_getutstatus_p();
 
 
 #endif
-

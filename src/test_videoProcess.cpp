@@ -11,7 +11,7 @@
 using namespace std;
 using namespace cv;
 
-bool startEnable = 1;
+bool startEnable = 0;
 int main(int argc, char **argv)
 {
 	struct timeval tv;

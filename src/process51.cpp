@@ -12,8 +12,8 @@
 #include "Ipcctl.h"
 
 
-OSD_Param gConfig_Osd_param = {0};
-UTC_Trk_Param gConfig_Alg_param = {0};
+OSDSTATUS gConfig_Osd_param = {0};
+UTCTRKSTATUS gConfig_Alg_param = {0};
 extern int ScalerLarge,ScalerMid,ScalerSmall;
 CProcess * CProcess::sThis = NULL;
 static bool DrawMoveDetect = 0;
@@ -1186,7 +1186,7 @@ void CProcess::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
 bool CProcess::OnProcess(int chId, Mat &frame)
 {
 	//track
-	int frcolor= 2;//extInCtrl->osdDrawColor;//extInCtrl->DispColor[extInCtrl->SensorStat];
+	int frcolor= extInCtrl->osdDrawColor;//extInCtrl->DispColor[extInCtrl->SensorStat];
 	int startx=0;
 	int starty=0;
 	int endx=0;
@@ -1600,8 +1600,8 @@ osdindex++;	//cross aim
 	 		starty=PiexltoWindowsy(extInCtrl->AxisPosY[extInCtrl->SensorStat],extInCtrl->SensorStat);
 			recIn.x = startx;
 			recIn.y = starty;
-			recIn.width = 200;//extInCtrl->crossAxisWidth;
-			recIn.height = 200;//extInCtrl->crossAxisHeight;
+			recIn.width = extInCtrl->crossAxisWidth;
+			recIn.height= extInCtrl->crossAxisHeight;
 			if(extInCtrl->AvtTrkStat == eTrk_mode_acq)
 			{
 				DrawCross(recIn,frcolor,true);
@@ -1630,8 +1630,8 @@ osdindex++;	//acqRect
 		if(extInCtrl->AvtTrkStat == eTrk_mode_acq){
 			recIn.x  = PiexltoWindowsx(extInCtrl->AxisPosX[extInCtrl->SensorStat],extInCtrl->SensorStat);
 	 		recIn.y  = PiexltoWindowsy(extInCtrl->AxisPosY[extInCtrl->SensorStat],extInCtrl->SensorStat);
-			recIn.width  = 300;//extInCtrl->AcqRectW[extInCtrl->SensorStat];
-			recIn.height = 300;//extInCtrl->AcqRectH[extInCtrl->SensorStat]; 
+			recIn.width  = extInCtrl->AcqRectW[extInCtrl->SensorStat];
+			recIn.height = extInCtrl->AcqRectH[extInCtrl->SensorStat]; 
 			if(recIn.width%2 == 1)
 				recIn.width++;
 			if(recIn.height%2 == 1)
@@ -2715,7 +2715,10 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
     MSGDRIV_attachMsgFun(handle,    MSGID_EXT_INPUT_CFGSAVE,             	MSGAPI_SaveCfgcmd,                 	     0);	
     MSGDRIV_attachMsgFun(handle,    MSGID_EXT_MVDETECT,             		MSGAPI_setMtdState,                 	     0);	
 
-  
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_UPDATE_ALG,             		MSGAPI_update_alg,                 	     0);	
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_UPDATE_OSD,             		MSGAPI_update_osd,                 	0);	
+    MSGDRIV_attachMsgFun(handle,    MSGID_EXT_UPDATE_CAMERA,             	MSGAPI_update_camera,              0);	
+ 
     return 0;
 }
 
@@ -3056,8 +3059,12 @@ void CProcess::initAimRect()
 	
 	return ;
 }
+void CProcess::MSGAPI_update_osd(long lParam)
+{
+	plat->update_param_osd();
+}
 
-void CProcess::updateConfigOsdParm()
+void CProcess::update_param_osd()
 {
 	CMD_EXT *pIStuts = extInCtrl;
 
@@ -3111,8 +3118,12 @@ void CProcess::updateConfigOsdParm()
 	return;
 }
 
+void CProcess::MSGAPI_update_alg(long lParam)
+{
+	plat->update_param_alg();
+}
 
-void CProcess::updateAlgParm()
+void CProcess::update_param_alg()
 {
 	UTC_DYN_PARAM dynamicParam;
 	if(gConfig_Alg_param.occlusion_thred > 0)
@@ -3412,4 +3423,8 @@ void CProcess::updateAlgParm()
 	UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
 
 	return ;
+}
+
+void CProcess::MSGAPI_update_camera(long lParam)
+{
 }

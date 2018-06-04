@@ -19,7 +19,7 @@
 
 #define AVT_TRK_AIM_SIZE			2
 
-
+#if 0
 typedef struct {
 	int MAIN_Sensor;	//13--0
 	int Timedisp_9;
@@ -124,6 +124,6 @@ typedef struct {
 	int Mmtdparm_8; //12--8
 
 }UTC_Trk_Param;
-
+#endif
 
 #endif

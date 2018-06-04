@@ -284,6 +284,9 @@ typedef enum
 
     // video control
     MSGID_EXT_INPUT_VIDEOCTRL,              ///< external cmd, video record or replay.
+    MSGID_EXT_UPDATE_OSD,
+    MSGID_EXT_UPDATE_ALG,
+    MSGID_EXT_UPDATE_CAMERA,
     MSGID_EXT_MVDETECT,
 }MSG_PROC_ID;
 

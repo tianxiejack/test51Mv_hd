@@ -106,9 +106,32 @@ void* recv_msg(SENDST *RS422)
 	app_ctrl_getSysData(pMsg);
 	switch(cmdID)
 	{	
+	/*
 		case read_shm_config:
-			startEnable = 1;
+			if(!startEnable){		
+				OSDSTATUS *osdtmp = ipc_getosdstatus_p();
+				UTCTRKSTATUS *utctmp = ipc_getutstatus_p();
+				memcpy(&gConfig_Alg_param,utctmp,sizeof(UTCTRKSTATUS));
+				memcpy(&gConfig_Osd_param,osdtmp,sizeof(OSDSTATUS));
+				startEnable = 1;
+			}
 			break;
+
+		case read_shm_osd:
+			OSDSTATUS *osdtmp = ipc_getosdstatus_p();
+			memcpy(&gConfig_Osd_param,osdtmp,sizeof(OSDSTATUS));
+			MSGDRIV_send(MSGID_EXT_UPDATE_OSD, 0);
+			break;
+
+		case read_shm_utctrk:
+			UTCTRKSTATUS *utctmp = ipc_getutstatus_p();
+			memcpy(&gConfig_Alg_param,utctmp,sizeof(UTCTRKSTATUS));	
+			MSGDRIV_send(MSGID_EXT_UPDATE_ALG, 0);			
+			break;
+
+		case read_shm_camera:
+			break;
+	*/		
 		case trk:	
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;
