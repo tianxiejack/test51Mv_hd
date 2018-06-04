@@ -6,14 +6,17 @@
 #include "app_ctrl.h"
 #include "configable.h"
 #include "osd_text.hpp"
+#include "msgDriv.h"
+
 
 #define DATAIN_TSK_PRI              (2)
 #define DATAIN_TSK_STACK_SIZE       (0)
 #define SDK_MEM_MALLOC(size)                                            OSA_memAlloc(size)
 
 extern  bool startEnable;
+extern OSDSTATUS gConfig_Osd_param ;
+extern UTCTRKSTATUS gConfig_Alg_param;
 int ipc_loop = 1;
-
 extern void inputtmp(unsigned char cmdid);
 
 OSA_BufCreate msgSendBufCreate;
@@ -103,10 +106,11 @@ void* recv_msg(SENDST *RS422)
 	CMD_EXT inCtrl, *pMsg = NULL;
 	pMsg = &inCtrl;
 	memset(pMsg,0,sizeof(CMD_EXT));
-	app_ctrl_getSysData(pMsg);
+	if(startEnable)
+		app_ctrl_getSysData(pMsg);
 	switch(cmdID)
 	{	
-	/*
+	
 		case read_shm_config:
 			if(!startEnable){		
 				OSDSTATUS *osdtmp = ipc_getosdstatus_p();
@@ -116,22 +120,27 @@ void* recv_msg(SENDST *RS422)
 				startEnable = 1;
 			}
 			break;
-
+			
 		case read_shm_osd:
-			OSDSTATUS *osdtmp = ipc_getosdstatus_p();
-			memcpy(&gConfig_Osd_param,osdtmp,sizeof(OSDSTATUS));
-			MSGDRIV_send(MSGID_EXT_UPDATE_OSD, 0);
+			{
+				OSDSTATUS *osdtmp = ipc_getosdstatus_p();
+				memcpy(&gConfig_Osd_param,osdtmp,sizeof(OSDSTATUS));
+				MSGDRIV_send(MSGID_EXT_UPDATE_OSD, 0);
+			}
 			break;
 
+
 		case read_shm_utctrk:
-			UTCTRKSTATUS *utctmp = ipc_getutstatus_p();
-			memcpy(&gConfig_Alg_param,utctmp,sizeof(UTCTRKSTATUS));	
-			MSGDRIV_send(MSGID_EXT_UPDATE_ALG, 0);			
+			{
+				UTCTRKSTATUS *utctmp = ipc_getutstatus_p();
+				memcpy(&gConfig_Alg_param,utctmp,sizeof(UTCTRKSTATUS));	
+				MSGDRIV_send(MSGID_EXT_UPDATE_ALG, 0);	
+			}
 			break;
 
 		case read_shm_camera:
 			break;
-	*/		
+			
 		case trk:	
 			memcpy(&Rtrk,RS422->param,sizeof(Rtrk));
 			imgID1 = Rtrk.AvtTrkStat;
