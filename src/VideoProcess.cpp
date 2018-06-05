@@ -226,7 +226,7 @@ void CVideoProcess::main_proc_func()
 						
 						m_rcTrack.x=currentx-MoveAcpSR.width/2;
 						m_rcTrack.y=currenty-MoveAcpSR.height/2;
-						m_rcTrack.width=MoveAcpSR.width;
+						m_rcTrack.width =MoveAcpSR.width;
 						m_rcTrack.height=MoveAcpSR.height;
 					}
 					else
@@ -715,10 +715,10 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 		if(pPrm == NULL)
 		{			
 			UTC_RECT_float rc;
-			rc.width 	= m_acqRectW;
-			rc.height 	= m_acqRectH;
-			rc.x 		= m_ImageAxisx - rc.width/2;
-			rc.y 		= m_ImageAxisy - rc.height/2;
+			rc.width 	=  60;//m_acqRectW;
+			rc.height 	=  60;//m_acqRectH;
+			rc.x 		=  m_ImageAxisx - rc.width/2;
+			rc.y 		=  m_ImageAxisy - rc.height/2;
 			m_rcTrack = rc;
 			m_rcAcq 	  = rc;
 		}
@@ -1056,11 +1056,7 @@ int CVideoProcess::configAvtFromFile()
 		
 		UtcSetSceneMVRecord(m_track, bSceneMVRecord);
 
-		
-		//OSA_printf("stillFrms = %d,stillThred=%f\n",stillFrms,stillThred);
-		
-		//if(cfg_blk_val[36] > 0)
-			UtcSetRoiMaxWidth(m_track, 400);
+		UtcSetRoiMaxWidth(m_track, 400);
 
 		UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
 #endif
@@ -1121,7 +1117,7 @@ int CVideoProcess::Algconfig()
 	
 //avtrack
 #if __TRACK__
-	//configAvtFromFile();
+	configAvtFromFile();
 #endif
 
 }

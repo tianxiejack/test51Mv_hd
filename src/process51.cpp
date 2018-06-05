@@ -1191,7 +1191,7 @@ void CProcess::DrawdashRect(int startx,int starty,int endx,int endy,int colour)
 bool CProcess::OnProcess(int chId, Mat &frame)
 {
 	//track
-printf("avtstatus = %d \n",extInCtrl->AvtTrkStat);
+//printf("avtstatus = %d \n",extInCtrl->AvtTrkStat);
 	int frcolor= extInCtrl->osdDrawColor;//extInCtrl->DispColor[extInCtrl->SensorStat];
 	int startx=0;
 	int starty=0;
@@ -1300,7 +1300,9 @@ printf("avtstatus = %d \n",extInCtrl->AvtTrkStat);
 	{
 		 UTC_RECT_float rcResult = m_rcTrack;
 		 UTC_RECT_float rcResult_algRect = m_rcTrack;
-		 
+printf("m_iTrackStat = %d \n",m_iTrackStat);
+printf("m_rcTrack.width height  : %d ,%d \n",m_rcTrack.width,m_rcTrack.height);		
+	 
 		 trackinfo_obj->trackrect=m_rcTrack;
 		 trackinfo_obj->TrkStat = extInCtrl->AvtTrkStat;
 		 m_SensorStat = extInCtrl->SensorStat;
@@ -1329,8 +1331,8 @@ printf("avtstatus = %d \n",extInCtrl->AvtTrkStat);
 		}
 		 if(m_bTrack)
 		 {
-			extInCtrl->TrkXtmp =rcResult.x+rcResult.width/2;
-			extInCtrl->TrkYtmp = rcResult.y+rcResult.height/2;
+			extInCtrl->TrkXtmp =rcResult.x + rcResult.width/2;
+			extInCtrl->TrkYtmp = rcResult.y+ rcResult.height/2;
 			coastRectx = extInCtrl->AvtPosX[0];
 			coastRecty = extInCtrl->AvtPosY[0];
 			if(extInCtrl->FovCtrl==5&&extInCtrl->SensorStat==0)
@@ -1354,8 +1356,8 @@ printf("avtstatus = %d \n",extInCtrl->AvtTrkStat);
 			{
 				 startx=PiexltoWindowsxzoom_TrkRect(rcResult.x+rcResult.width/2-aimw/2,extInCtrl->SensorStat);			
 				 starty=PiexltoWindowsyzoom_TrkRect(rcResult.y+rcResult.height/2-aimh/2 ,extInCtrl->SensorStat);
-				 endx=PiexltoWindowsxzoom_TrkRect(rcResult.x+rcResult.width/2+aimw/2,extInCtrl->SensorStat);
-			 	 endy=PiexltoWindowsyzoom_TrkRect(rcResult.y+rcResult.height/2+aimh/2 ,extInCtrl->SensorStat);
+				 endx  =PiexltoWindowsxzoom_TrkRect(rcResult.x+rcResult.width/2+aimw/2,extInCtrl->SensorStat);
+			 	 endy  =PiexltoWindowsyzoom_TrkRect(rcResult.y+rcResult.height/2+aimh/2 ,extInCtrl->SensorStat);
 			}
 			 //OSA_printf("startxy=(%d,%d) endXY=(%d,%d)resultXY(%f,%f)\n",startx,starty,endx,endy,rcResult.x+rcResult.width/2-aimw/2,rcResult.y+rcResult.height/2-aimh/2);
 			#if 1//dft alg reply x y w h			
@@ -1368,8 +1370,8 @@ printf("avtstatus = %d \n",extInCtrl->AvtTrkStat);
 			}
 			#endif
 			if( m_iTrackStat == 1)
-			{
-				#if 1	// trackRect
+			{		
+				#if 1// trackRect
 					rectangle( m_dccv,
 						Point( startx, starty ),
 						Point( endx, endy),
@@ -1398,7 +1400,8 @@ printf("avtstatus = %d \n",extInCtrl->AvtTrkStat);
 					endx=PiexltoWindowsxzoom(extInCtrl->AvtPosX[extInCtrl->SensorStat]+aimw/2,extInCtrl->SensorStat);
 					endy=PiexltoWindowsyzoom(extInCtrl->AvtPosY[extInCtrl->SensorStat]+aimh/2 ,extInCtrl->SensorStat);
 					}
-				if(bDraw != 0){
+				if(bDraw != 0)
+				{
 					DrawdashRect(startx,starty,endx,endy,frcolor);	// track lost DashRect				
 				}
 				#if 1 //dft alg reply x y w h
@@ -2379,8 +2382,9 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			UTC_RECT_float rc;
 			if(msgId == MSGID_EXT_INPUT_AIMSIZE)
 			{
-				pIStuts->unitAimW 	= pIStuts->AimW[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0];
-				pIStuts->unitAimH		= pIStuts->AimH[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1];
+				pIStuts->unitAimW  = trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]; //pIStuts->AimW[pIStuts->SensorStat];//
+				pIStuts->unitAimH	  = trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]; //pIStuts->AimH[pIStuts->SensorStat];//
+
 				rc.x	=	pIStuts->unitAimX-pIStuts->unitAimW/2;
 				rc.y	=	pIStuts->unitAimY-pIStuts->unitAimH/2;
 				rc.width=pIStuts->unitAimW;
@@ -3128,19 +3132,19 @@ void CProcess::MSGAPI_update_alg(long lParam)
 void CProcess::update_param_alg()
 {
 	UTC_DYN_PARAM dynamicParam;
-	if(gConfig_Alg_param.occlusion_thred > 0)
+	if(gConfig_Alg_param.occlusion_thred > 0.0001)
 		dynamicParam.occlusion_thred = gConfig_Alg_param.occlusion_thred;
 	else
 		dynamicParam.occlusion_thred = 0.28;
 	
-	if(gConfig_Alg_param.retry_acq_thred> 0)
+	if(gConfig_Alg_param.retry_acq_thred> 0.0001)
 		dynamicParam.retry_acq_thred = gConfig_Alg_param.retry_acq_thred;
 	else
 		dynamicParam.retry_acq_thred = 0.38;
 	
 	UtcSetDynParam(m_track, dynamicParam);
 	float up_factor;
-	if(gConfig_Alg_param.up_factor > 0)
+	if(gConfig_Alg_param.up_factor > 0.0001)
 		up_factor = gConfig_Alg_param.up_factor;
 	else
 		up_factor = 0.0125;
@@ -3166,11 +3170,8 @@ void CProcess::update_param_alg()
 		gapframe = 10;
 	UtcSetIntervalFrame(m_track, gapframe);
 
-    bool enhEnable;
-	if(gConfig_Alg_param.enhEnable> -1)
-		enhEnable = gConfig_Alg_param.enhEnable;
-	else
-		enhEnable = 1;
+   	bool enhEnable;
+	enhEnable = gConfig_Alg_param.enhEnable;		
 	UtcSetEnhance(m_track, enhEnable);
 
 	float cliplimit;
@@ -3402,18 +3403,18 @@ void CProcess::update_param_alg()
 	UtcSetKFHistThred(m_track, kalmanHistThred);
 
 	float kalmanCoefQ, kalmanCoefR;
-	if(gConfig_Alg_param.kalmanCoefQ> 0.00001)
+	if(gConfig_Alg_param.kalmanCoefQ> 0.000001)
 		kalmanCoefQ = gConfig_Alg_param.kalmanCoefQ;
 	else
 		kalmanCoefQ = 0.00001;
-	if(gConfig_Alg_param.kalmanCoefR> 0.00001)
+	if(gConfig_Alg_param.kalmanCoefR> 0.000001)
 		kalmanCoefR = gConfig_Alg_param.kalmanCoefR;
 	else
 		kalmanCoefR = 0.0025;
 	UtcSetKFCoefQR(m_track, kalmanCoefQ, kalmanCoefR);
 
 	bool  bSceneMVRecord;
-	bSceneMVRecord = gConfig_Alg_param.SceneMVEnable;
+	bSceneMVRecord = 0;//gConfig_Alg_param.SceneMVEnable;
 	
 	if(bSceneMVRecord == true)
 		wFileFlag = true;

@@ -25,7 +25,6 @@ int main(int argc, char **argv)
 	{
 		select( 0, NULL, NULL, NULL, &tv );
 	};
-	// read config parm from ipc,wait to add func
 	
 	CProcess proc;
 	//App_dxmain();
