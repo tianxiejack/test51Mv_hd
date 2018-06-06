@@ -125,6 +125,7 @@ void* recv_msg(SENDST *RS422)
 			
 		case read_shm_osd:
 			{
+				printf("read_shm_osd  \n\n");
 				OSDSTATUS *osdtmp = ipc_getosdstatus_p();
 				memcpy(&gConfig_Osd_param,osdtmp,sizeof(OSDSTATUS));
 				MSGDRIV_send(MSGID_EXT_UPDATE_OSD, 0);

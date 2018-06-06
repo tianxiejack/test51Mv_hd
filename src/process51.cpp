@@ -1300,14 +1300,17 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 	{
 		 UTC_RECT_float rcResult = m_rcTrack;
 		 UTC_RECT_float rcResult_algRect = m_rcTrack;
-printf("m_iTrackStat = %d \n",m_iTrackStat);
-printf("m_rcTrack.width height  : %d ,%d \n",m_rcTrack.width,m_rcTrack.height);		
+//printf("m_iTrackStat = %d \n",m_iTrackStat);
+//printf("m_rcTrack.width height  : %d ,%d \n",m_rcTrack.width,m_rcTrack.height);		
 	 
 		 trackinfo_obj->trackrect=m_rcTrack;
 		 trackinfo_obj->TrkStat = extInCtrl->AvtTrkStat;
 		 m_SensorStat = extInCtrl->SensorStat;
 		 int aimw= extInCtrl->AimW[extInCtrl->SensorStat];//trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][0];
-		 int aimh=  extInCtrl->AimW[extInCtrl->SensorStat];//trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][1];
+		 int aimh=  extInCtrl->AimH[extInCtrl->SensorStat];//trkWinWH[extInCtrl->SensorStat][extInCtrl->AvtTrkAimSize][1];
+//printf("aimw = %d,aimh = %d \n",aimw,aimh);
+//printf("@@@ extInCtrl->AimW[0] ,extInCtrl->AimH[0] :(%d,%d)\n",extInCtrl->AimW[extInCtrl->SensorStat],extInCtrl->AimH[extInCtrl->SensorStat]);
+			
 		 if((extInCtrl->FovCtrl==5)&&(extInCtrl->SensorStat==0))
 		{
 			aimw=aimw/2;
@@ -1369,6 +1372,7 @@ printf("m_rcTrack.width height  : %d ,%d \n",m_rcTrack.width,m_rcTrack.height);
 				rcResult_algRect.height = PiexltoWindowsy(rcResult_algRect.height,extInCtrl->SensorStat);
 			}
 			#endif
+	
 			if( m_iTrackStat == 1)
 			{		
 				#if 1// trackRect
@@ -3120,6 +3124,8 @@ void CProcess::update_param_osd()
 	pIStuts->picpCrossAxisWidth	= gConfig_Osd_param.Picp_CROSS_AXIS_WIDTH;
 	pIStuts->picpCrossAxisHeight	= gConfig_Osd_param.Picp_CROSS_AXIS_HEIGHT;
 
+//printf("%s , pIStuts->AimW[0] = %d \n",__func__,pIStuts->AimW[0]);
+//printf("%s , pIStuts->AimH[0] = %d \n",__func__,pIStuts->AimH[0]);
 
 	return;
 }

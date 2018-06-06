@@ -7,6 +7,7 @@ extern "C" {
 #endif
 
 #include "app_proj_xgs026.h"
+//#include "Ipcctl.h"
 
 #ifndef MTD_TARGET_NUM
 #define MTD_TARGET_NUM  8
@@ -18,6 +19,7 @@ typedef enum {
 	eSen_CH2   ,
 	eSen_CH3   ,
 	eSen_CH4   ,
+	eSen_CH5   ,
 	eSen_Max   
 }eSenserStat;
 
@@ -117,6 +119,7 @@ typedef enum Dram_saveMode
 
 
 /** universal status **/
+#if 1
 typedef struct
 {
 	/***** new status *****/
@@ -220,7 +223,9 @@ typedef struct
 	volatile unsigned char 	MmtOffsetXY[20]; 		//not sure the func
 	
 } CMD_EXT;
-
+#endif
+//typedef IMGSTATUS CMD_EXT;
+	
 typedef struct
 {
     union
