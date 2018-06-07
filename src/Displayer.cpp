@@ -1314,7 +1314,10 @@ void CDisplayer::gl_display(void)
 		}
 		glDisable(GL_BLEND);
 		//chinese_osd(600,200,L"第一次的封装显示",255,0,0,255,VIDEO_IMAGE_WIDTH_0,VIDEO_IMAGE_HEIGHT_0);	
-
+		chinese_osd(1100,10,L"速  度",255,0,0,255,VIDEO_IMAGE_WIDTH_0,VIDEO_IMAGE_HEIGHT_0);	//rate
+		chinese_osd(1300,10,L"距  离",255,0,0,255,VIDEO_IMAGE_WIDTH_0,VIDEO_IMAGE_HEIGHT_0);// juli
+		chinese_osd(1805,10,L"导航干扰",255,255,0,255,VIDEO_IMAGE_WIDTH_0,VIDEO_IMAGE_HEIGHT_0);//daohang ganrao
+		chinese_osd(1805,100,L"遥控干扰",255,255,0,255,VIDEO_IMAGE_WIDTH_0,VIDEO_IMAGE_HEIGHT_0);//yaokong ganrao
 	}
 	
 	glUseProgram(0);

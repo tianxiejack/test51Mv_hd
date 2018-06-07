@@ -29,6 +29,10 @@ class CProcess : public CVideoProcess
 	DS_Rect random;
 	char trkFPSDisplay[128];
 	Osd_cvPoint debugBak;
+
+	char timedisplay[128];
+
+	
 public:
 	CProcess();
 	~CProcess();
@@ -147,7 +151,8 @@ private:
 public:
 	void update_param_alg();
 	void update_param_osd();
-	
+	void DrawScaleLine(Mat frame,int frcolor);
+
 };
 
 

@@ -11,7 +11,7 @@
 using namespace std;
 using namespace cv;
 
-bool startEnable = 0;
+bool startEnable = false;
 int main(int argc, char **argv)
 {
 	struct timeval tv;
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 #ifdef __IPC__
 	Ipc_pthread_start();
 #endif
-	while(0 == startEnable)
+	while(false == startEnable)
 	{
 		select( 0, NULL, NULL, NULL, &tv );
 	};

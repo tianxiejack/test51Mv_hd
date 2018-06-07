@@ -15,7 +15,7 @@ FreeTypeFont*	_font;
 void OSDCreatText()
 {
 	_font   =   new FreeTypeFont();
-	_font->create("simsun.ttc",40,512,512);
+	_font->create("simsun.ttc",25,512,512);
 }
 
 void OSDdrawText(int x,int y,wchar_t* text,int win_width,int win_height)
