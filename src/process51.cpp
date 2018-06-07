@@ -2983,9 +2983,9 @@ void CProcess::MSGAPI_inputfovselect(long lParam )
 				sThis->Track_fovreacq( 330,pIStuts->SensorStat,0);
 			else if(pIStuts->FovStat == 4)	
 				sThis->Track_fovreacq( 110,pIStuts->SensorStat,0);					
-			else if(pIStuts->FovStat == 5){
+			else if(pIStuts->FovStat == 5)
 				sThis->Track_fovreacq( 55,pIStuts->SensorStat,0);
-			}
+			
 		#endif
 		}
 		else if(pIStuts->SensorStat == 1){
