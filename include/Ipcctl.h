@@ -30,12 +30,20 @@ typedef enum
     mmtselect,/*11*/
     axismove,/*12*/
     read_shm_trkpos,/*13*/
-    read_shm_config,
-    read_shm_osd,
-    read_shm_utctrk,
-    read_shm_camera,
-    elecZoom,
-    exit_img,
+    read_shm_config,/*14*/
+    read_shm_osd,/*15*/
+    read_shm_utctrk,/*16*/
+    read_shm_camera,/*17*/
+    elecZoom,/*18*/
+    exit_img,/*19*/
+    sensor_bind,/*20*/
+    sensor_video_trans,/*21*/
+    vframerate,/*22*/
+    vquality,/*23*/
+    osdcolor,/*24*/
+    osdfont,/*25*/
+    osdsize,/*26*/
+    osdctrl,/*27*/
     invalid
 }CMD_ID;
 
@@ -89,7 +97,7 @@ typedef enum {
         ipc_eSen_CH2 = 0x02,
         ipc_eSen_CH3 = 0x03,
         ipc_eSen_CH4 = 0x04,
-        ipc_eSen_CH5 = 0X05,
+        ipc_eSen_CH5 = 0x05,
         ipc_eSen_Max = 0x06
 }ipc_eSenserStat;
 
@@ -166,13 +174,13 @@ typedef enum ipc_Dram_DispGradeStat
 
 typedef enum ipc_Dram_DispGradeColor
 {
-	ipc_ecolor_Default  = 0x0,
-	ipc_ecolor_Black = 0x1,
-	ipc_ecolor_White    = 0x2,
+	ipc_ecolor_Black = 0x01,
+	ipc_ecolor_White    = 0x02,
 	ipc_ecolor_Red = 0x03,
 	ipc_ecolor_Yellow = 0x04,
 	ipc_ecolor_Blue = 0x05,
 	ipc_ecolor_Green = 0x06,
+	ipc_ecolor_Default  = 0x07,
 } ipc_eOSDColor;
 
 typedef enum
@@ -312,30 +320,42 @@ typedef struct{
     volatile unsigned char ImgZoomStat;
 }CMD_ZOOM;
 
-typedef struct{
-    volatile unsigned char screenshot;//1:enable 2:disable
-    volatile unsigned char g_record;//1:enable record  2:disable record
-}CMD_SCREENSHOT;
 
 typedef struct{
-    volatile unsigned char screenh265;//1:enable 2:disable
-    volatile unsigned char g_record;//1:enable record  2:disable record
-}CMD_SCREENH265;
+    volatile unsigned char vframerate;
+    volatile unsigned char vfSensorStat;
+}CMD_VFRAMERATE;
 
 typedef struct{
-    volatile unsigned int framerate;
-}CMD_FRAMERATE;
+    volatile unsigned char vquality;
+    volatile unsigned char vqSensorStat;
+}CMD_VQUALITY;
 
 typedef struct{
-    volatile unsigned int datastream;
-}CMD_DATASTREAM;
+    volatile unsigned char color;
+}CMD_OSDCOLOR;
+
+typedef struct{
+    volatile unsigned char font;
+}CMD_OSDFONT;
+
+typedef struct{
+    volatile unsigned char size;
+}CMD_OSDSIZE;
+
+typedef struct{
+    volatile unsigned char ctrl;
+}CMD_OSDCTRL;
 
 typedef struct{
     unsigned char cmd_ID;
 	unsigned char param[PARAMLEN];
 }SENDST;
 
-
+typedef struct{
+	unsigned int AimW;
+	unsigned int AimH;
+}AcqBoxWH;
 
 /** universal status **/
 typedef struct

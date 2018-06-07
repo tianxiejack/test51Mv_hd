@@ -234,6 +234,11 @@ void* recv_msg(SENDST *RS422)
 				if(1 == imgID1){
 					pMsg->AxisPosX[0] = Rsectrk.ImgPixelX;
 					pMsg->AxisPosY[0] = Rsectrk.ImgPixelY;
+					if(pMsg->AxisPosX[0] + pMsg->crossAxisWidth > VIDEO_IMAGE_WIDTH_0)
+						pMsg->AxisPosX[0] = VIDEO_IMAGE_WIDTH_0 - pMsg->crossAxisWidth/2;
+					if(pMsg->AxisPosY[0] + pMsg->crossAxisHeight > VIDEO_IMAGE_HEIGHT_0)
+						pMsg->AxisPosY[0] = VIDEO_IMAGE_HEIGHT_0 - pMsg->crossAxisHeight/2;
+	
 					pMsg->AvtTrkStat =eTrk_mode_search;
 					app_ctrl_setTrkStat(pMsg);
 					app_ctrl_setAxisPos(pMsg);
@@ -241,10 +246,10 @@ void* recv_msg(SENDST *RS422)
 				else if(0 == imgID1){
 					pMsg->AvtTrkStat = eTrk_mode_sectrk;
 					pMsg->AvtPosX[0] = Rsectrk.ImgPixelX;
-					pMsg->AvtPosY[0] = Rsectrk.ImgPixelY;
-					printf("next aimx ,aimy (%d,%d)\n",pMsg->AvtPosX[0],pMsg->AvtPosY[0]);
+					pMsg->AvtPosY[0] = Rsectrk.ImgPixelY;				
+					//printf("next aimx ,aimy (%d,%d)\n",pMsg->AvtPosX[0],pMsg->AvtPosY[0]);
 					app_ctrl_setTrkStat(pMsg);
-					printf("opticAxisPosX,opticAxisPosY (%d,%d)\n",pMsg->opticAxisPosX[0],pMsg->opticAxisPosY[0]);
+					//printf("opticAxisPosX,opticAxisPosY (%d,%d)\n",pMsg->opticAxisPosX[0],pMsg->opticAxisPosY[0]);
 					pMsg->AxisPosX[0] = pMsg->opticAxisPosX[0];
 					pMsg->AxisPosY[0] = pMsg->opticAxisPosY[0];
 					app_ctrl_setAxisPos(pMsg);
