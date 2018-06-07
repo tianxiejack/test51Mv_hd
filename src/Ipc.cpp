@@ -334,6 +334,9 @@ void* recv_msg(SENDST *RS422)
 
 int send_msg(SENDST *RS422)
 {
+	if(msgextInCtrl == NULL)
+		return -1;
+		
 	unsigned char cmdID = 0;
 	unsigned char imgID1 = 0;
 	unsigned char imgID2 = 0;
@@ -341,7 +344,7 @@ int send_msg(SENDST *RS422)
 	unsigned char imgID4 = 0;
 	unsigned char imgID5 = 0;	
 	CMD_EXT pIStuts;
-	
+
 	memcpy(&pIStuts,msgextInCtrl,sizeof(CMD_EXT));
 
 	if(RS422==NULL)
