@@ -2289,19 +2289,19 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			pIStuts->MmtStat[1] = pInCmd->MmtStat[1];
 		}
 
-		int MTDStatus = (pIStuts->MmtStat[pIStuts->SensorStat]&0x01) ;
+		int MMTStatus = (pIStuts->MmtStat[pIStuts->SensorStat]&0x01) ;
 
 //		OSA_printf(" %d:%s set mtd enMask %x\n", OSA_getCurTimeInMsec(),__func__,m_mtd_ctrl.un_mtd.enMask);
 
-		if(MTDStatus)
-			dynamic_config(VP_CFG_MtdEnable, 1);
+		if(MMTStatus)
+			dynamic_config(VP_CFG_MmtEnable, 1);
 		else
-			dynamic_config(VP_CFG_MtdEnable, 0);
+			dynamic_config(VP_CFG_MmtEnable, 0);
 		//FOR DUMP FRAME
-		if(MTDStatus)
-			dynamic_config(CDisplayer::DS_CFG_MMTEnable, pIStuts->SensorStat, &MTDStatus);
+		if(MMTStatus)
+			dynamic_config(CDisplayer::DS_CFG_MMTEnable, pIStuts->SensorStat, &MMTStatus);
 		else
-			dynamic_config(CDisplayer::DS_CFG_MMTEnable, pIStuts->SensorStat, &MTDStatus);
+			dynamic_config(CDisplayer::DS_CFG_MMTEnable, pIStuts->SensorStat, &MMTStatus);
 	}
 
 	if(msgId == MSGID_EXT_INPUT_ENENHAN)
@@ -3124,8 +3124,8 @@ void CProcess::update_param_osd()
 	pIStuts->picpCrossAxisWidth	= gConfig_Osd_param.Picp_CROSS_AXIS_WIDTH;
 	pIStuts->picpCrossAxisHeight	= gConfig_Osd_param.Picp_CROSS_AXIS_HEIGHT;
 
-//printf("%s , pIStuts->AimW[0] = %d \n",__func__,pIStuts->AimW[0]);
-//printf("%s , pIStuts->AimH[0] = %d \n",__func__,pIStuts->AimH[0]);
+//OSA_printf("%s , pIStuts->AimW[0] = %d \n",__func__,pIStuts->AimW[0]);
+//OSA_printf("%s , pIStuts->AimH[0] = %d \n",__func__,pIStuts->AimH[0]);
 
 	return;
 }

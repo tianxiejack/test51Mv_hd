@@ -151,7 +151,7 @@ void* recv_msg(SENDST *RS422)
 				pMsg->AvtTrkStat =eTrk_mode_target;
 			else
 				pMsg->AvtTrkStat = eTrk_mode_acq;
-			
+			printf("avt status = %d \n",pMsg->AvtTrkStat);
 			if(pMsg->AvtTrkStat == eTrk_mode_acq)
 			{
 				pMsg->AxisPosX[0] = pMsg->opticAxisPosX[0];

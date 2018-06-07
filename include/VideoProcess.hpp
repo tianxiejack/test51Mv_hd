@@ -60,7 +60,7 @@ public:
 		VP_CFG_MainChId = CDisplayer::DS_CFG_Max,
 		VP_CFG_SubChId,
 		VP_CFG_TrkEnable,
-		VP_CFG_MtdEnable,
+		VP_CFG_MmtEnable,
 		VP_CFG_BlobEnable,
 		VP_CFG_SubPicpChId,
 		VP_CFG_MvDetect,
@@ -125,7 +125,7 @@ protected:
 
 	
 	static bool m_bTrack;
-	static bool m_bMtd;
+	static bool m_bMtd;			// old singla for mmt : multi target detect
 	static bool m_bBlobDetect;
 	static bool m_bMoveDetect;
 	static int m_iTrackStat;

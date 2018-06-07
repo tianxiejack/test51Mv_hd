@@ -382,13 +382,13 @@ void CVideoProcess::main_proc_func()
 				acqRect.axisY = m_ImageAxisy;
 
 				if(m_SensorStat == 0){
-					acqRect.rcWin.x = m_ImageAxisx - 900;
-					acqRect.rcWin.y = m_ImageAxisy -450;
+					acqRect.rcWin.x = VIDEO_IMAGE_WIDTH_0/2 - 900;
+					acqRect.rcWin.y = VIDEO_IMAGE_HEIGHT_0/2 -450;
 					acqRect.rcWin.width = 1800;
 					acqRect.rcWin.height = 900;
 				}
 				//OSA_printf("acq axis  x ,y :(%d,%d)\n",acqRect.axisX,acqRect.axisY);
-				//OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,acqRect.rcWin.width,acqRect.rcWin.height);
+OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,acqRect.rcWin.width,acqRect.rcWin.height);
 				memcpy(&preWarnRect,&acqRect.rcWin,sizeof(UTC_Rect));
 				
 				if(1)//(moveDetectRect)
@@ -727,7 +727,7 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 			m_rcTrack = *(UTC_RECT_float*)pPrm;
 		}
 		break;
-	case VP_CFG_MtdEnable:
+	case VP_CFG_MmtEnable:
 		m_bMtd = iPrm;
 		break;
 	case VP_CFG_BlobEnable:
