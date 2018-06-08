@@ -234,15 +234,15 @@ void* recv_msg(SENDST *RS422)
 				if(1 == imgID1){
 					pMsg->AxisPosX[pMsg->SensorStat] = Rsectrk.ImgPixelX;
 					pMsg->AxisPosY[pMsg->SensorStat] = Rsectrk.ImgPixelY;
-					if(pMsg->AxisPosX[pMsg->SensorStat] + pMsg->crossAxisWidth > VIDEO_IMAGE_WIDTH_0)
+					if(pMsg->AxisPosX[pMsg->SensorStat] + pMsg->crossAxisWidth/2 > VIDEO_IMAGE_WIDTH_0)
 						pMsg->AxisPosX[pMsg->SensorStat] = VIDEO_IMAGE_WIDTH_0 - pMsg->crossAxisWidth/2;
-					if(pMsg->AxisPosY[pMsg->SensorStat] + pMsg->crossAxisHeight > VIDEO_IMAGE_HEIGHT_0)
+					if(pMsg->AxisPosY[pMsg->SensorStat] + pMsg->crossAxisHeight/2 > VIDEO_IMAGE_HEIGHT_0)
 						pMsg->AxisPosY[pMsg->SensorStat] = VIDEO_IMAGE_HEIGHT_0 - pMsg->crossAxisHeight/2;
 
-					if(pMsg->AxisPosX[pMsg->SensorStat] <  pMsg->crossAxisWidth)
-						pMsg->AxisPosX[pMsg->SensorStat] = + pMsg->crossAxisWidth;
-					if(pMsg->AxisPosY[pMsg->SensorStat]  <  pMsg->crossAxisHeight)
-						pMsg->AxisPosY[pMsg->SensorStat] =  pMsg->crossAxisHeight;
+					if(pMsg->AxisPosX[pMsg->SensorStat] <  pMsg->crossAxisWidth/2)
+						pMsg->AxisPosX[pMsg->SensorStat] =  pMsg->crossAxisWidth/2;
+					if(pMsg->AxisPosY[pMsg->SensorStat]  <  pMsg->crossAxisHeight/2)
+						pMsg->AxisPosY[pMsg->SensorStat] =  pMsg->crossAxisHeight/2;
 	
 					pMsg->AvtTrkStat =eTrk_mode_search;
 					app_ctrl_setTrkStat(pMsg);

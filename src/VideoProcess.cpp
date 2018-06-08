@@ -382,10 +382,10 @@ void CVideoProcess::main_proc_func()
 				acqRect.axisY = m_ImageAxisy;
 
 				if(m_SensorStat == 0){
-					acqRect.rcWin.x = VIDEO_IMAGE_WIDTH_0/2 - 900;
-					acqRect.rcWin.y = VIDEO_IMAGE_HEIGHT_0/2 -450;
 					acqRect.rcWin.width = 1800;
 					acqRect.rcWin.height = 900;
+					acqRect.rcWin.x = VIDEO_IMAGE_WIDTH_0/2 - acqRect.rcWin.width/2;
+					acqRect.rcWin.y = VIDEO_IMAGE_HEIGHT_0/2 -acqRect.rcWin.height/2;
 				}
 				//OSA_printf("acq axis  x ,y :(%d,%d)\n",acqRect.axisX,acqRect.axisY);
 OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,acqRect.rcWin.width,acqRect.rcWin.height);
@@ -396,9 +396,13 @@ OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,
 							Point( preWarnRect.x, preWarnRect.y ),
 							Point( preWarnRect.x+preWarnRect.width, preWarnRect.y+preWarnRect.height),
 							cvScalar(0,0,255,255), 2, 8 );
-							
+
+				#if 0
+					Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
+				#else
+					Movedetect = UtcTrkPreAcqSR(m_track,image,acqRect,&MoveAcpSR);
+				#endif
 				
-				Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
 				if(Movedetect)
 				{
 					printf("%s,line:%d		xy(%d,%d),wh(%d,%d)\n",__func__,__LINE__,
@@ -1299,8 +1303,7 @@ int CVideoProcess::ReAcqTarget()
 		iRet = 0;
 		m_rcTrack = m_rcAcq;
 		m_bakChId = m_curChId;
-		m_iTrackLostCnt = 0;
-		
+		m_iTrackLostCnt = 0;	
 	}
 	
 	if(m_intervalFrame > 0){

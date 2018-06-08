@@ -1489,7 +1489,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 				extInCtrl->trkerry=(PiexltoWindowsyf(extInCtrl->TrkY ,extInCtrl->SensorStat));//*10;
 				//OSA_printf("transferafter ********* trkxy(%d,%d)\n",extInCtrl.trkerrx,extInCtrl.trkerry);
 				
-				if(0)//(extInCtrl.unitTrkStat == 2)
+				if(extInCtrl->TrkStat == 2)
 				{
 					extInCtrl->trkerrx=(PiexltoWindowsx(m_ImageAxisx ,extInCtrl->SensorStat));//*10;
 					extInCtrl->trkerry=(PiexltoWindowsy(m_ImageAxisy ,extInCtrl->SensorStat));//*10;
@@ -3148,7 +3148,7 @@ void CProcess::MSGAPI_update_alg(long lParam)
 {
 	plat->update_param_alg();
 }
-
+#define UTCPARM 0
 void CProcess::update_param_alg()
 {
 	UTC_DYN_PARAM dynamicParam;
@@ -3162,14 +3162,12 @@ void CProcess::update_param_alg()
 	else
 		dynamicParam.retry_acq_thred = 0.38;
 	
-	UtcSetDynParam(m_track, dynamicParam);
 	float up_factor;
 	if(gConfig_Alg_param.up_factor > 0.0001)
 		up_factor = gConfig_Alg_param.up_factor;
 	else
 		up_factor = 0.0125;
-	
-	UtcSetUpFactor(m_track, up_factor);
+
 	TRK_SECH_RESTRAINT resTraint;
 	if(gConfig_Alg_param.res_distance > 0)
 		resTraint.res_distance = gConfig_Alg_param.res_distance;
@@ -3181,32 +3179,26 @@ void CProcess::update_param_alg()
 	else
 		resTraint.res_area = 5000;
 	//printf("UtcSetRestraint: distance=%d area=%d \n", resTraint.res_distance, resTraint.res_area);
-	UtcSetRestraint(m_track, resTraint);
 
 	int gapframe;
 	if(gConfig_Alg_param.gapframe> 0)
 		gapframe = gConfig_Alg_param.gapframe;
 	else
 		gapframe = 10;
-	UtcSetIntervalFrame(m_track, gapframe);
 
    	bool enhEnable;
-	enhEnable = gConfig_Alg_param.enhEnable;		
-	UtcSetEnhance(m_track, enhEnable);
+	enhEnable = gConfig_Alg_param.enhEnable;	
 
 	float cliplimit;
 	if(gConfig_Alg_param.cliplimit> 0)
 		cliplimit = gConfig_Alg_param.cliplimit;
 	else
 		cliplimit = 4.0;
-	UtcSetEnhfClip(m_track, cliplimit);	
 
 	bool dictEnable;
 
 	dictEnable = gConfig_Alg_param.dictEnable;
 
-	UtcSetPredict(m_track, dictEnable);
-	
 	int moveX,moveY;
 	if(gConfig_Alg_param.moveX > 0)
 		moveX = gConfig_Alg_param.moveX;
@@ -3217,7 +3209,6 @@ void CProcess::update_param_alg()
 		moveY = gConfig_Alg_param.moveY;
 	else
 		moveY = 10;
-	UtcSetMvPixel(m_track,moveX,moveY);
 
 	int moveX2,moveY2;
 	if(gConfig_Alg_param.moveX2 > 0)
@@ -3230,9 +3221,6 @@ void CProcess::update_param_alg()
 	else
 		moveY2 = 20;
 
-	UtcSetMvPixel2(m_track,moveX2,moveY2);
-
-
 	int segPixelX,segPixelY;
 
 	if(gConfig_Alg_param.segPixelX > 0)
@@ -3243,7 +3231,6 @@ void CProcess::update_param_alg()
 		segPixelY = gConfig_Alg_param.segPixelY;
 	else
 		segPixelY = 450;
-	UtcSetSegPixelThred(m_track,segPixelX,segPixelY);
 
 	if(gConfig_Alg_param.algOsdRect_Enable == 1)
 		algOsdRect = true;
@@ -3262,46 +3249,36 @@ void CProcess::update_param_alg()
 		ScalerSmall = gConfig_Alg_param.ScalerSmall;
 	else
 		ScalerSmall = 64;
-	UtcSetSalientScaler(m_track, ScalerLarge, ScalerMid, ScalerSmall);
 
 	int Scatter;
 	if(gConfig_Alg_param.Scatter > 0)
 		Scatter = gConfig_Alg_param.Scatter;
 	else
 		Scatter = 10;
-	UtcSetSalientScatter(m_track, Scatter);
 
 	float ratio;
 	if(gConfig_Alg_param.ratio >0.1)
 		ratio = gConfig_Alg_param.ratio;
 	else
 		ratio = 1.0;
-	UtcSetSRAcqRatio(m_track, ratio);
 
 	bool FilterEnable;
 
 	FilterEnable = gConfig_Alg_param.FilterEnable;
-	UtcSetBlurFilter(m_track,FilterEnable);
 
 	bool BigSecEnable;
 	BigSecEnable = gConfig_Alg_param.BigSecEnable;
-	UtcSetBigSearch(m_track, BigSecEnable);
 
 	int SalientThred;
 	if(gConfig_Alg_param.SalientThred > 0)
 		SalientThred = gConfig_Alg_param.SalientThred;
 	else
 		SalientThred = 40;
-	UtcSetSalientThred(m_track,SalientThred);
-
 	bool ScalerEnable;
 	ScalerEnable = gConfig_Alg_param.ScalerEnable;
-	UtcSetMultScaler(m_track, ScalerEnable);
 
 	bool DynamicRatioEnable;
 	DynamicRatioEnable = ScalerEnable = gConfig_Alg_param.DynamicRatioEnable;
-	UtcSetDynamicRatio(m_track, DynamicRatioEnable);
-
 
 	UTC_SIZE acqSize;
 	if(gConfig_Alg_param.acqSize_width > 0)	
@@ -3312,8 +3289,7 @@ void CProcess::update_param_alg()
 		acqSize.height = gConfig_Alg_param.acqSize_height;
 	else
 		acqSize.height = 8;
-	UtcSetSRMinAcqSize(m_track,acqSize);
-
+	
 	if(gConfig_Alg_param.TrkAim43_Enable == 1)
 		TrkAim43 = true;
 	else
@@ -3321,70 +3297,58 @@ void CProcess::update_param_alg()
 
 	bool SceneMVEnable;
 	SceneMVEnable = gConfig_Alg_param.SceneMVEnable;
-	UtcSetSceneMV(m_track, SceneMVEnable);
 
 	bool BackTrackEnable;
 	BackTrackEnable = gConfig_Alg_param.BackTrackEnable;
-	UtcSetBackTrack(m_track, BackTrackEnable);
 
 	bool  bAveTrkPos;
 	bAveTrkPos = gConfig_Alg_param.bAveTrkPos;
-	UtcSetAveTrkPos(m_track, bAveTrkPos);
-
 
 	float fTau;
 	if(gConfig_Alg_param.fTau > 0.01)
 		fTau = gConfig_Alg_param.fTau;
 	else
 		fTau = 0.5;
-	UtcSetDetectftau(m_track, fTau);
 
 	int  buildFrms;
 	if(gConfig_Alg_param.buildFrms > 0)
 		buildFrms = gConfig_Alg_param.buildFrms;
 	else
 		buildFrms = 500;
-	UtcSetDetectBuildFrms(m_track, buildFrms);
 	
 	int  LostFrmThred;
 	if(gConfig_Alg_param.LostFrmThred > 0)
 		LostFrmThred = gConfig_Alg_param.LostFrmThred;
 	else
 		LostFrmThred = 30;
-	UtcSetLostFrmThred(m_track, LostFrmThred);
 
 	float  histMvThred;
 	if(gConfig_Alg_param.histMvThred > 0.01)
 		histMvThred = gConfig_Alg_param.histMvThred;
 	else
 		histMvThred = 1.0;
-	UtcSetHistMVThred(m_track, histMvThred);
 
 	int  detectFrms;
 	if(gConfig_Alg_param.detectFrms > 0)
 		detectFrms = gConfig_Alg_param.detectFrms;
 	else
 		detectFrms = 30;
-	UtcSetDetectFrmsThred(m_track, detectFrms);
 
 	int  stillFrms;
 	if(gConfig_Alg_param.stillFrms > 0)
 		stillFrms = gConfig_Alg_param.stillFrms;
 	else
 		stillFrms = 50;
-	UtcSetStillFrmsThred(m_track, stillFrms);
 
 	float  stillThred;
 	if(gConfig_Alg_param.stillThred> 0.01)
 		stillThred = gConfig_Alg_param.stillThred;
 	else
 		stillThred = 0.1;
-	UtcSetStillPixThred(m_track, stillThred);
 
 
 	bool  bKalmanFilter;
 	bKalmanFilter = gConfig_Alg_param.bKalmanFilter;
-	UtcSetKalmanFilter(m_track, bKalmanFilter);
 
 	float xMVThred, yMVThred;
 	if(gConfig_Alg_param.xMVThred> 0.01)
@@ -3395,7 +3359,6 @@ void CProcess::update_param_alg()
 		yMVThred = gConfig_Alg_param.yMVThred;
 	else
 		yMVThred = 2.0;
-	UtcSetKFMVThred(m_track, xMVThred, yMVThred);
 
 	float xStillThred, yStillThred;
 	if(gConfig_Alg_param.xStillThred> 0.01)
@@ -3406,21 +3369,18 @@ void CProcess::update_param_alg()
 		yStillThred= gConfig_Alg_param.yStillThred;
 	else
 		yStillThred = 0.3;
-	UtcSetKFStillThred(m_track, xStillThred, yStillThred);
 
 	float slopeThred;
 	if(gConfig_Alg_param.slopeThred> 0.01)
 		slopeThred = gConfig_Alg_param.slopeThred;
 	else
 		slopeThred = 0.08;
-	UtcSetKFSlopeThred(m_track, slopeThred);
 
 	float kalmanHistThred;
 	if(gConfig_Alg_param.kalmanHistThred> 0.01)
 		kalmanHistThred = gConfig_Alg_param.kalmanHistThred;
 	else
 		kalmanHistThred = 2.5;
-	UtcSetKFHistThred(m_track, kalmanHistThred);
 
 	float kalmanCoefQ, kalmanCoefR;
 	if(gConfig_Alg_param.kalmanCoefQ> 0.000001)
@@ -3431,7 +3391,6 @@ void CProcess::update_param_alg()
 		kalmanCoefR = gConfig_Alg_param.kalmanCoefR;
 	else
 		kalmanCoefR = 0.0025;
-	UtcSetKFCoefQR(m_track, kalmanCoefQ, kalmanCoefR);
 
 	bool  bSceneMVRecord;
 	bSceneMVRecord = 0;//gConfig_Alg_param.SceneMVEnable;
@@ -3439,9 +3398,7 @@ void CProcess::update_param_alg()
 	if(bSceneMVRecord == true)
 		wFileFlag = true;
 	
-	UtcSetSceneMVRecord(m_track, bSceneMVRecord);
 	
-	UtcSetRoiMaxWidth(m_track, 400);
 
 	UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
 
@@ -3497,6 +3454,50 @@ void CProcess::update_param_alg()
 	else
 		lumThred = 50;
 	m_MMTDObj.SetSRLumThred(lumThred);
+
+#if UTCPARM
+
+	UtcSetDynParam(m_track, dynamicParam);
+	UtcSetUpFactor(m_track, up_factor);
+	UtcSetRestraint(m_track, resTraint);
+	UtcSetIntervalFrame(m_track, gapframe);
+	UtcSetEnhance(m_track, enhEnable);
+	UtcSetEnhfClip(m_track, cliplimit);	
+	UtcSetPredict(m_track, dictEnable);
+	UtcSetMvPixel(m_track,moveX,moveY);
+	UtcSetMvPixel2(m_track,moveX2,moveY2);
+	UtcSetSegPixelThred(m_track,segPixelX,segPixelY);
+	UtcSetSalientScaler(m_track, ScalerLarge, ScalerMid, ScalerSmall);
+	UtcSetSalientScatter(m_track, Scatter);
+	UtcSetSRAcqRatio(m_track, ratio);
+	UtcSetBlurFilter(m_track,FilterEnable);
+	UtcSetBigSearch(m_track, BigSecEnable);
+	UtcSetSalientThred(m_track,SalientThred);
+	UtcSetMultScaler(m_track, ScalerEnable);
+	UtcSetDynamicRatio(m_track, DynamicRatioEnable);
+	UtcSetSRMinAcqSize(m_track,acqSize);
+	UtcSetSceneMV(m_track, SceneMVEnable);
+	UtcSetBackTrack(m_track, BackTrackEnable);
+	UtcSetAveTrkPos(m_track, bAveTrkPos);
+	UtcSetDetectftau(m_track, fTau);
+	UtcSetDetectBuildFrms(m_track, buildFrms);
+	UtcSetLostFrmThred(m_track, LostFrmThred);
+	UtcSetHistMVThred(m_track, histMvThred);
+	UtcSetDetectFrmsThred(m_track, detectFrms);
+	UtcSetStillFrmsThred(m_track, stillFrms);
+	UtcSetStillPixThred(m_track, stillThred);
+	UtcSetKalmanFilter(m_track, bKalmanFilter);
+	UtcSetKFMVThred(m_track, xMVThred, yMVThred);
+	UtcSetKFStillThred(m_track, xStillThred, yStillThred);
+	UtcSetKFSlopeThred(m_track, slopeThred);
+	UtcSetKFHistThred(m_track, kalmanHistThred);
+	UtcSetKFCoefQR(m_track, kalmanCoefQ, kalmanCoefR);
+	UtcSetSceneMVRecord(m_track, bSceneMVRecord);
+	UtcSetRoiMaxWidth(m_track, 400);
+
+#endif
+
+
 	
 	return ;
 }
