@@ -113,7 +113,6 @@ protected:
 	 static void MSGAPI_update_osd(long IParam);
 	 static void MSGAPI_update_alg(long IParam);
 	 static void MSGAPI_update_camera(long IParam);
-	 
 
 private:
 	ACK_EXT extOutAck;

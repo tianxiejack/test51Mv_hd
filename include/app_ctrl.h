@@ -52,6 +52,6 @@ void  app_ctrl_getSysData(CMD_EXT * exthandle);
 void app_ctrl_setMmtSelect(CMD_EXT * pIStuts,unsigned char index);
 
 void app_ctrl_setMtdStat(CMD_EXT * pInCmd);
-
+void app_ctrl_setAcqRect(CMD_EXT * pInCmd);
 
 #endif /* APP_CTRL_H_ */

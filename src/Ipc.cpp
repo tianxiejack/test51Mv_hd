@@ -330,6 +330,15 @@ void* recv_msg(SENDST *RS422)
 			
 			app_ctrl_setAxisPos(pMsg);
 			break;
+
+		case acqBox:
+			AcqBoxWH acqSize;	
+			memcpy(&acqSize,RS422->param,sizeof(acqSize));
+			pMsg->AcqRectW[pMsg->SensorStat] = acqSize.AimW;
+			pMsg->AcqRectH[pMsg->SensorStat]  = acqSize.AimH;
+			app_ctrl_setAcqRect(pMsg);
+			MSGAPI_msgsend(acqBox);
+			break;
 			
 		case exit_img:
 			MSGAPI_msgsend(exit_img);
@@ -391,12 +400,8 @@ int send_msg(SENDST *RS422)
 			break;
 			
 		case trkdoor:
-			RS422->param[1] = pIStuts.AvtTrkAimSize;	
-			printf("ack trkdoor  :  %d\n",RS422->param[0]);						
 			break;	
-
 		
-			
 		case posmove:
 			switch(pIStuts.aimRectMoveStepX)
 			{
