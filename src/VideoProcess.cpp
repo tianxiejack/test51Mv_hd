@@ -388,7 +388,7 @@ void CVideoProcess::main_proc_func()
 					acqRect.rcWin.y = VIDEO_IMAGE_HEIGHT_0/2 -acqRect.rcWin.height/2;
 				}
 				//OSA_printf("acq axis  x ,y :(%d,%d)\n",acqRect.axisX,acqRect.axisY);
-OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,acqRect.rcWin.width,acqRect.rcWin.height);
+//OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,acqRect.rcWin.width,acqRect.rcWin.height);
 				memcpy(&preWarnRect,&acqRect.rcWin,sizeof(UTC_Rect));
 				
 				if(1)//(moveDetectRect)
@@ -402,6 +402,12 @@ OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,
 				#else
 					Movedetect = UtcTrkPreAcqSR(m_track,image,acqRect,&MoveAcpSR);
 				#endif
+				if(Movedetect)
+				{
+					double value;
+					getImgRioDelta(image.data_u8,image.width ,image.height,MoveAcpSR,&value);
+					OSA_printf("%s:line  %d   double = %f \n",__func__,__LINE__,value);	
+				}
 				
 				if(Movedetect)
 				{
@@ -1576,6 +1582,35 @@ void CVideoProcess::NotifyFunc(void *context, int chId)
 #endif
 #endif
 
-
+void CVideoProcess::getImgRioDelta(unsigned char* pdata,int width ,int height,UTC_Rect rio,double * value)
+{
+	unsigned char * ptr = pdata;
+	int Iij;
+	//gray max ,gray min ,gray average,gray delta
+	double Imax = 0, Imin = 255, Iave = 0, Idelta = 0;
+	for(int i=rio.y;i<rio.height+rio.y;i++)
+	{
+		for(int j=rio.x;j<rio.width+rio.x;j++)
+		{
+			Iij	= ptr[i*width+j];
+			if(Iij > Imax)
+				Imax = Iij;
+			if(Iij < Imin)
+				Imin = Iij;
+			Iave = Iave + Iij;
+		}
+	}
+	Iave = Iave/(rio.width*rio.height);
+	for(int i=rio.y;i<rio.height+rio.y;i++)
+	{
+		for(int j=rio.x;j<rio.width+rio.x;j++)
+		{
+			Iij 	=  ptr[i*width+j];
+			Idelta = Idelta + (Iij-Iave)*(Iij-Iave);
+		}
+	}
+	Idelta = Idelta/(rio.width*rio.height);
+	*value = Idelta;
+}
 
 

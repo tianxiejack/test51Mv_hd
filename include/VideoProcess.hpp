@@ -176,7 +176,8 @@ protected:
 	static void keySpecial_event( int key, int x, int y);
 	static void visibility_event(int state);
 	static void close_event(void);
-
+	void getImgRioDelta(unsigned char* pdata,int width ,int height,UTC_Rect rio,double * value);
+	
 private:
 	OSA_MutexHndl m_mutex;
 //	unsigned char *m_grayMem[2];
