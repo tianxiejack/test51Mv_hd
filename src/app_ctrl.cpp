@@ -366,12 +366,20 @@ void app_ctrl_setAimSize(CMD_EXT * pInCmd)
 	if(msgextInCtrl==NULL)
 		return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
-	
-	if (pIStuts->AvtTrkAimSize != pInCmd->AvtTrkAimSize)
+	bool enable = 0;
+	if (pIStuts->AimH[pIStuts->validChId] != pInCmd->AimH[pInCmd->validChId])
 	{
-		pIStuts->AvtTrkAimSize = pInCmd->AvtTrkAimSize;
-		MSGDRIV_send(MSGID_EXT_INPUT_AIMSIZE, 0);
+		pIStuts->AimH[pIStuts->validChId] = pInCmd->AimH[pInCmd->validChId];
+		enable=1;
 	}
+	if (pIStuts->AimW[pIStuts->validChId] != pInCmd->AimW[pInCmd->validChId])
+	{
+		pIStuts->AimW[pIStuts->validChId] = pInCmd->AimW[pInCmd->validChId];
+		enable=1;
+	}
+	if(enable)
+		MSGDRIV_send(MSGID_EXT_INPUT_AIMSIZE, 0);
+
 	return ;
 }
 

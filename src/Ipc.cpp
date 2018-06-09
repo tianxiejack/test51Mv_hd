@@ -88,7 +88,6 @@ void* recv_msg(SENDST *RS422)
 	CMD_POSMOVE Rposmove;
 	CMD_POSMOVE Raxismove;
 	CMD_ZOOM Rzoom;
-
 	
 
 	if(RS422==NULL)
@@ -284,11 +283,10 @@ void* recv_msg(SENDST *RS422)
 			break;
 					
 		case trkdoor:	
-			memcpy(&Rtrkdoor,RS422->param,sizeof(Rtrkdoor));
-			printf("recv trkdoor : Rtrkdoor.AvtTrkAimSize : %d\n",Rtrkdoor.AvtTrkAimSize);
-			pMsg->AvtTrkAimSize = Rtrkdoor.AvtTrkAimSize;
-			if(pMsg->AvtTrkAimSize > 0x05)
-				pMsg->AvtTrkAimSize = 0x05;
+			AcqBoxWH aimsize;
+			memcpy(&aimsize,RS422->param,sizeof(aimsize));
+			pMsg->AimW[pMsg->SensorStat] = aimsize.AimW;
+			pMsg->AimH[pMsg->SensorStat]  = aimsize.AimH;
 			app_ctrl_setAimSize(pMsg);	
 			MSGAPI_msgsend(trkdoor);
 			break;	

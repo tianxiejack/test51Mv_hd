@@ -2400,8 +2400,8 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			UTC_RECT_float rc;
 			if(msgId == MSGID_EXT_INPUT_AIMSIZE)
 			{
-				pIStuts->unitAimW  = trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]; //pIStuts->AimW[pIStuts->SensorStat];//
-				pIStuts->unitAimH	  = trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]; //pIStuts->AimH[pIStuts->SensorStat];//
+				pIStuts->unitAimW  =  pIStuts->AimW[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][0]; //pIStuts->AimW[pIStuts->SensorStat];//
+				pIStuts->unitAimH	  =  pIStuts->AimW[pIStuts->SensorStat];//trkWinWH[pIStuts->SensorStat][pIStuts->AvtTrkAimSize][1]; //pIStuts->AimH[pIStuts->SensorStat];//
 
 				rc.x	=	pIStuts->unitAimX-pIStuts->unitAimW/2;
 				rc.y	=	pIStuts->unitAimY-pIStuts->unitAimH/2;
