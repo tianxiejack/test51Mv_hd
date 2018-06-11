@@ -77,6 +77,7 @@ void CVideoProcess::main_proc_func()
 	Point pt1,pt2,erspt1,erspt2,erspt3,erspt4;
 	static UTC_ACQ_param acqRect;
 	CMD_EXT tmpCmd={0};
+	double value;
 
 #if 1
 	
@@ -404,13 +405,15 @@ void CVideoProcess::main_proc_func()
 				#endif
 				if(Movedetect)
 				{
-					double value;
 					getImgRioDelta(image.data_u8,image.width ,image.height,MoveAcpSR,&value);
-					OSA_printf("%s:line  %d   double = %f \n",__func__,__LINE__,value);	
+					//OSA_printf("%s:line  %d   double = %f \n",__func__,__LINE__,value);	
+					if(value < 300.0)
+						Movedetect = 0;
 				}
 				
 				if(Movedetect)
 				{
+					OSA_printf("%s:line  %d   double = %f \n",__func__,__LINE__,value);	
 					printf("%s,line:%d		xy(%d,%d),wh(%d,%d)\n",__func__,__LINE__,
 						preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);	
 					preAcpSR.x = MoveAcpSR.x*m_display.m_imgOsd[1].cols/frame.cols;
