@@ -44,6 +44,7 @@ typedef enum
     osdfont,/*25*/
     osdsize,/*26*/
     osdctrl,/*27*/
+    acqBox,
     invalid
 }CMD_ID;
 
