@@ -1958,7 +1958,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		itmp = pIStuts->PicpSensorStat;//freeze change
 		dynamic_config(VP_CFG_SubChId, itmp, NULL);
 ////enhance 
-
 		if(pIStuts->ImgEnhStat[pIStuts->SensorStat^1] ==0x01)
 		{
 			int ENHStatus=0;
@@ -1970,8 +1969,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			}
 			ENHStatus=0;
 			dynamic_config(CDisplayer::DS_CFG_EnhEnable, pIStuts->SensorStat^1, &ENHStatus);
-			pIStuts->ImgEnhStat[pIStuts->SensorStat^1]=0;
-				
+			pIStuts->ImgEnhStat[pIStuts->SensorStat^1]=0;			
 		}
 		
 //sec track sync
@@ -1989,19 +1987,36 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 //sensor 1 rect
 
 		DS_Rect lay_rect;
-	#if 1
-		lay_rect.w =vdisWH[0][0]/6;
-		lay_rect.h = vdisWH[0][1]/6;
-		lay_rect.x = crossBak.x - lay_rect.w/2;//vdisWH[0][0]/2-lay_rect.w/2;
-		lay_rect.y = crossBak.y - lay_rect.h/2;//vdisWH[0][1]/2-lay_rect.h/2;
-	#endif
-		if(pIStuts->PicpSensorStat==1)
-		{
-			lay_rect.w = vcapWH[1][0]/3;
-			lay_rect.h = vcapWH[1][1]/3;
-			lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
-			lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;
+			lay_rect.w = vcapWH[0][0]/3;
+			lay_rect.h = vcapWH[0][1]/3;
+			lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] -lay_rect.w/2;
+			lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] -lay_rect.h/2;
+
+		if(pIStuts->ImgZoomStat[pIStuts->SensorStat] == 2){
+			lay_rect.w = vcapWH[0][0]/12;
+			lay_rect.h = vcapWH[0][1]/12;
+			lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] -lay_rect.w/2;
+			lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] -lay_rect.h/2;
 		}
+		else if(pIStuts->ImgZoomStat[pIStuts->SensorStat] == 4){
+			lay_rect.w = vcapWH[0][0]/18;
+			lay_rect.h = vcapWH[0][1]/18;
+			lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] -lay_rect.w/2;
+			lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] -lay_rect.h/2;
+		}
+		else if(pIStuts->ImgZoomStat[pIStuts->SensorStat] == 6){
+			lay_rect.w = vcapWH[0][0]/24;
+			lay_rect.h = vcapWH[0][1]/24;
+			lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] -lay_rect.w/2;
+			lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] -lay_rect.h/2;
+		}
+		else if(pIStuts->ImgZoomStat[pIStuts->SensorStat] == 8){
+			lay_rect.w = vcapWH[0][0]/30;
+			lay_rect.h = vcapWH[0][1]/30;
+			lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] - lay_rect.w/2;
+			lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] - lay_rect.h/2;
+		}
+
 		m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
 
 //picp position
@@ -2016,18 +2031,20 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 ///sensor zoom
 
-		if(pIStuts->ImgZoomStat[pIStuts->SensorStat])
+		if(0)//(pIStuts->ImgZoomStat[pIStuts->SensorStat])
 		{
+			/*
 			memset(&lay_rect, 0, sizeof(DS_Rect));
-			//if(pIStuts->SensorStat==0)//just tv zooom
+			if(pIStuts->SensorStat==0)//just tv zooom
 			{
 				lay_rect.w = vcapWH[pIStuts->SensorStat][0]/2;
 				lay_rect.h = vcapWH[pIStuts->SensorStat][1]/2;
 				lay_rect.x = vcapWH[pIStuts->SensorStat][0]/4;
 				lay_rect.y = vcapWH[pIStuts->SensorStat][1]/4;
 			}
+			*/
 			
-			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
+			//m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
 			if(pIStuts->PicpSensorStat==1)
 			{
 				lay_rect.w = vcapWH[1][0]/6;
@@ -2044,9 +2061,6 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				lay_rect.y = vcapWH[0][1]/2-lay_rect.h/2;
 				m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);
 			}
-
-
-			
 		}
 
 
@@ -2483,16 +2497,41 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				lay_rect.h = vdisWH[0][1];
 				lay_rect.x = 0;
 				lay_rect.y = 0;
-			}
-				
+			}		
 			
 			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 0, &lay_rect);
 			memset(&lay_rect, 0, sizeof(DS_Rect));
 			
-			lay_rect.w = vcapWH[1][0]/3;
-			lay_rect.h = vcapWH[1][1]/3;
-			lay_rect.x = vcapWH[1][0]/2-lay_rect.w/2;
-			lay_rect.y = vcapWH[1][1]/2-lay_rect.h/2;	
+			lay_rect.w = vcapWH[0][0]/6;
+			lay_rect.h = vcapWH[0][1]/6;
+			lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] - lay_rect.w/2;
+			lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] - lay_rect.h/2;
+			
+			if(pIStuts->ImgZoomStat[pIStuts->SensorStat] == 2){
+				lay_rect.w =vdisWH[0][0]/12;
+				lay_rect.h = vdisWH[0][1]/12;
+				lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] - lay_rect.w/2;
+				lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] - lay_rect.h/2;
+			}
+			if(pIStuts->ImgZoomStat[pIStuts->SensorStat] == 4){
+				lay_rect.w = vcapWH[0][0]/24;
+				lay_rect.h = vcapWH[0][1]/24;
+				lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] -lay_rect.w/2;
+				lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] -lay_rect.h/2;
+			}
+			else if(pIStuts->ImgZoomStat[pIStuts->SensorStat] == 6){
+				lay_rect.w = vcapWH[0][0]/48;
+				lay_rect.h = vcapWH[0][1]/48;
+				lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] -lay_rect.w/2;
+				lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] -lay_rect.h/2;
+			}
+			else if(pIStuts->ImgZoomStat[pIStuts->SensorStat] == 8){
+				lay_rect.w = vcapWH[0][0]/64;
+				lay_rect.h = vcapWH[0][1]/64;
+				lay_rect.x = pIStuts->AxisPosX[pIStuts->SensorStat] - lay_rect.w/2;
+				lay_rect.y = pIStuts->AxisPosY[pIStuts->SensorStat] - lay_rect.h/2;
+			}
+			
 			
 			m_display.dynamic_config(CDisplayer::DS_CFG_CropRect, 1, &lay_rect);			
 		}
@@ -3141,9 +3180,10 @@ void CProcess::update_param_osd()
 	pIStuts->picpCrossAxisWidth	= gConfig_Osd_param.Picp_CROSS_AXIS_WIDTH;
 	pIStuts->picpCrossAxisHeight	= gConfig_Osd_param.Picp_CROSS_AXIS_HEIGHT;
 
-//OSA_printf("%s , pIStuts->AimW[0] = %d \n",__func__,pIStuts->AimW[0]);
-//OSA_printf("%s , pIStuts->AimH[0] = %d \n",__func__,pIStuts->AimH[0]);
-
+	//OSA_printf("%s , pIStuts->AimW[0] = %d \n",__func__,pIStuts->AimW[0]);
+	//OSA_printf("%s , pIStuts->AimH[0] = %d \n",__func__,pIStuts->AimH[0]);
+	//OSA_printf("pIStuts->osdDrawShow 		= %d\n",pIStuts->osdDrawShow);
+	//OSA_printf("pIStuts->osdTextShow 		= %d\n",pIStuts->osdTextShow);
 	return;
 }
 

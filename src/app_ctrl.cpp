@@ -187,12 +187,14 @@ void app_ctrl_setMMT(CMD_EXT * pInCmd)
 	if(pInCmd->MMTTempStat != pIStuts->MMTTempStat)
 		pIStuts->MMTTempStat = pInCmd->MMTTempStat;
 
-	if (pIStuts->MmtStat[0] != pInCmd->MmtStat[0])
-	{     
-		pIStuts->MmtStat[0] = pInCmd->MmtStat[0];
-		if(pInCmd->AvtTrkStat != eTrk_mode_target)
-		{
-		    MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
+	if(pInCmd->AvtTrkStat != eTrk_mode_target)
+	{
+		if (pIStuts->MmtStat[0] != pInCmd->MmtStat[0])
+		{     
+			pIStuts->MmtStat[0] = pInCmd->MmtStat[0];
+			{
+			    MSGDRIV_send(MSGID_EXT_INPUT_ENMTD, 0);
+			}
 		}
 	}
 	return ;

@@ -359,6 +359,7 @@ int CDisplayer::dynamic_config(DS_CFG type, int iPrm, void* pPrm)
 	bool bEnable;
 	DS_Rect *rc;
 	DS_fRect *frc;
+
 	
 	if(type == DS_CFG_ChId){
 		if(iPrm >= m_renderCount || iPrm < 0)
