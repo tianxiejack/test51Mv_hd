@@ -689,13 +689,19 @@ void app_ctrl_setPicp(CMD_EXT * pInCmd)
 	if(msgextInCtrl==NULL)
 		return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
-
+	bool enable = false;
 	if(pIStuts->PicpSensorStat != pInCmd->PicpSensorStat)
 	{
 		pIStuts->PicpSensorStat = pInCmd->PicpSensorStat;
-		MSGDRIV_send(MSGID_EXT_INPUT_PICPCROP, 0);
+		enable = true;
 	}
-
+	if(pIStuts->ImgPicp[pIStuts->validChId] != pInCmd->ImgPicp[pIStuts->validChId])
+	{
+		pIStuts->ImgPicp[pIStuts->validChId] = pInCmd->ImgPicp[pIStuts->validChId];
+		enable = true;
+	}
+	if(enable)
+		MSGDRIV_send(MSGID_EXT_INPUT_PICPCROP, 0);
 	return ;
 }
 

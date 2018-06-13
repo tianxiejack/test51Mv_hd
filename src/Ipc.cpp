@@ -278,7 +278,7 @@ void* recv_msg(SENDST *RS422)
 			else 
 				pMsg->PicpSensorStat = 0xff;
 
-			pMsg->ImgPicp[pMsg->validChId] = Rpinp.PicpZoomStat;	
+			pMsg->ImgPicp[pMsg->validChId] = Rpinp.ImgPicp;	
 			app_ctrl_setPicp(pMsg);
 			break;
 					
