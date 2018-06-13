@@ -299,7 +299,7 @@ void* recv_msg(SENDST *RS422)
 			app_ctrl_setAimPos(pMsg);
 			break;	
 
-		case zoom:
+		case elecZoom:
 			memcpy(&Rzoom,RS422->param,sizeof(Rzoom));
 			printf("recv zoom : Rzoom.ImgZoomStat : %d\n",Rzoom.ImgZoomStat);
 			pMsg->ImgZoomStat[pMsg->SensorStat] = Rzoom.ImgZoomStat;

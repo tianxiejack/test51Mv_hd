@@ -334,7 +334,6 @@ void CVideoProcess::main_proc_func()
 					roi.y=0;
 					roi.width=frame_gray.cols;
 					roi.height=frame_gray.rows;
-
 				}
 
 			//m_MMTDObj.MMTDProcess(frame_gray, m_tgtBox, m_display.m_imgOsd[1], 0);
@@ -406,7 +405,7 @@ void CVideoProcess::main_proc_func()
 				if(Movedetect)
 				{
 					getImgRioDelta(image.data_u8,image.width ,image.height,MoveAcpSR,&value);
-					//OSA_printf("%s:line  %d   double = %f \n",__func__,__LINE__,value);	
+					OSA_printf("%s:line  %d   double = %f \n",__func__,__LINE__,value);	
 					if(value < 300.0)
 						Movedetect = 0;
 				}
@@ -732,7 +731,7 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 			rc.height 	=  60;//m_acqRectH;
 			rc.x 		=  m_ImageAxisx - rc.width/2;
 			rc.y 		=  m_ImageAxisy - rc.height/2;
-			m_rcTrack = rc;
+			m_rcTrack  = rc;
 			m_rcAcq 	  = rc;
 		}
 		else

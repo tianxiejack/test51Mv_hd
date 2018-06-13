@@ -1238,6 +1238,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 
 	osdindex=0;	//picp cross
 	{
+		#if 0
 		if(Osdflag[osdindex]==1)
 		{
 			recIn.x=crosspicpBak.x;
@@ -1296,6 +1297,7 @@ bool CProcess::OnProcess(int chId, Mat &frame)
 			crosspicpWHBak.y = recIn.height;
 
 		}
+		#endif
 	}
 #if __TRACK__
 	osdindex++;
