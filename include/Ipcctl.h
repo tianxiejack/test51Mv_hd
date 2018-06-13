@@ -7,6 +7,7 @@
 #define _PATH3_ "/"
 #define _PATH4_ "/"
 #define _PATH5_ "/"
+#define _PATH6_ "/"
 
 #define SHMEMSTATUSSIZE 200
 #define SHMEMFRAMESIZE 10485760
@@ -45,6 +46,7 @@ typedef enum
     osdsize,/*26*/
     osdctrl,/*27*/
     acqBox,
+    read_shm_lkosd,
     invalid
 }CMD_ID;
 
@@ -80,6 +82,7 @@ typedef enum
     IPC_SHA,
     IPC_OSD_SHA,
     IPC_UTCTRK_SHA,
+    IPC_LKOSD_SHA,
     IPC_SEM,
     IPC_MAX
 }IPC_MTYPE;
@@ -567,6 +570,42 @@ typedef struct {
 
 }UTCTRKSTATUS;
 
+typedef struct{
+	unsigned int distance:1;
+	unsigned int speed:1;
+	unsigned int focus:1;
+	unsigned int time:1;
+	unsigned int plantAgle:1;
+	unsigned int targetPost:1;
+	unsigned int navDuration:1;
+	unsigned int commuDuration:1;
+
+	unsigned int  workPlace:1;
+	unsigned int softVer:1;
+	unsigned int reserve0:6;
+	
+	unsigned int   focusFeedBack:16;
+	unsigned int   speedInfo:8;
+	unsigned int   yearInfo:8;
+	unsigned int   monthInfo:8;
+	unsigned int   dayInfo:8;
+	unsigned int   timeHours:8;
+	unsigned int  timeMini:8;
+	unsigned int  timeSecnd:8;
+	unsigned int plantTilt1:8;
+	unsigned int plantTilt2:8;
+	unsigned int plantPan:16;
+	unsigned int lgitudeAgl:8;
+	unsigned int lgitudeMini:8;
+	unsigned int lgitudeSencd:8;
+  	unsigned int latitudeAgl:8;
+	unsigned int latitudeMini:8;
+	unsigned int latitudeSencd:8;
+	unsigned int distanceInfo:16;
+	unsigned int navDuratInfo1:8;
+	unsigned int navDuratInfo2:8;
+	unsigned int commuDuratInfo:16;
+}LKOSDSTATUS;
 
 
 typedef struct out_frame_angle
@@ -642,6 +681,7 @@ IMGSTATUS *ipc_getimgstatus_p();
 IMGSTATUS ipc_getimgstatus();
 OSDSTATUS *ipc_getosdstatus_p();
 UTCTRKSTATUS *ipc_getutstatus_p();
+LKOSDSTATUS *ipc_getlkosdstatus_p();
 
 
 #endif
