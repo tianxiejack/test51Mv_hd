@@ -2407,11 +2407,12 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			pIStuts->aimRectMoveStepX = pInCmd->aimRectMoveStepX;
 			pIStuts->aimRectMoveStepY= pInCmd->aimRectMoveStepY;
 		}
-
+		/*
 		if(pIStuts->AvtTrkAimSize<0||pIStuts->AvtTrkAimSize>4)
 		{
 			pIStuts->AvtTrkAimSize=2;
 		}
+		*/
 		if(pIStuts->AvtTrkStat)
 		{
 			UTC_RECT_float rc;
@@ -2445,6 +2446,9 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 				rc.y = pIStuts->unitAimY-pIStuts->unitAimH/2  + pIStuts->aimRectMoveStepY;
 				printf("333rc.x,rc.y : (%d,%d)\n",rc.x,rc.y);
 
+				pIStuts->aimRectMoveStepX = 0;
+				pIStuts->aimRectMoveStepY = 0;
+				
 			}
 			m_intervalFrame=1;
 			m_rcAcq=rc;

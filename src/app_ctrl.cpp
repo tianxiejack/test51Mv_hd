@@ -76,7 +76,7 @@ void app_ctrl_setAimPos(CMD_EXT * pInCmd)
 		return ;
 	CMD_EXT *pIStuts = msgextInCtrl;
 
-	if (pIStuts->aimRectMoveStepX != pInCmd->aimRectMoveStepX ||pIStuts->aimRectMoveStepY!= pInCmd->aimRectMoveStepY)
+	if (pIStuts->aimRectMoveStepX != pInCmd->aimRectMoveStepX ||pIStuts->aimRectMoveStepY != pInCmd->aimRectMoveStepY)
 	{
 		pIStuts->aimRectMoveStepX = pInCmd->aimRectMoveStepX;
 		pIStuts->aimRectMoveStepY = pInCmd->aimRectMoveStepY;
