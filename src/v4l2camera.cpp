@@ -47,14 +47,14 @@ Id(/*devId*/0)
 			bufferCount 	= 8;
 			break;
 		case 1:
-			imgformat 	= V4L2_PIX_FMT_GREY;
-			imgwidth  	= INPUT_IMAGE_FIRWIDTH;
-			imgheight 	= INPUT_IMAGE_FIRHEIGHT;
-			imgstride 	= imgwidth;
-			bufSize 		= imgwidth * imgheight;
-			imgtype     	= CV_8UC1;
+			imgformat 	= V4L2_PIX_FMT_YUYV;
+			imgwidth  	= INPUT_IMAGE_WIDTH;
+			imgheight 	= INPUT_IMAGE_HEIGHT;
+			imgstride 	= imgwidth*2;
+			bufSize 		= imgwidth * imgheight * 2;
+			imgtype     	= CV_8UC2;
 			memType 	= MEMORY_LOCKED;
-			bufferCount =8;
+			bufferCount  = 8;
 			break;
 		case 2:
 			imgformat 	= V4L2_PIX_FMT_GREY;

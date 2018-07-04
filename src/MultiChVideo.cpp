@@ -36,7 +36,7 @@ static int frameflag = 0;
 int MultiChVideo::creat()
 {
 
-	VCap[0] = new v4l2_camera(0);
+	VCap[0] = new v4l2_camera(1);
 	VCap[0]->creat();
 	
 	return 0;
