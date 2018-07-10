@@ -30,6 +30,20 @@ static int count=0;
 int ScalerLarge,ScalerMid,ScalerSmall;
 
 
+#if __MV__DETECT_VIBE__
+
+#include <cstddef>
+#include <ctime>
+#include <iostream>
+#include "ViBe.h"
+#include "distances/Manhattan.h"
+#include "system/types.h"
+using namespace ViBe;
+ViBeSequential<1, Manhattan<1> > * vibe;
+
+#endif
+
+
 int CVideoProcess::MAIN_threadCreate(void)
 {
 	int iRet = OSA_SOK;
@@ -72,12 +86,17 @@ void CVideoProcess::main_proc_func()
 	float speedx,speedy;
 	float optValue;
 	UTC_Rect AcqRect;
-	
+
 	static bool Movedetect=false;
 	Point pt1,pt2,erspt1,erspt2,erspt3,erspt4;
 	static UTC_ACQ_param acqRect;
 	CMD_EXT tmpCmd={0};
 	double value;
+
+#if __MV__DETECT_VIBE__
+	static bool firstFrame = true;
+	
+#endif
 
 #if 1
 	
@@ -355,7 +374,7 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bMoveDetect)
 		{
-			#if 1
+			#if 0
 
 				IMG_MAT image;
 				image.data_u8 = frame_gray.data;
@@ -464,10 +483,34 @@ void CVideoProcess::main_proc_func()
 
 		#if __MOVE_DETECT__
 			#if __DETECT_SWITCH_Z__
+				float x = 1920.0/960.0;
+				float y = 1080.0/540.0;
+				m_pMovDetector->setROIScalXY(x,y,0);
+				cv::Mat gray;
+				cv::resize(frame_gray,gray, cv::Size(960, 540));
+				
 				if(m_pMovDetector != NULL)
-					m_pMovDetector->setFrame(frame_gray,0);	//chId
+					m_pMovDetector->setFrame(gray,0);	//chId
 			#else
-				mvDetect(1,frame_gray.data,frame_gray.cols,frame_gray.rows,boundRect);
+				#if __MV__DETECT_VIBE__
+				cv::resize(frame_gray,frame_gray, cv::Size(640, 512));
+				if (firstFrame) {
+					  /* Instantiation of ViBe. */
+					  vibe = new ViBeSequential<1, Manhattan<1> > (frame_gray.rows, frame_gray.cols, frame_gray.data);
+					  firstFrame = false;
+					}
+				
+				cv::Mat segmentationMap(frame_gray.size(), CV_8UC1);
+				unsigned ttnode = OSA_getCurTimeInMsec();
+				vibe->segmentation(frame_gray.data, segmentationMap.data);
+				printf("delta1  = %d \n",OSA_getCurTimeInMsec() - ttnode);
+	    		vibe->update(frame_gray.data, segmentationMap.data);
+				printf("delta2  = %d \n",OSA_getCurTimeInMsec() - ttnode);
+				
+				imshow("Input video", frame_gray);
+				imshow("Segmentation by ViBe", segmentationMap);
+				waitKey(1);
+				#endif
 			#endif
 		#endif
 		}
@@ -530,6 +573,10 @@ CVideoProcess::CVideoProcess()
 	#if __MOVE_DETECT__
 		#if __DETECT_SWITCH_Z__
 			m_pMovDetector	=NULL;
+		#else
+			
+		 vibe = NULL;
+		
 		#endif
 	#endif
 	
@@ -570,7 +617,8 @@ int CVideoProcess::creat()
 			m_pMovDetector = MvDetector_Create();
 		OSA_assert(m_pMovDetector != NULL);
 	#else
-		createDetect(1,1920,1080);
+
+	
 	#endif
 #endif
 	return 0;
@@ -597,7 +645,7 @@ int CVideoProcess::destroy()
 	#if __DETECT_SWITCH_Z__
 		DeInitMvDetect();
 	#else
-		exitDetect();
+		
 	#endif
 #endif
 
@@ -1552,15 +1600,15 @@ void	CVideoProcess::initMvDetect()
 	
 	std::vector<cv::Point> polyWarnRoi ;
 	polyWarnRoi.resize(4);
-	polyWarnRoi[0]	= cv::Point(100,100);
-	polyWarnRoi[1]	= cv::Point(1820,100);
-	polyWarnRoi[2]	= cv::Point(1820,980);
-	polyWarnRoi[3]	= cv::Point(100,980);
+	polyWarnRoi[0]	= cv::Point(0,0);
+	polyWarnRoi[1]	= cv::Point(1920,0);
+	polyWarnRoi[2]	= cv::Point(1920,1080);
+	polyWarnRoi[3]	= cv::Point(0,1080);
 	for(i=0; i<DETECTOR_NUM; i++)
 	{
 		m_pMovDetector->setWarningRoi(polyWarnRoi,	i);
 		m_pMovDetector->setDrawOSD(m_dccv, i);
-		m_pMovDetector->enableSelfDraw(true, i);
+		m_pMovDetector->enableSelfDraw(false, i);
 		m_pMovDetector->setWarnMode(WARN_MOVEDETECT_MODE, i);
 	} 
 }
@@ -1575,11 +1623,11 @@ void CVideoProcess::NotifyFunc(void *context, int chId)
 {
 	//int num;
 	CVideoProcess *pParent = (CVideoProcess*)context;
-	pParent->m_display.m_bOsd = true;
-
+	//pParent->m_display.m_bOsd = true;
+	
 	pThis->m_pMovDetector->getMoveTarget(pThis->detect_vect,0);
 
-	pParent->m_display.UpDateOsd(1);
+	//pParent->m_display.UpDateOsd(1);
 }
 #endif
 #endif

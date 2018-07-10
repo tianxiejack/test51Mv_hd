@@ -1663,11 +1663,11 @@ osdindex++;	//acqRect
 osdindex++;
 {
 	if(Osdflag[osdindex] == 1)
-		DrawScaleLine(m_dccv,0);
+		//DrawScaleLine(m_dccv,0);
 
 	if(1)
 	{
-		DrawScaleLine(m_dccv,2);
+		//DrawScaleLine(m_dccv,2);
 		Osdflag[osdindex]=1;
 	}
 }
@@ -1688,42 +1688,25 @@ osdindex++;
 		}
 		if(m_bMoveDetect)
 		{
-			detect_num = detect_vect.size();		
+			detect_bak = detect_vect;
+			detect_num = detect_bak.size();		
 			DrawMoveDetect = 1;
 			for(i =0;i<detect_num;i++)
 			{
-				if(detect_vect[i].targetRect.width > 20 && detect_vect[i].targetRect.height > 20 )
+				//if(detect_vect[i].targetRect.width > 20 && detect_vect[i].targetRect.height > 20 )
 				{
-					DrawRect(m_dccv, detect_vect[i].targetRect,2);
-					random.x = detect_vect[i].targetRect.x;
-					random.y = detect_vect[i].targetRect.y;
-					random.h = detect_vect[i].targetRect.height;
-					random.w =detect_vect[i].targetRect.width;			
+					DrawRect(m_dccv, detect_bak[i].targetRect,3);
 				}
 			}		
-			detect_bak = detect_vect;
 			Osdflag[osdindex]=1;
 		}
 		else
 			DrawMoveDetect = 0 ;
 	}
 #else
-	osdindex++;
-	{
-		if(Osdflag[osdindex]==1){
-			for(i=0;i<6;i++){	
-				DrawRect(m_dccv, backRect[i],0);
-			}			
-			Osdflag[osdindex]=0;
-		}
-		if(m_bMoveDetect){
-			for(i=0;i<6;i++){	
-				DrawRect(m_dccv, boundRect[i],4);
-				backRect[i] = boundRect[i];
-			}			
-			Osdflag[osdindex]=1;
-		}		
-	}
+
+
+
 #endif	
 #endif
 	prisensorstatus=extInCtrl->SensorStat;
@@ -3447,7 +3430,7 @@ void CProcess::update_param_alg()
 	
 	
 
-	UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
+	//UtcSetPLT_BS(m_track, tPLT_WRK, BoreSight_Mid);
 
 
 

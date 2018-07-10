@@ -14,6 +14,8 @@
 #include "MMTD.h"
 #include "mvdetectInterface.hpp"
 
+
+
 typedef struct _main_thr_obj_cxt{
 	bool bTrack;
 	bool bMtd;
@@ -93,6 +95,7 @@ public:
 	int m_acqRectH;
 
 public :
+
 
 	//CMSTracker trackInit;
 	int detState ;
@@ -226,9 +229,8 @@ protected: //track
 		std::vector<TRK_RECT_INFO> detect_vect;
 		std::vector<TRK_RECT_INFO> detect_bak;
 	#else
-		protected:
-		cv::Rect boundRect[6];
-		cv::Rect backRect[6];
+
+	
 	#endif
 #endif
 
