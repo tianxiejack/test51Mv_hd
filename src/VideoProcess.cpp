@@ -483,14 +483,14 @@ void CVideoProcess::main_proc_func()
 
 		#if __MOVE_DETECT__
 			#if __DETECT_SWITCH_Z__
-				float x = 1920.0/960.0;
-				float y = 1080.0/540.0;
+				float x = 1920.0/640.0;
+				float y = 1080.0/480.0;
 				m_pMovDetector->setROIScalXY(x,y,0);
 				cv::Mat gray;
-				cv::resize(frame_gray,gray, cv::Size(960, 540));
+				cv::resize(frame_gray,gray, cv::Size(640, 480));
 				
 				if(m_pMovDetector != NULL)
-					m_pMovDetector->setFrame(gray,0);	//chId
+					m_pMovDetector->setFrame(gray,300,0);	//chId
 			#else
 				#if __MV__DETECT_VIBE__
 				cv::resize(frame_gray,frame_gray, cv::Size(640, 512));

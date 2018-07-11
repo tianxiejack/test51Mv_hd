@@ -15,7 +15,7 @@ public:
 public:
 	virtual	int	init(LPNOTIFYFUNC	notifyFunc, void *context){return 1;};
 	virtual	int destroy(){return 1;};
-	virtual	void	setFrame(cv::Mat	src, 	int chId = 0){};//杈撳叆瑙嗛甯?
+	virtual	void	setFrame(cv::Mat	src, int inputArea,	int chId = 0){};//杈撳叆瑙嗛甯?
 	virtual	void	enableSelfDraw(bool	bEnable, int chId = 0){};
 	virtual	void   setROIScalXY(float scaleX = 1.0, float scaleY = 1.0, int chId = 0){};//璁剧疆缂╂斁绯绘暟锛岄粯璁や负1.0
 
