@@ -1686,10 +1686,10 @@ osdindex++;
 			}			
 			Osdflag[osdindex]=0;
 		}
-		if(m_bMoveDetect)
+		if(1)
 		{
 			detect_bak = detect_vect;
-			detect_num = detect_bak.size();		
+			detect_num = detect_bak.size();	
 			DrawMoveDetect = 1;
 			for(i =0;i<detect_num;i++)
 			{
@@ -2723,16 +2723,15 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		if(Mtdstatus)
 		{
 			dynamic_config(VP_CFG_MvDetect, 1,NULL);
-			//tmpCmd.MtdState[pIStuts->SensorStat] = 1;
-			//app_ctrl_setMtdStat(&tmpCmd);
 		}
 		else
 		{
 			dynamic_config(VP_CFG_MvDetect, 0,NULL);
-			//tmpCmd.MtdState[pIStuts->SensorStat] = 0;
-			//app_ctrl_setMtdStat(&tmpCmd);
-			if(m_pMovDetector != NULL)
+
+			if(m_pMovDetector != NULL){
 				m_pMovDetector->mvPause();
+				pThis->detect_vect.clear();
+			}
 		}
 	}
 	

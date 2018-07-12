@@ -221,7 +221,7 @@ protected: //track
 
 #if __MOVE_DETECT__
 	#if __DETECT_SWITCH_Z__
-		protected:
+		public:
 		CMvDectInterface *m_pMovDetector;
 		void	initMvDetect();
 		void	DeInitMvDetect();
