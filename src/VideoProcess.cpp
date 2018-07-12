@@ -485,7 +485,7 @@ void CVideoProcess::main_proc_func()
 			#if __DETECT_SWITCH_Z__
 				
 				if(m_pMovDetector != NULL)
-					m_pMovDetector->setFrame(frame_gray,frame_gray.cols,frame_gray.rows,2,0,8);
+					m_pMovDetector->setFrame(frame_gray,frame_gray.cols,frame_gray.rows,5,0,8,35);
 					//m_pMovDetector->setFrame(frame_gray,8,0);
 			#else
 				#if __MV__DETECT_VIBE__
