@@ -1,3 +1,9 @@
+/*
+ * mvdectInterface.h
+ *
+ *  Created on: 2017年9月4日
+ *      Author: cr
+ */
 
 #ifndef MVDECTINTERFACE_H_
 #define MVDECTINTERFACE_H_
@@ -15,21 +21,21 @@ public:
 public:
 	virtual	int	init(LPNOTIFYFUNC	notifyFunc, void *context){return 1;};
 	virtual	int destroy(){return 1;};
-	virtual	void	setFrame(cv::Mat	src, int inputArea,	int chId = 0){};//杈撳叆瑙嗛甯?
+	virtual	void	setFrame(cv::Mat	src ,int srcwidth , int srcheight ,int accuracy,int chId,int inputArea){};//输入视频帧
 	virtual	void	enableSelfDraw(bool	bEnable, int chId = 0){};
-	virtual	void   setROIScalXY(float scaleX = 1.0, float scaleY = 1.0, int chId = 0){};//璁剧疆缂╂斁绯绘暟锛岄粯璁や负1.0
+	virtual	void   setROIScalXY(float scaleX = 1.0, float scaleY = 1.0, int chId = 0){};//设置缩放系数，默认为1.0
 
-	virtual	void	clearWarningRoi(int chId	= 0){};//娓呴櫎璀︽垝鍖?
-	virtual	void	setWarningRoi(std::vector<cv::Point2i>	warnRoi,	int chId	= 0){};//璁剧疆缂╂斁鍓嶇殑璀︽垝鍖哄煙
+	virtual	void	clearWarningRoi(int chId	= 0){};//清除警戒区
+	virtual	void	setWarningRoi(std::vector<cv::Point2i>	warnRoi,	int chId	= 0){};//设置缩放前的警戒区域
 	virtual	void	setTrkThred(TRK_THRED		trkThred,	int chId	= 0){};
 	virtual	void	setDrawOSD(cv::Mat	dispOSD, int chId = 0){};
-	virtual	void	setWarnMode(WARN_MODE	warnMode,	int chId	= 0){};//璁剧疆璀︽垝妯″紡
+	virtual	void	setWarnMode(WARN_MODE	warnMode,	int chId	= 0){};//设置警戒模式
 
-	virtual	void	getLostTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//涓㈠け鐩爣
-	virtual	void	getInvadeTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//鍏ヤ镜鐩爣
-	virtual	void	getMoveTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//绉诲姩鐩爣
-	virtual	void	getBoundTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//瓒婄晫鐩爣
-	virtual	void	getWarnTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//璀︽垝鍖哄懆杈规墍鏈夌洰鏍?
+	virtual	void	getLostTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//丢失目标
+	virtual	void	getInvadeTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//入侵目标
+	virtual	void	getMoveTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//移动目标
+	virtual	void	getBoundTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//越界目标
+	virtual	void	getWarnTarget(std::vector<TRK_RECT_INFO>	&resTarget,	int chId	= 0){};//警戒区周边所有目标
 
 };
 

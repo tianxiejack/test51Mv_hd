@@ -483,14 +483,10 @@ void CVideoProcess::main_proc_func()
 
 		#if __MOVE_DETECT__
 			#if __DETECT_SWITCH_Z__
-				float x = 1920.0/640.0;
-				float y = 1080.0/480.0;
-				m_pMovDetector->setROIScalXY(x,y,0);
-				cv::Mat gray;
-				cv::resize(frame_gray,gray, cv::Size(640, 480));
 				
 				if(m_pMovDetector != NULL)
-					m_pMovDetector->setFrame(gray,300,0);	//chId
+					m_pMovDetector->setFrame(frame_gray,frame_gray.cols,frame_gray.rows,2,0,8);
+					//m_pMovDetector->setFrame(frame_gray,8,0);
 			#else
 				#if __MV__DETECT_VIBE__
 				cv::resize(frame_gray,frame_gray, cv::Size(640, 512));
@@ -1590,7 +1586,7 @@ int CVideoProcess::process_mtd(ALGMTD_HANDLE pChPrm, Mat frame_gray, Mat frame_d
 
 #if __MOVE_DETECT__
 #if __DETECT_SWITCH_Z__
-void	CVideoProcess::initMvDetect()
+void CVideoProcess::initMvDetect()
 {
 	int	i;
 	OSA_printf("%s:mvDetect start ", __func__);
@@ -1613,7 +1609,7 @@ void	CVideoProcess::initMvDetect()
 	} 
 }
 
-void	CVideoProcess::DeInitMvDetect()
+void CVideoProcess::DeInitMvDetect()
 {
 	if(m_pMovDetector != NULL)
 		m_pMovDetector->destroy();
@@ -1621,13 +1617,8 @@ void	CVideoProcess::DeInitMvDetect()
 
 void CVideoProcess::NotifyFunc(void *context, int chId)
 {
-	//int num;
-	CVideoProcess *pParent = (CVideoProcess*)context;
-	//pParent->m_display.m_bOsd = true;
-	
+	CVideoProcess *pParent = (CVideoProcess*)context;	
 	pThis->m_pMovDetector->getMoveTarget(pThis->detect_vect,0);
-
-	//pParent->m_display.UpDateOsd(1);
 }
 #endif
 #endif
