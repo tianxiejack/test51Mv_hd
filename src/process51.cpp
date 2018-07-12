@@ -2725,14 +2725,14 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 			dynamic_config(VP_CFG_MvDetect, 1,NULL);
 			//tmpCmd.MtdState[pIStuts->SensorStat] = 1;
 			//app_ctrl_setMtdStat(&tmpCmd);
-			//if(m_pMovDetector != NULL)
-			//		m_pMovDetector->mvPause();
 		}
 		else
 		{
 			dynamic_config(VP_CFG_MvDetect, 0,NULL);
 			//tmpCmd.MtdState[pIStuts->SensorStat] = 0;
 			//app_ctrl_setMtdStat(&tmpCmd);
+			if(m_pMovDetector != NULL)
+				m_pMovDetector->mvPause();
 		}
 	}
 	

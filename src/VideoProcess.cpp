@@ -476,7 +476,6 @@ void CVideoProcess::main_proc_func()
 							FONT_HERSHEY_TRIPLEX,0.8,
 							cvScalar(255,255,0,255), 1
 							);
-			
 				}
 				#endif
 #endif
@@ -485,8 +484,7 @@ void CVideoProcess::main_proc_func()
 			#if __DETECT_SWITCH_Z__
 				
 				if(m_pMovDetector != NULL)
-					m_pMovDetector->setFrame(frame_gray,frame_gray.cols,frame_gray.rows,5,0,8,35);
-					//m_pMovDetector->setFrame(frame_gray,8,0);
+					m_pMovDetector->setFrame(frame_gray,frame_gray.cols,frame_gray.rows,4,0,8,35);
 			#else
 				#if __MV__DETECT_VIBE__
 				cv::resize(frame_gray,frame_gray, cv::Size(640, 512));
