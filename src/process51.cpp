@@ -57,8 +57,8 @@ CProcess::CProcess()
 	pIStuts->opticAxisPosX[1]   = VIDEO_IMAGE_WIDTH_1/2;
 	pIStuts->opticAxisPosY[1]   = VIDEO_IMAGE_HEIGHT_1/2;
 	
-	pIStuts->unitAimW 	= 	AIM_WIDTH;
-	pIStuts->unitAimH 	= 	AIM_HEIGHT;
+	pIStuts->unitAimW 		= 	AIM_WIDTH;
+	pIStuts->unitAimH 		= 	AIM_HEIGHT;
 	pIStuts->unitAimX		=	VIDEO_IMAGE_WIDTH_0/2;
 	pIStuts->unitAimY		=	VIDEO_IMAGE_HEIGHT_0/2;
 	pIStuts->SensorStat 	= pIStuts->SensorStatBegin;
@@ -1686,17 +1686,14 @@ osdindex++;
 			}			
 			Osdflag[osdindex]=0;
 		}
-		if(1)
+		if(m_bMoveDetect)
 		{
-			detect_bak = detect_vect;
+			detect_bak.assign(detect_vect.begin(), detect_vect.end());
 			detect_num = detect_bak.size();	
 			DrawMoveDetect = 1;
 			for(i =0;i<detect_num;i++)
 			{
-				//if(detect_vect[i].targetRect.width > 20 && detect_vect[i].targetRect.height > 20 )
-				{
-					DrawRect(m_dccv, detect_bak[i].targetRect,3);
-				}
+				DrawRect(m_dccv, detect_bak[i].targetRect,3);
 			}		
 			Osdflag[osdindex]=1;
 		}
@@ -2730,7 +2727,7 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 
 			if(m_pMovDetector != NULL){
 				m_pMovDetector->mvPause();
-				pThis->detect_vect.clear();
+				//pThis->detect_vect.clear();
 			}
 		}
 	}

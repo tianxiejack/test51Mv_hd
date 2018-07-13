@@ -484,7 +484,7 @@ void CVideoProcess::main_proc_func()
 			#if __DETECT_SWITCH_Z__
 
 				if(m_pMovDetector != NULL)
-					m_pMovDetector->setFrame(frame_gray,frame_gray.cols,frame_gray.rows,5,0,8,35);
+					m_pMovDetector->setFrame(frame_gray,frame_gray.cols,frame_gray.rows,0,2,8,35);
 			#else
 				#if __MV__DETECT_VIBE__
 				cv::resize(frame_gray,frame_gray, cv::Size(640, 512));
@@ -1601,8 +1601,8 @@ void CVideoProcess::initMvDetect()
 	for(i=0; i<DETECTOR_NUM; i++)
 	{
 		m_pMovDetector->setWarningRoi(polyWarnRoi,	i);
-		m_pMovDetector->setDrawOSD(m_dccv, i);
-		m_pMovDetector->enableSelfDraw(false, i);
+		//m_pMovDetector->setDrawOSD(m_dccv, i);
+		//m_pMovDetector->enableSelfDraw(false, i);
 		m_pMovDetector->setWarnMode(WARN_MOVEDETECT_MODE, i);
 	} 
 }
@@ -1616,8 +1616,9 @@ void CVideoProcess::DeInitMvDetect()
 void CVideoProcess::NotifyFunc(void *context, int chId)
 {
 	CVideoProcess *pParent = (CVideoProcess*)context;	
-	if(pParent->m_bMoveDetect)
-		pThis->m_pMovDetector->getMoveTarget(pThis->detect_vect,0);
+	if(pParent->m_bMoveDetect){
+		pThis->m_pMovDetector->getMoveTarget(pThis->detect_vect,chId);	
+	}
 }
 #endif
 #endif
