@@ -60,21 +60,32 @@ static GLfloat m_glvTexCoordsDefault[8] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1
 
 inline void my_affine(GLfloat result[16], affine_param ap)
 {
-	float theta = 10.0f;
-	float rads = float(theta/180.0f) * CV_PI;
-	const float c = cosf(rads);
-	const float s = sinf(rads);
-	float dx, dy;
-	dx = 100;//-960;
-	dy = -200;//-540;
-	
+	//float theta = 0.0f;
+	//float rads = float(theta/180.0f) * CV_PI;
+	//const float c = cosf(rads);
+	//const float s = sinf(rads);
+	//float dx, dy;
+	//dx = 100;//-960;
+	//dy = -200;//-540;
+	//dx = -dx;
+#if 0
+	printf("\n*****************************************\n");
+	printf("****dx = %f\n",ap.dx);
+	printf("****dy = %f\n",ap.dy);
+	printf("****cos = %f\n",ap.cos);
+	printf("****sin = %f\n",ap.sin);
+	printf("****scale = %f\n",ap.scale);
+	printf("****theta = %f\n",ap.theta);
+	printf("\n**********end****************\n");
+#endif
+	ap.dx = -ap.dx;
 	memset(result, 0, sizeof(GLfloat)*16);
-	result[0] = c;//ap.cos;
-	result[1] = -s;//-ap.sin;
-	result[3] = dx/1920.0;//(200-1920)/1920.0;//ap.dx;
-	result[4] = s;//ap.sin;
-	result[5] = c;//ap.cos;
-	result[7] = dy/1080.0;//140/1080.0;//ap.dy;
+	result[0] = ap.cos;
+	result[1] = -ap.sin;
+	result[3] = ap.dx/1920.0;
+	result[4] = ap.sin;
+	result[5] = ap.cos;
+	result[7] = ap.dy/1080.0;
 	result[10] = 1.0f;
 	result[15] = 1.0f;
 }

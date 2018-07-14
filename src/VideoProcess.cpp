@@ -148,7 +148,7 @@ void CVideoProcess::main_proc_func()
 		if(!OnPreProcess(chId, frame))
 			continue;
 
-		if(!m_bTrack && !m_bMtd && !m_bBlobDetect&&!m_bMoveDetect){
+		if(!m_bTrack && !m_bMtd && !m_bBlobDetect&&!m_bMoveDetect&&!m_bStable){
 			OnProcess(chId, frame);
 			continue;
 		}
@@ -419,7 +419,6 @@ void CVideoProcess::main_proc_func()
 			}
 		}
 		
-
 		if(chId != m_curChId)
 			continue;
 		
