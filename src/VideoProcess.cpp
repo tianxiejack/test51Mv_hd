@@ -13,6 +13,10 @@
 #include "MvDetect.hpp"
 #include "app_ctrl.h"
 
+
+#include "stability.hpp"
+
+
 using namespace vmath;
 
 int CVideoProcess::m_mouseEvent = 0;
@@ -23,6 +27,7 @@ bool CVideoProcess::m_bTrack = false;
 bool CVideoProcess::m_bMtd = false;
 bool CVideoProcess::m_bBlobDetect = false;
 bool CVideoProcess::m_bMoveDetect = false;
+bool CVideoProcess::m_bStable = false;
 int CVideoProcess::m_iTrackStat = 0;
 int CVideoProcess::m_iTrackLostCnt = 0;
 int64 CVideoProcess::tstart = 0;
@@ -130,6 +135,7 @@ void CVideoProcess::main_proc_func()
 		bool bMtd = mainProcThrObj.cxt[mainProcThrObj.pp^1].bMtd;
 		bool bBlobDetect = mainProcThrObj.cxt[mainProcThrObj.pp^1].bBlobDetect;
 		bool bMoveDetect = mainProcThrObj.cxt[mainProcThrObj.pp^1].bMoveDetect;
+		bool bStable = mainProcThrObj.cxt[mainProcThrObj.pp^1].bStable;
 		int chId = mainProcThrObj.cxt[mainProcThrObj.pp^1].chId;
 		int iTrackStat = mainProcThrObj.cxt[mainProcThrObj.pp^1].iTrackStat;
 
@@ -374,111 +380,6 @@ void CVideoProcess::main_proc_func()
 		}
 		else if (bMoveDetect)
 		{
-			#if 0
-
-				IMG_MAT image;
-				image.data_u8 = frame_gray.data;
-				image.width = frame_gray.cols;
-				image.height = frame_gray.rows;
-				image.channels = 1;
-				image.step[0] = image.width;
-				image.dtype = 0;
-				image.size = frame_gray.cols*frame_gray.rows;
-
-				if(moveDetectRect)
-				{
-					rectangle( m_display.m_imgOsd[1],
-						Point( preAcpSR.x, preAcpSR.y ),
-						Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-						cvScalar(0,0,0,0), 1, 8 );
-
-					rectangle( m_display.m_imgOsd[1],
-							Point( preWarnRect.x, preWarnRect.y ),
-							Point( preWarnRect.x+preWarnRect.width, preWarnRect.y+preWarnRect.height),
-							cvScalar(0,0,0,0), 1, 8 );
-				}
-				acqRect.axisX = m_ImageAxisx;
-				acqRect.axisY = m_ImageAxisy;
-
-				if(m_SensorStat == 0){
-					acqRect.rcWin.width = 1800;
-					acqRect.rcWin.height = 900;
-					acqRect.rcWin.x = VIDEO_IMAGE_WIDTH_0/2 - acqRect.rcWin.width/2;
-					acqRect.rcWin.y = VIDEO_IMAGE_HEIGHT_0/2 -acqRect.rcWin.height/2;
-				}
-				//OSA_printf("acq axis  x ,y :(%d,%d)\n",acqRect.axisX,acqRect.axisY);
-//OSA_printf("x,y,width,height : (%d,%d,%d,%d)\n",acqRect.rcWin.x,acqRect.rcWin.y,acqRect.rcWin.width,acqRect.rcWin.height);
-				memcpy(&preWarnRect,&acqRect.rcWin,sizeof(UTC_Rect));
-				
-				if(1)//(moveDetectRect)
-					rectangle( m_display.m_imgOsd[1],
-							Point( preWarnRect.x, preWarnRect.y ),
-							Point( preWarnRect.x+preWarnRect.width, preWarnRect.y+preWarnRect.height),
-							cvScalar(0,0,255,255), 2, 8 );
-
-				#if 0
-					Movedetect = UtcAcqTarget(m_track,image,acqRect,&MoveAcpSR);
-				#else
-					Movedetect = UtcTrkPreAcqSR(m_track,image,acqRect,&MoveAcpSR);
-				#endif
-				if(Movedetect)
-				{
-					getImgRioDelta(image.data_u8,image.width ,image.height,MoveAcpSR,&value);
-					OSA_printf("%s:line  %d   double = %f \n",__func__,__LINE__,value);	
-					if(value < 300.0)
-						Movedetect = 0;
-				}
-				
-				if(Movedetect)
-				{
-					OSA_printf("%s:line  %d   double = %f \n",__func__,__LINE__,value);	
-					printf("%s,line:%d		xy(%d,%d),wh(%d,%d)\n",__func__,__LINE__,
-						preAcpSR.x,preAcpSR.y,preAcpSR.width,preAcpSR.height);	
-					preAcpSR.x = MoveAcpSR.x*m_display.m_imgOsd[1].cols/frame.cols;
-					preAcpSR.y = MoveAcpSR.y*m_display.m_imgOsd[1].rows/frame.rows;
-					preAcpSR.width = MoveAcpSR.width*m_display.m_imgOsd[1].cols/frame.cols;
-					preAcpSR.height = MoveAcpSR.height*m_display.m_imgOsd[1].rows/frame.rows;
-
-					if(0)//(moveDetectRect)
-						rectangle( m_display.m_imgOsd[1],
-							Point( preAcpSR.x, preAcpSR.y ),
-							Point( preAcpSR.x+preAcpSR.width, preAcpSR.y+preAcpSR.height),
-							cvScalar(255,0,0,255), 1, 8 );
-	
-				
-					tmpCmd.AvtTrkStat = eTrk_mode_sectrk;
-					tmpCmd.AvtPosX[0] = preAcpSR.x + preAcpSR.width/2;
-					tmpCmd.AvtPosY[0] = preAcpSR.y + preAcpSR.height/2;
-					app_ctrl_setTrkStat(&tmpCmd);		
-					tmpCmd.MtdState[0] = 0;
-					app_ctrl_setMtdStat(&tmpCmd);	
-					rectangle( m_display.m_imgOsd[1],
-							Point( preWarnRect.x, preWarnRect.y ),
-							Point( preWarnRect.x+preWarnRect.width, preWarnRect.y+preWarnRect.height),
-							cvScalar(0,0,0,0), 2, 8 );
-										
-				}
-				
-				#if 0
-				if(m_display.disptimeEnable == 1){
-				
-					UtcGetSceneMV(m_track, &speedx1, &speedy1);
-					
-					putText(m_display.m_imgOsd[1],m_strDisplay1,
-							Point( m_display.m_imgOsd[1].cols-450, 105),
-							FONT_HERSHEY_TRIPLEX,0.8,
-							cvScalar(0,0,0,0), 1
-							);
-					sprintf(m_strDisplay1, "speedxy: (%0.2f,%0.2f)", speedx1,speedy1);
-
-					putText(m_display.m_imgOsd[1],m_strDisplay1,
-							Point( m_display.m_imgOsd[1].cols-450, 105),
-							FONT_HERSHEY_TRIPLEX,0.8,
-							cvScalar(255,255,0,255), 1
-							);
-				}
-				#endif
-#endif
 
 		#if __MOVE_DETECT__
 			#if __DETECT_SWITCH_Z__
@@ -508,6 +409,16 @@ void CVideoProcess::main_proc_func()
 			#endif
 		#endif
 		}
+		else if(bStable){
+				
+			if(chId == 0){
+				//extractYUYV2Gray(frame, frame_gray);	
+				UInt32 t1 = OSA_getCurTimeInMsec();
+				run_stable(frame_gray,picwidhttv,picheightttv,COMPENSATE_NORMAL,120,120,&m_display.apParam);
+				OSA_printf("run_stable time :%d \n",OSA_getCurTimeInMsec() - t1);
+			}
+		}
+		
 
 		if(chId != m_curChId)
 			continue;
@@ -601,6 +512,8 @@ int CVideoProcess::creat()
 	MAIN_threadCreate();
 	
 	OSA_mutexCreate(&m_mutex);	
+	
+	Create_stable();
 
 	OnCreate();
 
@@ -628,6 +541,9 @@ int CVideoProcess::destroy()
 	m_display.destroy();
 
 	OnDestroy();
+
+	destroy_stable();
+
 
 	if(m_pwFile != NULL){
 		fclose(m_pwFile);
@@ -795,6 +711,10 @@ int CVideoProcess::dynamic_config(int type, int iPrm, void* pPrm)
 		break;
 	case VP_CFG_MvDetect:
 		m_bMoveDetect = iPrm;
+		break;
+	case VP_CFG_Stable:
+		m_bStable= iPrm;
+		m_display.m_bStable_dis = iPrm;
 		break;
 	default:
 		break;
@@ -1417,6 +1337,7 @@ int CVideoProcess::process_frame(int chId, Mat frame)
 		mainProcThrObj.cxt[mainProcThrObj.pp].bMtd = m_bMtd;
 		mainProcThrObj.cxt[mainProcThrObj.pp].bBlobDetect = m_bBlobDetect;
 		mainProcThrObj.cxt[mainProcThrObj.pp].bMoveDetect = m_bMoveDetect;
+		mainProcThrObj.cxt[mainProcThrObj.pp].bStable= m_bStable;
 		mainProcThrObj.cxt[mainProcThrObj.pp].iTrackStat = m_iTrackStat;
 		mainProcThrObj.cxt[mainProcThrObj.pp].chId = chId;
 		if(mainProcThrObj.bFirst){
@@ -1425,6 +1346,7 @@ int CVideoProcess::process_frame(int chId, Mat frame)
 			mainProcThrObj.cxt[mainProcThrObj.pp^1].bMtd = m_bMtd;
 			mainProcThrObj.cxt[mainProcThrObj.pp^1].bBlobDetect = m_bBlobDetect;
 			mainProcThrObj.cxt[mainProcThrObj.pp^1].bMoveDetect = m_bMoveDetect;
+			mainProcThrObj.cxt[mainProcThrObj.pp].bStable= m_bStable;
 			mainProcThrObj.cxt[mainProcThrObj.pp^1].iTrackStat = m_iTrackStat;
 			mainProcThrObj.cxt[mainProcThrObj.pp^1].chId = chId;
 			mainProcThrObj.bFirst = false;

@@ -11,18 +11,19 @@
 
 #define OSA_BUF_ID_INVALID    (-1)
 
+
 typedef struct {
-  int 		size;
-  int 		count;
-  int 		flags;
-  Uint32	timestamp;
-  int 		width;
-  int 		height;
-  Uint32 	isKeyFrame;
-  Uint16 	codecType;
-  int           strid;
-  void 		*physAddr;
-  void 		*virtAddr;
+	int 		size;
+	int 		count;
+	int 		flags;
+	Uint32		timestamp;
+	int 		width;
+	int 		height;
+	Uint32 		isKeyFrame;
+	Uint16 		codecType;
+	int         strid;
+	void 		*physAddr;
+	void 		*virtAddr;
 
 } OSA_BufInfo;
 

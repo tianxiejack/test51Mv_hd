@@ -19,6 +19,7 @@
 #include "osa_buf.h"
 #include "osa_sem.h"
 
+#include "stability.hpp"
 
 using namespace std;
 using namespace cv;
@@ -127,6 +128,7 @@ public:
 	bool m_bRun;
 	bool m_bFullScreen;
 	bool m_bOsd;
+	static bool m_bStable_dis;
 	Mat m_disOsd[DS_DC_CNT];
 	Mat m_imgOsd[DS_DC_CNT];
 	DS_Size m_videoSize[DS_CHAN_MAX];
@@ -134,6 +136,7 @@ public:
 	bool m_bEnh[DS_CHAN_MAX];
 	bool m_Mmt[DS_CHAN_MAX];
 	bool  Videoeable[DS_CHAN_MAX];
+	affine_param apParam;
 	unsigned int dismodchanag;
 	unsigned int dismodchanagcount;
 	 int tv_pribuffid;
@@ -156,12 +159,11 @@ public:
 	char dispstrDisplay[128];
 	int disptimeEnable;
 
-		 OSA_BufCreate tskSendBufCreatetv;
-        OSA_BufHndl tskSendBuftv;
+	OSA_BufCreate tskSendBufCreatetv;
+    OSA_BufHndl tskSendBuftv;
 
 	OSA_BufCreate tskSendBufCreatefir;
-        OSA_BufHndl tskSendBuffir;
-	
+    OSA_BufHndl tskSendBuffir;
 	
 	//bool firvideo;
 protected:
@@ -235,6 +237,7 @@ public:
 
 	
 };
+
 #define picwidhttv VIDEO_IMAGE_WIDTH_0
 #define picheightttv VIDEO_IMAGE_HEIGHT_0
 

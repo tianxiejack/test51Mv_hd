@@ -11,7 +11,7 @@
 using namespace std;
 using namespace cv;
 
-bool startEnable = false;
+bool startEnable = true;
 int main(int argc, char **argv)
 {
 	struct timeval tv;
@@ -40,9 +40,9 @@ int main(int argc, char **argv)
 }
 
 //__IPC__
-//__MOVE_DETECT__		__DETECT_SWITCH_Z__
+//__MOVE_DETECT__	__DETECT_SWITCH_Z__	__MV__DETECT_VIBE__
 //__TRACK__
-
+//__STABLE__
 //---------------------------
 //__MMT__
 //__BLOCK__

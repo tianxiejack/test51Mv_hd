@@ -22,11 +22,14 @@
 #include "configable.h"
 
 #include "osd_text.hpp"
+
+
 #define HISTEN 0
 #define CLAHEH 1
 #define DARKEN 0
 
 static CDisplayer *gThis = NULL;
+bool CDisplayer::m_bStable_dis = false;
 
 double capTime = 0;
 
@@ -54,6 +57,29 @@ GLfloat _fontColor[4] = {1.0,1.0,1.0,	1.0};
 static GLfloat m_glvVertsDefault[8] = {-1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f};
 static GLfloat m_glvTexCoordsDefault[8] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
+
+inline void my_affine(GLfloat result[16], affine_param ap)
+{
+	float theta = 10.0f;
+	float rads = float(theta/180.0f) * CV_PI;
+	const float c = cosf(rads);
+	const float s = sinf(rads);
+	float dx, dy;
+	dx = 100;//-960;
+	dy = -200;//-540;
+	
+	memset(result, 0, sizeof(GLfloat)*16);
+	result[0] = c;//ap.cos;
+	result[1] = -s;//-ap.sin;
+	result[3] = dx/1920.0;//(200-1920)/1920.0;//ap.dx;
+	result[4] = s;//ap.sin;
+	result[5] = c;//ap.cos;
+	result[7] = dy/1080.0;//140/1080.0;//ap.dy;
+	result[10] = 1.0f;
+	result[15] = 1.0f;
+}
+
+
 CDisplayer::CDisplayer()
 :m_mainWinWidth(VIDEO_IMAGE_WIDTH_0),m_mainWinHeight(VIDEO_IMAGE_HEIGHT_0),m_renderCount(0),
 m_bRun(false),m_bFullScreen(false),m_bOsd(false),
@@ -70,13 +96,15 @@ m_bRun(false),m_bFullScreen(false),m_bOsd(false),
 	for(i=0; i<DS_DC_CNT; i++)
 		buffId_osd[i] = -1;
 	memset(updata_osd, 0, sizeof(updata_osd));
+	
 	dismodchanagcount=0;
 	tv_pribuffid=-1;
 	fir_pribuffid=-1;
 	freezeonece=0;
-
+	
 	frameCount = 0;
 	frameRate = 0.0;
+	memset(&apParam,0,sizeof(apParam));
 }
 
 CDisplayer::~CDisplayer()
@@ -539,6 +567,7 @@ void CDisplayer::display(Mat frame, int chId, int code)
 	unsigned char tvbuffer=0;
 	unsigned char firbuffer=0;
 
+	Mat frame_gray = Mat(frame.rows,frame.cols,CV_8UC1);
 	int nChannel = frame.channels();
 	unsigned int byteCount = frame.rows * frame.cols * nChannel * sizeof(unsigned char);
 	assert(chId>=0 && chId<DS_CHAN_MAX);
@@ -593,6 +622,7 @@ void CDisplayer::display(Mat frame, int chId, int code)
 			d_src_rgb=(unsigned char *)tskSendBuftv.bufInfo[bufId].virtAddr;
 
 		OSA_mutexLock(&m_mutex);
+
 
 #if 0
 		cudaMemcpyAsync_share(d_src, frame.data, byteCount, cudaMemcpyHostToDevice, chId, 1, m_cuStream[0]);
@@ -1261,7 +1291,14 @@ void CDisplayer::gl_display(void)
 		if(m_img[chId].cols <=0 || m_img[chId].rows <=0 || m_img[chId].channels() == 0)
 			continue;
 
-		glUniformMatrix4fv(Uniform_mattrans, 1, GL_FALSE, m_glmat44fTrans[chId]);
+		if(m_bStable_dis){
+			GLfloat result[16];
+			my_affine(result, apParam);
+			glUniformMatrix4fv(Uniform_mattrans, 1, GL_FALSE, result);
+		}else{
+			glUniformMatrix4fv(Uniform_mattrans, 1, GL_FALSE, m_glmat44fTrans[chId]);
+		}
+
 		//glUniform1i(Uniform_osd_enable, m_bOsd);
 
 		glUniform1i(Uniform_tex_in, 0);

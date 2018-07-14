@@ -221,7 +221,9 @@ typedef struct
 	
 	volatile unsigned int  	ImgMmtshow[eSen_Max];	//not sure show what
 	volatile unsigned char 	MmtOffsetXY[20]; 		//not sure the func
-	
+
+	volatile unsigned int 	Stable;
+
 } CMD_EXT;
 #endif
 //typedef IMGSTATUS CMD_EXT;

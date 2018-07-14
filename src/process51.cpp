@@ -1716,6 +1716,7 @@ osdindex++;
 	return true;
 }
 
+
 static inline void my_rotate(GLfloat result[16], float theta)
 {
 	float rads = float(theta/180.0f) * CV_PI;
@@ -1805,6 +1806,18 @@ void CProcess::OnKeyDwn(unsigned char key)
 		else
 			pIStuts->ImgBlobDetect[pIStuts->SensorStat] = eImgAlg_Enable;
 		msgdriv_event(MSGID_EXT_INPUT_ENBDT, NULL);
+	}
+
+	if (key == 's' || key == 'S')
+	{
+		if(pIStuts->Stable)
+		{
+			pIStuts->Stable= eImgAlg_Disable;
+		}
+		else
+			pIStuts->Stable = eImgAlg_Enable;
+		
+		msgdriv_event(MSGID_EXT_INPUT_ENSTB, NULL);
 	}
 
 	if (key == 't' || key == 'T')
@@ -2333,6 +2346,24 @@ void CProcess::msgdriv_event(MSG_PROC_ID msgId, void *prm)
 		else
 			dynamic_config(CDisplayer::DS_CFG_EnhEnable, pIStuts->SensorStat, &ENHStatus);
 	}
+
+
+	if(msgId == MSGID_EXT_INPUT_ENSTB)
+	{
+		if(prm != NULL)
+		{
+			pInCmd = (CMD_EXT *)prm;
+			pIStuts->Stable= pInCmd->Stable; 		
+		}
+
+		if(pIStuts->SensorStat == 0)
+		{		
+			int stableStatus = (pIStuts->Stable & 0x01) ;
+			OSA_printf(" %d:%s set stable enMask %d\n", OSA_getCurTimeInMsec(),__func__,stableStatus);
+			dynamic_config(VP_CFG_Stable, stableStatus);			
+		}
+	}
+	
 
 	if(msgId == MSGID_EXT_INPUT_ENBDT)
 	{
@@ -3824,3 +3855,5 @@ void CProcess::DrawScaleLine(Mat frame,int frcolor)
 		polylines(frame, ppt, npt, 1, 1, Scalar(255),1,8,0);
 		fillPoly(frame, ppt, npt, 1, Scalar(0,0,255,255));
 }
+
+
